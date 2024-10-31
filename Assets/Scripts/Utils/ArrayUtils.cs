@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Utils
@@ -13,6 +14,17 @@ namespace Utils
             }
             
             return array[Random.Range(0, array.Length)];
+        }
+        
+        public static T RandomChoice<T>(List<T> list)
+        {
+            if (list.Count == 0)
+            {
+                GameLogger.LogError("Cannot get random element from list with zero length!");
+                return default;
+            }
+            
+            return list[Random.Range(0, list.Count)];
         }
     }
 }
