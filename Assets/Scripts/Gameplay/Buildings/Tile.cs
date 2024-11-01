@@ -1,9 +1,5 @@
-using System;
-using Core;
-using Core.Colour;
 using Cysharp.Threading.Tasks;
 using Unity.Collections;
-using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -33,7 +29,7 @@ namespace Gameplay.Buildings
 
             var timeElapsed = 0f;
 
-            while (timeElapsed < flashDuration)
+            while (timeElapsed < flashDuration && isFlashing)
             {
                 var lerp = flashCurve.Evaluate(timeElapsed / flashDuration);
 
@@ -46,6 +42,17 @@ namespace Gameplay.Buildings
 
             spriteRenderer.color = baseColour;
             isFlashing = false;
+        }
+
+        public void CancelFlash()
+        {
+            isFlashing = false;
+        }
+
+        public void Toggle(bool isActive)
+        {
+            baseColour = new Color(baseColour.r, baseColour.g, baseColour.b, isActive ? 1f : 0f);
+            spriteRenderer.color = baseColour;
         }
         
         public void SetSize(Vector2 size, Vector2 random)

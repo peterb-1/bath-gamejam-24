@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
-using Core.Colour;
 using Cysharp.Threading.Tasks;
+using Gameplay.Colour;
+using Gameplay.Input;
 using NaughtyAttributes;
 using UnityEngine;
 using Utils;
@@ -15,6 +17,8 @@ namespace Gameplay.Buildings
     [RequireComponent(typeof(BoxCollider2D))]
     public class Building : MonoBehaviour
     {
+        private const int TILES_PER_CYCLE = 10;
+        
         [SerializeField] 
         private ColourId colourId;
         
@@ -51,9 +55,34 @@ namespace Gameplay.Buildings
         [SerializeField] 
         private ColourDatabase colourDatabase;
 
+        private bool isActive;
+
+        private void Awake()
+        {
+            ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
+            ColourManager.OnColourChangeInstant += HandleColourChangeInstant;
+        }
+
+        private void HandleColourChangeStarted(ColourId colour, float duration)
+        {
+            var shouldActivate = colourId == colour;
+
+            if (shouldActivate != isActive)
+            {
+                isActive = shouldActivate;
+                ToggleBuildingAsync(duration).Forget();
+            }
+        }
+        
+        private void HandleColourChangeInstant(ColourId colour)
+        {
+            isActive = colourId == colour;
+            ToggleBuildingAsync(0f).Forget();
+        }
+
         private void Update()
         {
-            if (Random.Range(0f, 1f) < flashChance)
+            if (isActive && Random.Range(0f, 1f) < flashChance)
             {
                 var tile = ArrayUtils.RandomChoice(tiles);
             
@@ -61,12 +90,58 @@ namespace Gameplay.Buildings
             }
         }
 
+        private async UniTask ToggleBuildingAsync(float duration)
+        {
+            var shuffledTiles = new List<Tile>();
+
+            while (tiles.Count > 0)
+            {
+                var randomTile = ArrayUtils.RandomChoice(tiles);
+                shuffledTiles.Add(randomTile);
+                tiles.Remove(randomTile);
+            }
+
+            tiles = shuffledTiles;
+
+            var totalTiles = tiles.Count;
+            var currentTile = 0;
+            var delay = duration * TILES_PER_CYCLE / totalTiles;
+
+            try
+            {
+                foreach (var tile in tiles)
+                {
+                    if (!isActive)
+                    {
+                        tile.CancelFlash();
+                    }
+
+                    tile.Toggle(isActive);
+
+                    if (delay > 0f && currentTile % TILES_PER_CYCLE == 0)
+                    {
+                        await UniTask.Delay(TimeSpan.FromSeconds(delay));
+                    }
+
+                    currentTile++;
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                // do nothing - suppress the error log, it's ok if we cancel the enumeration to toggle the other way
+            }
+        }
+        
+        private void OnDestroy()
+        {
+            ColourManager.OnColourChangeStarted -= HandleColourChangeStarted;
+            ColourManager.OnColourChangeInstant -= HandleColourChangeInstant;
+        }
+
 #if UNITY_EDITOR
         [Button("Fill Tiles")]
         private void FillTiles()
         {
-            var occupiedTiles = new HashSet<(int, int)>();
-
             if (tileDimensions.x < 1 || tileDimensions.y < 1)
             {
                 GameLogger.LogError("Cannot fill tiles since one or more dimensions is not a positive number!", this);
@@ -78,6 +153,8 @@ namespace Gameplay.Buildings
                 GameLogger.LogError($"Cannot fill tiles since the colour config for {colourId} could not be found in the colour database!", colourDatabase);
                 return;
             }
+            
+            var occupiedTiles = new HashSet<(int, int)>();
 
             var buildingSize = boxCollider.size;
             var tileSize = buildingSize / tileDimensions;
@@ -127,7 +204,7 @@ namespace Gameplay.Buildings
             backgroundSpriteRenderer.transform.localScale = buildingSize;
             backgroundSpriteRenderer.transform.position = boxCollider.bounds.center.xy() + backgroundOffset;
             backgroundSpriteRenderer.color = colourConfig.Background;
-            backgroundSpriteRenderer.sortingOrder = sortingOrder;
+            backgroundSpriteRenderer.sortingOrder = sortingOrder - 1;
         }
 
         [Button("Clear Tiles")]
