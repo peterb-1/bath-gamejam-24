@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d54b93114039f14ea51dd1a8c1899b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveAction: {fileID: -1680190386980627800, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
+  jumpAction: {fileID: -2099379676528639254, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   blueAction: {fileID: -4712871377477003836, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   redAction: {fileID: 7458181770686317865, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   yellowAction: {fileID: 6870097182979891522, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}

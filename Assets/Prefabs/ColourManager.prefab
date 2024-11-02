@@ -44,4 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a96e91adb4aa5314695aa5ae421f537c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colourChangeDuration: 0.25
+  colourChangeDuration: 0.5

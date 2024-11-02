@@ -17,6 +17,9 @@ namespace Gameplay.Colour
         private Color max;
         
         [field: SerializeField]
+        public Color PlayerColour { get; private set; }
+        
+        [field: SerializeField]
         public Color Background { get; private set; }
 
         public Color GetColour()

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
-using Gameplay.Input;
 using NaughtyAttributes;
 using UnityEngine;
 using Utils;
@@ -92,6 +91,8 @@ namespace Gameplay.Buildings
 
         private async UniTask ToggleBuildingAsync(float duration)
         {
+            boxCollider.enabled = isActive;
+            
             var shuffledTiles = new List<Tile>();
 
             while (tiles.Count > 0)
@@ -181,7 +182,8 @@ namespace Gameplay.Buildings
                         tileMultiplier--;
                     }
 
-                    var offset = new Vector2((j + tileMultiplier / 2f) * tileSize.x, (i + tileMultiplier / 2f) * tileSize.y);
+                    var indexOffset = (tileMultiplier - 1) / 2f;
+                    var offset = new Vector2((j + indexOffset) * tileSize.x, (i + indexOffset) * tileSize.y);
                     
                     tileGameObject.transform.parent = transform;
                     tile.SetSize(tileSize * tileMultiplier, randomSizeRange);
