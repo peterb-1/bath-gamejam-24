@@ -203,7 +203,7 @@ namespace Gameplay.Buildings
                 }
             }
 
-            backgroundSpriteRenderer.transform.localScale = buildingSize;
+            backgroundSpriteRenderer.size = buildingSize;
             backgroundSpriteRenderer.transform.position = boxCollider.bounds.center.xy() + backgroundOffset;
             backgroundSpriteRenderer.color = colourConfig.Background;
             backgroundSpriteRenderer.sortingOrder = sortingOrder - 1;
