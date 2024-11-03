@@ -121,7 +121,7 @@ namespace Gameplay.Buildings
 
                     if (delay > 0f && currentTile % TILES_PER_CYCLE == 0)
                     {
-                        await UniTask.Delay(TimeSpan.FromSeconds(delay));
+                        await UniTask.Delay(TimeSpan.FromSeconds(delay), ignoreTimeScale: true);
                     }
 
                     currentTile++;

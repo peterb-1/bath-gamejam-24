@@ -2,7 +2,6 @@ using System;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
 using UnityEngine;
-using Utils;
 
 namespace Gameplay.Colour
 {
@@ -11,42 +10,31 @@ namespace Gameplay.Colour
         [SerializeField] 
         private float colourChangeDuration;
         
-        public ColourId CurrentColour { get; private set; }
-        
-        public static ColourManager Instance { get; private set; }
+        private ColourId currentColour;
+        private bool isChangingColour;
 
         // subscribers to OnColourChangeStarted have a responsibility to complete their colour change transition within the specified duration
         public static event Action<ColourId, float> OnColourChangeStarted;
         public static event Action<ColourId> OnColourChangeInstant;
         public static event Action OnColourChangeEnded;
 
-        private bool isChangingColour;
-        
         private void Awake()
         {
-            if (Instance != null)
-            {
-                GameLogger.LogWarning("There should only be one ColourManager in the scene! Destroying this one.", this);
-                Destroy(gameObject);
-            }
-            
-            Instance = this;
-
-            CurrentColour = ColourId.Blue;
+            currentColour = ColourId.Blue;
 
             InputManager.OnColourChanged += HandleColourChanged;
         }
 
         private void Start()
         {
-            OnColourChangeInstant?.Invoke(CurrentColour);
+            OnColourChangeInstant?.Invoke(currentColour);
         }
 
         private void HandleColourChanged(ColourId colour)
         {
-            if (colour == CurrentColour || isChangingColour) return;
+            if (colour == currentColour || isChangingColour) return;
             
-            CurrentColour = colour;
+            currentColour = colour;
             
             RunColourChangeAsync().Forget();
         }
@@ -55,7 +43,7 @@ namespace Gameplay.Colour
         {
             isChangingColour = true;
             
-            OnColourChangeStarted?.Invoke(CurrentColour, colourChangeDuration);
+            OnColourChangeStarted?.Invoke(currentColour, colourChangeDuration);
 
             await UniTask.Delay(TimeSpan.FromSeconds(colourChangeDuration));
             

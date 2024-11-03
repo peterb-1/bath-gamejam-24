@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
 using UnityEngine;
 using Utils;
@@ -11,6 +12,9 @@ namespace Gameplay.Player
 
         [SerializeField] 
         private ColourDatabase colourDatabase;
+
+        [SerializeField] 
+        private AnimationCurve flashCurve;
         
         private void Awake()
         {
@@ -35,11 +39,33 @@ namespace Gameplay.Player
             if (colourDatabase.TryGetColourConfig(colour, out var colourConfig))
             {
                 playerSpriteRenderer.color = colourConfig.PlayerColour;
+                RunFlashAsync(duration).Forget();
             }
             else
             {
                 GameLogger.LogError($"Cannot change player colour since the colour config for {colour} could not be found in the colour database!", colourDatabase);
             }
+        }
+
+        private async UniTask RunFlashAsync(float duration)
+        {
+            var initialTime = Time.realtimeSinceStartup;
+            var startColour = playerSpriteRenderer.color;
+            var timeElapsed = 0f;
+
+            // run flash independent of timescale, since this happens during the slowdown
+            while (timeElapsed < duration)
+            {
+                var lerp = flashCurve.Evaluate(timeElapsed / duration);
+
+                playerSpriteRenderer.color = (1f - lerp) * startColour + lerp * Color.white;
+                
+                await UniTask.Yield();
+                
+                timeElapsed = Time.realtimeSinceStartup - initialTime;
+            }
+
+            playerSpriteRenderer.color = startColour;
         }
 
         private void OnDestroy()

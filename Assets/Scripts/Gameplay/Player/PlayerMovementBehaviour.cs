@@ -1,4 +1,3 @@
-using Gameplay.Colour;
 using Gameplay.Input;
 using UnityEngine;
 
@@ -44,6 +43,12 @@ namespace Gameplay.Player
         [SerializeField] 
         private Rigidbody2D rigidBody;
 
+        [SerializeField] 
+        private Transform spriteRendererTransform;
+
+        [SerializeField] 
+        private Animator playerAnimator;
+
         [SerializeField]
         private Transform leftGroundCheck;
 
@@ -55,8 +60,6 @@ namespace Gameplay.Player
 
         [SerializeField]
         private Transform rightHeadCheck;
-
-        private Vector2 preFreezeVelocity;
         
         private float coyoteCountdown;
         private float jumpBufferCountdown;
@@ -65,28 +68,14 @@ namespace Gameplay.Player
         private bool isTouchingLeftWall;
         private bool isTouchingRightWall;
         private bool hasDoubleJumped;
-        private bool isFrozen;
+        
+        private static readonly int IsGrounded = Animator.StringToHash("isGrounded");
+        private static readonly int IsRunning = Animator.StringToHash("isRunning");
+        private static readonly int DoubleJump = Animator.StringToHash("doubleJump");
 
         private void Awake()
         {
             InputManager.OnJumpPerformed += HandleJumpPerformed;
-            ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
-            ColourManager.OnColourChangeEnded += HandleColourChangeEnded;
-        }
-
-        private void HandleColourChangeStarted(ColourId _, float duration)
-        {
-            isFrozen = true;
-            preFreezeVelocity = rigidBody.linearVelocity;
-            rigidBody.linearVelocity = Vector2.zero;
-            rigidBody.gravityScale = 0f;
-        }
-        
-        private void HandleColourChangeEnded()
-        {
-            isFrozen = false;
-            rigidBody.linearVelocity = preFreezeVelocity;
-            rigidBody.gravityScale = 1f;
         }
 
         private void Update()
@@ -112,6 +101,8 @@ namespace Gameplay.Player
             
             isTouchingRightWall = Physics2D.Raycast(rightGroundPosition, right, groundCheckDistance, groundLayers) ||
                                  Physics2D.Raycast(rightHeadCheck.position, right, groundCheckDistance, groundLayers);
+            
+            playerAnimator.SetBool(IsGrounded, isGrounded);
 
             if (isGrounded)
             {
@@ -122,8 +113,6 @@ namespace Gameplay.Player
 
         private void FixedUpdate()
         {
-            if (isFrozen) return;
-            
             var moveAmount = InputManager.MoveAmount;
             var desiredVelocity = moveAmount * moveSpeed;
             
@@ -134,6 +123,19 @@ namespace Gameplay.Player
             if (rigidBody.linearVelocityY < 0)
             {
                 rigidBody.linearVelocity += Vector2.up * (Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime);
+            }
+
+            var isMoving = Mathf.Abs(rigidBody.linearVelocityX) > 1e-3f;
+
+            if (isGrounded)
+            {
+                playerAnimator.SetBool(IsRunning, isMoving);
+            }
+
+            if (isMoving)
+            {
+                var spriteScale = new Vector3(rigidBody.linearVelocityX > 0 ? 1f : -1f, 1f, 1f);
+                spriteRendererTransform.localScale = spriteScale;
             }
 
             TryJump();
@@ -164,6 +166,7 @@ namespace Gameplay.Player
             {
                 PerformJump(doubleJumpForce);
                 hasDoubleJumped = true;
+                playerAnimator.SetTrigger(DoubleJump);
             }
         }
         
@@ -183,8 +186,6 @@ namespace Gameplay.Player
         private void OnDestroy()
         {
             InputManager.OnJumpPerformed -= HandleJumpPerformed;
-            ColourManager.OnColourChangeStarted -= HandleColourChangeStarted;
-            ColourManager.OnColourChangeEnded -= HandleColourChangeEnded;
         }
     }
 }
