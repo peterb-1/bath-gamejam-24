@@ -12,6 +12,7 @@ namespace Gameplay.Camera
         [SerializeField]
         private float smoothTime;
 
+        private PlayerDeathBehaviour playerDeathBehaviour;
         private Transform target;
         private Vector3 velocity;
 
@@ -21,6 +22,16 @@ namespace Gameplay.Camera
             
             target = PlayerAccessService.Instance.PlayerTransform;
             velocity = Vector3.zero;
+            
+            playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
+            playerDeathBehaviour.OnDeathSequenceFinish += HandleDeathSequenceFinish;
+            
+            SnapToTarget();
+        }
+
+        private void HandleDeathSequenceFinish()
+        {
+            SnapToTarget();
         }
 
         private void Update()
@@ -38,6 +49,11 @@ namespace Gameplay.Camera
         {
             var currentPosition = target.position;
             return new Vector3(currentPosition.x + followOffset.x, currentPosition.y + followOffset.y, followOffset.z);
+        }
+
+        private void OnDestroy()
+        {
+            playerDeathBehaviour.OnDeathSequenceFinish -= HandleDeathSequenceFinish;
         }
     }
 }

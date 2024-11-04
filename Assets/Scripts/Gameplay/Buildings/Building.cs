@@ -31,28 +31,37 @@ namespace Gameplay.Buildings
         private Vector2 backgroundOffset;
 
         [SerializeField, Range(0f, 1f)] 
+        private float flashChance;
+        
+        [SerializeField, Range(0f, 1f)] 
         private float largeTileChance;
+
+        [SerializeField] 
+        private float deathColliderBoundary;
+
+        [SerializeField] 
+        private int mainColliderDelayFrames;
         
         [SerializeField] 
         private int maxTileSize;
-        
-        [SerializeField, Range(0f, 1f)] 
-        private float flashChance;
 
         [SerializeField] 
         private int sortingOrder;
-        
-        [SerializeField, ReadOnly] 
-        private List<Tile> tiles;
 
         [SerializeField] 
-        private BoxCollider2D boxCollider;
+        private BoxCollider2D mainCollider;
+        
+        [SerializeField] 
+        private BoxCollider2D deathCollider;
         
         [SerializeField] 
         private SpriteRenderer backgroundSpriteRenderer;
 
         [SerializeField] 
         private ColourDatabase colourDatabase;
+        
+        [SerializeField, ReadOnly] 
+        private List<Tile> tiles;
 
         private bool isActive;
 
@@ -91,7 +100,7 @@ namespace Gameplay.Buildings
 
         private async UniTask ToggleBuildingAsync(float duration)
         {
-            boxCollider.enabled = isActive;
+            ToggleCollidersAsync().Forget();
             
             var shuffledTiles = new List<Tile>();
 
@@ -132,6 +141,18 @@ namespace Gameplay.Buildings
                 // do nothing - suppress the error log, it's ok if we cancel the enumeration to toggle the other way
             }
         }
+
+        private async UniTask ToggleCollidersAsync()
+        {
+            // enable the death collider first
+            // if it kills the player, they won't be pushed out next frame since their collider will be disabled
+            
+            deathCollider.enabled = isActive;
+
+            await UniTask.DelayFrame(mainColliderDelayFrames);
+            
+            mainCollider.enabled = isActive;
+        }
         
         private void OnDestroy()
         {
@@ -140,8 +161,8 @@ namespace Gameplay.Buildings
         }
 
 #if UNITY_EDITOR
-        [Button("Fill Tiles")]
-        private void FillTiles()
+        [Button("Setup Building")]
+        private void SetupBuilding()
         {
             if (tileDimensions.x < 1 || tileDimensions.y < 1)
             {
@@ -157,9 +178,9 @@ namespace Gameplay.Buildings
             
             var occupiedTiles = new HashSet<(int, int)>();
 
-            var buildingSize = boxCollider.size;
+            var buildingSize = mainCollider.size;
             var tileSize = buildingSize / tileDimensions;
-            var buildingMin = boxCollider.bounds.min.xy() + tileSize / 2f;
+            var buildingMin = mainCollider.bounds.min.xy() + tileSize / 2f;
 
             var tilePrefabGuid = AssetDatabase.FindAssets("Tile t:GameObject")[0];
             var tilePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(tilePrefabGuid));
@@ -203,8 +224,11 @@ namespace Gameplay.Buildings
                 }
             }
 
+            deathCollider.offset = mainCollider.offset;
+            deathCollider.size = buildingSize - 2f * deathColliderBoundary * Vector2.one;
+
             backgroundSpriteRenderer.size = buildingSize;
-            backgroundSpriteRenderer.transform.position = boxCollider.bounds.center.xy() + backgroundOffset;
+            backgroundSpriteRenderer.transform.position = mainCollider.bounds.center.xy() + backgroundOffset;
             backgroundSpriteRenderer.color = colourConfig.Background;
             backgroundSpriteRenderer.sortingOrder = sortingOrder - 1;
         }

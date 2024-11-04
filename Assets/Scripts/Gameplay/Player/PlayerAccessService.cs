@@ -9,10 +9,13 @@ namespace Gameplay.Player
         public Transform PlayerTransform { get; private set; }
         
         [field: SerializeField]
-        public PlayerMovementBehaviour PlayerMovementBehaviour { get; private set; }
-    
-        [field: SerializeField]
         public PlayerColourBehaviour PlayerColourBehaviour { get; private set; }
+        
+        [field: SerializeField]
+        public PlayerDeathBehaviour PlayerDeathBehaviour { get; private set; }
+        
+        [field: SerializeField]
+        public PlayerMovementBehaviour PlayerMovementBehaviour { get; private set; }
         
         public static PlayerAccessService Instance { get; private set; }
 

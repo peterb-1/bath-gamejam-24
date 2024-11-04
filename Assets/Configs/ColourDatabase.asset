@@ -21,7 +21,7 @@ MonoBehaviour:
   - colourId: 1
     min: {r: 0.8962264, g: 0.3931559, b: 0.5842448, a: 1}
     max: {r: 0.6981132, g: 0.1745283, b: 0.2260284, a: 1}
-    <PlayerColour>k__BackingField: {r: 0.90588236, g: 0.23529412, b: 0.3254902, a: 1}
+    <PlayerColour>k__BackingField: {r: 0.9647059, g: 0.28627452, b: 0.38039216, a: 1}
     <Background>k__BackingField: {r: 0.735849, g: 0.2256141, b: 0.31888276, a: 1}
   - colourId: 2
     min: {r: 0.7735849, g: 0.5207302, b: 0.22258809, a: 1}

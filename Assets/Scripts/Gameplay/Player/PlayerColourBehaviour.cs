@@ -11,6 +11,9 @@ namespace Gameplay.Player
         private SpriteRenderer playerSpriteRenderer;
 
         [SerializeField] 
+        private ParticleSystemRenderer deathParticleRenderer;
+
+        [SerializeField] 
         private ColourDatabase colourDatabase;
 
         [SerializeField] 
@@ -26,7 +29,7 @@ namespace Gameplay.Player
         {
             if (colourDatabase.TryGetColourConfig(colour, out var colourConfig))
             {
-                playerSpriteRenderer.color = colourConfig.PlayerColour;
+                SetColour(colourConfig);
             }
             else
             {
@@ -38,13 +41,19 @@ namespace Gameplay.Player
         {
             if (colourDatabase.TryGetColourConfig(colour, out var colourConfig))
             {
-                playerSpriteRenderer.color = colourConfig.PlayerColour;
+                SetColour(colourConfig);
                 RunFlashAsync(duration).Forget();
             }
             else
             {
                 GameLogger.LogError($"Cannot change player colour since the colour config for {colour} could not be found in the colour database!", colourDatabase);
             }
+        }
+
+        private void SetColour(ColourConfig colourConfig)
+        {
+            playerSpriteRenderer.color = colourConfig.PlayerColour;
+            deathParticleRenderer.material.color = colourConfig.PlayerColour;
         }
 
         private async UniTask RunFlashAsync(float duration)

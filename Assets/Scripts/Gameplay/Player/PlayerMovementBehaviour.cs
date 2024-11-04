@@ -60,6 +60,9 @@ namespace Gameplay.Player
 
         [SerializeField]
         private Transform rightHeadCheck;
+
+        [SerializeField]
+        private PlayerDeathBehaviour playerDeathBehaviour;
         
         private float coyoteCountdown;
         private float jumpBufferCountdown;
@@ -76,6 +79,9 @@ namespace Gameplay.Player
         private void Awake()
         {
             InputManager.OnJumpPerformed += HandleJumpPerformed;
+
+            playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
+            playerDeathBehaviour.OnDeathSequenceFinish += HandleDeathSequenceFinish;
         }
 
         private void Update()
@@ -116,13 +122,13 @@ namespace Gameplay.Player
             var moveAmount = InputManager.MoveAmount;
             var desiredVelocity = moveAmount * moveSpeed;
             
-            rigidBody.linearVelocity = moveAmount == 0
-                ? new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, 0, deceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY)
+            rigidBody.linearVelocity = moveAmount == 0f
+                ? new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, 0f, deceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY)
                 : new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, desiredVelocity, acceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY);
             
-            if (rigidBody.linearVelocityY < 0)
+            if (rigidBody.linearVelocityY < 0f)
             {
-                rigidBody.linearVelocity += Vector2.up * (Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime);
+                rigidBody.linearVelocity += Vector2.up * (Physics2D.gravity.y * (fallMultiplier - 1f) * Time.deltaTime);
             }
 
             var isMoving = Mathf.Abs(rigidBody.linearVelocityX) > 1e-3f;
@@ -134,7 +140,7 @@ namespace Gameplay.Player
 
             if (isMoving)
             {
-                var spriteScale = new Vector3(rigidBody.linearVelocityX > 0 ? 1f : -1f, 1f, 1f);
+                var spriteScale = new Vector3(rigidBody.linearVelocityX > 0f ? 1f : -1f, 1f, 1f);
                 spriteRendererTransform.localScale = spriteScale;
             }
 
@@ -148,9 +154,9 @@ namespace Gameplay.Player
         
         private void TryJump()
         {
-            if (jumpBufferCountdown <= 0) return;
+            if (jumpBufferCountdown <= 0f) return;
             
-            if (isGrounded || coyoteCountdown > 0)
+            if (isGrounded || coyoteCountdown > 0f)
             {
                 PerformJump(jumpForce);
             }
@@ -173,19 +179,34 @@ namespace Gameplay.Player
         private void PerformJump(float force)
         {
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, force);
-            jumpBufferCountdown = 0;
+            jumpBufferCountdown = 0f;
         }
 
         private void PerformWallJump(Vector2 force)
         {
             rigidBody.linearVelocity = force;
             hasDoubleJumped = true;
-            jumpBufferCountdown = 0;
+            jumpBufferCountdown = 0f;
+        }
+        
+        private void HandleDeathSequenceStart()
+        {
+            rigidBody.linearVelocity = Vector2.zero;
+            rigidBody.gravityScale = 0f;
+        }
+
+        private void HandleDeathSequenceFinish()
+        {
+            rigidBody.linearVelocity = Vector2.zero;
+            rigidBody.gravityScale = 1f;
         }
 
         private void OnDestroy()
         {
             InputManager.OnJumpPerformed -= HandleJumpPerformed;
+            
+            playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
+            playerDeathBehaviour.OnDeathSequenceFinish -= HandleDeathSequenceFinish;
         }
     }
 }

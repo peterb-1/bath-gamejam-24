@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
+using Gameplay.Player;
 using UnityEngine;
 
 namespace Gameplay.Colour
@@ -8,8 +9,12 @@ namespace Gameplay.Colour
     public class ColourManager : MonoBehaviour
     {
         [SerializeField] 
+        private ColourId initialColour;
+        
+        [SerializeField] 
         private float colourChangeDuration;
         
+        private PlayerDeathBehaviour playerDeathBehaviour;
         private ColourId currentColour;
         private bool isChangingColour;
 
@@ -18,11 +23,26 @@ namespace Gameplay.Colour
         public static event Action<ColourId> OnColourChangeInstant;
         public static event Action OnColourChangeEnded;
 
-        private void Awake()
+        private async void Awake()
         {
-            currentColour = ColourId.Blue;
+            currentColour = initialColour;
 
             InputManager.OnColourChanged += HandleColourChanged;
+            
+            await UniTask.WaitUntil(PlayerAccessService.IsReady);
+
+            playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
+            playerDeathBehaviour.OnDeathSequenceFinish += HandleDeathSequenceFinish;
+        }
+
+        private void HandleDeathSequenceFinish()
+        {
+            if (currentColour != initialColour)
+            {
+                currentColour = initialColour;
+                
+                OnColourChangeInstant?.Invoke(currentColour);
+            }
         }
 
         private void Start()

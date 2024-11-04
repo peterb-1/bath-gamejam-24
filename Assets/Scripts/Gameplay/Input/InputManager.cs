@@ -1,5 +1,7 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
+using Gameplay.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,16 +24,24 @@ namespace Gameplay.Input
         [SerializeField] 
         private InputActionReference yellowAction;
         
+        private PlayerDeathBehaviour playerDeathBehaviour;
+        
         public static float MoveAmount { get; private set; }
         public static event Action<ColourId> OnColourChanged;
         public static event Action OnJumpPerformed;
         
-        private void Awake()
+        private async void Awake()
         {
-            SetupInputs();
+            EnableInputs();
+
+            await UniTask.WaitUntil(PlayerAccessService.IsReady);
+
+            playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
+            playerDeathBehaviour.OnDeathSequenceStart += DisableInputs;
+            playerDeathBehaviour.OnDeathSequenceFinish += EnableInputs;
         }
 
-        private void SetupInputs()
+        private void EnableInputs()
         {
             moveAction.action.Enable();
             jumpAction.action.Enable();
@@ -72,10 +82,13 @@ namespace Gameplay.Input
 
         private void OnDestroy()
         {
-            ShutdownInputs();
+            DisableInputs();
+            
+            playerDeathBehaviour.OnDeathSequenceStart -= DisableInputs;
+            playerDeathBehaviour.OnDeathSequenceFinish -= EnableInputs;
         }
         
-        private void ShutdownInputs()
+        private void DisableInputs()
         {
             moveAction.action.Disable();
             jumpAction.action.Disable();
