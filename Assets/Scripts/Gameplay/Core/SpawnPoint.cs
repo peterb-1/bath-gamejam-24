@@ -17,12 +17,17 @@ namespace Gameplay.Core
             playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
             playerTransform = PlayerAccessService.Instance.PlayerTransform;
 
-            playerTransform.position = transform.position;
+            SpawnPlayer();
 
             playerDeathBehaviour.OnDeathSequenceFinish += HandleDeathSequenceFinish;
         }
 
         private void HandleDeathSequenceFinish()
+        {
+            SpawnPlayer();
+        }
+
+        private void SpawnPlayer()
         {
             playerTransform.position = transform.position;
         }

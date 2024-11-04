@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Gameplay.Player;
 using UnityEngine;
@@ -25,8 +26,6 @@ namespace Gameplay.Camera
             
             playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
             playerDeathBehaviour.OnDeathSequenceFinish += HandleDeathSequenceFinish;
-            
-            SnapToTarget();
         }
 
         private void HandleDeathSequenceFinish()

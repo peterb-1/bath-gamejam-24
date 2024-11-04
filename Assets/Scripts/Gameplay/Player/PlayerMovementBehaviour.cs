@@ -93,14 +93,20 @@ namespace Gameplay.Player
             }
 
             var trans = transform;
-            var down = -trans.up;
+            var up = trans.up;
+            var down = -up;
             var right = trans.right;
             var left = -right;
             var leftGroundPosition = leftGroundCheck.position;
             var rightGroundPosition = rightGroundCheck.position;
 
-            isGrounded = Physics2D.Raycast(leftGroundPosition, down, groundCheckDistance, groundLayers) ||
+            var doesRaycastUpHit = Physics2D.Raycast(leftGroundPosition, up, groundCheckDistance, groundLayers) ||
+                                   Physics2D.Raycast(rightGroundPosition, up, groundCheckDistance, groundLayers);
+            
+            var doesRaycastDownHit = Physics2D.Raycast(leftGroundPosition, down, groundCheckDistance, groundLayers) ||
                          Physics2D.Raycast(rightGroundPosition, down, groundCheckDistance, groundLayers);
+
+            isGrounded = doesRaycastDownHit && !doesRaycastUpHit;
             
             isTouchingLeftWall = Physics2D.Raycast(leftGroundPosition, left, groundCheckDistance, groundLayers) ||
                                  Physics2D.Raycast(leftHeadCheck.position, left, groundCheckDistance, groundLayers);

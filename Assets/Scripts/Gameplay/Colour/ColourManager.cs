@@ -10,13 +10,16 @@ namespace Gameplay.Colour
     {
         [SerializeField] 
         private ColourId initialColour;
+
+        [SerializeField] 
+        private float colourChangeCooldown;
         
         [SerializeField] 
         private float colourChangeDuration;
         
         private PlayerDeathBehaviour playerDeathBehaviour;
         private ColourId currentColour;
-        private bool isChangingColour;
+        private bool canChangeColour;
 
         // subscribers to OnColourChangeStarted have a responsibility to complete their colour change transition within the specified duration
         public static event Action<ColourId, float> OnColourChangeStarted;
@@ -26,6 +29,7 @@ namespace Gameplay.Colour
         private async void Awake()
         {
             currentColour = initialColour;
+            canChangeColour = true;
 
             InputManager.OnColourChanged += HandleColourChanged;
             
@@ -52,7 +56,7 @@ namespace Gameplay.Colour
 
         private void HandleColourChanged(ColourId colour)
         {
-            if (colour == currentColour || isChangingColour) return;
+            if (colour == currentColour || !canChangeColour) return;
             
             currentColour = colour;
             
@@ -61,15 +65,17 @@ namespace Gameplay.Colour
 
         private async UniTask RunColourChangeAsync()
         {
-            isChangingColour = true;
+            canChangeColour = false;
             
             OnColourChangeStarted?.Invoke(currentColour, colourChangeDuration);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(colourChangeDuration));
+            await UniTask.Delay(TimeSpan.FromSeconds(colourChangeCooldown));
+            
+            canChangeColour = true;
+
+            await UniTask.Delay(TimeSpan.FromSeconds(colourChangeDuration - colourChangeCooldown));
             
             OnColourChangeEnded?.Invoke();
-            
-            isChangingColour = false;
         }
 
         private void OnDestroy()
