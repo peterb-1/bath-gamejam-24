@@ -97,6 +97,9 @@ MonoBehaviour:
   tileDimensions: {x: 4, y: 8}
   randomSizeRange: {x: 0.04, y: 0.04}
   backgroundOffset: {x: 0.16, y: 0.08}
+  hologramTilingPerUnitSize: {x: 1, y: 1}
+  hologramSpeedRange: {x: 0.05, y: 0.25}
+  hologramStrengthRange: {x: 0.3, y: 0.7}
   flashChance: 0.2
   largeTileChance: 0.15
   deathColliderBoundary: 1.2
@@ -241,7 +244,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 8331be91165798a46b280b1b2636772d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

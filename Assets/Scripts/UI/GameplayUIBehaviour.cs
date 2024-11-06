@@ -1,5 +1,7 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Gameplay.Input;
+using Gameplay.Player;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,9 +21,21 @@ namespace UI
         [SerializeField] 
         private Sprite gamepadButtonPrompts;
 
-        private void Awake()
+        private PlayerVictoryBehaviour playerVictoryBehaviour;
+
+        private async void Awake()
         {
             InputManager.OnControlSchemeChanged += HandleControlSchemeChanged;
+            
+            await UniTask.WaitUntil(PlayerAccessService.IsReady);
+
+            playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
+            playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
+        }
+
+        private void HandleVictorySequenceStart(Vector2 _1, float _2)
+        {
+            gameplayPageGroup.HideGroup();
         }
 
         private void HandleControlSchemeChanged(ControlScheme controlScheme)

@@ -1,5 +1,7 @@
+using Cysharp.Threading.Tasks;
 using Gameplay.Input;
 using UnityEngine;
+using Utils;
 
 namespace Gameplay.Player
 {
@@ -39,6 +41,9 @@ namespace Gameplay.Player
         [SerializeField]
         private LayerMask groundLayers;
 
+        [SerializeField] 
+        private AnimationCurve moveTowardsTargetCurve;
+
         [Header("References")]
         [SerializeField] 
         private Rigidbody2D rigidBody;
@@ -63,6 +68,9 @@ namespace Gameplay.Player
 
         [SerializeField]
         private PlayerDeathBehaviour playerDeathBehaviour;
+
+        [SerializeField]
+        private PlayerVictoryBehaviour playerVictoryBehaviour;
         
         private float coyoteCountdown;
         private float jumpBufferCountdown;
@@ -82,6 +90,8 @@ namespace Gameplay.Player
 
             playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
             playerDeathBehaviour.OnDeathSequenceFinish += HandleDeathSequenceFinish;
+
+            playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
         }
 
         private void Update()
@@ -202,6 +212,40 @@ namespace Gameplay.Player
         {
             rigidBody.linearVelocity = Vector2.zero;
             rigidBody.gravityScale = 1f;
+        }
+        
+        private void HandleVictorySequenceStart(Vector2 position, float duration)
+        {
+            MoveToTargetAsync(position, duration).Forget();
+        }
+
+        private async UniTask MoveToTargetAsync(Vector2 targetPosition, float duration)
+        {
+            rigidBody.gravityScale = 0f;
+            
+            var timeElapsed = 0f;
+            var trans = transform;
+            var startPosition = trans.position.xy();
+            var currentVelocity = rigidBody.linearVelocity;
+            
+            while (timeElapsed < duration)
+            {
+                var lerp = moveTowardsTargetCurve.Evaluate(timeElapsed / duration);
+
+                var positionFromVelocity = startPosition + currentVelocity * (timeElapsed * (1 - lerp));
+                var targetContribution = Vector2.Lerp(startPosition, targetPosition, lerp);
+
+                trans.position = Vector2.Lerp(positionFromVelocity, targetContribution, lerp);
+                trans.localScale = (1.0f - lerp) * Vector3.one;
+
+                await UniTask.Yield();
+
+                timeElapsed += Time.deltaTime;
+            }
+
+            trans.position = targetPosition;
+            
+            rigidBody.linearVelocity = Vector2.zero;
         }
 
         private void OnDestroy()

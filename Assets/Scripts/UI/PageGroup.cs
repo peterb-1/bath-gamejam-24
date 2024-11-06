@@ -1,3 +1,4 @@
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using UnityEngine;
@@ -63,6 +64,12 @@ namespace UI
 
         public void SetPage(Page page)
         {
+            if (!pages.Contains(page))
+            {
+                GameLogger.LogWarning($"Page {page} is not registered to this PageGroup - cannot set as the active page.", this);
+                return;
+            }
+            
             activePage.Hide();
             activePage = page;
             activePage.Show();

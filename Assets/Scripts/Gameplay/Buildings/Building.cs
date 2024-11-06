@@ -30,6 +30,15 @@ namespace Gameplay.Buildings
         [SerializeField] 
         private Vector2 backgroundOffset;
 
+        [SerializeField] 
+        private Vector2 hologramTilingPerUnitSize;
+
+        [SerializeField] 
+        private Vector2 hologramSpeedRange;
+        
+        [SerializeField] 
+        private Vector2 hologramStrengthRange;
+
         [SerializeField, Range(0f, 1f)] 
         private float flashChance;
         
@@ -64,11 +73,26 @@ namespace Gameplay.Buildings
         private List<Tile> tiles;
 
         private bool isActive;
+        
+        private static readonly int ScrollSpeed = Shader.PropertyToID("_ScrollSpeed");
+        private static readonly int Tiling = Shader.PropertyToID("_Tiling");
+        private static readonly int Strength = Shader.PropertyToID("_Strength");
 
         private void Awake()
         {
             ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
             ColourManager.OnColourChangeInstant += HandleColourChangeInstant;
+
+            InitialiseHologramSettings();
+        }
+        
+        private void InitialiseHologramSettings()
+        {
+            var hologramMaterial = backgroundSpriteRenderer.material;
+
+            hologramMaterial.SetVector(Tiling, hologramTilingPerUnitSize * mainCollider.size.y);
+            hologramMaterial.SetFloat(ScrollSpeed, Random.Range(hologramSpeedRange.x, hologramSpeedRange.y));
+            hologramMaterial.SetFloat(Strength, Random.Range(hologramStrengthRange.x, hologramStrengthRange.y));
         }
 
         private void HandleColourChangeStarted(ColourId colour, float duration)

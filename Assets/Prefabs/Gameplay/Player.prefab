@@ -154,6 +154,7 @@ GameObject:
   - component: {fileID: 7832381044865399546}
   - component: {fileID: 3914673202431141328}
   - component: {fileID: 5012229811958368346}
+  - component: {fileID: 3249549202202213294}
   - component: {fileID: 166652011353585149}
   - component: {fileID: 6448495522596364973}
   m_Layer: 0
@@ -200,6 +201,7 @@ MonoBehaviour:
   <PlayerColourBehaviour>k__BackingField: {fileID: 3914673202431141328}
   <PlayerDeathBehaviour>k__BackingField: {fileID: 5012229811958368346}
   <PlayerMovementBehaviour>k__BackingField: {fileID: 7832381044865399546}
+  <PlayerVictoryBehaviour>k__BackingField: {fileID: 3249549202202213294}
 --- !u!114 &7832381044865399546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,6 +227,30 @@ MonoBehaviour:
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
+  moveTowardsTargetCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   rigidBody: {fileID: 166652011353585149}
   spriteRendererTransform: {fileID: 8015807823079495631}
   playerAnimator: {fileID: 7933610506833450488}
@@ -233,6 +259,7 @@ MonoBehaviour:
   leftHeadCheck: {fileID: 2036022508249942363}
   rightHeadCheck: {fileID: 3579599629245161508}
   playerDeathBehaviour: {fileID: 5012229811958368346}
+  playerVictoryBehaviour: {fileID: 3249549202202213294}
 --- !u!114 &3914673202431141328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,6 +318,23 @@ MonoBehaviour:
   playerHitbox: {fileID: 6448495522596364973}
   playerSpriteRenderer: {fileID: 8491304688917359779}
   deathParticles: {fileID: 6912738076980054414}
+--- !u!114 &3249549202202213294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2745676539903126608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a06057005fecfe4795fcd26ad3587ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  victorySequenceDuration: 0.6
+  victoryLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  playerHitbox: {fileID: 6448495522596364973}
 --- !u!50 &166652011353585149
 Rigidbody2D:
   serializedVersion: 5

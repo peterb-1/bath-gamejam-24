@@ -28,6 +28,7 @@ namespace Gameplay.Input
         private InputActionReference yellowAction;
         
         private PlayerDeathBehaviour playerDeathBehaviour;
+        private PlayerVictoryBehaviour playerVictoryBehaviour;
         
         public static float MoveAmount { get; private set; }
         public static event Action<ColourId> OnColourChanged;
@@ -37,6 +38,7 @@ namespace Gameplay.Input
         private async void Awake()
         {
             EnableInputs();
+            SubscribeToInputCallbacks();
 
             playerInput.onControlsChanged += HandleControlSchemeChanged;
 
@@ -45,6 +47,14 @@ namespace Gameplay.Input
             playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
             playerDeathBehaviour.OnDeathSequenceStart += DisableInputs;
             playerDeathBehaviour.OnDeathSequenceFinish += EnableInputs;
+
+            playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
+            playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
+        }
+
+        private void HandleVictorySequenceStart(Vector2 _1, float _2)
+        {
+            DisableInputs();
         }
 
         private void HandleControlSchemeChanged(PlayerInput _)
@@ -68,11 +78,6 @@ namespace Gameplay.Input
             blueAction.action.Enable();
             redAction.action.Enable();
             yellowAction.action.Enable();
-
-            jumpAction.action.performed += HandleJumpPerformed;
-            blueAction.action.performed += HandleBluePerformed;
-            redAction.action.performed += HandleRedPerformed;
-            yellowAction.action.performed += HandleYellowPerformed;
         }
 
         private void DisableInputs()
@@ -82,7 +87,18 @@ namespace Gameplay.Input
             blueAction.action.Disable();
             redAction.action.Disable();
             yellowAction.action.Disable();
+        }
 
+        private void SubscribeToInputCallbacks()
+        {
+            jumpAction.action.performed += HandleJumpPerformed;
+            blueAction.action.performed += HandleBluePerformed;
+            redAction.action.performed += HandleRedPerformed;
+            yellowAction.action.performed += HandleYellowPerformed;
+        }
+
+        private void UnsubscribeFromInputCallbacks()
+        {
             jumpAction.action.performed -= HandleJumpPerformed;
             blueAction.action.performed -= HandleBluePerformed;
             redAction.action.performed -= HandleRedPerformed;
@@ -117,11 +133,14 @@ namespace Gameplay.Input
         private void OnDestroy()
         {
             DisableInputs();
+            UnsubscribeFromInputCallbacks();
             
             playerInput.onControlsChanged -= HandleControlSchemeChanged;
             
             playerDeathBehaviour.OnDeathSequenceStart -= DisableInputs;
             playerDeathBehaviour.OnDeathSequenceFinish -= EnableInputs;
+            
+            playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
         }
     }
 }
