@@ -316,10 +316,10 @@ TextureImporter:
       name: Drone_0
       rect:
         serializedVersion: 2
-        x: 17
-        y: 503
-        width: 76
-        height: 68
+        x: 0
+        y: 480
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -338,10 +338,10 @@ TextureImporter:
       name: Drone_1
       rect:
         serializedVersion: 2
-        x: 113
-        y: 503
-        width: 78
-        height: 68
+        x: 96
+        y: 480
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -360,10 +360,10 @@ TextureImporter:
       name: Drone_2
       rect:
         serializedVersion: 2
-        x: 208
-        y: 502
-        width: 80
-        height: 68
+        x: 192
+        y: 480
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -382,10 +382,10 @@ TextureImporter:
       name: Drone_3
       rect:
         serializedVersion: 2
-        x: 303
-        y: 501
-        width: 81
-        height: 68
+        x: 288
+        y: 480
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -404,10 +404,10 @@ TextureImporter:
       name: Drone_4
       rect:
         serializedVersion: 2
-        x: 398
-        y: 500
-        width: 76
-        height: 68
+        x: 384
+        y: 480
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -426,10 +426,10 @@ TextureImporter:
       name: Drone_5
       rect:
         serializedVersion: 2
-        x: 495
-        y: 501
-        width: 76
-        height: 68
+        x: 480
+        y: 480
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -448,10 +448,10 @@ TextureImporter:
       name: Drone_6
       rect:
         serializedVersion: 2
-        x: 593
-        y: 502
-        width: 76
-        height: 68
+        x: 576
+        y: 480
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -470,10 +470,10 @@ TextureImporter:
       name: Drone_7
       rect:
         serializedVersion: 2
-        x: 689
-        y: 503
-        width: 140
-        height: 68
+        x: 672
+        y: 480
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -492,10 +492,10 @@ TextureImporter:
       name: Drone_8
       rect:
         serializedVersion: 2
-        x: 934
-        y: 518
-        width: 16
-        height: 20
+        x: 768
+        y: 480
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -514,10 +514,10 @@ TextureImporter:
       name: Drone_9
       rect:
         serializedVersion: 2
-        x: 1024
-        y: 385
-        width: 311
-        height: 173
+        x: 864
+        y: 480
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -536,10 +536,10 @@ TextureImporter:
       name: Drone_10
       rect:
         serializedVersion: 2
-        x: 1406
+        x: 960
         y: 480
-        width: 84
-        height: 58
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -558,10 +558,10 @@ TextureImporter:
       name: Drone_11
       rect:
         serializedVersion: 2
-        x: 1488
-        y: 514
-        width: 28
-        height: 20
+        x: 1056
+        y: 480
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -580,10 +580,10 @@ TextureImporter:
       name: Drone_12
       rect:
         serializedVersion: 2
-        x: 1516
-        y: 514
-        width: 16
-        height: 27
+        x: 1152
+        y: 480
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -602,10 +602,10 @@ TextureImporter:
       name: Drone_13
       rect:
         serializedVersion: 2
-        x: 17
-        y: 407
-        width: 76
-        height: 68
+        x: 1248
+        y: 480
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -624,10 +624,10 @@ TextureImporter:
       name: Drone_14
       rect:
         serializedVersion: 2
-        x: 113
-        y: 407
-        width: 76
-        height: 68
+        x: 1344
+        y: 480
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -643,35 +643,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Drone_15
-      rect:
-        serializedVersion: 2
-        x: 208
-        y: 405
-        width: 76
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1a5b73eea0574b520800000000000000
-      internalID: 2716925165018002849
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Drone_16
       rect:
         serializedVersion: 2
-        x: 305
-        y: 403
-        width: 74
-        height: 67
+        x: 0
+        y: 384
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -690,10 +668,10 @@ TextureImporter:
       name: Drone_17
       rect:
         serializedVersion: 2
-        x: 399
-        y: 401
-        width: 74
-        height: 66
+        x: 96
+        y: 384
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -712,10 +690,10 @@ TextureImporter:
       name: Drone_18
       rect:
         serializedVersion: 2
-        x: 493
-        y: 395
-        width: 74
-        height: 67
+        x: 192
+        y: 384
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -734,10 +712,10 @@ TextureImporter:
       name: Drone_19
       rect:
         serializedVersion: 2
-        x: 589
-        y: 385
-        width: 74
-        height: 70
+        x: 288
+        y: 384
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -756,10 +734,10 @@ TextureImporter:
       name: Drone_20
       rect:
         serializedVersion: 2
-        x: 681
-        y: 383
-        width: 74
-        height: 68
+        x: 384
+        y: 384
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -778,10 +756,10 @@ TextureImporter:
       name: Drone_21
       rect:
         serializedVersion: 2
-        x: 776
-        y: 383
-        width: 74
-        height: 69
+        x: 480
+        y: 384
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -800,10 +778,10 @@ TextureImporter:
       name: Drone_22
       rect:
         serializedVersion: 2
-        x: 871
-        y: 385
-        width: 74
-        height: 68
+        x: 576
+        y: 384
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -822,10 +800,10 @@ TextureImporter:
       name: Drone_23
       rect:
         serializedVersion: 2
-        x: 966
+        x: 672
         y: 384
-        width: 74
-        height: 68
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -844,10 +822,10 @@ TextureImporter:
       name: Drone_24
       rect:
         serializedVersion: 2
-        x: 1440
-        y: 394
-        width: 24
-        height: 28
+        x: 768
+        y: 384
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -866,10 +844,10 @@ TextureImporter:
       name: Drone_25
       rect:
         serializedVersion: 2
-        x: 1464
-        y: 395
-        width: 16
-        height: 22
+        x: 864
+        y: 384
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -888,10 +866,10 @@ TextureImporter:
       name: Drone_26
       rect:
         serializedVersion: 2
-        x: 1480
-        y: 394
-        width: 50
-        height: 29
+        x: 960
+        y: 384
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -910,10 +888,10 @@ TextureImporter:
       name: Drone_27
       rect:
         serializedVersion: 2
-        x: 17
-        y: 311
-        width: 76
-        height: 68
+        x: 1056
+        y: 384
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -929,35 +907,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Drone_28
-      rect:
-        serializedVersion: 2
-        x: 113
-        y: 308
-        width: 74
-        height: 67
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8d433b26ae64872c0800000000000000
-      internalID: -4433715860654050088
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Drone_29
       rect:
         serializedVersion: 2
-        x: 207
-        y: 306
-        width: 74
-        height: 66
+        x: 0
+        y: 288
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -976,10 +932,10 @@ TextureImporter:
       name: Drone_30
       rect:
         serializedVersion: 2
-        x: 305
-        y: 308
-        width: 74
-        height: 67
+        x: 96
+        y: 288
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -998,10 +954,10 @@ TextureImporter:
       name: Drone_31
       rect:
         serializedVersion: 2
-        x: 1441
-        y: 308
-        width: 30
-        height: 42
+        x: 192
+        y: 288
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1020,10 +976,10 @@ TextureImporter:
       name: Drone_32
       rect:
         serializedVersion: 2
-        x: 1473
-        y: 313
-        width: 21
-        height: 24
+        x: 288
+        y: 288
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1039,35 +995,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Drone_33
-      rect:
-        serializedVersion: 2
-        x: 1495
-        y: 313
-        width: 16
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4a0d6ea504f1a3d80800000000000000
-      internalID: -8270263404449050460
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Drone_34
       rect:
         serializedVersion: 2
-        x: 1509
-        y: 313
-        width: 23
-        height: 29
+        x: 0
+        y: 192
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1086,10 +1020,10 @@ TextureImporter:
       name: Drone_35
       rect:
         serializedVersion: 2
-        x: 17
-        y: 215
-        width: 76
-        height: 68
+        x: 96
+        y: 192
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1108,10 +1042,10 @@ TextureImporter:
       name: Drone_36
       rect:
         serializedVersion: 2
-        x: 114
-        y: 216
-        width: 76
-        height: 68
+        x: 192
+        y: 192
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1130,10 +1064,10 @@ TextureImporter:
       name: Drone_37
       rect:
         serializedVersion: 2
-        x: 211
-        y: 214
-        width: 76
-        height: 68
+        x: 288
+        y: 192
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1152,10 +1086,10 @@ TextureImporter:
       name: Drone_38
       rect:
         serializedVersion: 2
-        x: 306
-        y: 212
-        width: 76
-        height: 68
+        x: 384
+        y: 192
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1171,57 +1105,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Drone_39
-      rect:
-        serializedVersion: 2
-        x: 401
-        y: 215
-        width: 76
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7311340c50e832090800000000000000
-      internalID: -8060442752711454409
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_40
-      rect:
-        serializedVersion: 2
-        x: 1395
-        y: 244
-        width: 26
-        height: 25
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3596f2ccd203e96d0800000000000000
-      internalID: -2981892930015368877
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Drone_41
       rect:
         serializedVersion: 2
-        x: 1420
-        y: 244
-        width: 19
-        height: 21
+        x: 0
+        y: 96
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1240,10 +1130,10 @@ TextureImporter:
       name: Drone_42
       rect:
         serializedVersion: 2
-        x: 1439
-        y: 245
-        width: 6
-        height: 28
+        x: 96
+        y: 96
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1262,10 +1152,10 @@ TextureImporter:
       name: Drone_43
       rect:
         serializedVersion: 2
-        x: 1446
-        y: 243
-        width: 19
-        height: 30
+        x: 192
+        y: 96
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1284,10 +1174,10 @@ TextureImporter:
       name: Drone_44
       rect:
         serializedVersion: 2
-        x: 1465
-        y: 239
-        width: 12
-        height: 36
+        x: 288
+        y: 96
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1306,10 +1196,10 @@ TextureImporter:
       name: Drone_45
       rect:
         serializedVersion: 2
-        x: 1475
-        y: 240
-        width: 23
-        height: 30
+        x: 384
+        y: 96
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1328,10 +1218,10 @@ TextureImporter:
       name: Drone_46
       rect:
         serializedVersion: 2
-        x: 1498
-        y: 245
-        width: 7
-        height: 28
+        x: 480
+        y: 96
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1347,35 +1237,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Drone_47
-      rect:
-        serializedVersion: 2
-        x: 1503
-        y: 237
-        width: 17
-        height: 28
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 834e48496c7ac9860800000000000000
-      internalID: 7538084347648468024
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Drone_48
       rect:
         serializedVersion: 2
-        x: 1518
-        y: 239
-        width: 14
-        height: 36
+        x: 0
+        y: 0
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1394,10 +1262,10 @@ TextureImporter:
       name: Drone_49
       rect:
         serializedVersion: 2
-        x: 1402
-        y: 201
-        width: 68
-        height: 34
+        x: 96
+        y: 0
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1416,10 +1284,10 @@ TextureImporter:
       name: Drone_50
       rect:
         serializedVersion: 2
-        x: 1469
-        y: 205
-        width: 19
-        height: 22
+        x: 192
+        y: 0
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1438,10 +1306,10 @@ TextureImporter:
       name: Drone_51
       rect:
         serializedVersion: 2
-        x: 1487
-        y: 205
-        width: 15
-        height: 22
+        x: 288
+        y: 0
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1460,10 +1328,10 @@ TextureImporter:
       name: Drone_52
       rect:
         serializedVersion: 2
-        x: 1500
-        y: 205
-        width: 17
-        height: 31
+        x: 384
+        y: 0
+        width: 96
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1478,429 +1346,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: Drone_53
-      rect:
-        serializedVersion: 2
-        x: 17
-        y: 119
-        width: 76
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a91df0078430d93f0800000000000000
-      internalID: -892553541496876646
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_54
-      rect:
-        serializedVersion: 2
-        x: 113
-        y: 120
-        width: 76
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: dbfb64b986c73b9d0800000000000000
-      internalID: -2759725357924433987
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_55
-      rect:
-        serializedVersion: 2
-        x: 209
-        y: 121
-        width: 76
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f2f694e90a1d28b90800000000000000
-      internalID: -7240994763077750993
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_56
-      rect:
-        serializedVersion: 2
-        x: 305
-        y: 122
-        width: 76
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3e65f2bdcd9f9de00800000000000000
-      internalID: 1070161113442637539
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_57
-      rect:
-        serializedVersion: 2
-        x: 401
-        y: 121
-        width: 76
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 285b16b74c755de00800000000000000
-      internalID: 1068856987965568386
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_58
-      rect:
-        serializedVersion: 2
-        x: 497
-        y: 120
-        width: 76
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 47d5d6be711ab7a40800000000000000
-      internalID: 5367060505048210804
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_59
-      rect:
-        serializedVersion: 2
-        x: 1446
-        y: 120
-        width: 28
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a376851842fa36680800000000000000
-      internalID: -8762967878609115334
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_60
-      rect:
-        serializedVersion: 2
-        x: 1476
-        y: 121
-        width: 19
-        height: 35
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: eb7e45c00e02ba300800000000000000
-      internalID: 264341149782960062
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_61
-      rect:
-        serializedVersion: 2
-        x: 1498
-        y: 122
-        width: 6
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e5af1213df09fdd50800000000000000
-      internalID: 6764284582459210334
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_62
-      rect:
-        serializedVersion: 2
-        x: 1505
-        y: 121
-        width: 20
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a81674bedbfef4110800000000000000
-      internalID: 1247479220780097930
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_63
-      rect:
-        serializedVersion: 2
-        x: 17
-        y: 23
-        width: 76
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 19725c82a6de617d0800000000000000
-      internalID: -2947907865861085295
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_64
-      rect:
-        serializedVersion: 2
-        x: 113
-        y: 22
-        width: 76
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b10976d48e3082960800000000000000
-      internalID: 7577310669316788251
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_65
-      rect:
-        serializedVersion: 2
-        x: 209
-        y: 19
-        width: 74
-        height: 67
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 251a10ebdbea479b0800000000000000
-      internalID: -5083245949434617518
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_66
-      rect:
-        serializedVersion: 2
-        x: 303
-        y: 17
-        width: 74
-        height: 66
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 412e8b0a03d2c8050800000000000000
-      internalID: 5804063706651877908
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_67
-      rect:
-        serializedVersion: 2
-        x: 400
-        y: 21
-        width: 76
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 87f95277db0621ed0800000000000000
-      internalID: -2444785280844718216
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_68
-      rect:
-        serializedVersion: 2
-        x: 1419
-        y: 32
-        width: 29
-        height: 31
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9366886067836d240800000000000000
-      internalID: 4816098931086222905
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_69
-      rect:
-        serializedVersion: 2
-        x: 1450
-        y: 33
-        width: 36
-        height: 35
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 24b9278ea40aa1e00800000000000000
-      internalID: 1016300909513317186
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_70
-      rect:
-        serializedVersion: 2
-        x: 1487
-        y: 20
-        width: 22
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 65a545bd8a9f42dd0800000000000000
-      internalID: -2511608188536333738
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Drone_71
-      rect:
-        serializedVersion: 2
-        x: 1509
-        y: 33
-        width: 19
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3840f2ad5a4743d40800000000000000
-      internalID: 5563199695388345475
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 2c84e5bf74853b044a152f1d15be50c6
     internalID: 0
     vertices: []
     indices: 
@@ -1909,7 +1359,63 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Drone_0: 4112356383579328530
+      Drone_1: -9122016740902801177
+      Drone_10: 2056274229838913570
+      Drone_11: -6402413444110431300
+      Drone_12: 6418209275800209030
+      Drone_13: -3569145050445347841
+      Drone_14: 8228949730740926054
+      Drone_15: 2716925165018002849
+      Drone_16: -6309020000329384564
+      Drone_17: 8369353139864668123
+      Drone_18: 2844731510044773580
+      Drone_19: 5699431818378455193
+      Drone_2: -7695309289240506667
+      Drone_20: -7565778690001588580
+      Drone_21: -6944644974107990808
+      Drone_22: 6281091401535878740
+      Drone_23: 815375672950077231
+      Drone_24: 7060027419168797574
+      Drone_25: 8263750646965251366
+      Drone_26: -379915338932831879
+      Drone_27: 4209614882834400338
+      Drone_28: -4433715860654050088
+      Drone_29: -4973709402504538429
+      Drone_3: -3223525642366603235
+      Drone_30: -3506727454550793280
+      Drone_31: -729490635724684191
+      Drone_32: 6181600414265506046
+      Drone_33: -8270263404449050460
+      Drone_34: -3675159549374260432
+      Drone_35: 2490493413958876353
+      Drone_36: -8589647049333862887
+      Drone_37: -1884158717524878179
+      Drone_38: 2890951076529711664
+      Drone_39: -8060442752711454409
+      Drone_4: 1371902213157426602
+      Drone_40: -2981892930015368877
+      Drone_41: -3384699373965070591
+      Drone_42: 3286132138492026456
+      Drone_43: -2954335207920715084
+      Drone_44: -2552051463148942623
+      Drone_45: 7743379336334260952
+      Drone_46: 1697561612483519111
+      Drone_47: 7538084347648468024
+      Drone_48: 6363908890915979519
+      Drone_49: 4592240411062090904
+      Drone_5: 6925330608835871255
+      Drone_50: 2067571345294476419
+      Drone_51: -6284673525162063736
+      Drone_52: 1203818792443097482
+      Drone_53: -892553541496876646
+      Drone_54: -2759725357924433987
+      Drone_55: 931601676
+      Drone_6: -8936346841901684153
+      Drone_7: 2326313104105906880
+      Drone_8: 3336612464585399052
+      Drone_9: 2007886861881913749
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
