@@ -31,7 +31,7 @@ namespace Gameplay.Buildings
         private Vector2 backgroundOffset;
 
         [SerializeField] 
-        private Vector2 hologramTilingPerUnitSize;
+        private Vector2 hologramTilingRange;
 
         [SerializeField] 
         private Vector2 hologramSpeedRange;
@@ -90,7 +90,7 @@ namespace Gameplay.Buildings
         {
             var hologramMaterial = backgroundSpriteRenderer.material;
 
-            hologramMaterial.SetVector(Tiling, hologramTilingPerUnitSize * mainCollider.size.y);
+            hologramMaterial.SetVector(Tiling, new Vector2(1f, Random.Range(hologramTilingRange.x, hologramTilingRange.y) * mainCollider.size.y));
             hologramMaterial.SetFloat(ScrollSpeed, Random.Range(hologramSpeedRange.x, hologramSpeedRange.y));
             hologramMaterial.SetFloat(Strength, Random.Range(hologramStrengthRange.x, hologramStrengthRange.y));
         }

@@ -1,7 +1,7 @@
-using System;
 using Cysharp.Threading.Tasks;
 using Gameplay.Player;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Gameplay.Camera
 {
@@ -12,6 +12,15 @@ namespace Gameplay.Camera
         
         [SerializeField]
         private float smoothTime;
+
+        [SerializeField] 
+        private float velocityShakeThreshold;
+        
+        [SerializeField] 
+        private float velocityShakeMultiplier;
+        
+        [SerializeField] 
+        private float maxShakeStrength;
 
         private PlayerDeathBehaviour playerDeathBehaviour;
         private Transform target;
@@ -35,7 +44,11 @@ namespace Gameplay.Camera
 
         private void Update()
         {
-            transform.position = Vector3.SmoothDamp(transform.position, GetTargetPosition(), ref velocity, smoothTime);
+            var velocityMagnitude = velocity.magnitude - velocityShakeThreshold;
+            var shakeIntensity = Mathf.Clamp(velocityMagnitude * velocityShakeMultiplier, 0, maxShakeStrength);
+            var shakeOffset = new Vector3(Random.Range(-1f, 1f) * shakeIntensity, Random.Range(-1f, 1f) * shakeIntensity, 0f);
+
+            transform.position = Vector3.SmoothDamp(transform.position, GetTargetPosition() + shakeOffset, ref velocity, smoothTime);
         }
 
         private void SnapToTarget()

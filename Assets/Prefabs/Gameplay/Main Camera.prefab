@@ -70,7 +70,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 4.4
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -98,9 +98,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1fb722ed1fbca44593c098ec4e45bde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   followOffset: {x: 0, y: 0, z: -10}
-  smoothTime: 0.25
+  smoothTime: 0.12
+  velocityShakeThreshold: 2
+  velocityShakeMultiplier: 0.1
+  maxShakeStrength: 1
 --- !u!81 &6438292713810105194
 AudioListener:
   m_ObjectHideFlags: 0

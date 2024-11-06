@@ -82,15 +82,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_fontColor.b
-      value: 0.48967603
+      value: 0.30286258
       objectReference: {fileID: 0}
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_fontColor.g
-      value: 0.48967603
+      value: 0.2991723
       objectReference: {fileID: 0}
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_fontColor.r
-      value: 0.7924528
+      value: 0.764151
       objectReference: {fileID: 0}
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_fontSizeBase
@@ -216,7 +216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1440845906237661293, guid: 05209929063325e4bb40347260164103, type: 3}
       propertyPath: m_Name
-      value: VictoryPageGroup Variant
+      value: VictoryPageGroup
       objectReference: {fileID: 0}
     - target: {fileID: 3495050392053917900, guid: 05209929063325e4bb40347260164103, type: 3}
       propertyPath: m_Pivot.x
