@@ -10,6 +10,9 @@ namespace Gameplay.Input
     public class InputManager : MonoBehaviour
     {
         [SerializeField] 
+        private PlayerInput playerInput;
+        
+        [SerializeField] 
         private InputActionReference moveAction;
 
         [SerializeField] 
@@ -29,16 +32,33 @@ namespace Gameplay.Input
         public static float MoveAmount { get; private set; }
         public static event Action<ColourId> OnColourChanged;
         public static event Action OnJumpPerformed;
+        public static event Action<ControlScheme> OnControlSchemeChanged;
         
         private async void Awake()
         {
             EnableInputs();
+
+            playerInput.onControlsChanged += HandleControlSchemeChanged;
 
             await UniTask.WaitUntil(PlayerAccessService.IsReady);
 
             playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
             playerDeathBehaviour.OnDeathSequenceStart += DisableInputs;
             playerDeathBehaviour.OnDeathSequenceFinish += EnableInputs;
+        }
+
+        private void HandleControlSchemeChanged(PlayerInput _)
+        {
+            var controlSchemeIdentifier = playerInput.currentControlScheme;
+            
+            var controlScheme = controlSchemeIdentifier switch
+            {
+                ControlSchemeIdentifiers.KEYBOARD_MOUSE => ControlScheme.KeyboardMouse,
+                ControlSchemeIdentifiers.GAMEPAD => ControlScheme.Gamepad,
+                _ => throw new ArgumentOutOfRangeException(nameof(controlSchemeIdentifier), controlSchemeIdentifier, null)
+            };
+            
+            OnControlSchemeChanged?.Invoke(controlScheme);
         }
 
         private void EnableInputs()
@@ -55,6 +75,20 @@ namespace Gameplay.Input
             yellowAction.action.performed += HandleYellowPerformed;
         }
 
+        private void DisableInputs()
+        {
+            moveAction.action.Disable();
+            jumpAction.action.Disable();
+            blueAction.action.Disable();
+            redAction.action.Disable();
+            yellowAction.action.Disable();
+
+            jumpAction.action.performed -= HandleJumpPerformed;
+            blueAction.action.performed -= HandleBluePerformed;
+            redAction.action.performed -= HandleRedPerformed;
+            yellowAction.action.performed -= HandleYellowPerformed;
+        }
+        
         private void Update()
         {
             MoveAmount = moveAction.action.ReadValue<Vector2>().x;
@@ -84,22 +118,10 @@ namespace Gameplay.Input
         {
             DisableInputs();
             
+            playerInput.onControlsChanged -= HandleControlSchemeChanged;
+            
             playerDeathBehaviour.OnDeathSequenceStart -= DisableInputs;
             playerDeathBehaviour.OnDeathSequenceFinish -= EnableInputs;
-        }
-        
-        private void DisableInputs()
-        {
-            moveAction.action.Disable();
-            jumpAction.action.Disable();
-            blueAction.action.Disable();
-            redAction.action.Disable();
-            yellowAction.action.Disable();
-
-            jumpAction.action.performed -= HandleJumpPerformed;
-            blueAction.action.performed -= HandleBluePerformed;
-            redAction.action.performed -= HandleRedPerformed;
-            yellowAction.action.performed -= HandleYellowPerformed;
         }
     }
 }

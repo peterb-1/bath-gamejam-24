@@ -87,10 +87,7 @@ namespace Gameplay.Player
         private void Update()
         {
             if (!isGrounded) coyoteCountdown -= Time.deltaTime;
-            if (jumpBufferCountdown > 0f)
-            {
-                jumpBufferCountdown -= Time.deltaTime;
-            }
+            if (jumpBufferCountdown > 0f) jumpBufferCountdown -= Time.deltaTime;
 
             var trans = transform;
             var up = trans.up;
