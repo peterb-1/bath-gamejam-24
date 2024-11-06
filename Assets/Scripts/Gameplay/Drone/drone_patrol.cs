@@ -2,9 +2,6 @@ using UnityEngine;
 
 public class drone_patrol : MonoBehaviour
 {
-    // [SerializeField]
-    // private Animator droneAnimator;
-
     [SerializeField]
     private Transform patrolPoint1;
 
