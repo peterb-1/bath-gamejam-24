@@ -96,3 +96,13 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+ignore.conf
+.plastic/plastic.changes
+.plastic/plastic.selector
+.plastic/plastic.wktree
+.plastic/plastic.workspace
+.vscode/extensions.json
+.vscode/launch.json
+.vscode/settings.json
+Assets/Sprites/Gameplay/enemy/Drone.png.meta
+.gitignore
