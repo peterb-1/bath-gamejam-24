@@ -89,7 +89,6 @@ namespace Gameplay.Player
             InputManager.OnJumpPerformed += HandleJumpPerformed;
 
             playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
-            playerDeathBehaviour.OnDeathSequenceFinish += HandleDeathSequenceFinish;
 
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
         }
@@ -208,12 +207,6 @@ namespace Gameplay.Player
             rigidBody.gravityScale = 0f;
         }
 
-        private void HandleDeathSequenceFinish()
-        {
-            rigidBody.linearVelocity = Vector2.zero;
-            rigidBody.gravityScale = 1f;
-        }
-        
         private void HandleVictorySequenceStart(Vector2 position, float duration)
         {
             MoveToTargetAsync(position, duration).Forget();
@@ -253,7 +246,6 @@ namespace Gameplay.Player
             InputManager.OnJumpPerformed -= HandleJumpPerformed;
             
             playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
-            playerDeathBehaviour.OnDeathSequenceFinish -= HandleDeathSequenceFinish;
         }
     }
 }

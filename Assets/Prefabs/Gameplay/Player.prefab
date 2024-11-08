@@ -311,7 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 971ce76dd9690b149b878c2e1c695f26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathSequenceDuration: 0.8
+  deathSequenceDuration: 0.4
   deathLayers:
     serializedVersion: 2
     m_Bits: 128

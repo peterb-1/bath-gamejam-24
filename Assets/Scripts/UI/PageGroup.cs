@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
@@ -38,6 +39,22 @@ namespace UI
                 activePage = initialPage;
                 activePage.ShowImmediate();
             }
+        }
+
+        public async UniTask ShowGroupAsync()
+        {
+            ShowGroup();
+
+            var duration = await pageGroupAnimator.GetCurrentClipDurationAsync();
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+        }
+        
+        public async UniTask HideGroupAsync()
+        {
+            HideGroup();
+
+            var duration = await pageGroupAnimator.GetCurrentClipDurationAsync();
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
         }
         
         public void ShowGroup()

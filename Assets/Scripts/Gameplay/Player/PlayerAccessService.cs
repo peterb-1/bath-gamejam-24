@@ -28,6 +28,7 @@ namespace Gameplay.Player
             {
                 GameLogger.LogError("Cannot have more than one PlayerAccessService in the scene at once! Destroying this one.");
                 Destroy(this);
+                return;
             }
 
             Instance = this;

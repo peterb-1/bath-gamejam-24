@@ -1,6 +1,8 @@
 using System;
+using Core;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Gameplay.Player
 {
@@ -22,7 +24,6 @@ namespace Gameplay.Player
         private ParticleSystem deathParticles;
 
         public event Action OnDeathSequenceStart;
-        public event Action OnDeathSequenceFinish;
 
         private void OnTriggerEnter2D(Collider2D other)
         {
@@ -44,13 +45,7 @@ namespace Gameplay.Player
 
             await UniTask.Delay(TimeSpan.FromSeconds(deathSequenceDuration));
             
-            playerHitbox.enabled = true;
-            playerSpriteRenderer.enabled = true;
-            
-            deathParticles.gameObject.SetActive(false);
-            deathParticles.Stop();
-
-            OnDeathSequenceFinish?.Invoke();
+            SceneLoader.Instance.LoadScene(SceneManager.GetActiveScene());
         }
     }
 }

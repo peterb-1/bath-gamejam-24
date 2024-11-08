@@ -46,7 +46,6 @@ namespace Gameplay.Input
 
             playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
             playerDeathBehaviour.OnDeathSequenceStart += DisableInputs;
-            playerDeathBehaviour.OnDeathSequenceFinish += EnableInputs;
 
             playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
@@ -138,7 +137,6 @@ namespace Gameplay.Input
             playerInput.onControlsChanged -= HandleControlSchemeChanged;
             
             playerDeathBehaviour.OnDeathSequenceStart -= DisableInputs;
-            playerDeathBehaviour.OnDeathSequenceFinish -= EnableInputs;
             
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
         }
