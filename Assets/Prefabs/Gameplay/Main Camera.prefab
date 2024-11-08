@@ -100,9 +100,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followOffset: {x: 0, y: 0, z: -10}
   smoothTime: 0.12
-  velocityShakeThreshold: 2
-  velocityShakeMultiplier: 0.1
-  maxShakeStrength: 1
+  velocityShakeThreshold: 5
+  velocityShakeMultiplier: 0.0012
+  maxShakeStrength: 0.008
 --- !u!81 &6438292713810105194
 AudioListener:
   m_ObjectHideFlags: 0

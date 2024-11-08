@@ -45,7 +45,7 @@ namespace Gameplay.Camera
         private void Update()
         {
             var velocityMagnitude = velocity.magnitude - velocityShakeThreshold;
-            var shakeIntensity = Mathf.Clamp(velocityMagnitude * velocityShakeMultiplier, 0, maxShakeStrength);
+            var shakeIntensity = Mathf.Clamp(velocityMagnitude * velocityShakeMultiplier, 0, maxShakeStrength) / Time.deltaTime;
             var shakeOffset = new Vector3(Random.Range(-1f, 1f) * shakeIntensity, Random.Range(-1f, 1f) * shakeIntensity, 0f);
 
             transform.position = Vector3.SmoothDamp(transform.position, GetTargetPosition() + shakeOffset, ref velocity, smoothTime);
