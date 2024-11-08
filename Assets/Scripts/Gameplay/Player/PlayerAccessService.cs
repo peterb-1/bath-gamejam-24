@@ -24,7 +24,7 @@ namespace Gameplay.Player
 
         private void Awake()
         {
-            if (Instance != null)
+            if (Instance != null && Instance != this)
             {
                 GameLogger.LogError("Cannot have more than one PlayerAccessService in the scene at once! Destroying this one.");
                 Destroy(this);

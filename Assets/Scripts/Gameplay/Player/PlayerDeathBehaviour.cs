@@ -45,7 +45,7 @@ namespace Gameplay.Player
 
             await UniTask.Delay(TimeSpan.FromSeconds(deathSequenceDuration));
             
-            SceneLoader.Instance.LoadScene(SceneManager.GetActiveScene());
+            SceneLoader.Instance.ReloadCurrentScene();
         }
     }
 }

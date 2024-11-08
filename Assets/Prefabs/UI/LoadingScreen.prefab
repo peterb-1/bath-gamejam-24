@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: LoadingScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 2901783670216365875, guid: 05209929063325e4bb40347260164103, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2901783670216365875, guid: 05209929063325e4bb40347260164103, type: 3}
+      propertyPath: m_BlocksRaycasts
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3495050392053917900, guid: 05209929063325e4bb40347260164103, type: 3}
       propertyPath: m_Pivot.x
       value: 0

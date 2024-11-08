@@ -1,6 +1,8 @@
+using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Player;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -12,6 +14,12 @@ namespace UI
         [SerializeField] 
         private Page victoryPage;
 
+        [SerializeField] 
+        private Button retryButton;
+        
+        [SerializeField] 
+        private Button nextButton;
+
         private PlayerVictoryBehaviour playerVictoryBehaviour;
 
         private async void Awake()
@@ -20,6 +28,13 @@ namespace UI
 
             playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
             playerVictoryBehaviour.OnVictorySequenceFinish += HandleVictorySequenceFinish;
+            
+            retryButton.onClick.AddListener(HandleRetryClicked);
+        }
+
+        private void HandleRetryClicked()
+        {
+            SceneLoader.Instance.ReloadCurrentScene();
         }
 
         private void HandleVictorySequenceFinish()
@@ -31,6 +46,8 @@ namespace UI
         private void OnDestroy()
         {
             playerVictoryBehaviour.OnVictorySequenceFinish -= HandleVictorySequenceFinish;
+            
+            retryButton.onClick.RemoveListener(HandleRetryClicked);
         }
     }
 }

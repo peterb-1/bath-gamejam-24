@@ -15,7 +15,7 @@ namespace Core
         
         private void Awake()
         {
-            if (Instance != null)
+            if (Instance != null && Instance != this)
             {
                 // would usually log an error, but we expect this to happen when loading a new scene
                 Destroy(this);
@@ -31,6 +31,11 @@ namespace Core
             if (isLoading) return;
 
             LoadSceneAsync(scene).Forget();
+        }
+
+        public void ReloadCurrentScene()
+        {
+            LoadScene(SceneManager.GetActiveScene());
         }
 
         private async UniTask LoadSceneAsync(Scene scene)
