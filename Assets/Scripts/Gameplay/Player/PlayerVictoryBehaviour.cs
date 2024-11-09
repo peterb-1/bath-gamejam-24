@@ -1,7 +1,7 @@
 using System;
+using Audio;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using Utils;
 
 namespace Gameplay.Player
 {
@@ -30,6 +30,8 @@ namespace Gameplay.Player
         private async UniTask RunVictorySequenceAsync(Vector3 targetPosition)
         {
             OnVictorySequenceStart?.Invoke(targetPosition, victorySequenceDuration);
+            
+            AudioManager.Instance.Play(AudioClipIdentifier.Victory);
 
             playerHitbox.enabled = false;
 

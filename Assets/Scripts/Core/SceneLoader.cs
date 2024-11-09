@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,6 +12,9 @@ namespace Core
         
         public static SceneLoader Instance { get; private set; }
 
+        public static event Action OnSceneLoadStart;
+        public static event Action OnSceneLoaded;
+
         private bool isLoading;
         
         private void Awake()
@@ -18,7 +22,7 @@ namespace Core
             if (Instance != null && Instance != this)
             {
                 // would usually log an error, but we expect this to happen when loading a new scene
-                Destroy(this);
+                Destroy(gameObject);
                 return;
             }
 
@@ -41,10 +45,14 @@ namespace Core
         private async UniTask LoadSceneAsync(Scene scene)
         {
             isLoading = true;
+            
+            OnSceneLoadStart?.Invoke();
 
             await loadingScreen.ShowAsync();
             
             await SceneManager.LoadSceneAsync(scene.name);
+            
+            OnSceneLoaded?.Invoke();
             
             await loadingScreen.HideAsync();
             

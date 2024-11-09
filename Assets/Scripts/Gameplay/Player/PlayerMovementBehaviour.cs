@@ -1,3 +1,4 @@
+using Audio;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
 using UnityEngine;
@@ -190,12 +191,14 @@ namespace Gameplay.Player
         
         private void PerformJump(float force)
         {
+            AudioManager.Instance.Play(AudioClipIdentifier.Jump);
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, force);
             jumpBufferCountdown = 0f;
         }
 
         private void PerformWallJump(Vector2 force)
         {
+            AudioManager.Instance.Play(AudioClipIdentifier.Jump);
             rigidBody.linearVelocity = force;
             hasDoubleJumped = true;
             jumpBufferCountdown = 0f;

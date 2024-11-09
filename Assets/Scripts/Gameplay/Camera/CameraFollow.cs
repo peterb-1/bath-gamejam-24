@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Gameplay.Player;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -24,8 +25,10 @@ namespace Gameplay.Camera
         private Transform target;
         private Vector3 velocity;
 
-        private void Awake()
+        private async void Awake()
         {
+            await UniTask.WaitUntil(PlayerAccessService.IsReady);
+            
             target = PlayerAccessService.Instance.PlayerTransform;
             velocity = Vector3.zero;
         }

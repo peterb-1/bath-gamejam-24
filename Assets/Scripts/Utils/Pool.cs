@@ -15,6 +15,7 @@ namespace Utils
         public Pool(T item, int defaultCapacity = 100)
         {
             rootGameObject = new GameObject($"POOL - {item.name}");
+            Object.DontDestroyOnLoad(rootGameObject);
             
             poolObject = item;
             

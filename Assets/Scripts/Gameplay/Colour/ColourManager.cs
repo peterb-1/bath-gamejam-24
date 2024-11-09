@@ -1,4 +1,5 @@
 using System;
+using Audio;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
 using UnityEngine;
@@ -49,6 +50,8 @@ namespace Gameplay.Colour
         private async UniTask RunColourChangeAsync()
         {
             canChangeColour = false;
+            
+            AudioManager.Instance.Play(AudioClipIdentifier.ColourSwitch);
             
             OnColourChangeStarted?.Invoke(currentColour, colourChangeDuration);
 

@@ -116,7 +116,7 @@ namespace Gameplay.Buildings
         {
             if (isActive && Random.Range(0f, 1f) < flashChance)
             {
-                var tile = ArrayUtils.RandomChoice(tiles);
+                var tile = tiles.RandomChoice();
             
                 tile.FlashAsync().Forget();
             }
@@ -130,7 +130,7 @@ namespace Gameplay.Buildings
 
             while (tiles.Count > 0)
             {
-                var randomTile = ArrayUtils.RandomChoice(tiles);
+                var randomTile = tiles.RandomChoice();
                 shuffledTiles.Add(randomTile);
                 tiles.Remove(randomTile);
             }

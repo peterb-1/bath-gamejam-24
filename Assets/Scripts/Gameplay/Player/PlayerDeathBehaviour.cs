@@ -1,4 +1,5 @@
 using System;
+using Audio;
 using Core;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -22,8 +23,15 @@ namespace Gameplay.Player
 
         [SerializeField] 
         private ParticleSystem deathParticles;
+        
+        public bool IsAlive { get; private set; }
 
         public event Action OnDeathSequenceStart;
+
+        private void Awake()
+        {
+            IsAlive = true;
+        }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
@@ -35,7 +43,12 @@ namespace Gameplay.Player
 
         private async UniTask RunDeathSequenceAsync()
         {
+            IsAlive = false;
+            
             OnDeathSequenceStart?.Invoke();
+            
+            AudioManager.Instance.Play(AudioClipIdentifier.Death);
+            AudioManager.Instance.Stop(AudioClipIdentifier.ColourSwitch);
 
             playerHitbox.enabled = false;
             playerSpriteRenderer.enabled = false;

@@ -5,7 +5,7 @@ namespace Utils
 {
     public static class ArrayUtils
     {
-        public static T RandomChoice<T>(T[] array)
+        public static T RandomChoice<T>(this T[] array)
         {
             if (array.Length == 0)
             {
@@ -16,7 +16,7 @@ namespace Utils
             return array[Random.Range(0, array.Length)];
         }
         
-        public static T RandomChoice<T>(List<T> list)
+        public static T RandomChoice<T>(this List<T> list)
         {
             if (list.Count == 0)
             {

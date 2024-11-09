@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81375d90185a7c546836733466a129ef, type: 3}
+  m_Name: AudioDatabase
+  m_EditorClassIdentifier: 
+  audioClips:
+  - <Identifier>k__BackingField: 2
+    <AudioClip>k__BackingField: {fileID: 8300000, guid: adbf7f9efc8276146b7c83ac5131e57f, type: 3}
+    <MixerGroup>k__BackingField: {fileID: -7706118319890773885, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
+    <IsLooping>k__BackingField: 0
+    <Volume>k__BackingField: 0.55
+  - <Identifier>k__BackingField: 5
+    <AudioClip>k__BackingField: {fileID: 8300000, guid: 31bdf5b922594ef4483e69fa48b9807d, type: 3}
+    <MixerGroup>k__BackingField: {fileID: -7706118319890773885, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
+    <IsLooping>k__BackingField: 0
+    <Volume>k__BackingField: 0.9
+  - <Identifier>k__BackingField: 1
+    <AudioClip>k__BackingField: {fileID: 8300000, guid: 957c845d40a154b43bb2563085d951da, type: 3}
+    <MixerGroup>k__BackingField: {fileID: -7706118319890773885, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
+    <IsLooping>k__BackingField: 0
+    <Volume>k__BackingField: 0.8
+  - <Identifier>k__BackingField: 4
+    <AudioClip>k__BackingField: {fileID: 8300000, guid: 38854bc33d07a044995b466eae77bcec, type: 3}
+    <MixerGroup>k__BackingField: {fileID: -7832759350548265567, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
+    <IsLooping>k__BackingField: 0
+    <Volume>k__BackingField: 1
+  - <Identifier>k__BackingField: 4
+    <AudioClip>k__BackingField: {fileID: 8300000, guid: e928a4031c91d994eb3b009aee11e6e3, type: 3}
+    <MixerGroup>k__BackingField: {fileID: -7832759350548265567, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
+    <IsLooping>k__BackingField: 0
+    <Volume>k__BackingField: 1
+  - <Identifier>k__BackingField: 4
+    <AudioClip>k__BackingField: {fileID: 8300000, guid: ff1ef6fc5503ff44a947f9aa410ba9f3, type: 3}
+    <MixerGroup>k__BackingField: {fileID: -7832759350548265567, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
+    <IsLooping>k__BackingField: 0
+    <Volume>k__BackingField: 1
+  - <Identifier>k__BackingField: 4
+    <AudioClip>k__BackingField: {fileID: 8300000, guid: ad0a0cae414ecb24aab890efc46c1cdf, type: 3}
+    <MixerGroup>k__BackingField: {fileID: -7832759350548265567, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
+    <IsLooping>k__BackingField: 0
+    <Volume>k__BackingField: 1
+  - <Identifier>k__BackingField: 7
+    <AudioClip>k__BackingField: {fileID: 8300000, guid: 2b9d016a63f458c4f882f5f99f05e77f, type: 3}
+    <MixerGroup>k__BackingField: {fileID: -7818162125043226211, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
+    <IsLooping>k__BackingField: 0
+    <Volume>k__BackingField: 1
+  - <Identifier>k__BackingField: 8
+    <AudioClip>k__BackingField: {fileID: 8300000, guid: 32ddfc0dd726d1e418e1cc7e3c9e8bbe, type: 3}
+    <MixerGroup>k__BackingField: {fileID: -7818162125043226211, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
+    <IsLooping>k__BackingField: 0
+    <Volume>k__BackingField: 1
+  - <Identifier>k__BackingField: 9
+    <AudioClip>k__BackingField: {fileID: 8300000, guid: c9517884af24c3f468c3603047fb3baa, type: 3}
+    <MixerGroup>k__BackingField: {fileID: -7818162125043226211, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
+    <IsLooping>k__BackingField: 0
+    <Volume>k__BackingField: 1
