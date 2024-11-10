@@ -29,15 +29,9 @@ public class Drone_death : MonoBehaviour
             temp.a = alpha;
             spriteRenderer.color = temp;
         }
-        count ++;
-        Debug.Log(count);
-        if(count == 400)
-        {
-            RunDeathSequenceAsync();
-        }
     }
 
-    private async UniTask RunDeathSequenceAsync()
+    public async UniTask RunDeathSequenceAsync()
     {
         rigidBody.linearVelocity = new Vector2(0.0f, 0.0f);
         droneAnimator.SetTrigger(Died);
