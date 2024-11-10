@@ -53,6 +53,7 @@ namespace Gameplay.Input
             }
 
             Instance = this;
+            transform.parent = null;
             DontDestroyOnLoad(this);
             
             playerInput.onControlsChanged += HandleControlSchemeChanged;

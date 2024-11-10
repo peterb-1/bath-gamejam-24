@@ -216,6 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpForce: 8
   doubleJumpForce: 6
+  headJumpForce: 6
   wallJumpForce: {x: 18, y: 6}
   fallMultiplier: 1.8
   moveSpeed: 7

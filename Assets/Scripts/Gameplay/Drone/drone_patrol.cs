@@ -24,6 +24,8 @@ public class drone_patrol : MonoBehaviour
         direction = direction * speed / Time.fixedDeltaTime;
         rigidBody.linearVelocity = direction;
         if(patrolPoint2.position.x == patrolPoint1.position.x) { checkYs = true; }
+
+        transform.position = patrolPoint1.position;
     }
 
     // Update is called once per frame

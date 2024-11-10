@@ -28,6 +28,7 @@ namespace Core
             }
 
             Instance = this;
+            transform.parent = null;
             DontDestroyOnLoad(this);
         }
 

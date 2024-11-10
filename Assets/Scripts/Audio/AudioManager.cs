@@ -71,6 +71,7 @@ namespace Audio
             }
 
             Instance = this;
+            transform.parent = null;
             DontDestroyOnLoad(this);
             
             audioDatabase.Initialise();

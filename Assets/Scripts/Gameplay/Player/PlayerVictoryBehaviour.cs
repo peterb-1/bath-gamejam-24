@@ -15,7 +15,7 @@ namespace Gameplay.Player
         private LayerMask victoryLayers;
 
         [SerializeField] 
-        private BoxCollider2D playerHitbox;
+        private Collider2D playerHitbox;
         
         public event Action<Vector2, float> OnVictorySequenceStart;
         public event Action OnVictorySequenceFinish;

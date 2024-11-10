@@ -16,7 +16,7 @@ namespace Gameplay.Player
         private LayerMask deathLayers;
 
         [SerializeField] 
-        private BoxCollider2D playerHitbox;
+        private Collider2D playerHitbox;
         
         [SerializeField] 
         private SpriteRenderer playerSpriteRenderer;
