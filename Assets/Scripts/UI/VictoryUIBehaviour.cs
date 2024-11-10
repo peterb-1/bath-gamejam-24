@@ -1,6 +1,7 @@
 using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Player;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +18,11 @@ namespace UI
         [SerializeField] 
         private Button nextButton;
 
+        [SerializeField] 
+        private TMP_Text timerText;
+
+        private float time;
+
         private PlayerVictoryBehaviour playerVictoryBehaviour;
 
         private async void Awake()
@@ -29,6 +35,11 @@ namespace UI
             retryButton.onClick.AddListener(HandleRetryClicked);
         }
 
+        private void Start()
+        {
+            time = Time.time;
+        }
+
         private void HandleRetryClicked()
         {
             victoryPageGroup.HideGroup();
@@ -36,9 +47,20 @@ namespace UI
             SceneLoader.Instance.ReloadCurrentScene();
         }
 
+        private void FormatTime()
+        {
+            var seconds = (int)(time % 60);
+            var centiSeconds = (int)((time - (int)time)*100);
+            var minutes = (int)(time / 60);
+            timerText.text = $"{minutes:00}:{seconds:00}:{centiSeconds:00}";
+        }
+        
         private void HandleVictorySequenceFinish()
         {
             victoryPageGroup.ShowGroup();
+
+            time = Time.time - time;
+            FormatTime();
         }
 
         private void OnDestroy()
