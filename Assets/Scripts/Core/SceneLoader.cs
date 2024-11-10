@@ -2,6 +2,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utils;
 
 namespace Core
 {
@@ -44,6 +45,8 @@ namespace Core
 
         private async UniTask LoadSceneAsync(Scene scene)
         {
+            GameLogger.Log($"Loading scene {scene.name}...", this);
+            
             isLoading = true;
             
             OnSceneLoadStart?.Invoke();
@@ -51,6 +54,8 @@ namespace Core
             await loadingScreen.ShowAsync();
             
             await SceneManager.LoadSceneAsync(scene.name);
+            
+            GameLogger.Log("Loaded scene successfully!", this);
             
             OnSceneLoaded?.Invoke();
             

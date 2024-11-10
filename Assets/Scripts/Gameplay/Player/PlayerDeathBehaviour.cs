@@ -3,7 +3,7 @@ using Audio;
 using Core;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using Utils;
 
 namespace Gameplay.Player
 {
@@ -43,6 +43,8 @@ namespace Gameplay.Player
 
         private async UniTask RunDeathSequenceAsync()
         {
+            GameLogger.Log("Player died - running death sequence", this);
+            
             IsAlive = false;
             
             OnDeathSequenceStart?.Invoke();

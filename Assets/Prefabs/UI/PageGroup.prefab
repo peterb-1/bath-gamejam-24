@@ -166,6 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a0149e6ead1e2e4093a4ed009420b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 2901783670216365875}
   pages:
   - {fileID: 3977737563795135723}
   activateOnAwake: 0

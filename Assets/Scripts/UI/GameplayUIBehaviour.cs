@@ -31,6 +31,8 @@ namespace UI
 
             playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
+            
+            HandleControlSchemeChanged(InputManager.CurrentControlScheme);
         }
 
         private void HandleVictorySequenceStart(Vector2 _1, float _2)

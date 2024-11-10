@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
@@ -13,6 +14,8 @@ namespace Audio
     public class AudioManager : MonoBehaviour
     {
         private const float UNFILTERED_FREQUENCY = 22000;
+        private const float PLAYBACK_END_TOLERANCE = 0.1f;
+        private const float PLAYER_ACCESS_TIMEOUT = 1f;
         
         private const string LOW_PASS_CUTOFF = "LowPassCutoff";
         private const string FLANGER_DRY = "FlangerDry";
@@ -99,21 +102,19 @@ namespace Audio
 
         private async UniTask GetPlayerBehavioursAsync()
         {
-            await UniTask.WaitUntil(PlayerAccessService.IsReady);
-
-            playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
-            playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
-
-            playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
-            playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
-        }
-
-        private void HandleVictorySequenceStart(Vector2 _1, float _2)
-        {
-            playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
-            playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
+            var cts = new CancellationTokenSource();
+            cts.CancelAfter(TimeSpan.FromSeconds(PLAYER_ACCESS_TIMEOUT));
             
-            RunFilterCurveAsync(endLevelCurve, endLevelDuration).Forget();
+            var isCancelled = await UniTask.WaitUntil(PlayerAccessService.IsReady, cancellationToken: cts.Token).SuppressCancellationThrow();
+
+            if (!isCancelled)
+            {
+                playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
+                playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
+
+                playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
+                playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
+            }
         }
 
         private void HandleDeathSequenceStart()
@@ -122,6 +123,14 @@ namespace Audio
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
             
             RunFilterCurveAsync(deathCurve, deathDuration).Forget();
+        }
+        
+        private void HandleVictorySequenceStart(Vector2 _1, float _2)
+        {
+            playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
+            playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
+            
+            RunFilterCurveAsync(endLevelCurve, endLevelDuration).Forget();
         }
 
         private async UniTask PlayMusicAsync()
@@ -136,7 +145,11 @@ namespace Audio
                     selectedTrack = musicTracks.RandomChoice();
                 }
                 
+                GameLogger.Log($"Playing music track {selectedTrack}...");
+                
                 await PlayAsync(selectedTrack);
+                
+                GameLogger.Log($"Music track {selectedTrack} finished!");
 
                 previousTrack = selectedTrack;
             }
@@ -190,6 +203,7 @@ namespace Audio
         private async UniTask PlayClipAsync(AudioClipData clipData, Action onFinishedCallback = null)
         {
             var audioSource = audioSourcePool.Get();
+            var duration = clipData.AudioClip.length;
             
             audioSource.clip = clipData.AudioClip;
             audioSource.loop = clipData.IsLooping;
@@ -199,7 +213,7 @@ namespace Audio
             
             playingAudioSources.Add((clipData, audioSource));
 
-            await UniTask.WaitWhile(() => audioSource.isPlaying);
+            await UniTask.WaitUntil(() => audioSource.time >= duration - PLAYBACK_END_TOLERANCE);
 
             // check if it's still playing and hasn't been stopped externally
             if (playingAudioSources.Contains((clipData, audioSource)))
@@ -284,6 +298,8 @@ namespace Audio
 
         private void OnDestroy()
         {
+            if (Instance != this) return;
+            
             ColourManager.OnColourChangeStarted -= HandleColourChangeStarted;
             SceneLoader.OnSceneLoadStart -= HandleSceneLoadStart;
             SceneLoader.OnSceneLoaded -= HandleSceneLoaded;

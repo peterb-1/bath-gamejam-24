@@ -2,6 +2,7 @@ using System;
 using Audio;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Utils;
 
 namespace Gameplay.Player
 {
@@ -29,6 +30,8 @@ namespace Gameplay.Player
 
         private async UniTask RunVictorySequenceAsync(Vector3 targetPosition)
         {
+            GameLogger.Log("Level complete - running victory sequence", this);
+            
             OnVictorySequenceStart?.Invoke(targetPosition, victorySequenceDuration);
             
             AudioManager.Instance.Play(AudioClipIdentifier.Victory);

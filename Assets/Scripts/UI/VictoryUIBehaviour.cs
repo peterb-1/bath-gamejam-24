@@ -12,9 +12,6 @@ namespace UI
         private PageGroup victoryPageGroup;
 
         [SerializeField] 
-        private Page victoryPage;
-
-        [SerializeField] 
         private Button retryButton;
         
         [SerializeField] 
@@ -34,13 +31,14 @@ namespace UI
 
         private void HandleRetryClicked()
         {
+            victoryPageGroup.HideGroup();
+            
             SceneLoader.Instance.ReloadCurrentScene();
         }
 
         private void HandleVictorySequenceFinish()
         {
             victoryPageGroup.ShowGroup();
-            victoryPage.Show();
         }
 
         private void OnDestroy()
