@@ -291,6 +291,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
+--- !u!114 &1565486233250511084 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
+  m_PrefabInstance: {fileID: 736635199045541940}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &8732447716097673300 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8293078692645890144, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
@@ -449,6 +460,7 @@ MonoBehaviour:
   buttonPromptImage: {fileID: 138341649648664393}
   keyboardMouseButtonPrompts: {fileID: 21300000, guid: 9b35808833b86824fac25ff192c27905, type: 3}
   gamepadButtonPrompts: {fileID: 21300000, guid: a027593170bb19e47b0eb4566369a897, type: 3}
+  timerText: {fileID: 1565486233250511084}
 --- !u!114 &7882166268838635626 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6294470839730690366, guid: 05209929063325e4bb40347260164103, type: 3}
