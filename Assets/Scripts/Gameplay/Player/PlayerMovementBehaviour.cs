@@ -10,10 +10,13 @@ namespace Gameplay.Player
     {
         [Header("Settings")]
         [SerializeField] 
-        private float jumpForce;
+        private float jumpForce; 
 
         [SerializeField] 
         private float doubleJumpForce;
+        
+        [SerializeField] 
+        private float headJumpForce;
         
         [SerializeField]
         private Vector2 wallJumpForce;
@@ -202,6 +205,12 @@ namespace Gameplay.Player
             rigidBody.linearVelocity = force;
             hasDoubleJumped = true;
             jumpBufferCountdown = 0f;
+        }
+
+        public void HeadJump()
+        {
+            AudioManager.Instance.Play(AudioClipIdentifier.Jump);
+            rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, headJumpForce);
         }
         
         private void HandleDeathSequenceStart()

@@ -9,6 +9,8 @@ public class Drone_death : MonoBehaviour
     private Animator droneAnimator;
     [SerializeField] 
     private Rigidbody2D rigidBody;
+    [SerializeField]
+    private Collider2D collider;
     [SerializeField] 
     private SpriteRenderer spriteRenderer;
 
@@ -33,6 +35,7 @@ public class Drone_death : MonoBehaviour
 
     public async UniTask RunDeathSequenceAsync()
     {
+        Destroy(collider);
         rigidBody.linearVelocity = new Vector2(0.0f, 0.0f);
         droneAnimator.SetTrigger(Died);
         alpha = 0.99f;
