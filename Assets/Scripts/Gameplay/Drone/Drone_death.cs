@@ -26,7 +26,6 @@ public class Drone_death : MonoBehaviour
         if(alpha < 1.0f && alpha > 0.0f)
         {
             alpha -= 0.0002f / Time.fixedDeltaTime;
-            Debug.Log(alpha);
             var temp = spriteRenderer.color;
             temp.a = alpha;
             spriteRenderer.color = temp;
