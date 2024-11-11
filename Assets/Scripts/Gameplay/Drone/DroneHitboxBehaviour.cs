@@ -82,6 +82,7 @@ namespace Gameplay.Drone
             rigidBody.simulated = true;
             rigidBody.linearVelocity = -direction * deathDirectionStrength;
             rigidBody.gravityScale = 1f;
+            rigidBody.constraints = RigidbodyConstraints2D.None;
             
             droneCollider.enabled = false;
             droneAnimator.SetTrigger(Died);

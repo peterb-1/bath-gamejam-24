@@ -283,7 +283,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   headAngleRange: {x: 10, y: 170}
-  deathDirectionStrength: {x: 6, y: 2}
+  deathDirectionStrength: {x: 5, y: 1}
   fadeCurve:
     serializedVersion: 2
     m_Curve:
@@ -335,7 +335,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &6832673857974883721
 CircleCollider2D:
   m_ObjectHideFlags: 0
