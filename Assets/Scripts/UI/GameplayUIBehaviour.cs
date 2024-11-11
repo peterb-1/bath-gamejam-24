@@ -61,11 +61,6 @@ namespace UI
             };
         }
 
-        private void OnDestroy()
-        {
-            InputManager.OnControlSchemeChanged -= HandleControlSchemeChanged;
-        }
-
         private void FormatTime()
         {
             var seconds = (int)(time % 60);
@@ -78,6 +73,11 @@ namespace UI
         {
             time += Time.deltaTime;
             FormatTime();
+        }
+        
+        private void OnDestroy()
+        {
+            InputManager.OnControlSchemeChanged -= HandleControlSchemeChanged;
         }
     }
 }
