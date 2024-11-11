@@ -39,8 +39,8 @@ namespace Gameplay.Buildings
         [SerializeField] 
         private Vector2 hologramStrengthRange;
 
-        [SerializeField, Range(0f, 1f)] 
-        private float flashChance;
+        [SerializeField] 
+        private float flashChancePerTile;
         
         [SerializeField, Range(0f, 1f)] 
         private float largeTileChance;
@@ -73,6 +73,7 @@ namespace Gameplay.Buildings
         private List<Tile> tiles;
 
         private bool isActive;
+        private float flashChance;
         
         private static readonly int ScrollSpeed = Shader.PropertyToID("_ScrollSpeed");
         private static readonly int Tiling = Shader.PropertyToID("_Tiling");
@@ -84,6 +85,8 @@ namespace Gameplay.Buildings
             ColourManager.OnColourChangeInstant += HandleColourChangeInstant;
 
             InitialiseHologramSettings();
+
+            flashChance = flashChancePerTile * tiles.Count;
         }
         
         private void InitialiseHologramSettings()

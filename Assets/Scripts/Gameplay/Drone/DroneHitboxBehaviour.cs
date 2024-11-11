@@ -30,11 +30,16 @@ namespace Gameplay.Drone
         [SerializeField] 
         private Vector2 deathDirectionStrength;
 
+        [SerializeField] 
+        private AnimationCurve fadeCurve;
+
+        [SerializeField] 
+        private float fadeDuration;
+
         private PlayerMovementBehaviour playerMovementBehaviour;
         private PlayerDeathBehaviour playerDeathBehaviour;
         
         private static readonly int Died = Animator.StringToHash("died");
-        private float alpha = 1.0f;
 
         public event Action OnDroneKilled;
 
@@ -44,17 +49,6 @@ namespace Gameplay.Drone
 
             playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
             playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
-        }
-        
-        private void Update()
-        {
-            if (alpha is < 1.0f and > 0.0f)
-            {
-                alpha -= 0.00005f / Time.deltaTime;
-                var temp = spriteRenderer.color;
-                temp.a = alpha;
-                spriteRenderer.color = temp;
-            }
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -81,23 +75,44 @@ namespace Gameplay.Drone
             
             playerMovementBehaviour.PerformHeadJump();
             
-            droneCollider.enabled = false;
-            
             AudioManager.Instance.Play(AudioClipIdentifier.DroneDeath);
 
             direction.Normalize();
             
+            rigidBody.simulated = true;
             rigidBody.linearVelocity = -direction * deathDirectionStrength;
             rigidBody.gravityScale = 1f;
-            rigidBody.constraints = RigidbodyConstraints2D.None;
             
+            droneCollider.enabled = false;
             droneAnimator.SetTrigger(Died);
-            alpha = 0.99f;
+            
+            RunFadeAsync().Forget();
         }
         
         private void HandleDroneKilledPlayer()
         {
             playerDeathBehaviour.KillPlayer();
+        }
+
+        private async UniTask RunFadeAsync()
+        {
+            var timeElapsed = 0f;
+            var startColour = spriteRenderer.color;
+
+            while (timeElapsed < fadeDuration)
+            {
+                var lerp = fadeCurve.Evaluate(timeElapsed / fadeDuration);
+
+                spriteRenderer.color = lerp * startColour + (1f - lerp) * Color.clear;
+                
+                await UniTask.Yield();
+
+                timeElapsed += Time.deltaTime;
+            }
+            
+            spriteRenderer.color = Color.clear;
+
+            rigidBody.simulated = false;
         }
     }
 }

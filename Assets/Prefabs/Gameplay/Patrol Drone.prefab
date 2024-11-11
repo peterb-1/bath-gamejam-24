@@ -260,7 +260,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   patrolPoint1: {fileID: 5958829447525932916}
   patrolPoint2: {fileID: 7079453491131020925}
-  rigidBody: {fileID: 3999417708195568565}
+  cycleTime: 5
+  smoothEnds: 1
   droneHitboxBehaviour: {fileID: 1193363079179838421}
 --- !u!114 &1193363079179838421
 MonoBehaviour:
@@ -283,6 +284,31 @@ MonoBehaviour:
     m_Bits: 512
   headAngleRange: {x: 10, y: 170}
   deathDirectionStrength: {x: 6, y: 2}
+  fadeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0.006142871
+      outSlope: 0.006142871
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.16262329
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -2.8879502
+      outSlope: -2.8879502
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.091462076
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  fadeDuration: 2
 --- !u!50 &3999417708195568565
 Rigidbody2D:
   serializedVersion: 5
@@ -306,10 +332,10 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
+  m_CollisionDetection: 1
+  m_Constraints: 0
 --- !u!58 &6832673857974883721
 CircleCollider2D:
   m_ObjectHideFlags: 0
