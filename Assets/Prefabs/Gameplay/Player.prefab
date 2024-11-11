@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8015807823079495631}
   - component: {fileID: 8491304688917359779}
   - component: {fileID: 7933610506833450488}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -119,7 +119,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2036022508249942363}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HeadL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ GameObject:
   - component: {fileID: 3249549202202213294}
   - component: {fileID: 166652011353585149}
   - component: {fileID: 6448495522596364973}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -418,7 +418,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7768947304158388915}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GroundL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -449,7 +449,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3579599629245161508}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: HeadR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -480,7 +480,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4497381059625391674}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GroundR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -513,7 +513,7 @@ GameObject:
   - component: {fileID: 8884353325459393007}
   - component: {fileID: 6912738076980054414}
   - component: {fileID: 8671948913537418050}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: DeathParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}

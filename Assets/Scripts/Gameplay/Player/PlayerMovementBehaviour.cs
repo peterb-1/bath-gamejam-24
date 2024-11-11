@@ -111,18 +111,18 @@ namespace Gameplay.Player
             var rightGroundPosition = rightGroundCheck.position;
 
             var doesRaycastUpHit = Physics2D.Raycast(leftGroundPosition, up, groundCheckDistance, groundLayers) ||
-                                   Physics2D.Raycast(rightGroundPosition, up, groundCheckDistance, groundLayers);
+                                   Physics2D.Raycast(rightGroundPosition, up, groundCheckDistance, groundLayers); 
             
             var doesRaycastDownHit = Physics2D.Raycast(leftGroundPosition, down, groundCheckDistance, groundLayers) ||
-                         Physics2D.Raycast(rightGroundPosition, down, groundCheckDistance, groundLayers);
+                                     Physics2D.Raycast(rightGroundPosition, down, groundCheckDistance, groundLayers);
 
             isGrounded = doesRaycastDownHit && !doesRaycastUpHit;
             
             isTouchingLeftWall = Physics2D.Raycast(leftGroundPosition, left, groundCheckDistance, groundLayers) ||
                                  Physics2D.Raycast(leftHeadCheck.position, left, groundCheckDistance, groundLayers);
             
-            isTouchingRightWall = Physics2D.Raycast(rightGroundPosition, right, groundCheckDistance, groundLayers) ||
-                                 Physics2D.Raycast(rightHeadCheck.position, right, groundCheckDistance, groundLayers);
+            isTouchingRightWall = Physics2D.Raycast(rightGroundPosition, right, groundCheckDistance, groundLayers) || 
+                                  Physics2D.Raycast(rightHeadCheck.position, right, groundCheckDistance, groundLayers);
             
             playerAnimator.SetBool(IsGrounded, isGrounded);
 
@@ -207,7 +207,7 @@ namespace Gameplay.Player
             jumpBufferCountdown = 0f;
         }
 
-        public void HeadJump()
+        public void PerformHeadJump()
         {
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, headJumpForce);

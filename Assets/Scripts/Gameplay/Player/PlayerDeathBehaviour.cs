@@ -37,16 +37,23 @@ namespace Gameplay.Player
         {
             if ((deathLayers.value & (1 << other.gameObject.layer)) != 0)
             {
-                RunDeathSequenceAsync().Forget();
+                KillPlayer();
             }
+        }
+
+        public void KillPlayer()
+        {
+            if (!IsAlive) return;
+            
+            IsAlive = false;
+            
+            GameLogger.Log("Player died - running death sequence", this);
+            
+            RunDeathSequenceAsync().Forget();
         }
 
         private async UniTask RunDeathSequenceAsync()
         {
-            GameLogger.Log("Player died - running death sequence", this);
-            
-            IsAlive = false;
-            
             OnDeathSequenceStart?.Invoke();
             
             AudioManager.Instance.Play(AudioClipIdentifier.Death);

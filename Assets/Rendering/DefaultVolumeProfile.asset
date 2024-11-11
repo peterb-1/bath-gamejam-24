@@ -711,7 +711,7 @@ MonoBehaviour:
     m_Value: 1
   warpedFlareIntensity:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   warpedFlareScale:
     m_OverrideState: 1
     m_Value: {x: 1, y: 1}

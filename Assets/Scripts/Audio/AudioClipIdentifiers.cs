@@ -5,6 +5,7 @@ namespace Audio
         ButtonClick,
         ColourSwitch,
         Death,
+        DroneDeath,
         DoubleJump,
         Jump,
         Victory,
