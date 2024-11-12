@@ -31,6 +31,11 @@ namespace Core
             transform.parent = null;
             DontDestroyOnLoad(this);
         }
+        
+        public void ReloadCurrentScene()
+        {
+            LoadScene(SceneManager.GetActiveScene());
+        }
 
         public void LoadScene(Scene scene)
         {
@@ -39,9 +44,11 @@ namespace Core
             LoadSceneAsync(scene).Forget();
         }
 
-        public void ReloadCurrentScene()
+        public void LoadScene(int sceneIndex)
         {
-            LoadScene(SceneManager.GetActiveScene());
+            if (isLoading) return;
+
+            LoadSceneAsync(sceneIndex).Forget();
         }
 
         private async UniTask LoadSceneAsync(Scene scene)
@@ -55,6 +62,27 @@ namespace Core
             await loadingScreen.ShowAsync();
             
             await SceneManager.LoadSceneAsync(scene.name);
+            
+            GameLogger.Log("Loaded scene successfully!", this);
+            
+            OnSceneLoaded?.Invoke();
+            
+            await loadingScreen.HideAsync();
+            
+            isLoading = false;
+        }
+        
+        private async UniTask LoadSceneAsync(int sceneIndex)
+        {
+            GameLogger.Log($"Loading scene at index {sceneIndex}...", this);
+            
+            isLoading = true;
+            
+            OnSceneLoadStart?.Invoke();
+
+            await loadingScreen.ShowAsync();
+            
+            await SceneManager.LoadSceneAsync(sceneIndex);
             
             GameLogger.Log("Loaded scene successfully!", this);
             

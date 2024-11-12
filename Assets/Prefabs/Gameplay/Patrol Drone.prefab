@@ -220,9 +220,9 @@ GameObject:
   - component: {fileID: 6927541103140264550}
   - component: {fileID: 5277196919517267600}
   - component: {fileID: 1193363079179838421}
+  - component: {fileID: 6459642081313245993}
   - component: {fileID: 3999417708195568565}
   - component: {fileID: 6832673857974883721}
-  - component: {fileID: 6459642081313245993}
   m_Layer: 0
   m_Name: Drone
   m_TagString: Untagged
@@ -310,6 +310,48 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   fadeDuration: 2
+--- !u!114 &6459642081313245993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4705282589404379199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08713a5b4fbdb044a8e9605c2a1c3674, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isColoured: 0
+  colourId: 0
+  fadeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  fadedAlpha: 0.3
+  deathCollider: {fileID: 6832673857974883721}
+  spriteRenderer: {fileID: 9156634028554724453}
+  colourDatabase: {fileID: 11400000, guid: 9ee9ba719534f7b428301db4856b7bda, type: 2}
 --- !u!50 &3999417708195568565
 Rigidbody2D:
   serializedVersion: 5
@@ -373,23 +415,6 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.25
---- !u!114 &6459642081313245993
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4705282589404379199}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08713a5b4fbdb044a8e9605c2a1c3674, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isColoured: 0
-  colourId: 0
-  deathCollider: {fileID: 6832673857974883721}
-  spriteRenderer: {fileID: 9156634028554724453}
-  colourDatabase: {fileID: 11400000, guid: 9ee9ba719534f7b428301db4856b7bda, type: 2}
 --- !u!1 &5264209634603969185
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,7 +461,7 @@ GameObject:
   m_Layer: 0
   m_Name: Patrol Point 2
   m_TagString: Untagged
-  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

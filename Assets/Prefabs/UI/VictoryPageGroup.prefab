@@ -425,6 +425,7 @@ MonoBehaviour:
   retryButton: {fileID: 7795908612391335328}
   nextButton: {fileID: 5168445007998589380}
   timerText: {fileID: 1151107645559964468}
+  nextSceneIndex: 0
 --- !u!224 &7209971690187909071 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2742919296865489921, guid: 05209929063325e4bb40347260164103, type: 3}
@@ -444,7 +445,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2088089576616869877, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
       propertyPath: m_fontSize
-      value: 48
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 2088089576616869877, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
       propertyPath: m_fontSizeBase
@@ -691,7 +692,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2088089576616869877, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
       propertyPath: m_fontSize
-      value: 48
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 2088089576616869877, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
       propertyPath: m_fontSizeBase

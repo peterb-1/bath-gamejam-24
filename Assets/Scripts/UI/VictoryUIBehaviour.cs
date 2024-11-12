@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using Gameplay.Player;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI
@@ -21,6 +22,9 @@ namespace UI
         [SerializeField] 
         private TMP_Text timerText;
 
+        [SerializeField] 
+        private int nextSceneIndex;
+
         private float time;
 
         private PlayerVictoryBehaviour playerVictoryBehaviour;
@@ -33,6 +37,7 @@ namespace UI
             playerVictoryBehaviour.OnVictorySequenceFinish += HandleVictorySequenceFinish;
             
             retryButton.onClick.AddListener(HandleRetryClicked);
+            nextButton.onClick.AddListener(HandleNextClicked);
         }
 
         private void Start()
@@ -45,6 +50,13 @@ namespace UI
             victoryPageGroup.HideGroup();
             
             SceneLoader.Instance.ReloadCurrentScene();
+        }
+        
+        private void HandleNextClicked()
+        {
+            victoryPageGroup.HideGroup();
+            
+            SceneLoader.Instance.LoadScene(nextSceneIndex);
         }
 
         private void FormatTime()
@@ -68,6 +80,7 @@ namespace UI
             playerVictoryBehaviour.OnVictorySequenceFinish -= HandleVictorySequenceFinish;
             
             retryButton.onClick.RemoveListener(HandleRetryClicked);
+            nextButton.onClick.RemoveListener(HandleNextClicked);
         }
     }
 }
