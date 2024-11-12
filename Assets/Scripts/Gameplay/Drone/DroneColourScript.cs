@@ -1,90 +1,105 @@
-using UnityEngine;
+using System;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
-using System;
-using System.Collections.Generic;
 using NaughtyAttributes;
+using UnityEngine;
 
-public class DroneColourScript : MonoBehaviour
+namespace Gameplay.Drone
 {
-    [SerializeField]
-    private bool isColoured;
+    public class DroneColourScript : MonoBehaviour
+    {
+        [SerializeField]
+        private bool isColoured;
 
-    [SerializeField] 
-    private ColourId colourId;
+        [SerializeField, ShowIf(nameof(isColoured))] 
+        private ColourId colourId;
 
-    // [SerializeField] 
-    // private Collider2D headCollider;
+        // [SerializeField] 
+        // private Collider2D headCollider;
     
-    [SerializeField] 
-    private Collider2D deathCollider;
+        [SerializeField] 
+        private Collider2D deathCollider;
 
-    [SerializeField] 
-    private SpriteRenderer spriteRenderer;
+        [SerializeField] 
+        private SpriteRenderer spriteRenderer;
 
-    [SerializeField] 
-    private ColourDatabase colourDatabase;
+        [SerializeField] 
+        private ColourDatabase colourDatabase;
 
-    private bool isActive = true;
-    private float hiddenAlpha = 0.3f;
+        private bool isActive = true;
+        private float hiddenAlpha = 0.3f;
 
-     private void Awake()
-    {
-        if(isColoured)
+        private void Awake()
         {
-            ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
-            ColourManager.OnColourChangeInstant += HandleColourChangeInstant;
+            if (isColoured)
+            {
+                ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
+                ColourManager.OnColourChangeInstant += HandleColourChangeInstant;
+                
+                if (colourDatabase.TryGetColourConfig(colourId, out var colourConfig))
+                {
+                    spriteRenderer.color = colourConfig.DroneColour;
+                }
+            }
         }
-    }
 
-    private void HandleColourChangeStarted(ColourId colour, float duration)
-    {
-
-        var shouldActivate = colourId == colour;
-
-        if (shouldActivate != isActive)
+        private void HandleColourChangeStarted(ColourId colour, float duration)
         {
-            isActive = shouldActivate;
-            ToggleDroneAsync(duration).Forget();
+
+            var shouldActivate = colourId == colour;
+
+            if (shouldActivate != isActive)
+            {
+                isActive = shouldActivate;
+                ToggleDroneAsync(duration).Forget();
+            }
         }
-    }
 
-    private void HandleColourChangeInstant(ColourId colour)
-    {
-        isActive = colourId == colour;
-        ToggleDroneAsync(0f).Forget();
-    }
-
-    private async UniTask ToggleDroneAsync(float duration)
-    {
-        ToggleCollidersAsync().Forget();
-
-        float changeBy = -0.01f;
-        float delay = 0.01f;
-        if(isActive) { changeBy *= -1; }
-
-        var spriteColor = spriteRenderer.color;
-        float currentAlpha = spriteColor.a;
-
-        while((currentAlpha < 1.0f && isActive) || (currentAlpha > hiddenAlpha && !isActive))
+        private void HandleColourChangeInstant(ColourId colour)
         {
-            currentAlpha += changeBy;
-            spriteColor = spriteRenderer.color;
-            spriteColor.a = currentAlpha;
-            spriteRenderer.color = spriteColor;
-            await UniTask.Delay(TimeSpan.FromSeconds(delay), ignoreTimeScale: true);
-
+            isActive = colourId == colour;
+            ToggleDroneAsync(0f).Forget();
         }
-    }
 
-    private async UniTask ToggleCollidersAsync()
-    {
-        deathCollider.enabled = isActive;
-        // headCollider.enabled = isActive;
-    }
+        private async UniTask ToggleDroneAsync(float duration)
+        {
+            ToggleCollidersAsync().Forget();
+
+            float changeBy = -0.01f;
+            float delay = 0.01f;
+            if(isActive) { changeBy *= -1; }
+
+            var spriteColor = spriteRenderer.color;
+            float currentAlpha = spriteColor.a;
+
+            while((currentAlpha < 1.0f && isActive) || (currentAlpha > hiddenAlpha && !isActive))
+            {
+                currentAlpha += changeBy;
+                spriteColor = spriteRenderer.color;
+                spriteColor.a = currentAlpha;
+                spriteRenderer.color = spriteColor;
+                await UniTask.Delay(TimeSpan.FromSeconds(delay), ignoreTimeScale: true);
+
+            }
+        }
+
+        private async UniTask ToggleCollidersAsync()
+        {
+            deathCollider.enabled = isActive;
+            // headCollider.enabled = isActive;
+        }
+
+        private void OnDestroy()
+        {
+            if (isColoured)
+            {
+                ColourManager.OnColourChangeStarted -= HandleColourChangeStarted;
+                ColourManager.OnColourChangeInstant -= HandleColourChangeInstant;
+            }
+        }
 
 
-    /*
+        /*
     #if UNITY_EDITOR
     [Button("Colour Drone")]
     private void ColourDrone()
@@ -96,4 +111,5 @@ public class DroneColourScript : MonoBehaviour
     }
     #endif
     */
+    }
 }
