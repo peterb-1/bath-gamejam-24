@@ -100,7 +100,7 @@ MonoBehaviour:
   hologramTilingRange: {x: 0.4, y: 1.2}
   hologramSpeedRange: {x: 0.15, y: 0.5}
   hologramStrengthRange: {x: 0.3, y: 0.7}
-  flashChance: 0.2
+  flashChancePerTile: 0.0003
   largeTileChance: 0.15
   deathColliderBoundary: 1
   mainColliderDelayFrames: 3

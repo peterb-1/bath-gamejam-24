@@ -79,7 +79,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  flashDuration: 4
+  flashDuration: 3
   baseColour: {r: 0, g: 0, b: 0, a: 0}
 --- !u!212 &6862818853434839081
 SpriteRenderer:

@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
 using System;
 using System.Collections.Generic;
+using NaughtyAttributes;
 
 public class DroneColourScript : MonoBehaviour
 {

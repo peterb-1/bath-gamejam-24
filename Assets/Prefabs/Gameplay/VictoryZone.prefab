@@ -156,7 +156,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1
+  m_Radius: 0.9
 --- !u!114 &3433930922687525026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,3 +171,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blackHoleTransform: {fileID: 4354224448719904989}
   rotationPerSecond: 30
+  spinFxCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1.7287203
+      outSlope: 1.7287203
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.46215498
+    - serializedVersion: 3
+      time: 0.22342199
+      value: 0.6845889
+      inSlope: 6.1899
+      outSlope: 6.1899
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07569005
+      outWeight: 0.08045674
+    - serializedVersion: 3
+      time: 0.45435223
+      value: 0.7315934
+      inSlope: -3.4128947
+      outSlope: -3.4128947
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.05602896
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spinFxDuration: 1.5
+  maxSpeedMultiplier: 25
+  maxScaleMultiplier: 1.25

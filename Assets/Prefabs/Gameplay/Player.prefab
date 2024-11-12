@@ -224,7 +224,7 @@ MonoBehaviour:
   deceleration: 10
   coyoteDuration: 0.15
   jumpBufferDuration: 0.2
-  groundCheckDistance: 0.15
+  groundCheckDistance: 0.25
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 971ce76dd9690b149b878c2e1c695f26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathSequenceDuration: 0.4
+  deathSequenceDuration: 0.5
   deathLayers:
     serializedVersion: 2
     m_Bits: 128
