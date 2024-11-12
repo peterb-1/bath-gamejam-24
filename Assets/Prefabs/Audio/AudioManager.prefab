@@ -181,5 +181,5 @@ MonoBehaviour:
     m_RotationOrder: 4
   endLevelDuration: 0.4
   deathDuration: 0.4
-  disableFxDuration: 0.35
+  disableFxDuration: 0.3
   musicTracks: 08000000090000000a000000
