@@ -12,8 +12,8 @@ public class DroneColourScript : MonoBehaviour
     [SerializeField] 
     private ColourId colourId;
 
-    [SerializeField] 
-    private Collider2D headCollider;
+    // [SerializeField] 
+    // private Collider2D headCollider;
     
     [SerializeField] 
     private Collider2D deathCollider;
@@ -79,10 +79,11 @@ public class DroneColourScript : MonoBehaviour
     private async UniTask ToggleCollidersAsync()
     {
         deathCollider.enabled = isActive;
-        headCollider.enabled = isActive;
+        // headCollider.enabled = isActive;
     }
 
 
+    /*
     #if UNITY_EDITOR
     [Button("Colour Drone")]
     private void ColourDrone()
@@ -93,4 +94,5 @@ public class DroneColourScript : MonoBehaviour
         }
     }
     #endif
+    */
 }
