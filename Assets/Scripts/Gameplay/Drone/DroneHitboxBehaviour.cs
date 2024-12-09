@@ -35,13 +35,16 @@ namespace Gameplay.Drone
 
         [SerializeField] 
         private float fadeDuration;
+        
+        [field: SerializeField] 
+        public float TimeBonusOnKilled { get; private set; }
 
         private PlayerMovementBehaviour playerMovementBehaviour;
         private PlayerDeathBehaviour playerDeathBehaviour;
         
         private static readonly int Died = Animator.StringToHash("died");
 
-        public event Action OnDroneKilled;
+        public event Action<DroneHitboxBehaviour> OnDroneKilled;
 
         private async void Awake()
         {
@@ -49,6 +52,8 @@ namespace Gameplay.Drone
 
             playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
             playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
+            
+            DroneTrackerService.RegisterDrone(this);
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -71,7 +76,7 @@ namespace Gameplay.Drone
 
         private void HandlePlayerKilledDrone(Vector2 direction)
         {
-            OnDroneKilled?.Invoke();
+            OnDroneKilled?.Invoke(this);
             
             playerMovementBehaviour.PerformHeadJump();
             

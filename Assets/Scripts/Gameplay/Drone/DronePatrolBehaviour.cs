@@ -29,7 +29,7 @@ namespace Gameplay.Drone
             droneHitboxBehaviour.OnDroneKilled += HandleDroneKilled;
         }
 
-        private void HandleDroneKilled()
+        private void HandleDroneKilled(DroneHitboxBehaviour _)
         {
             isAlive = false;
         }
@@ -37,6 +37,7 @@ namespace Gameplay.Drone
         private void Update()
         {
             if (!isAlive) return;
+            
             currentCycleTime += Time.deltaTime;
             currentCycleTime %= cycleTime;
 

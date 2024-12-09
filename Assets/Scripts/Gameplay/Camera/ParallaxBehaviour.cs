@@ -27,7 +27,7 @@ namespace Gameplay.Camera
         private void Update()
         {
             var cameraOffset = targetCameraTransform.position.xy() - cameraStartPosition.xy();
-            transform.position = startPosition - (Vector3)(followStrength * cameraOffset);
+            transform.position = startPosition + (Vector3)(followStrength * cameraOffset);
         }
     }
 }

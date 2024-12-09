@@ -310,6 +310,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   fadeDuration: 2
+  <TimeBonusOnKilled>k__BackingField: 1
 --- !u!114 &6459642081313245993
 MonoBehaviour:
   m_ObjectHideFlags: 0

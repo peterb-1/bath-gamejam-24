@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 571b04367c87cad47908226661857add, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followStrength: {x: 0.15, y: 0}
+  followStrength: {x: -0.15, y: 0}
 --- !u!114 &6867922412462427558
 MonoBehaviour:
   m_ObjectHideFlags: 0
