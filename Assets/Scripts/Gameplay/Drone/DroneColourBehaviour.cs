@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
+using Gameplay.Core;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -65,7 +66,7 @@ namespace Gameplay.Drone
         {
             deathCollider.enabled = isActive;
             
-            var initialTime = Time.realtimeSinceStartup;
+            var initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
             var startColour = spriteRenderer.color;
             var startAlpha = startColour.a;
             var targetAlpha = isActive ? 1f : fadedAlpha;
@@ -81,7 +82,7 @@ namespace Gameplay.Drone
                 
                 await UniTask.Yield();
                 
-                timeElapsed = Time.realtimeSinceStartup - initialTime;
+                timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
             }
 
             startColour.a = targetAlpha;

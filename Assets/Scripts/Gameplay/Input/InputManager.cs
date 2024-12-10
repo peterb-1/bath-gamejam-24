@@ -3,6 +3,7 @@ using System.Threading;
 using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
+using Gameplay.Core;
 using Gameplay.Player;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -22,6 +23,9 @@ namespace Gameplay.Input
 
         [SerializeField] 
         private InputActionReference jumpAction;
+
+        [SerializeField] 
+        private InputActionReference pauseAction;
         
         [SerializeField] 
         private InputActionReference blueAction;
@@ -36,10 +40,12 @@ namespace Gameplay.Input
         private PlayerVictoryBehaviour playerVictoryBehaviour;
         
         public static ControlScheme CurrentControlScheme { get; private set; }
+        public static bool AreInputsEnabled { get; private set; }
         public static float MoveAmount { get; private set; }
         public static event Action<ColourId> OnColourChanged;
         public static event Action OnJumpPerformed;
         public static event Action<ControlScheme> OnControlSchemeChanged;
+        public static event Action OnPauseToggled;
         
         public static InputManager Instance { get; private set; }
         
@@ -126,8 +132,11 @@ namespace Gameplay.Input
 
         private void EnableInputs()
         {
+            AreInputsEnabled = true;
+            
             moveAction.action.Enable();
             jumpAction.action.Enable();
+            pauseAction.action.Enable();
             blueAction.action.Enable();
             redAction.action.Enable();
             yellowAction.action.Enable();
@@ -135,8 +144,11 @@ namespace Gameplay.Input
 
         private void DisableInputs()
         {
+            AreInputsEnabled = false;
+            
             moveAction.action.Disable();
             jumpAction.action.Disable();
+            pauseAction.action.Disable();
             blueAction.action.Disable();
             redAction.action.Disable();
             yellowAction.action.Disable();
@@ -145,6 +157,7 @@ namespace Gameplay.Input
         private void SubscribeToInputCallbacks()
         {
             jumpAction.action.performed += HandleJumpPerformed;
+            pauseAction.action.performed += HandlePausePerformed;
             blueAction.action.performed += HandleBluePerformed;
             redAction.action.performed += HandleRedPerformed;
             yellowAction.action.performed += HandleYellowPerformed;
@@ -153,6 +166,7 @@ namespace Gameplay.Input
         private void UnsubscribeFromInputCallbacks()
         {
             jumpAction.action.performed -= HandleJumpPerformed;
+            pauseAction.action.performed -= HandlePausePerformed;
             blueAction.action.performed -= HandleBluePerformed;
             redAction.action.performed -= HandleRedPerformed;
             yellowAction.action.performed -= HandleYellowPerformed;
@@ -163,23 +177,32 @@ namespace Gameplay.Input
             MoveAmount = moveAction.action.ReadValue<Vector2>().x;
         }
 
-        private void HandleJumpPerformed(InputAction.CallbackContext obj)
+        private static void HandleJumpPerformed(InputAction.CallbackContext _)
         {
+            if (PauseManager.Instance.IsPaused) return;
             OnJumpPerformed?.Invoke();
+        }
+
+        private static void HandlePausePerformed(InputAction.CallbackContext _)
+        {
+            OnPauseToggled?.Invoke();
         }
 
         private static void HandleBluePerformed(InputAction.CallbackContext _)
         {
+            if (PauseManager.Instance.IsPaused) return;
             OnColourChanged?.Invoke(ColourId.Blue);
         }
         
         private static void HandleRedPerformed(InputAction.CallbackContext _)
         {
+            if (PauseManager.Instance.IsPaused) return;
             OnColourChanged?.Invoke(ColourId.Red);
         }
         
         private static void HandleYellowPerformed(InputAction.CallbackContext _)
         {
+            if (PauseManager.Instance.IsPaused) return;
             OnColourChanged?.Invoke(ColourId.Yellow);
         }
 

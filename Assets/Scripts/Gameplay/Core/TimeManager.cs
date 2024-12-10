@@ -8,10 +8,35 @@ namespace Gameplay.Core
     {
         [SerializeField] 
         private AnimationCurve slowdownCurve;
+
+        public static TimeManager Instance { get; private set; }
+        
+        public float UnpausedRealtimeSinceStartup { get; private set; }
         
         private void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                // would usually log an error, but we expect this to happen when loading a new scene
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+            transform.parent = null;
+            DontDestroyOnLoad(this);
+            
+            UnpausedRealtimeSinceStartup = 0f;
+            
             ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
+        }
+        
+        private void Update()
+        {
+            if (PauseManager.Instance != null && !PauseManager.Instance.IsPaused)
+            {
+                UnpausedRealtimeSinceStartup += Time.unscaledDeltaTime;
+            }
         }
 
         private void HandleColourChangeStarted(ColourId _, float duration)
@@ -21,20 +46,28 @@ namespace Gameplay.Core
 
         private async UniTask RunSlowdownAsync(float duration)
         {
-            var initialTime = Time.realtimeSinceStartup;
+            var initialTime = UnpausedRealtimeSinceStartup;
             var initialFixedDeltaTime = Time.fixedDeltaTime;
             var timeElapsed = 0f;
 
             while (timeElapsed < duration)
             {
-                var lerp = timeElapsed / duration;
+                if (!PauseManager.Instance.IsPaused)
+                {
+                    var lerp = timeElapsed / duration;
 
-                Time.timeScale = slowdownCurve.Evaluate(lerp);
-                Time.fixedDeltaTime = initialFixedDeltaTime * Time.timeScale;
+                    Time.timeScale = slowdownCurve.Evaluate(lerp);
+                    Time.fixedDeltaTime = initialFixedDeltaTime * Time.timeScale;
+                }
 
                 await UniTask.Yield();
                 
-                timeElapsed = Time.realtimeSinceStartup - initialTime;
+                timeElapsed = UnpausedRealtimeSinceStartup - initialTime;
+            }
+
+            if (!PauseManager.Instance.IsPaused)
+            {
+                Time.timeScale = 1.0f;
             }
         }
         

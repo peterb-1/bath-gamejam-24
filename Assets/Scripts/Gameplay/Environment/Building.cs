@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
+using Gameplay.Core;
 using NaughtyAttributes;
 using UnityEditor;
 using UnityEngine;
@@ -114,7 +115,7 @@ namespace Gameplay.Environment
 
         private void Update()
         {
-            if (isActive && Random.Range(0f, 1f) < flashChance)
+            if (isActive && !PauseManager.Instance.IsPaused && Random.Range(0f, 1f) < flashChance)
             {
                 var tile = tiles.RandomChoice();
             
@@ -154,6 +155,7 @@ namespace Gameplay.Environment
 
                     if (delay > 0f && currentTile % TILES_PER_CYCLE == 0)
                     {
+                        await UniTask.WaitUntil(() => !PauseManager.Instance.IsPaused);
                         await UniTask.Delay(TimeSpan.FromSeconds(delay), ignoreTimeScale: true);
                     }
 

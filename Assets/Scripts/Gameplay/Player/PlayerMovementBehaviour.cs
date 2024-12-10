@@ -93,7 +93,6 @@ namespace Gameplay.Player
             InputManager.OnJumpPerformed += HandleJumpPerformed;
 
             playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
-
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
         }
 
@@ -258,6 +257,7 @@ namespace Gameplay.Player
             InputManager.OnJumpPerformed -= HandleJumpPerformed;
             
             playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
+            playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
         }
     }
 }

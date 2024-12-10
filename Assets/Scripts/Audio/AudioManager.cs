@@ -4,6 +4,7 @@ using System.Threading;
 using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
+using Gameplay.Core;
 using Gameplay.Player;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -229,7 +230,7 @@ namespace Audio
         
         private async UniTask RunFxCurveAsync(float duration)
         {
-            var initialTime = Time.realtimeSinceStartup;
+            var initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
             var timeElapsed = 0f;
 
             // run fx curve independent of timescale, since this happens during the slowdown
@@ -243,7 +244,7 @@ namespace Audio
                 
                 await UniTask.Yield();
                 
-                timeElapsed = Time.realtimeSinceStartup - initialTime;
+                timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
             }
 
             if (playerDeathBehaviour.IsAlive)
@@ -256,7 +257,7 @@ namespace Audio
 
         private async UniTask RunFilterCurveAsync(AnimationCurve curve, float duration)
         {
-            var initialTime = Time.realtimeSinceStartup;
+            var initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
             var timeElapsed = 0f;
             
             audioMixer.GetFloat(LOW_PASS_CUTOFF, out var startFrequency);
@@ -270,13 +271,13 @@ namespace Audio
                 
                 await UniTask.Yield();
                 
-                timeElapsed = Time.realtimeSinceStartup - initialTime;
+                timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
             }
         }
 
         private async UniTask DisableFxAsync()
         {
-            var initialTime = Time.realtimeSinceStartup;
+            var initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
             var timeElapsed = 0f;
             
             audioMixer.GetFloat(LOW_PASS_CUTOFF, out var startFrequency);
@@ -289,7 +290,7 @@ namespace Audio
                 
                 await UniTask.Yield();
                 
-                timeElapsed = Time.realtimeSinceStartup - initialTime;
+                timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
             }
             
             audioMixer.SetFloat(LOW_PASS_CUTOFF, UNFILTERED_FREQUENCY);

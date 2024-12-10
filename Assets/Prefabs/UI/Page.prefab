@@ -51,6 +51,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageAnimator: {fileID: 8911890961453001625}
+  hasDefaultSelectable: 0
+  defaultSelectable: {fileID: 0}
 --- !u!95 &8911890961453001625
 Animator:
   serializedVersion: 7
@@ -63,7 +65,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 66a7561c5ee48db45801af06bc03cab5, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0

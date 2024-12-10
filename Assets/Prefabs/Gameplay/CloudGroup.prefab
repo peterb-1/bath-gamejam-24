@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cloudCount: 5
-  horizontalSpeed: 1
+  horizontalSpeed: 1.2
   despawnPosition: -100
   respawnPosition: 150
 --- !u!1001 &2037667643941914227

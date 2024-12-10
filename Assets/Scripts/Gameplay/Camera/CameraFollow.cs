@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Gameplay.Core;
 using Gameplay.Player;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -48,6 +49,8 @@ namespace Gameplay.Camera
 
         private void Update()
         {
+            if (Time.deltaTime == 0f) return;
+                
             var velocityMagnitude = velocity.magnitude - velocityShakeThreshold;
             var shakeIntensity = Mathf.Clamp(velocityMagnitude * velocityShakeMultiplier, 0, maxShakeStrength) / Time.deltaTime;
             var shakeOffset = new Vector3(Random.Range(-1f, 1f) * shakeIntensity, Random.Range(-1f, 1f) * shakeIntensity, 0f);

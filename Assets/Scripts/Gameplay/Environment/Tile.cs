@@ -35,7 +35,7 @@ namespace Gameplay.Environment
 
                 spriteRenderer.color = (1f - lerp) * baseColour + lerp * Color.white;
 
-                await UniTask.DelayFrame(1).AttachExternalCancellation(destroyCancellationToken);
+                await UniTask.DelayFrame(1, cancellationToken: destroyCancellationToken);
                 
                 timeElapsed += Time.deltaTime;
             }

@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
+using Gameplay.Core;
 using UnityEngine;
 using Utils;
 
@@ -58,7 +59,7 @@ namespace Gameplay.Player
 
         private async UniTask RunFlashAsync(float duration)
         {
-            var initialTime = Time.realtimeSinceStartup;
+            var initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
             var startColour = playerSpriteRenderer.color;
             var timeElapsed = 0f;
 
@@ -71,7 +72,7 @@ namespace Gameplay.Player
                 
                 await UniTask.Yield();
                 
-                timeElapsed = Time.realtimeSinceStartup - initialTime;
+                timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
             }
 
             playerSpriteRenderer.color = startColour;

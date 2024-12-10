@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Gameplay.Core;
 using Gameplay.Player;
 using UnityEngine;
 
@@ -41,7 +42,7 @@ namespace Gameplay.Victory
 
         private async UniTask RunSpinFxAsync()
         {
-            var initialTime = Time.realtimeSinceStartup;
+            var initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
             var startRotationSpeed = rotationPerSecond;
             var initialScale = transform.localScale;
             var timeElapsed = 0f;
@@ -56,7 +57,7 @@ namespace Gameplay.Victory
 
                 await UniTask.Yield();
                 
-                timeElapsed = Time.realtimeSinceStartup - initialTime;
+                timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
             }
 
             rotationPerSecond = startRotationSpeed;
