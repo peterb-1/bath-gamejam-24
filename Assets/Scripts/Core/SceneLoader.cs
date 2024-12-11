@@ -1,8 +1,14 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Core
 {
@@ -10,11 +16,19 @@ namespace Core
     {
         [SerializeField] 
         private LoadingScreen loadingScreen;
+
+        [SerializeField] 
+        private SceneConfig levelSelectScene;
+
+        [SerializeField, ReadOnly] 
+        private List<SceneConfig> sceneConfigs;
         
         public static SceneLoader Instance { get; private set; }
 
         public static event Action OnSceneLoadStart;
         public static event Action OnSceneLoaded;
+        
+        public SceneConfig CurrentSceneConfig { get; private set; }
 
         private bool isLoading;
         
@@ -30,30 +44,36 @@ namespace Core
             Instance = this;
             transform.parent = null;
             DontDestroyOnLoad(this);
+
+            foreach (var config in sceneConfigs)
+            {
+                if (config.ScenePath == SceneManager.GetActiveScene().path)
+                {
+                    CurrentSceneConfig = config;
+                }
+            }
         }
         
         public void ReloadCurrentScene()
         {
-            LoadScene(SceneManager.GetActiveScene());
+            LoadScene(CurrentSceneConfig);
         }
 
-        public void LoadScene(Scene scene)
+        public void LoadLevelSelect()
+        {
+            LoadScene(levelSelectScene);
+        }
+
+        public void LoadScene(SceneConfig sceneConfig)
         {
             if (isLoading) return;
 
-            LoadSceneAsync(scene).Forget();
+            LoadSceneAsync(sceneConfig).Forget();
         }
 
-        public void LoadScene(int sceneIndex)
+        private async UniTask LoadSceneAsync(SceneConfig sceneConfig)
         {
-            if (isLoading) return;
-
-            LoadSceneAsync(sceneIndex).Forget();
-        }
-
-        private async UniTask LoadSceneAsync(Scene scene)
-        {
-            GameLogger.Log($"Loading scene {scene.name}...", this);
+            GameLogger.Log($"Loading scene {sceneConfig.name}...", this);
             
             isLoading = true;
             
@@ -61,9 +81,11 @@ namespace Core
 
             await loadingScreen.ShowAsync();
             
-            await SceneManager.LoadSceneAsync(scene.name);
+            CurrentSceneConfig = sceneConfig;
             
-            GameLogger.Log("Loaded scene successfully!", this);
+            await SceneManager.LoadSceneAsync(sceneConfig.ScenePath);
+
+            GameLogger.Log($"Loaded scene {sceneConfig.name} successfully!", this);
             
             OnSceneLoaded?.Invoke();
             
@@ -72,25 +94,23 @@ namespace Core
             isLoading = false;
         }
         
-        private async UniTask LoadSceneAsync(int sceneIndex)
+#if UNITY_EDITOR
+        private void OnValidate()
         {
-            GameLogger.Log($"Loading scene at index {sceneIndex}...", this);
+            sceneConfigs.Clear();
             
-            isLoading = true;
+            var guids = AssetDatabase.FindAssets($"t:{nameof(SceneConfig)}");
             
-            OnSceneLoadStart?.Invoke();
-
-            await loadingScreen.ShowAsync();
-            
-            await SceneManager.LoadSceneAsync(sceneIndex);
-            
-            GameLogger.Log("Loaded scene successfully!", this);
-            
-            OnSceneLoaded?.Invoke();
-            
-            await loadingScreen.HideAsync();
-            
-            isLoading = false;
+            foreach (var guid in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var asset = AssetDatabase.LoadAssetAtPath<SceneConfig>(path);
+                if (asset != null)
+                {
+                    sceneConfigs.Add(asset);
+                }
+            }
         }
+#endif
     }
 }

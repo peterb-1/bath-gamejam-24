@@ -17,6 +17,9 @@ namespace UI
         
         [SerializeField] 
         private Button nextButton;
+
+        [SerializeField] 
+        private Button quitButton;
         
         [SerializeField] 
         private TimerBehaviour timerBehaviour;
@@ -25,7 +28,7 @@ namespace UI
         private TMP_Text timerText;
 
         [SerializeField] 
-        private int nextSceneIndex;
+        private SceneConfig nextSceneConfig;
 
         private PlayerVictoryBehaviour playerVictoryBehaviour;
 
@@ -38,20 +41,25 @@ namespace UI
             
             retryButton.onClick.AddListener(HandleRetryClicked);
             nextButton.onClick.AddListener(HandleNextClicked);
+            quitButton.onClick.AddListener(HandleQuitClicked);
         }
 
         private void HandleRetryClicked()
         {
             victoryPageGroup.HideGroup();
-            
             SceneLoader.Instance.ReloadCurrentScene();
         }
         
         private void HandleNextClicked()
         {
             victoryPageGroup.HideGroup();
-            
-            SceneLoader.Instance.LoadScene(nextSceneIndex);
+            SceneLoader.Instance.LoadScene(nextSceneConfig);
+        }
+        
+        private void HandleQuitClicked()
+        {
+            victoryPageGroup.HideGroup();
+            SceneLoader.Instance.LoadLevelSelect();
         }
 
         private void HandleVictorySequenceFinish()
@@ -67,6 +75,7 @@ namespace UI
             
             retryButton.onClick.RemoveListener(HandleRetryClicked);
             nextButton.onClick.RemoveListener(HandleNextClicked);
+            quitButton.onClick.RemoveListener(HandleQuitClicked);
         }
     }
 }

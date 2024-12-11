@@ -1,12 +1,17 @@
 ﻿using Core;
 using Gameplay.Core;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace UI
 {
     public class PauseUIBehaviour : MonoBehaviour
     {
+        [SerializeField] 
+        private TMP_Text levelInfoText;
+        
         [SerializeField] 
         private Button resumeButton;
 
@@ -23,6 +28,26 @@ namespace UI
             quitButton.onClick.AddListener(HandleQuitClicked);
         }
 
+        private void Start()
+        {
+            SetLevelInfoText();
+        }
+
+        private void SetLevelInfoText()
+        {
+            var sceneConfig = SceneLoader.Instance.CurrentSceneConfig;
+
+            if (sceneConfig.IsLevelScene)
+            {
+                levelInfoText.text = sceneConfig.LevelConfig.GetLevelText();
+            }
+            else
+            {
+                GameLogger.LogWarning("Could not obtain current level config for level info text.", this);
+                levelInfoText.text = "MISSING LEVEL CONFIG";
+            }
+        }
+
         private void HandleResumeClicked()
         {
             PauseManager.Instance.Unpause();
@@ -36,7 +61,8 @@ namespace UI
         
         private void HandleQuitClicked()
         {
-            throw new System.NotImplementedException();
+            PauseManager.Instance.UnpauseInvisible();
+            SceneLoader.Instance.LoadLevelSelect();
         }
 
         private void OnDestroy()

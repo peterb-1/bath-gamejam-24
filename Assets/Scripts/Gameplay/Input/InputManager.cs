@@ -213,7 +213,7 @@ namespace Gameplay.Input
 
         private static void HandleJumpPerformed(InputAction.CallbackContext _)
         {
-            if (PauseManager.Instance.IsPaused) return;
+            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
             OnJumpPerformed?.Invoke();
         }
 
@@ -224,19 +224,19 @@ namespace Gameplay.Input
 
         private static void HandleBluePerformed(InputAction.CallbackContext _)
         {
-            if (PauseManager.Instance.IsPaused) return;
+            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
             OnColourChanged?.Invoke(ColourId.Blue);
         }
         
         private static void HandleRedPerformed(InputAction.CallbackContext _)
         {
-            if (PauseManager.Instance.IsPaused) return;
+            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
             OnColourChanged?.Invoke(ColourId.Red);
         }
         
         private static void HandleYellowPerformed(InputAction.CallbackContext _)
         {
-            if (PauseManager.Instance.IsPaused) return;
+            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
             OnColourChanged?.Invoke(ColourId.Yellow);
         }
 

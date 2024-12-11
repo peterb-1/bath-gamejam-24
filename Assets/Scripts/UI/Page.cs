@@ -24,7 +24,8 @@ namespace UI
 
         private bool isActive;
 
-        private void Awake()
+        // needs to be Start, not Awake, so that the default selectable is definitely awake when trying to select it
+        private void Start()
         {
             InputManager.OnControlSchemeChanged += HandleControlSchemeChanged;
             
@@ -35,6 +36,7 @@ namespace UI
         {
             if (isActive && hasDefaultSelectable && controlScheme is not ControlScheme.Mouse)
             {
+                EventSystem.current.SetSelectedGameObject(null);
                 defaultSelectable.Select();
             }
         }
@@ -48,6 +50,7 @@ namespace UI
 
             if (hasDefaultSelectable && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
             {
+                EventSystem.current.SetSelectedGameObject(null);
                 defaultSelectable.Select();
             }
         }
@@ -75,6 +78,7 @@ namespace UI
             
             if (hasDefaultSelectable && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
             {
+                EventSystem.current.SetSelectedGameObject(null);
                 defaultSelectable.Select();
             }
         }

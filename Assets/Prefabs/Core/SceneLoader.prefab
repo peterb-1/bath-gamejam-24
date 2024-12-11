@@ -46,6 +46,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingScreen: {fileID: 2439356370993896313}
+  levelSelectScene: {fileID: 11400000, guid: a5df0169d87d21c459448efb34469885, type: 2}
+  sceneConfigs:
+  - {fileID: 11400000, guid: 914fb52546235b74c8835dfed7777b32, type: 2}
+  - {fileID: 11400000, guid: 967a6828f4b8ac747b2a04640e834452, type: 2}
+  - {fileID: 11400000, guid: a5df0169d87d21c459448efb34469885, type: 2}
 --- !u!1001 &8878825978482249738
 PrefabInstance:
   m_ObjectHideFlags: 0
