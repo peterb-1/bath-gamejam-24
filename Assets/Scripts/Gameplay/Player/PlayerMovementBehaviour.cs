@@ -1,4 +1,5 @@
 using Audio;
+using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
 using UnityEngine;
@@ -91,6 +92,7 @@ namespace Gameplay.Player
         private void Awake()
         {
             InputManager.OnJumpPerformed += HandleJumpPerformed;
+            SceneLoader.OnSceneLoadStart += HandleSceneLoadStart;
 
             playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
@@ -212,6 +214,12 @@ namespace Gameplay.Player
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, headJumpForce);
         }
         
+        private void HandleSceneLoadStart()
+        {
+            rigidBody.linearVelocity = Vector2.zero;
+            rigidBody.gravityScale = 0f;
+        }
+        
         private void HandleDeathSequenceStart()
         {
             rigidBody.linearVelocity = Vector2.zero;
@@ -255,6 +263,7 @@ namespace Gameplay.Player
         private void OnDestroy()
         {
             InputManager.OnJumpPerformed -= HandleJumpPerformed;
+            SceneLoader.OnSceneLoadStart -= HandleSceneLoadStart;
             
             playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;

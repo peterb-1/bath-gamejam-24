@@ -1,8 +1,8 @@
-using System;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Utils;
 
@@ -33,7 +33,7 @@ namespace UI
         
         private void HandleControlSchemeChanged(ControlScheme controlScheme)
         {
-            if (isActive && hasDefaultSelectable && controlScheme is ControlScheme.Gamepad)
+            if (isActive && hasDefaultSelectable && controlScheme is not ControlScheme.Mouse)
             {
                 defaultSelectable.Select();
             }
@@ -46,7 +46,7 @@ namespace UI
             pageAnimator.SetBool(IsForward, isForward);
             pageAnimator.SetBool(IsActive, true);
 
-            if (hasDefaultSelectable && InputManager.CurrentControlScheme is ControlScheme.Gamepad)
+            if (hasDefaultSelectable && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
             {
                 defaultSelectable.Select();
             }
@@ -54,6 +54,12 @@ namespace UI
 
         public void Hide(bool isForward = true)
         {
+            if (EventSystem.current.currentSelectedGameObject != null &&
+                EventSystem.current.currentSelectedGameObject.transform.IsChildOf(transform))
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+            }
+
             isActive = false;
             
             pageAnimator.SetBool(IsForward, isForward);
@@ -67,7 +73,7 @@ namespace UI
             pageAnimator.SetBool(IsActive, true);
             pageAnimator.EvaluateCurrentClipEndAsync().Forget();
             
-            if (hasDefaultSelectable && InputManager.CurrentControlScheme is ControlScheme.Gamepad)
+            if (hasDefaultSelectable && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
             {
                 defaultSelectable.Select();
             }
@@ -75,6 +81,12 @@ namespace UI
         
         public void HideImmediate()
         {
+            if (EventSystem.current.currentSelectedGameObject != null &&
+                EventSystem.current.currentSelectedGameObject.transform.IsChildOf(transform))
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+            }
+            
             isActive = false;
             
             pageAnimator.SetBool(IsActive, false);

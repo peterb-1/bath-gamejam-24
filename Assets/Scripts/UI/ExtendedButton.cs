@@ -21,8 +21,8 @@ namespace UI
         {
             var navigationMode = controlScheme switch
             {
-                ControlScheme.KeyboardMouse => Navigation.Mode.None,
-                ControlScheme.Gamepad => Navigation.Mode.Automatic,
+                ControlScheme.Keyboard or ControlScheme.Gamepad => Navigation.Mode.Explicit,
+                ControlScheme.Mouse => Navigation.Mode.None,
                 _ => throw new ArgumentOutOfRangeException(nameof(controlScheme), controlScheme, null)
             };
 

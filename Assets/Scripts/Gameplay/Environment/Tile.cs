@@ -52,7 +52,11 @@ namespace Gameplay.Environment
         public void Toggle(bool isActive)
         {
             baseColour = new Color(baseColour.r, baseColour.g, baseColour.b, isActive ? 1f : 0f);
-            spriteRenderer.color = baseColour;
+
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.color = baseColour;
+            }
         }
         
         public void SetSize(Vector2 size, Vector2 random)

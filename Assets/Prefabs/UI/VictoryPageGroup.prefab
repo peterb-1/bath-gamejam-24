@@ -424,6 +424,7 @@ MonoBehaviour:
   victoryPageGroup: {fileID: 1532431674620340976}
   retryButton: {fileID: 7795908612391335328}
   nextButton: {fileID: 5168445007998589380}
+  timerBehaviour: {fileID: 0}
   timerText: {fileID: 1151107645559964468}
   nextSceneIndex: 0
 --- !u!224 &7209971690187909071 stripped
@@ -531,6 +532,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3984225271042433086, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 5168445007998589380}
     - target: {fileID: 9041081325839109250, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
       propertyPath: m_Name
       value: Retry
@@ -778,6 +783,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3984225271042433086, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 7795908612391335328}
     - target: {fileID: 9041081325839109250, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
       propertyPath: m_Name
       value: Next

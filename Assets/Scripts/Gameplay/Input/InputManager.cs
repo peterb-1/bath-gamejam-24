@@ -110,23 +110,62 @@ namespace Gameplay.Input
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
         }
 
-        private void HandleControlSchemeChanged(PlayerInput _)
+        private bool IsMouseActive()
         {
+            return Mouse.current != null && (Mouse.current.delta.ReadValue() != Vector2.zero || Mouse.current.leftButton.wasPressedThisFrame);
+        }
+
+        private async void HandleControlSchemeChanged(PlayerInput _)
+        {
+            // stupid hack to ensure that the mouse is recognised as active if that's what triggered the callback
+            await UniTask.Yield();
+            
             var controlSchemeIdentifier = playerInput.currentControlScheme;
             
-            var controlScheme = controlSchemeIdentifier switch
+            var controlScheme = (controlSchemeIdentifier, IsMouseActive()) switch
             {
-                ControlSchemeIdentifiers.KEYBOARD_MOUSE => ControlScheme.KeyboardMouse,
-                ControlSchemeIdentifiers.GAMEPAD => ControlScheme.Gamepad,
+                (ControlSchemeIdentifiers.KEYBOARD_MOUSE, true) => ControlScheme.Mouse,
+                (ControlSchemeIdentifiers.KEYBOARD_MOUSE, false) => ControlScheme.Keyboard,
+                (ControlSchemeIdentifiers.GAMEPAD, _) => ControlScheme.Gamepad,
                 _ => throw new ArgumentOutOfRangeException(nameof(controlSchemeIdentifier), controlSchemeIdentifier, null)
             };
             
-            if (controlScheme is ControlScheme.KeyboardMouse)
+            UpdateControlScheme(controlScheme);
+        }
+        
+        private void Update()
+        {
+            MoveAmount = moveAction.action.ReadValue<Vector2>().x;
+            
+            if (IsMouseActive())
             {
+                UpdateControlScheme(ControlScheme.Mouse);
+            }
+
+            if (CurrentControlScheme is ControlScheme.Mouse)
+            {
+                if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+                {
+                    UpdateControlScheme(ControlScheme.Keyboard);
+                }
+            }
+        }
+
+        private void UpdateControlScheme(ControlScheme controlScheme)
+        {
+            CurrentControlScheme = controlScheme;
+
+            if (controlScheme is ControlScheme.Mouse)
+            {
+                Cursor.visible = true;
+                
                 EventSystem.current.SetSelectedGameObject(null);
             }
-            
-            CurrentControlScheme = controlScheme;
+            else
+            {
+                Cursor.visible = false;
+            }
+
             OnControlSchemeChanged?.Invoke(controlScheme);
         }
 
@@ -170,11 +209,6 @@ namespace Gameplay.Input
             blueAction.action.performed -= HandleBluePerformed;
             redAction.action.performed -= HandleRedPerformed;
             yellowAction.action.performed -= HandleYellowPerformed;
-        }
-        
-        private void Update()
-        {
-            MoveAmount = moveAction.action.ReadValue<Vector2>().x;
         }
 
         private static void HandleJumpPerformed(InputAction.CallbackContext _)

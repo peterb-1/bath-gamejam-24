@@ -105,6 +105,22 @@ namespace Gameplay.Core
                 Time.timeScale = prePauseTimeScale;
             }
         }
+        
+        public void UnpauseInvisible()
+        {
+            if (IsPaused)
+            {
+                TogglePauseInvisible();
+            }
+        }
+
+        public void Unpause()
+        {
+            if (IsPaused)
+            {
+                TogglePause();
+            }
+        }
 
         private void OnDestroy()
         {

@@ -67,8 +67,9 @@ namespace UI
         {
             buttonPromptImage.sprite = controlScheme switch
             {
-                ControlScheme.KeyboardMouse => keyboardMouseButtonPrompts,
+                ControlScheme.Keyboard => keyboardMouseButtonPrompts,
                 ControlScheme.Gamepad => gamepadButtonPrompts,
+                ControlScheme.Mouse => buttonPromptImage.sprite,
                 _ => throw new ArgumentOutOfRangeException(nameof(controlScheme), controlScheme, null)
             };
         }
