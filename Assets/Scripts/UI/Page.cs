@@ -14,13 +14,19 @@ namespace UI
         private Animator pageAnimator;
 
         [SerializeField] 
+        private CanvasGroup canvasGroup;
+
+        [SerializeField] 
         private bool hasDefaultSelectable;
 
         [SerializeField, ShowIf(nameof(hasDefaultSelectable))]
         private Selectable defaultSelectable;
 
+        [SerializeField, ShowIf(nameof(hasDefaultSelectable))]
+        private bool selectOnShow = true;
+
         private static readonly int IsActive = Animator.StringToHash("isActive");
-        private static readonly int IsForward = Animator.StringToHash("isActive");
+        private static readonly int IsForward = Animator.StringToHash("isForward");
 
         private bool isActive;
 
@@ -29,15 +35,17 @@ namespace UI
         {
             InputManager.OnControlSchemeChanged += HandleControlSchemeChanged;
             
-            HandleControlSchemeChanged(InputManager.CurrentControlScheme);
+            if (selectOnShow && isActive)
+            {
+                TrySelectDefaultSelectable();
+            }
         }
         
         private void HandleControlSchemeChanged(ControlScheme controlScheme)
         {
-            if (isActive && hasDefaultSelectable && controlScheme is not ControlScheme.Mouse)
+            if (isActive)
             {
-                EventSystem.current.SetSelectedGameObject(null);
-                defaultSelectable.Select();
+                TrySelectDefaultSelectable();
             }
         }
 
@@ -48,10 +56,12 @@ namespace UI
             pageAnimator.SetBool(IsForward, isForward);
             pageAnimator.SetBool(IsActive, true);
 
-            if (hasDefaultSelectable && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
+
+            if (selectOnShow)
             {
-                EventSystem.current.SetSelectedGameObject(null);
-                defaultSelectable.Select();
+                TrySelectDefaultSelectable();
             }
         }
 
@@ -67,6 +77,9 @@ namespace UI
             
             pageAnimator.SetBool(IsForward, isForward);
             pageAnimator.SetBool(IsActive, false);
+            
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
         }
 
         public void ShowImmediate()
@@ -76,10 +89,12 @@ namespace UI
             pageAnimator.SetBool(IsActive, true);
             pageAnimator.EvaluateCurrentClipEndAsync().Forget();
             
-            if (hasDefaultSelectable && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
+
+            if (selectOnShow)
             {
-                EventSystem.current.SetSelectedGameObject(null);
-                defaultSelectable.Select();
+                TrySelectDefaultSelectable();
             }
         }
         
@@ -95,6 +110,18 @@ namespace UI
             
             pageAnimator.SetBool(IsActive, false);
             pageAnimator.EvaluateCurrentClipEndAsync().Forget();
+            
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+        }
+
+        private void TrySelectDefaultSelectable()
+        {
+            if (hasDefaultSelectable && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
+            {
+                EventSystem.current.SetSelectedGameObject(null);
+                defaultSelectable.Select();
+            }
         }
         
         private void OnDestroy()

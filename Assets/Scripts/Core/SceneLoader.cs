@@ -24,13 +24,14 @@ namespace Core
         private List<SceneConfig> sceneConfigs;
         
         public static SceneLoader Instance { get; private set; }
-
-        public static event Action OnSceneLoadStart;
-        public static event Action OnSceneLoaded;
         
         public SceneConfig CurrentSceneConfig { get; private set; }
+        public SceneConfig PreviousSceneConfig { get; private set; }
 
         private bool isLoading;
+        
+        public static event Action OnSceneLoadStart;
+        public static event Action OnSceneLoaded;
         
         private void Awake()
         {
@@ -52,6 +53,8 @@ namespace Core
                     CurrentSceneConfig = config;
                 }
             }
+
+            PreviousSceneConfig = null;
         }
         
         public void ReloadCurrentScene()
@@ -81,6 +84,7 @@ namespace Core
 
             await loadingScreen.ShowAsync();
             
+            PreviousSceneConfig = CurrentSceneConfig;
             CurrentSceneConfig = sceneConfig;
             
             await SceneManager.LoadSceneAsync(sceneConfig.ScenePath);

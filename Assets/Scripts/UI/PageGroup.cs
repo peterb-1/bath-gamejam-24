@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Cysharp.Threading.Tasks;
-using NaughtyAttributes;
 using UnityEngine;
 using Utils;
 
@@ -101,17 +100,19 @@ namespace UI
             pageGroupAnimator.EvaluateCurrentClipEndAsync().Forget();
         }
 
-        public void SetPage(Page page)
+        public void SetPage(Page page, bool isForward = true)
         {
+            if (page == activePage) return;
+            
             if (!pages.Contains(page))
             {
                 GameLogger.LogWarning($"Page {page} is not registered to this PageGroup - cannot set as the active page.", this);
                 return;
             }
             
-            activePage.Hide();
+            activePage.Hide(isForward);
             activePage = page;
-            activePage.Show();
+            activePage.Show(isForward);
         }
     }
 }

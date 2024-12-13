@@ -17,6 +17,8 @@ namespace UI
         [SerializeField] 
         private Animator borderAnimator;
 
+        public SceneConfig SceneConfig => sceneConfig;
+
         private static readonly int Selected = Animator.StringToHash("Selected");
 
         protected override void Awake()

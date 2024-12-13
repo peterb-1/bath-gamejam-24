@@ -33,16 +33,24 @@ namespace UI
 
         public override void OnSubmit(BaseEventData eventData)
         {
-            base.OnSubmit(eventData);
+            // play sfx before calling base method in case clicking the button deactivates it
+            if (interactable)
+            {
+                AudioManager.Instance.Play(AudioClipIdentifier.ButtonClick);
+            }
             
-            AudioManager.Instance.Play(AudioClipIdentifier.ButtonClick);
+            base.OnSubmit(eventData);
         }
 
         public override void OnPointerClick(PointerEventData eventData)
         {
-            base.OnPointerClick(eventData);
+            // play sfx before calling base method in case clicking the button deactivates it
+            if (interactable)
+            {
+                AudioManager.Instance.Play(AudioClipIdentifier.ButtonClick);
+            }
             
-            AudioManager.Instance.Play(AudioClipIdentifier.ButtonClick);
+            base.OnPointerClick(eventData);
         }
 
         protected override void OnDestroy()
