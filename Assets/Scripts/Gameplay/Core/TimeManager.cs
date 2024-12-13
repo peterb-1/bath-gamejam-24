@@ -33,7 +33,7 @@ namespace Gameplay.Core
         
         private void Update()
         {
-            if (PauseManager.Instance != null && !PauseManager.Instance.IsPaused)
+            if (PauseManager.Instance == null || !PauseManager.Instance.IsPaused)
             {
                 UnpausedRealtimeSinceStartup += Time.unscaledDeltaTime;
             }

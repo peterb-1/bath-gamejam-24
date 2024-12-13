@@ -9,16 +9,16 @@ namespace Gameplay.Environment
         private float horizontalSpeed;
         
         [SerializeField, ReadOnly]
-        private float despawnPosition;
+        private float leftEnd;
         
         [SerializeField, ReadOnly]
-        private float respawnPosition;
+        private float rightEnd;
 
-        public void Configure(float speed, float despawn, float respawn)
+        public void Configure(float speed, float left, float right)
         {
             horizontalSpeed = speed;
-            despawnPosition = despawn;
-            respawnPosition = respawn;
+            leftEnd = left;
+            rightEnd = right;
         }
 
         private void Update()
@@ -27,10 +27,13 @@ namespace Gameplay.Environment
             
             position += Vector3.right * (horizontalSpeed * Time.deltaTime);
 
-            if ((horizontalSpeed > 0 && position.x > despawnPosition) ||
-                (horizontalSpeed < 0 && position.x < despawnPosition))
+            if (horizontalSpeed > 0 && position.x > rightEnd)
             {
-                position.x = respawnPosition;
+                position.x -= rightEnd - leftEnd;
+            }
+            else if (horizontalSpeed < 0 && position.x < leftEnd)
+            {
+                position.x += rightEnd - leftEnd;
             }
 
             transform.localPosition = position;

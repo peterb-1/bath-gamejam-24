@@ -4,6 +4,7 @@ using Gameplay.Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace UI
 {
@@ -26,6 +27,9 @@ namespace UI
 
         [SerializeField] 
         private TMP_Text timerText;
+        
+        [SerializeField] 
+        private TMP_Text levelInfoText;
 
         [SerializeField] 
         private SceneConfig nextSceneConfig;
@@ -64,9 +68,26 @@ namespace UI
 
         private void HandleVictorySequenceFinish()
         {
-            victoryPageGroup.ShowGroup();
-
+            SetLevelInfoText();
+            
             timerText.text = timerBehaviour.GetFormattedTimeElapsed();
+            
+            victoryPageGroup.ShowGroup();
+        }
+        
+        private void SetLevelInfoText()
+        {
+            var sceneConfig = SceneLoader.Instance.CurrentSceneConfig;
+
+            if (sceneConfig.IsLevelScene)
+            {
+                levelInfoText.text = sceneConfig.LevelConfig.GetLevelText();
+            }
+            else
+            {
+                GameLogger.LogWarning("Could not obtain current level config for level info text.", this);
+                levelInfoText.text = "MISSING LEVEL CONFIG";
+            }
         }
 
         private void OnDestroy()

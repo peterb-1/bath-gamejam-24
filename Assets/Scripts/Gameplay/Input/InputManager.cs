@@ -137,7 +137,7 @@ namespace Gameplay.Input
         {
             MoveAmount = moveAction.action.ReadValue<Vector2>().x;
             
-            if (IsMouseActive())
+            if (CurrentControlScheme is not ControlScheme.Mouse && IsMouseActive())
             {
                 UpdateControlScheme(ControlScheme.Mouse);
             }

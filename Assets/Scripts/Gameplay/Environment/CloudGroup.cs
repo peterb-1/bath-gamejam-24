@@ -13,26 +13,47 @@ namespace Gameplay.Environment
         [SerializeField] 
         private int cloudCount;
         
-        [SerializeField, Min(0f)] 
+        [SerializeField] 
         private float horizontalSpeed;
 
         [SerializeField] 
-        private float despawnPosition;
+        private float leftEnd;
 
         [SerializeField] 
-        private float respawnPosition;
+        private float rightEnd;
+
+        [SerializeField, ReadOnly] 
+        private Cloud[] clouds;
+
+        public float BaseSpeed => horizontalSpeed;
+        public float CurrentSpeed { get; private set; }
+
+        private void Awake()
+        {
+            CurrentSpeed = BaseSpeed;
+        }
+
+        public void SetSpeed(float speed)
+        {
+            foreach (var cloud in clouds)
+            {
+                cloud.Configure(speed, leftEnd, rightEnd);
+            }
+
+            CurrentSpeed = speed;
+        }
 
 #if UNITY_EDITOR
         [Button("Setup Clouds")]
         private void SetupClouds()
         {
-            var span = Mathf.Abs(respawnPosition - despawnPosition);
-            var start = Mathf.Min(respawnPosition, despawnPosition);
+            var span = rightEnd - leftEnd;
             var interCloudDistance = span / cloudCount;
-            var direction = despawnPosition > respawnPosition ? 1f : -1f;
 
             var cloudPrefabGuid = AssetDatabase.FindAssets("Cloud t:GameObject")[0];
             var cloudPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(cloudPrefabGuid));
+
+            clouds = new Cloud[cloudCount];
 
             for (var i = 0; i < cloudCount; i++)
             {
@@ -40,9 +61,11 @@ namespace Gameplay.Environment
                 var cloud = cloudGameObject.GetComponent<Cloud>();
 
                 cloudGameObject.transform.parent = transform;
-                cloud.transform.localPosition = Vector3.right * (start + (i + 0.5f) * interCloudDistance);
+                cloud.transform.localPosition = Vector3.right * (leftEnd + (i + 0.5f) * interCloudDistance);
 
-                cloud.Configure(horizontalSpeed * direction, despawnPosition, respawnPosition);
+                cloud.Configure(horizontalSpeed, leftEnd, rightEnd);
+
+                clouds[i] = cloud;
             }
         }
 
@@ -53,6 +76,8 @@ namespace Gameplay.Environment
             {
                 DestroyImmediate(transform.GetChild(i).gameObject);
             }
+
+            clouds = Array.Empty<Cloud>();
         }
 #endif
     }

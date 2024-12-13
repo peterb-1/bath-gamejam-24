@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
 using Core;
+using Cysharp.Threading.Tasks;
+using Gameplay.Core;
+using Gameplay.Environment;
+using Gameplay.Input;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +25,18 @@ namespace UI
         
         [SerializeField] 
         private Button forwardButton;
+
+        [SerializeField] 
+        private CloudGroup cloudGroup;
+
+        [SerializeField] 
+        private AnimationCurve cloudAnimationCurve;
+        
+        [SerializeField] 
+        private float cloudAnimationTime;
+
+        [SerializeField]
+        private float cloudAnimationStrength;
 
         private int currentPageIndex;
 
@@ -85,10 +101,12 @@ namespace UI
             
             pageGroup.SetPage(newDistrictPage.Page, isForward: false);
 
-            if (currentPageIndex == 0)
+            if (currentPageIndex == 0 && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
             {
                 leftmostButton.Select();
             }
+            
+            AnimateCloudsAsync(isForward: false).Forget();
         }
         
         private void HandleForwardClicked()
@@ -102,10 +120,12 @@ namespace UI
             
             pageGroup.SetPage(newDistrictPage.Page, isForward: true);
 
-            if (currentPageIndex == districtPages.Length - 1)
+            if (currentPageIndex == districtPages.Length - 1 && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
             {
                 rightmostButton.Select();
             }
+            
+            AnimateCloudsAsync(isForward: true).Forget();
         }
 
         private void SetPageNavigation()
@@ -136,6 +156,54 @@ namespace UI
         private void HandleSceneLoadStart()
         {
             pageGroup.HideGroup();
+        }
+
+        private async UniTask AnimateCloudsAsync(bool isForward)
+        {
+            var speedScale = isForward ? 1.0f : -1.0f;
+            var baseSpeed = cloudGroup.BaseSpeed;
+            var startSpeed = cloudGroup.CurrentSpeed;
+            var speedDifference = Mathf.Abs(startSpeed - baseSpeed) / cloudAnimationStrength;
+            var halfTime = cloudAnimationTime * 0.5f;
+            var initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
+            var timeElapsed = 0.0f;
+            
+            while (timeElapsed < halfTime)
+            {
+                var lerp = cloudAnimationCurve.Evaluate(timeElapsed / halfTime);
+                var speed = startSpeed + cloudAnimationStrength * lerp * speedScale * (1 - speedDifference);
+                var clampedSpeed = isForward
+                    ? Mathf.Max(speed, baseSpeed + cloudAnimationStrength)
+                    : Mathf.Min(speed, baseSpeed - cloudAnimationStrength);
+                
+                cloudGroup.SetSpeed(clampedSpeed);
+                
+                await UniTask.Yield();
+                
+                timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
+            }
+
+            initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
+            timeElapsed = 0.0f;
+            
+            while (timeElapsed < halfTime)
+            {
+                var lerp = 1.0f - cloudAnimationCurve.Evaluate(timeElapsed / halfTime);
+                var speed = baseSpeed + cloudAnimationStrength * lerp * speedScale;
+                var clampedSpeed = isForward
+                    ? Mathf.Max(speed, baseSpeed + cloudAnimationStrength)
+                    : Mathf.Min(speed, baseSpeed - cloudAnimationStrength);
+                
+                cloudGroup.SetSpeed(clampedSpeed);
+
+                cloudGroup.SetSpeed(speed);
+                
+                await UniTask.Yield();
+                
+                timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
+            }
+            
+            cloudGroup.SetSpeed(baseSpeed);
         }
         
         private void OnDestroy()
