@@ -224,6 +224,8 @@ MonoBehaviour:
   deceleration: 10
   coyoteDuration: 0.15
   jumpBufferDuration: 0.2
+  hookCooldownDuration: 0.4
+  hookOffset: {x: 0, y: -0.5, z: 0}
   groundCheckDistance: 0.25
   groundLayers:
     serializedVersion: 2

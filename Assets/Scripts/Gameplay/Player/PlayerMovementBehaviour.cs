@@ -40,6 +40,12 @@ namespace Gameplay.Player
         [SerializeField] 
         private float jumpBufferDuration;
 
+        [SerializeField] 
+        private float hookCooldownDuration;
+
+        [SerializeField] 
+        private Vector3 hookOffset;
+
         [SerializeField]
         private float groundCheckDistance;
         
@@ -76,17 +82,24 @@ namespace Gameplay.Player
 
         [SerializeField]
         private PlayerVictoryBehaviour playerVictoryBehaviour;
+
+        public Vector2 Velocity => rigidBody.linearVelocity;
         
         private float coyoteCountdown;
         private float jumpBufferCountdown;
+        private float hookCountdown;
         
         private bool isGrounded;
         private bool isTouchingLeftWall;
         private bool isTouchingRightWall;
         private bool hasDoubleJumped;
+        private bool isHooked;
+
+        private HingeJoint2D hook;
         
         private static readonly int IsGrounded = Animator.StringToHash("isGrounded");
         private static readonly int IsRunning = Animator.StringToHash("isRunning");
+        private static readonly int IsHooked = Animator.StringToHash("isHooked");
         private static readonly int DoubleJump = Animator.StringToHash("doubleJump");
 
         private void Awake()
@@ -102,6 +115,7 @@ namespace Gameplay.Player
         {
             if (!isGrounded) coyoteCountdown -= Time.deltaTime;
             if (jumpBufferCountdown > 0f) jumpBufferCountdown -= Time.deltaTime;
+            if (hookCountdown > 0f) hookCountdown -= Time.deltaTime;
 
             var trans = transform;
             var up = trans.up;
@@ -127,7 +141,7 @@ namespace Gameplay.Player
             
             playerAnimator.SetBool(IsGrounded, isGrounded);
 
-            if (isGrounded)
+            if (isGrounded || isHooked)
             {
                 coyoteCountdown = coyoteDuration;
                 hasDoubleJumped = false;
@@ -138,11 +152,14 @@ namespace Gameplay.Player
         {
             var moveAmount = InputManager.MoveAmount;
             var desiredVelocity = moveAmount * moveSpeed;
-            
-            rigidBody.linearVelocity = moveAmount == 0f
-                ? new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, 0f, deceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY)
-                : new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, desiredVelocity, acceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY);
-            
+
+            if (!isHooked)
+            {
+                rigidBody.linearVelocity = moveAmount == 0f
+                    ? new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, 0f, deceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY)
+                    : new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, desiredVelocity, acceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY);
+            }
+
             if (rigidBody.linearVelocityY < 0f)
             {
                 rigidBody.linearVelocity += Vector2.up * (Physics2D.gravity.y * (fallMultiplier - 1f) * Time.deltaTime);
@@ -173,7 +190,7 @@ namespace Gameplay.Player
         {
             if (jumpBufferCountdown <= 0f) return;
             
-            if (isGrounded || coyoteCountdown > 0f)
+            if (isGrounded || isHooked || coyoteCountdown > 0f)
             {
                 PerformJump(jumpForce);
             }
@@ -195,6 +212,8 @@ namespace Gameplay.Player
         
         private void PerformJump(float force)
         {
+            UnhookPlayer();
+            
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, force);
             jumpBufferCountdown = 0f;
@@ -212,6 +231,46 @@ namespace Gameplay.Player
         {
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, headJumpForce);
+        }
+
+        public bool TryHookPlayer(HingeJoint2D hinge)
+        {
+            if (isHooked || hookCountdown > 0f)
+            {
+                return false;
+            }
+
+            var trans = transform;
+
+            hook = hinge;
+            
+            isHooked = true;
+
+            hook.connectedBody = rigidBody;
+            rigidBody.linearVelocity = Vector2.zero;
+            rigidBody.gravityScale = 0f;
+            
+            trans.parent = hook.transform;
+            trans.localPosition = hookOffset;
+            
+            playerAnimator.SetBool(IsHooked, true);
+
+            return true;
+        }
+
+        public void UnhookPlayer()
+        {
+            if (!isHooked) return;
+            
+            isHooked = false;
+            hookCountdown = hookCooldownDuration;
+            
+            hook.connectedBody = null;
+            transform.parent = null;
+            rigidBody.linearVelocity = Vector2.zero;
+            rigidBody.gravityScale = 1f;
+            
+            playerAnimator.SetBool(IsHooked, false);
         }
         
         private void HandleSceneLoadStart()
