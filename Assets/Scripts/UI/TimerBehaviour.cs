@@ -1,5 +1,4 @@
 ﻿using System;
-using Gameplay.Core;
 using Gameplay.Drone;
 using UnityEngine;
 
@@ -41,8 +40,10 @@ namespace UI
             return GetFormattedTime(TimeElapsed);
         }
 
-        public string GetFormattedTime(float time)
+        public static string GetFormattedTime(float time)
         {
+            if (Math.Abs(time - float.MaxValue) < 0.01f) return "N/A";
+            
             var minutes = (int) (time / 60);
             var seconds = (int) (time % 60);
             var centiSeconds = (int) ((time - (int) time) * 100);

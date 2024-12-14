@@ -7,10 +7,10 @@ namespace Utils
 {
     public static class SaveUtils
     {
-        public static void Save<T>(T data, string fileName) where T : class
+        public static void Save<T>(T data, string fileName) where T : class, new()
         {
             var path = Path.Combine(Application.persistentDataPath, fileName);
-            var json = JsonUtility.ToJson(data);
+            var json = JsonUtility.ToJson(data, true);
 
             try
             {
@@ -27,7 +27,7 @@ namespace Utils
             }
         }
         
-        public static T Load<T>(string fileName) where T : class
+        public static T Load<T>(string fileName) where T : class, new()
         {
             var path = Path.Combine(Application.persistentDataPath, fileName);
             
@@ -45,7 +45,7 @@ namespace Utils
             catch (Exception e)
             {
                 GameLogger.LogError($"Failed to read data from path {path}: {e}");
-                return null;
+                return new T();
             }
         }
     }

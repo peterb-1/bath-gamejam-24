@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: LevelSelectInfoDisplay
+  m_Controller: {fileID: 9100000, guid: 66a7561c5ee48db45801af06bc03cab5, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: a41d6250a0283d340be37d1360d8abef, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 841ea873b37a83c4e842056ad0e9ed3c, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 321a45bd4eed8a5458646288efc0cf1c, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 841ea873b37a83c4e842056ad0e9ed3c, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 78dd2fb88070f9742a7ab51f738e1e56, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 78dd2fb88070f9742a7ab51f738e1e56, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 953bb01a5f48df04d8d906f0d8fdceca, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: f0825107f47e1764ab0ea68eace3e01b, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 1d0bc10eaf1b7bf45b264896ceaed66b, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: f0825107f47e1764ab0ea68eace3e01b, type: 2}

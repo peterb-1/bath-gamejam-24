@@ -22,7 +22,7 @@ namespace Gameplay.Core
             return $"District {GetRomanNumeral(districtNumber)}  —  Mission {missionNumber}";
         }
 
-        private string GetRomanNumeral(int i)
+        public static string GetRomanNumeral(int i)
         {
             return i switch
             {

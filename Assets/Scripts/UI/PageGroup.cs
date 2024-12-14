@@ -23,13 +23,13 @@ namespace UI
         [SerializeField] 
         private Animator pageGroupAnimator;
         
-        private Page activePage;
+        public Page ActivePage { get; private set; }
         
         private static readonly int IsActive = Animator.StringToHash("isActive");
 
         private void Awake()
         {
-            activePage = initialPage;
+            ActivePage = initialPage;
             
             foreach (var page in pages)
             {
@@ -46,7 +46,7 @@ namespace UI
         {
             pageGroupAnimator.SetBool(IsActive, true);
             
-            activePage.Show();
+            ActivePage.Show();
 
             var duration = await pageGroupAnimator.GetCurrentClipDurationAsync();
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
@@ -60,7 +60,7 @@ namespace UI
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
             
-            activePage.Hide();
+            ActivePage.Hide();
             
             pageGroupAnimator.SetBool(IsActive, false);
 
@@ -83,7 +83,7 @@ namespace UI
             pageGroupAnimator.SetBool(IsActive, true);
             pageGroupAnimator.EvaluateCurrentClipEndAsync().Forget();
             
-            activePage.ShowImmediate();
+            ActivePage.ShowImmediate();
             
             canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
@@ -94,15 +94,15 @@ namespace UI
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
             
-            activePage.HideImmediate();
+            ActivePage.HideImmediate();
             
             pageGroupAnimator.SetBool(IsActive, false);
             pageGroupAnimator.EvaluateCurrentClipEndAsync().Forget();
         }
 
-        public void SetPage(Page page, bool isForward = true)
+        public async UniTask SetPageAsync(Page page, bool isForward = true)
         {
-            if (page == activePage) return;
+            if (page == ActivePage) return;
             
             if (!pages.Contains(page))
             {
@@ -110,9 +110,15 @@ namespace UI
                 return;
             }
             
-            activePage.Hide(isForward);
-            activePage = page;
-            activePage.Show(isForward);
+            ActivePage.Hide(isForward);
+            ActivePage = page;
+            
+            await ActivePage.ShowAsync(isForward);
+        }
+
+        public void SetPage(Page page, bool isForward = true)
+        {
+            SetPageAsync(page, isForward).Forget();
         }
     }
 }

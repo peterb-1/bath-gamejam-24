@@ -20,8 +20,8 @@ namespace Core
         [SerializeField] 
         private SceneConfig levelSelectScene;
 
-        [SerializeField, ReadOnly] 
-        private List<SceneConfig> sceneConfigs;
+        [field: SerializeField, ReadOnly] 
+        public List<SceneConfig> SceneConfigs { get; private set; }
         
         public static SceneLoader Instance { get; private set; }
         
@@ -46,7 +46,7 @@ namespace Core
             transform.parent = null;
             DontDestroyOnLoad(this);
 
-            foreach (var config in sceneConfigs)
+            foreach (var config in SceneConfigs)
             {
                 if (config.ScenePath == SceneManager.GetActiveScene().path)
                 {
@@ -56,6 +56,8 @@ namespace Core
 
             PreviousSceneConfig = null;
         }
+        
+        public static bool IsReady() => Instance != null;
         
         public void ReloadCurrentScene()
         {
@@ -101,7 +103,7 @@ namespace Core
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            sceneConfigs.Clear();
+            SceneConfigs.Clear();
             
             var guids = AssetDatabase.FindAssets($"t:{nameof(SceneConfig)}");
             
@@ -111,7 +113,7 @@ namespace Core
                 var asset = AssetDatabase.LoadAssetAtPath<SceneConfig>(path);
                 if (asset != null)
                 {
-                    sceneConfigs.Add(asset);
+                    SceneConfigs.Add(asset);
                 }
             }
         }

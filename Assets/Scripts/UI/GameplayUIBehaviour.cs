@@ -53,7 +53,7 @@ namespace UI
 
         private void HandleTimeBonusApplied(float timeBonus)
         {
-            timerBonusText.SetText($"- {timerBehaviour.GetFormattedTime(timeBonus)}");
+            timerBonusText.SetText($"- {TimerBehaviour.GetFormattedTime(timeBonus)}");
             
             timerTextAnimator.SetTrigger(Pulse);
         }

@@ -1,6 +1,7 @@
 using System;
 using Audio;
 using Gameplay.Input;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -8,6 +9,9 @@ namespace UI
 {
     public class ExtendedButton : Button
     {
+        public event Action<ExtendedButton> OnHover;
+        public event Action<ExtendedButton> OnUnhover;
+        
         protected override void Awake()
         {
             base.Awake();
@@ -51,6 +55,40 @@ namespace UI
             }
             
             base.OnPointerClick(eventData);
+        }
+        
+        public override void OnSelect(BaseEventData eventData)
+        {
+            if (interactable)
+            {
+                OnHover?.Invoke(this);
+            }
+            
+            base.OnSelect(eventData);
+        }
+
+        public override void OnDeselect(BaseEventData eventData)
+        {
+            OnUnhover?.Invoke(this);
+            
+            base.OnDeselect(eventData);
+        }
+        
+        public override void OnPointerEnter(PointerEventData eventData)
+        {
+            if (interactable)
+            {
+                OnHover?.Invoke(this);
+            }
+            
+            base.OnPointerEnter(eventData);
+        }
+
+        public override void OnPointerExit(PointerEventData eventData)
+        {
+            OnUnhover?.Invoke(this);
+            
+            base.OnPointerExit(eventData);
         }
 
         protected override void OnDestroy()

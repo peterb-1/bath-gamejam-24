@@ -1,4 +1,5 @@
 using Core;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Player;
 using TMPro;
@@ -72,6 +73,14 @@ namespace UI
             
             timerText.text = timerBehaviour.GetFormattedTimeElapsed();
             
+            if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(
+                    SceneLoader.Instance.CurrentSceneConfig, out var levelData))
+            {
+                levelData.SetTime(timerBehaviour.TimeElapsed);
+                
+                SaveManager.Instance.Save();
+            }
+
             victoryPageGroup.ShowGroup();
         }
         

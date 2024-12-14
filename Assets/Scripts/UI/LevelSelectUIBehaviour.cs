@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using Core;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Gameplay.Environment;
 using Gameplay.Input;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace UI
 {
@@ -15,16 +18,19 @@ namespace UI
         private PageGroup pageGroup;
 
         [SerializeField] 
+        private LevelSelectInfoDisplayUIBehaviour infoDisplayBehaviour;
+
+        [SerializeField] 
         private DistrictPageUIBehaviour[] districtPages;
 
         [SerializeField] 
         private LevelSelectButton defaultButton;
         
         [SerializeField] 
-        private Button backButton;
+        private ExtendedButton backButton;
         
         [SerializeField] 
-        private Button forwardButton;
+        private ExtendedButton forwardButton;
 
         [SerializeField] 
         private CloudGroup cloudGroup;
@@ -49,13 +55,21 @@ namespace UI
                 foreach (var levelSelectButton in districtPage.LevelSelectButtons)
                 {
                     levelSelectButtonLookup.Add(levelSelectButton.SceneConfig, (districtPage, levelSelectButton));
+
+                    levelSelectButton.OnHover += HandleLevelSelectButtonHover;
+                    levelSelectButton.OnUnhover += HandleButtonUnhover;
                 }
             }
 
             SceneLoader.OnSceneLoadStart += HandleSceneLoadStart;
             
             backButton.onClick.AddListener(HandleBackClicked);
+            backButton.OnHover += HandleBackHover;
+            backButton.OnUnhover += HandleButtonUnhover;
+            
             forwardButton.onClick.AddListener(HandleForwardClicked);
+            forwardButton.OnHover += HandleForwardHover;
+            forwardButton.OnUnhover += HandleButtonUnhover;
         }
 
         private void Start()
@@ -90,7 +104,35 @@ namespace UI
             }
         }
         
-        private void HandleBackClicked()
+        private void HandleSceneLoadStart()
+        {
+            pageGroup.HideGroup();
+        }
+        
+        private void HandleLevelSelectButtonHover(ExtendedButton button)
+        {
+            if (button is LevelSelectButton levelSelectButton)
+            {
+                infoDisplayBehaviour.SetLevelInfo(levelSelectButton.SceneConfig);
+            }
+        }
+
+        private void HandleBackHover(ExtendedButton _)
+        {
+            infoDisplayBehaviour.SetNextDistrict(currentPageIndex);
+        }
+
+        private void HandleForwardHover(ExtendedButton _)
+        {
+            infoDisplayBehaviour.SetNextDistrict(currentPageIndex + 2);
+        }
+        
+        private void HandleButtonUnhover(ExtendedButton _)
+        {
+            infoDisplayBehaviour.SetNoData();
+        }
+
+        private async void HandleBackClicked()
         {
             currentPageIndex--;
             
@@ -99,17 +141,29 @@ namespace UI
             
             SetPageNavigation();
             
-            pageGroup.SetPage(newDistrictPage.Page, isForward: false);
+            AnimateCloudsAsync(isForward: false).Forget();
+
+            if (currentPageIndex > 0)
+            {
+                infoDisplayBehaviour.SetNextDistrict(currentPageIndex);
+            }
+            else if (InputManager.CurrentControlScheme is ControlScheme.Mouse)
+            {
+                infoDisplayBehaviour.SetNoData();
+            }
+            
+            await pageGroup.SetPageAsync(newDistrictPage.Page, isForward: false);
+            
+            // may have gone to a new page while waiting for the transition to complete
+            if (districtPages[currentPageIndex] != newDistrictPage) return;
 
             if (currentPageIndex == 0 && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
             {
                 leftmostButton.Select();
             }
-            
-            AnimateCloudsAsync(isForward: false).Forget();
         }
         
-        private void HandleForwardClicked()
+        private async void HandleForwardClicked()
         {
             currentPageIndex++;
             
@@ -118,26 +172,38 @@ namespace UI
 
             SetPageNavigation();
             
-            pageGroup.SetPage(newDistrictPage.Page, isForward: true);
+            AnimateCloudsAsync(isForward: true).Forget();
+            
+            if (currentPageIndex < districtPages.Length - 1)
+            {
+                infoDisplayBehaviour.SetNextDistrict(currentPageIndex + 2);
+            }
+            else if (InputManager.CurrentControlScheme is ControlScheme.Mouse)
+            {
+                infoDisplayBehaviour.SetNoData();
+            }
+
+            await pageGroup.SetPageAsync(newDistrictPage.Page, isForward: true);
+
+            // may have gone to a new page while waiting for the transition to complete
+            if (districtPages[currentPageIndex] != newDistrictPage) return;
 
             if (currentPageIndex == districtPages.Length - 1 && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
             {
                 rightmostButton.Select();
             }
-            
-            AnimateCloudsAsync(isForward: true).Forget();
         }
 
         private void SetPageNavigation()
         {
             var districtPage = districtPages[currentPageIndex];
             var leftmostButton = districtPage.GetLeftmostUnlockedLevelButton();
-            var leftmostNavigation = leftmostButton.navigation;
             var rightmostButton = districtPage.GetRightmostUnlockedLevelButton();
+            var leftmostNavigation = leftmostButton.navigation;
             var rightmostNavigation = rightmostButton.navigation;
             var backNavigation = backButton.navigation;
-            var isBackActive = currentPageIndex > 0;
             var forwardNavigation = forwardButton.navigation;
+            var isBackActive = currentPageIndex > 0;
             var isForwardActive = currentPageIndex < districtPages.Length - 1;
                 
             leftmostNavigation.selectOnLeft = isBackActive ? backButton : null;
@@ -151,11 +217,6 @@ namespace UI
             rightmostButton.navigation = rightmostNavigation;
             forwardButton.navigation = forwardNavigation;
             forwardButton.interactable = isForwardActive;
-        }
-
-        private void HandleSceneLoadStart()
-        {
-            pageGroup.HideGroup();
         }
 
         private async UniTask AnimateCloudsAsync(bool isForward)
@@ -208,10 +269,24 @@ namespace UI
         
         private void OnDestroy()
         {
+            foreach (var districtPage in districtPages)
+            {
+                foreach (var levelSelectButton in districtPage.LevelSelectButtons)
+                {
+                    levelSelectButton.OnHover -= HandleLevelSelectButtonHover;
+                    levelSelectButton.OnUnhover -= HandleButtonUnhover;
+                }
+            }
+            
             SceneLoader.OnSceneLoadStart -= HandleSceneLoadStart;
             
             backButton.onClick.RemoveListener(HandleBackClicked);
+            backButton.OnHover -= HandleBackHover;
+            backButton.OnUnhover -= HandleButtonUnhover;
+            
             forwardButton.onClick.RemoveListener(HandleForwardClicked);
+            forwardButton.OnHover -= HandleForwardHover;
+            forwardButton.OnUnhover -= HandleButtonUnhover;
         }
     }
 }

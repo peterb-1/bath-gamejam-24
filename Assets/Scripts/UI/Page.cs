@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
 using NaughtyAttributes;
@@ -48,13 +49,16 @@ namespace UI
                 TrySelectDefaultSelectable();
             }
         }
-
-        public void Show(bool isForward = true)
+        
+        public async UniTask ShowAsync(bool isForward = true)
         {
             isActive = true;
                 
             pageAnimator.SetBool(IsForward, isForward);
             pageAnimator.SetBool(IsActive, true);
+            
+            var duration = await pageAnimator.GetCurrentClipDurationAsync();
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
 
             canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
@@ -64,22 +68,35 @@ namespace UI
                 TrySelectDefaultSelectable();
             }
         }
-
-        public void Hide(bool isForward = true)
+        
+        public async UniTask HideAsync(bool isForward = true)
         {
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+            
             if (EventSystem.current.currentSelectedGameObject != null &&
                 EventSystem.current.currentSelectedGameObject.transform.IsChildOf(transform))
             {
                 EventSystem.current.SetSelectedGameObject(null);
             }
-
-            isActive = false;
             
+            isActive = false;
+
             pageAnimator.SetBool(IsForward, isForward);
             pageAnimator.SetBool(IsActive, false);
-            
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
+
+            var duration = await pageAnimator.GetCurrentClipDurationAsync();
+            await UniTask.Delay(TimeSpan.FromSeconds(duration));
+        }
+
+        public void Show(bool isForward = true)
+        {
+            ShowAsync(isForward).Forget();
+        }
+
+        public void Hide(bool isForward = true)
+        {
+            HideAsync(isForward).Forget();
         }
 
         public void ShowImmediate()
