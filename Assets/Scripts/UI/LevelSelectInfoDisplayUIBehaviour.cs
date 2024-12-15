@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Saving;
+using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using TMPro;
 using UnityEngine;
@@ -34,12 +35,22 @@ namespace UI
             pageGroup.SetPage(noDataPage);
         }
         
-        public void SetLevelInfo(SceneConfig sceneConfig)
+        public async UniTask SetLevelInfoAsync(SceneConfig sceneConfig)
         {
-            if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(sceneConfig, out var levelData))
+            // weird quirk where the await creates some delay even when the condition is already true
+            if (!SaveManager.IsReady)
             {
-                levelCodeText.text = levelData.SceneConfig.LevelConfig.GetLevelNumber();
-                bestTimeText.text = TimerBehaviour.GetFormattedTime(levelData.BestTime);
+                await UniTask.WaitUntil(() => SaveManager.IsReady);
+            }
+
+            if (sceneConfig.IsLevelScene)
+            {
+                levelCodeText.text = sceneConfig.LevelConfig.GetLevelNumber();
+                
+                if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(sceneConfig.LevelConfig, out var levelData))
+                {
+                    bestTimeText.text = TimerBehaviour.GetFormattedTime(levelData.BestTime);
+                }
             }
             
             pageGroup.SetPage(levelInfoPage);

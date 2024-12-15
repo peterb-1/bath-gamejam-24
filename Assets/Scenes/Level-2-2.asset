@@ -16,6 +16,8 @@ MonoBehaviour:
   scenePath: Assets/Scenes/Level-2-2.unity
   <IsLevelScene>k__BackingField: 1
   <LevelConfig>k__BackingField:
+    <Guid>k__BackingField: df95d4db-7782-43df-961e-420ce3e978af
     districtNumber: 2
     missionNumber: 2
+    <IsUnlockedByDefault>k__BackingField: 0
   <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: 5b3093770cf341741896ce61ef7336d3, type: 2}

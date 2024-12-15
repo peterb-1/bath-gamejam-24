@@ -1,4 +1,5 @@
 ﻿using System;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Gameplay.Core
@@ -6,11 +7,17 @@ namespace Gameplay.Core
     [Serializable]
     public class LevelConfig
     {
+        [field: SerializeField, ReadOnly, AllowNesting] 
+        public string Guid { get; private set; }
+        
         [SerializeField] 
         private int districtNumber;
         
         [SerializeField] 
         private int missionNumber;
+
+        [field: SerializeField]
+        public bool IsUnlockedByDefault { get; private set; }
 
         public string GetLevelNumber()
         {
@@ -39,5 +46,12 @@ namespace Gameplay.Core
                 _ => throw new ArgumentOutOfRangeException(nameof(i), i, null)
             };
         }
+        
+#if UNITY_EDITOR
+        public void SetGuid(Guid guid)
+        {
+            Guid = guid.ToString();
+        }
+#endif
     }
 }

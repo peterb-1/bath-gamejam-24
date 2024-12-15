@@ -1,14 +1,10 @@
 ﻿using System.Collections.Generic;
 using Core;
-using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Gameplay.Environment;
 using Gameplay.Input;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using Utils;
 
 namespace UI
 {
@@ -113,7 +109,7 @@ namespace UI
         {
             if (button is LevelSelectButton levelSelectButton)
             {
-                infoDisplayBehaviour.SetLevelInfo(levelSelectButton.SceneConfig);
+                infoDisplayBehaviour.SetLevelInfoAsync(levelSelectButton.SceneConfig).Forget();
             }
         }
 

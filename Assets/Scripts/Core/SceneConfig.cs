@@ -3,6 +3,7 @@ using NaughtyAttributes;
 using UnityEngine;
 
 #if UNITY_EDITOR
+using System;
 using UnityEditor;
 #endif
 
@@ -27,9 +28,6 @@ namespace Core
         
         [field: SerializeField, ShowIf(nameof(IsLevelScene))]
         public SceneConfig NextSceneConfig { get; private set; }
-        
-        [field: SerializeField, ShowIf(nameof(IsLevelScene))]
-        public bool IsUnlockedByDefault { get; private set; }
 
         public string ScenePath => scenePath;
 
@@ -37,6 +35,12 @@ namespace Core
         private void OnValidate()
         {
             scenePath = sceneAsset != null ? AssetDatabase.GetAssetPath(sceneAsset) : string.Empty;
+
+            if (string.IsNullOrWhiteSpace(LevelConfig.Guid))
+            {
+                LevelConfig.SetGuid(Guid.NewGuid());
+                EditorUtility.SetDirty(this);
+            }
         }
 #endif
     }

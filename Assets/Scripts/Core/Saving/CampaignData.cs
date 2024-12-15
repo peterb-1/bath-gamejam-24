@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Gameplay.Core;
 using UnityEngine;
 
 namespace Core.Saving
@@ -11,11 +12,11 @@ namespace Core.Saving
         [SerializeField] 
         private List<LevelData> levelDataEntries = new();
 
-        public bool TryGetLevelData(SceneConfig sceneConfig, out LevelData levelData)
+        public bool TryGetLevelData(LevelConfig levelConfig, out LevelData levelData)
         {
             foreach (var data in levelDataEntries)
             {
-                if (data.SceneConfig == sceneConfig)
+                if (data.LevelConfigGuid == levelConfig.Guid)
                 {
                     levelData = data;
                     return true;
@@ -32,11 +33,15 @@ namespace Core.Saving
 
             foreach (var sceneConfig in SceneLoader.Instance.SceneConfigs)
             {
-                if (!TryGetLevelData(sceneConfig, out _) && sceneConfig.IsLevelScene)
-                {
-                    var newLevelData = new LevelData(sceneConfig);
+                if (!sceneConfig.IsLevelScene) continue;
 
-                    if (sceneConfig.IsUnlockedByDefault)
+                var levelConfig = sceneConfig.LevelConfig;
+                
+                if (!TryGetLevelData(levelConfig, out _))
+                {
+                    var newLevelData = new LevelData(levelConfig);
+
+                    if (levelConfig.IsUnlockedByDefault)
                     {
                         newLevelData.TryUnlock();
                     }

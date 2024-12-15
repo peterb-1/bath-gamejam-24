@@ -15,7 +15,7 @@ namespace UI
         {
             foreach (var button in LevelSelectButtons)
             {
-                if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(button.SceneConfig, out var levelData) &&
+                if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(button.SceneConfig.LevelConfig, out var levelData) &&
                     levelData.IsUnlocked)
                 {
                     return button;
@@ -31,7 +31,7 @@ namespace UI
             {
                 var button = LevelSelectButtons[i];
                 
-                if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(button.SceneConfig, out var levelData) &&
+                if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(button.SceneConfig.LevelConfig, out var levelData) &&
                     levelData.IsUnlocked)
                 {
                     return button;

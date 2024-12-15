@@ -11,7 +11,7 @@ namespace Utils
         [field: SerializeField] 
         private List<Transform> controlPoints;
 
-        [SerializeField, ReadOnly] 
+        [SerializeField, ReadOnly, AllowNesting] 
         private List<Vector3> segmentPoints;
 
         public void AddPoint(Transform transform)
@@ -132,6 +132,5 @@ namespace Utils
 
             return derivativePoints[0].normalized;
         }
-
     }
 }

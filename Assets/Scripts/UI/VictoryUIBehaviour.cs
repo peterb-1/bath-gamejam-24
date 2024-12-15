@@ -108,13 +108,14 @@ namespace UI
             var currentSceneConfig = SceneLoader.Instance.CurrentSceneConfig;
             var shouldSave = false;
             
-            if (campaignData.TryGetLevelData(currentSceneConfig, out var levelData))
+            if (currentSceneConfig.IsLevelScene &&
+                campaignData.TryGetLevelData(currentSceneConfig.LevelConfig, out var levelData))
             {
                 shouldSave |= levelData.TrySetTime(timerBehaviour.TimeElapsed);
             }
 
-            if (currentSceneConfig.NextSceneConfig != null &&
-                campaignData.TryGetLevelData(currentSceneConfig.NextSceneConfig, out var nextLevelData))
+            if (currentSceneConfig.NextSceneConfig.IsLevelScene &&
+                campaignData.TryGetLevelData(currentSceneConfig.NextSceneConfig.LevelConfig, out var nextLevelData))
             {
                 shouldSave |= nextLevelData.TryUnlock();
             }

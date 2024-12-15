@@ -1,4 +1,5 @@
 ﻿using System;
+using Gameplay.Core;
 using UnityEngine;
 
 namespace Core.Saving
@@ -7,7 +8,7 @@ namespace Core.Saving
     public class LevelData
     {
         [field: SerializeField] 
-        public SceneConfig SceneConfig { get; private set; }
+        public string LevelConfigGuid { get; private set; }
         
         [field: SerializeField]
         public float BestTime { get; private set; }
@@ -15,9 +16,9 @@ namespace Core.Saving
         [field: SerializeField]
         public bool IsUnlocked { get; private set; }
 
-        public LevelData(SceneConfig sceneConfig)
+        public LevelData(LevelConfig levelConfig)
         {
-            SceneConfig = sceneConfig;
+            LevelConfigGuid = levelConfig.Guid;
             BestTime = float.MaxValue;
             IsUnlocked = false;
         }

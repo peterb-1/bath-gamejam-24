@@ -48,7 +48,7 @@ namespace UI
         {
             await UniTask.WaitUntil(() => SaveManager.IsReady);
 
-            interactable = SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(sceneConfig, out var levelData) &&
+            interactable = SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(sceneConfig.LevelConfig, out var levelData) &&
                            levelData.IsUnlocked;
 
             if (!interactable)
