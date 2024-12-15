@@ -114,7 +114,8 @@ namespace UI
                 shouldSave |= levelData.TrySetTime(timerBehaviour.TimeElapsed);
             }
 
-            if (currentSceneConfig.NextSceneConfig.IsLevelScene &&
+            if (currentSceneConfig.NextSceneConfig != null && 
+                currentSceneConfig.NextSceneConfig.IsLevelScene &&
                 campaignData.TryGetLevelData(currentSceneConfig.NextSceneConfig.LevelConfig, out var nextLevelData))
             {
                 shouldSave |= nextLevelData.TryUnlock();

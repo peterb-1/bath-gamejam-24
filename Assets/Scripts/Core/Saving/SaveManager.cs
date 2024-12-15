@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NaughtyAttributes;
+using UnityEngine;
 using Utils;
 
 namespace Core.Saving
@@ -37,5 +38,22 @@ namespace Core.Saving
         {
             SaveUtils.Save(SaveData, SAVE_PATH);
         }
+        
+#if UNITY_EDITOR
+        [Button("[DEBUG] Unlock All Levels")]
+        private void UnlockAllLevels()
+        {
+            foreach (var sceneConfig in SceneLoader.Instance.SceneConfigs)
+            {
+                if (sceneConfig.IsLevelScene
+                    && SaveData.CampaignData.TryGetLevelData(sceneConfig.LevelConfig, out var levelData))
+                {
+                    levelData.TryUnlock();
+                }
+            }
+            
+            SceneLoader.Instance.ReloadCurrentScene();
+        }
+#endif
     }
 }
