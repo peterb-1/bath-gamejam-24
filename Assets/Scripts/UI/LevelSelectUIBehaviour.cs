@@ -137,7 +137,7 @@ namespace UI
             currentPageIndex--;
             
             var newDistrictPage = districtPages[currentPageIndex];
-            var leftmostButton = newDistrictPage.GetLeftmostUnlockedLevelButton();
+            var leftmostButton = newDistrictPage.LevelSelectButtons[0];
             
             SetPageNavigation();
             
@@ -168,13 +168,15 @@ namespace UI
             currentPageIndex++;
             
             var newDistrictPage = districtPages[currentPageIndex];
-            var rightmostButton = newDistrictPage.GetRightmostUnlockedLevelButton();
+            var rightmostButton = newDistrictPage.GetRightmostUnlockedLevelButton() ?? backButton;
+            var areAllLevelsUnlocked = rightmostButton == newDistrictPage.LevelSelectButtons[^1];
+            var isForwardActive = currentPageIndex < districtPages.Length - 1 && areAllLevelsUnlocked;
 
             SetPageNavigation();
             
             AnimateCloudsAsync(isForward: true).Forget();
             
-            if (currentPageIndex < districtPages.Length - 1)
+            if (isForwardActive)
             {
                 infoDisplayBehaviour.SetNextDistrict(currentPageIndex + 2);
             }
@@ -188,7 +190,7 @@ namespace UI
             // may have gone to a new page while waiting for the transition to complete
             if (districtPages[currentPageIndex] != newDistrictPage) return;
 
-            if (currentPageIndex == districtPages.Length - 1 && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
+            if (!isForwardActive && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
             {
                 rightmostButton.Select();
             }
@@ -197,26 +199,28 @@ namespace UI
         private void SetPageNavigation()
         {
             var districtPage = districtPages[currentPageIndex];
-            var leftmostButton = districtPage.GetLeftmostUnlockedLevelButton();
-            var rightmostButton = districtPage.GetRightmostUnlockedLevelButton();
+            var leftmostButton = districtPage.GetLeftmostUnlockedLevelButton() ?? forwardButton;
+            var rightmostButton = districtPage.GetRightmostUnlockedLevelButton() ?? backButton;
+            var areAllLevelsUnlocked = rightmostButton == districtPage.LevelSelectButtons[^1];
+
             var leftmostNavigation = leftmostButton.navigation;
             var rightmostNavigation = rightmostButton.navigation;
             var backNavigation = backButton.navigation;
             var forwardNavigation = forwardButton.navigation;
             var isBackActive = currentPageIndex > 0;
-            var isForwardActive = currentPageIndex < districtPages.Length - 1;
-                
-            leftmostNavigation.selectOnLeft = isBackActive ? backButton : null;
-            backNavigation.selectOnRight = leftmostButton;
-            leftmostButton.navigation = leftmostNavigation;
-            backButton.navigation = backNavigation;
-            backButton.interactable = isBackActive;
+            var isForwardActive = currentPageIndex < districtPages.Length - 1 && areAllLevelsUnlocked;
             
             rightmostNavigation.selectOnRight = isForwardActive ? forwardButton : null;
             forwardNavigation.selectOnLeft = rightmostButton;
             rightmostButton.navigation = rightmostNavigation;
             forwardButton.navigation = forwardNavigation;
             forwardButton.interactable = isForwardActive;
+            
+            leftmostNavigation.selectOnLeft = isBackActive ? backButton : null;
+            backNavigation.selectOnRight = leftmostButton;
+            leftmostButton.navigation = leftmostNavigation;
+            backButton.navigation = backNavigation;
+            backButton.interactable = isBackActive;
         }
 
         private async UniTask AnimateCloudsAsync(bool isForward)

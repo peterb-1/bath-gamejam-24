@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Level-3-1
   m_EditorClassIdentifier: 
   sceneAsset: {fileID: 102900000, guid: 05e26e93df3b36b4bb8c10b6e7499c94, type: 3}
-  scenePath: Assets/Scenes/Level-1-1.unity
+  scenePath: Assets/Scenes/Level-3-1.unity
   <IsLevelScene>k__BackingField: 1
   <LevelConfig>k__BackingField:
     districtNumber: 3
     missionNumber: 1
+  <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: 902645983c265464692db4a93b1f6555, type: 2}

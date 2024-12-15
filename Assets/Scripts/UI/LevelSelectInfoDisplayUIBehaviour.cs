@@ -1,7 +1,5 @@
-﻿using System;
-using Core;
+﻿using Core;
 using Core.Saving;
-using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using TMPro;
 using UnityEngine;

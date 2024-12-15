@@ -34,7 +34,14 @@ namespace Core.Saving
             {
                 if (!TryGetLevelData(sceneConfig, out _) && sceneConfig.IsLevelScene)
                 {
-                    levelDataEntries.Add(new LevelData(sceneConfig));
+                    var newLevelData = new LevelData(sceneConfig);
+
+                    if (sceneConfig.IsUnlockedByDefault)
+                    {
+                        newLevelData.TryUnlock();
+                    }
+                    
+                    levelDataEntries.Add(newLevelData);
                 }
             }
         }

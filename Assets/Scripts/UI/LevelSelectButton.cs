@@ -1,5 +1,6 @@
-using System;
 using Core;
+using Core.Saving;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -26,6 +27,8 @@ namespace UI
         {
             base.Awake();
             
+            if (!Application.isPlaying) return;
+            
             onClick.AddListener(HandleButtonClicked);
 
             if (sceneConfig.IsLevelScene)
@@ -37,12 +40,31 @@ namespace UI
                 GameLogger.LogWarning($"Level select button {name} was assigned scene config with no level config!", this);
                 levelNumberText.text = "N/A";
             }
+            
+            SetLockedStateAsync().Forget();
+        }
+        
+        private async UniTask SetLockedStateAsync()
+        {
+            await UniTask.WaitUntil(() => SaveManager.IsReady);
+
+            interactable = SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(sceneConfig, out var levelData) &&
+                           levelData.IsUnlocked;
+
+            if (!interactable)
+            {
+                gameObject.SetActive(false);
+            }
         }
 
         public override void OnSelect(BaseEventData eventData)
         {
             base.OnSelect(eventData);
-            borderAnimator.SetBool(Selected, true);
+
+            if (interactable)
+            {
+                borderAnimator.SetBool(Selected, true);
+            }
         }
 
         public override void OnDeselect(BaseEventData eventData)
@@ -54,7 +76,11 @@ namespace UI
         public override void OnPointerEnter(PointerEventData eventData)
         {
             base.OnPointerEnter(eventData);
-            borderAnimator.SetBool(Selected, true);
+            
+            if (interactable)
+            {
+                borderAnimator.SetBool(Selected, true);
+            }
         }
 
         public override void OnPointerExit(PointerEventData eventData)

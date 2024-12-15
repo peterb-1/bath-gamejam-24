@@ -1,7 +1,6 @@
 using System;
 using Audio;
 using Gameplay.Input;
-using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 

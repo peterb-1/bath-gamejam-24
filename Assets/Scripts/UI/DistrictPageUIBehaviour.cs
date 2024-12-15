@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core.Saving;
+using UnityEngine;
 
 namespace UI
 {
@@ -12,12 +13,32 @@ namespace UI
 
         public LevelSelectButton GetLeftmostUnlockedLevelButton()
         {
-            return LevelSelectButtons[0];
+            foreach (var button in LevelSelectButtons)
+            {
+                if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(button.SceneConfig, out var levelData) &&
+                    levelData.IsUnlocked)
+                {
+                    return button;
+                }
+            }
+            
+            return null;
         }
         
         public LevelSelectButton GetRightmostUnlockedLevelButton()
         {
-            return LevelSelectButtons[^1];
+            for (var i = LevelSelectButtons.Length - 1; i >= 0; i--)
+            {
+                var button = LevelSelectButtons[i];
+                
+                if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(button.SceneConfig, out var levelData) &&
+                    levelData.IsUnlocked)
+                {
+                    return button;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -2,6 +2,7 @@ using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Player;
+using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,6 +34,9 @@ namespace UI
         private TMP_Text levelInfoText;
 
         [SerializeField] 
+        private bool overrideNextSceneConfig;
+        
+        [SerializeField, ShowIf(nameof(overrideNextSceneConfig))] 
         private SceneConfig nextSceneConfig;
 
         private PlayerVictoryBehaviour playerVictoryBehaviour;
@@ -58,7 +62,12 @@ namespace UI
         private void HandleNextClicked()
         {
             victoryPageGroup.HideGroup();
-            SceneLoader.Instance.LoadScene(nextSceneConfig);
+
+            var sceneToLoad = overrideNextSceneConfig 
+                ? nextSceneConfig 
+                : SceneLoader.Instance.CurrentSceneConfig.NextSceneConfig;
+            
+            SceneLoader.Instance.LoadScene(sceneToLoad);
         }
         
         private void HandleQuitClicked()
@@ -73,13 +82,7 @@ namespace UI
             
             timerText.text = timerBehaviour.GetFormattedTimeElapsed();
             
-            if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(
-                    SceneLoader.Instance.CurrentSceneConfig, out var levelData))
-            {
-                levelData.SetTime(timerBehaviour.TimeElapsed);
-                
-                SaveManager.Instance.Save();
-            }
+            UpdateSaveData();
 
             victoryPageGroup.ShowGroup();
         }
@@ -96,6 +99,29 @@ namespace UI
             {
                 GameLogger.LogWarning("Could not obtain current level config for level info text.", this);
                 levelInfoText.text = "MISSING LEVEL CONFIG";
+            }
+        }
+
+        private void UpdateSaveData()
+        {
+            var campaignData = SaveManager.Instance.SaveData.CampaignData;
+            var currentSceneConfig = SceneLoader.Instance.CurrentSceneConfig;
+            var shouldSave = false;
+            
+            if (campaignData.TryGetLevelData(currentSceneConfig, out var levelData))
+            {
+                shouldSave |= levelData.TrySetTime(timerBehaviour.TimeElapsed);
+            }
+
+            if (currentSceneConfig.NextSceneConfig != null &&
+                campaignData.TryGetLevelData(currentSceneConfig.NextSceneConfig, out var nextLevelData))
+            {
+                shouldSave |= nextLevelData.TryUnlock();
+            }
+
+            if (shouldSave)
+            {
+                SaveManager.Instance.Save();
             }
         }
 

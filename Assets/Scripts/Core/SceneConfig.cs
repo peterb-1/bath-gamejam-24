@@ -24,6 +24,12 @@ namespace Core
 
         [field: SerializeField, ShowIf(nameof(IsLevelScene))]
         public LevelConfig LevelConfig { get; private set; }
+        
+        [field: SerializeField, ShowIf(nameof(IsLevelScene))]
+        public SceneConfig NextSceneConfig { get; private set; }
+        
+        [field: SerializeField, ShowIf(nameof(IsLevelScene))]
+        public bool IsUnlockedByDefault { get; private set; }
 
         public string ScenePath => scenePath;
 

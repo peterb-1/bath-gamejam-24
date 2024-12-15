@@ -11,19 +11,37 @@ namespace Core.Saving
         
         [field: SerializeField]
         public float BestTime { get; private set; }
+        
+        [field: SerializeField]
+        public bool IsUnlocked { get; private set; }
 
         public LevelData(SceneConfig sceneConfig)
         {
             SceneConfig = sceneConfig;
             BestTime = float.MaxValue;
+            IsUnlocked = false;
         }
 
-        public void SetTime(float time)
+        public bool TrySetTime(float time)
         {
             if (time < BestTime)
             {
                 BestTime = time;
+                return true;
             }
+
+            return false;
+        }
+
+        public bool TryUnlock()
+        {
+            if (!IsUnlocked)
+            {
+                IsUnlocked = true;
+                return true;
+            }
+
+            return false;
         }
     }
 }

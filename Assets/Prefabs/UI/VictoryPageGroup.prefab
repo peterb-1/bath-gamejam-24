@@ -776,6 +776,7 @@ MonoBehaviour:
   timerBehaviour: {fileID: 0}
   timerText: {fileID: 1151107645559964468}
   levelInfoText: {fileID: 2677780919762914474}
+  overrideNextSceneConfig: 0
   nextSceneConfig: {fileID: 0}
 --- !u!224 &7209971690187909071 stripped
 RectTransform:

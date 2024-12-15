@@ -33,7 +33,7 @@ namespace Gameplay.Zipline
         private Transform playerTransform;
         
         private float curveProgress;
-        private bool isForwards;
+        private bool isMovingForwards;
 
         private async void Awake()
         {
@@ -47,42 +47,51 @@ namespace Gameplay.Zipline
         {
             if (hook.connectedBody == null)
             {
-                var playerDistance = bezierCurve.GetDistanceToCurve(playerTransform.position, out var closestPoint, out curveProgress);
-                if (playerDistance > activationDistanceThreshold) return;
-                
-                hook.transform.position = closestPoint;
-                
-                var preHookVelocity = playerMovementBehaviour.Velocity;
-                
-                if (playerMovementBehaviour.TryHookPlayer(hook))
-                {
-                    if (curveProgress < endThreshold)
-                    {
-                        isForwards = true;
-                    }
-                    else if (curveProgress > 1f - endThreshold)
-                    {
-                        isForwards = false;
-                    }
-                    else
-                    {
-                        var tangent = bezierCurve.GetTangent(curveProgress).xy();
-                        isForwards = Vector2.Dot(tangent, preHookVelocity) > 0f;
-                    }
-                }
+                TryHookPlayer();
             }
             else
             {
-                curveProgress += Time.deltaTime * traversalSpeed * (isForwards ? 1f : -1f);
+                MovePlayerAlongZipline();
+            }
+        }
 
-                if (curveProgress is > 0f and < 1f)
-                {
-                    hook.transform.position = bezierCurve.GetPoint(curveProgress);
-                }
-                else
-                {
-                    playerMovementBehaviour.UnhookPlayer();
-                }
+        private void TryHookPlayer()
+        {
+            var playerDistance = bezierCurve.GetDistanceToCurve(playerTransform.position, out var closestPoint, out curveProgress);
+            if (playerDistance > activationDistanceThreshold) return;
+                
+            hook.transform.position = closestPoint;
+                
+            var preHookVelocity = playerMovementBehaviour.Velocity;
+
+            if (!playerMovementBehaviour.TryHookPlayer(hook)) return;
+            
+            if (curveProgress < endThreshold)
+            {
+                isMovingForwards = true;
+            }
+            else if (curveProgress > 1f - endThreshold)
+            {
+                isMovingForwards = false;
+            }
+            else
+            {
+                var tangent = bezierCurve.GetTangent(curveProgress).xy();
+                isMovingForwards = Vector2.Dot(tangent, preHookVelocity) > 0f;
+            }
+        }
+
+        private void MovePlayerAlongZipline()
+        {
+            curveProgress += Time.deltaTime * traversalSpeed * (isMovingForwards ? 1f : -1f);
+
+            if (curveProgress is > 0f and < 1f)
+            {
+                hook.transform.position = bezierCurve.GetPoint(curveProgress);
+            }
+            else
+            {
+                playerMovementBehaviour.UnhookPlayer();
             }
         }
 
