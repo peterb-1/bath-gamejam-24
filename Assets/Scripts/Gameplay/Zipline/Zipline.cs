@@ -77,7 +77,7 @@ namespace Gameplay.Zipline
             else
             {
                 var tangent = bezierCurve.GetTangent(curveProgress).xy();
-                isMovingForwards = Vector2.Dot(tangent, preHookVelocity) > 0f;
+                isMovingForwards = tangent.x * preHookVelocity.x >= 0f;
             }
         }
 

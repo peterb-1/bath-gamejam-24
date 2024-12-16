@@ -14,7 +14,7 @@ namespace Gameplay.Environment
     [RequireComponent(typeof(BoxCollider2D))]
     public class Building : MonoBehaviour
     {
-        private const int TILES_PER_CYCLE = 10;
+        private const float DELAY = 0.03f;
         
         [SerializeField] 
         private ColourId colourId;
@@ -139,8 +139,10 @@ namespace Gameplay.Environment
             tiles = shuffledTiles;
 
             var totalTiles = tiles.Count;
-            var currentTile = 0;
-            var delay = duration * TILES_PER_CYCLE / totalTiles;
+            var currentTile = 1;
+            var tilesPerCycle = duration == 0f 
+                ? totalTiles + 1 
+                : Mathf.Max(1, (int) (totalTiles * DELAY / duration));
 
             try
             {
@@ -153,10 +155,10 @@ namespace Gameplay.Environment
 
                     tile.Toggle(isActive);
 
-                    if (delay > 0f && currentTile % TILES_PER_CYCLE == 0)
+                    if (currentTile % tilesPerCycle == 0)
                     {
                         await UniTask.WaitUntil(() => !PauseManager.Instance.IsPaused);
-                        await UniTask.Delay(TimeSpan.FromSeconds(delay), ignoreTimeScale: true);
+                        await UniTask.Delay(TimeSpan.FromSeconds(DELAY), ignoreTimeScale: true);
                     }
 
                     currentTile++;
@@ -235,7 +237,7 @@ namespace Gameplay.Environment
                     tileGameObject.transform.parent = transform;
                     tile.SetSize(tileSize * tileMultiplier, randomSizeRange);
                     tile.SetPosition(buildingMin + offset);
-                    tile.SetColour(colourConfig.GetColour());
+                    tile.SetColour(colourConfig.GetRandomColour());
                     tile.SetOrder(sortingOrder);
 
                     tiles.Add(tile);

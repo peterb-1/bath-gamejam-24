@@ -23,6 +23,9 @@ namespace Gameplay.Player
         private Vector2 wallJumpForce;
 
         [SerializeField] 
+        private Vector2 ziplineForceMultiplier;
+
+        [SerializeField] 
         private float fallMultiplier;
         
         [SerializeField] 
@@ -33,6 +36,9 @@ namespace Gameplay.Player
 
         [SerializeField] 
         private float deceleration;
+
+        [SerializeField] 
+        private float runAnimationSpeedThreshold;
 
         [SerializeField] 
         private float coyoteDuration;
@@ -84,6 +90,9 @@ namespace Gameplay.Player
         private PlayerVictoryBehaviour playerVictoryBehaviour;
 
         public Vector2 Velocity => rigidBody.linearVelocity;
+
+        private Vector2 lastZiplinePosition;
+        private Vector2 ziplineVelocity;
         
         private float coyoteCountdown;
         private float jumpBufferCountdown;
@@ -146,6 +155,17 @@ namespace Gameplay.Player
                 coyoteCountdown = coyoteDuration;
                 hasDoubleJumped = false;
             }
+
+            if (isHooked)
+            {
+                var currentPosition = transform.position.xy();
+
+                ziplineVelocity = currentPosition == lastZiplinePosition 
+                    ? Vector2.zero 
+                    : (currentPosition - lastZiplinePosition) / Time.deltaTime;
+                
+                lastZiplinePosition = currentPosition;
+            }
         }
 
         private void FixedUpdate()
@@ -165,16 +185,19 @@ namespace Gameplay.Player
                 rigidBody.linearVelocity += Vector2.up * (Physics2D.gravity.y * (fallMultiplier - 1f) * Time.deltaTime);
             }
 
-            var isMoving = Mathf.Abs(rigidBody.linearVelocityX) > 1e-3f;
+            var isMoving = Mathf.Abs(rigidBody.linearVelocityX) > runAnimationSpeedThreshold;
 
             if (isGrounded)
             {
                 playerAnimator.SetBool(IsRunning, isMoving);
             }
 
-            if (isMoving)
+            if (isMoving || isHooked)
             {
-                var spriteScale = new Vector3(rigidBody.linearVelocityX > 0f ? 1f : -1f, 1f, 1f);
+                var isMovingRight = (isMoving && rigidBody.linearVelocityX > 0f) ||
+                                    (isHooked && ziplineVelocity.x > 0f);
+                
+                var spriteScale = new Vector3(isMovingRight ? 1f : -1f, 1f, 1f);
                 spriteRendererTransform.localScale = spriteScale;
             }
 
@@ -233,22 +256,23 @@ namespace Gameplay.Player
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, headJumpForce);
         }
 
-        public bool TryHookPlayer(HingeJoint2D hinge)
+        public bool TryHookPlayer(HingeJoint2D newHook)
         {
-            if (isHooked || hookCountdown > 0f)
+            if (isHooked || (hookCountdown > 0f && hook == newHook) || !playerDeathBehaviour.IsAlive)
             {
                 return false;
             }
 
             var trans = transform;
 
-            hook = hinge;
-            
+            hook = newHook;
             isHooked = true;
+            hookCountdown = 0f;
 
             hook.connectedBody = rigidBody;
             rigidBody.linearVelocity = Vector2.zero;
             rigidBody.gravityScale = 0f;
+            lastZiplinePosition = trans.position.xy();
             
             trans.parent = hook.transform;
             trans.localPosition = hookOffset;
@@ -267,7 +291,8 @@ namespace Gameplay.Player
             
             hook.connectedBody = null;
             transform.parent = null;
-            rigidBody.linearVelocity = Vector2.zero;
+
+            rigidBody.linearVelocity = ziplineVelocity * ziplineForceMultiplier;
             rigidBody.gravityScale = 1f;
             
             playerAnimator.SetBool(IsHooked, false);
@@ -281,6 +306,8 @@ namespace Gameplay.Player
         
         private void HandleDeathSequenceStart()
         {
+            UnhookPlayer();
+            
             rigidBody.linearVelocity = Vector2.zero;
             rigidBody.gravityScale = 0f;
         }

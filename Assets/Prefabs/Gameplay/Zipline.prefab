@@ -241,7 +241,7 @@ MonoBehaviour:
   curveSegmentCount: 30
   activationDistanceThreshold: 0.5
   traversalSpeed: 1
-  endThreshold: 0.1
+  endThreshold: 0.025
 --- !u!120 &6813993196282001183
 LineRenderer:
   serializedVersion: 2
@@ -286,7 +286,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -10
   m_Positions:
   - {x: -5.88, y: 0, z: 0}
   - {x: -5.447025, y: 0.14351779, z: 0}

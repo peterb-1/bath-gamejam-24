@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49e0ef1fb32541ca97a3662a5c22c625, type: 3}
   m_Name: Level-2-1
   m_EditorClassIdentifier: 
-  sceneAsset: {fileID: 102900000, guid: 03e91ecec34478243808c81c5ccfa434, type: 3}
+  sceneAsset: {fileID: 102900000, guid: 31df2bea6c37af24983b43091e20a240, type: 3}
   scenePath: Assets/Scenes/Level-2-1.unity
   <IsLevelScene>k__BackingField: 1
   <LevelConfig>k__BackingField:

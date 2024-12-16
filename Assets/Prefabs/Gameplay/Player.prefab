@@ -218,10 +218,12 @@ MonoBehaviour:
   doubleJumpForce: 6
   headJumpForce: 6
   wallJumpForce: {x: 18, y: 6}
+  ziplineForceMultiplier: {x: 0.5, y: 0.25}
   fallMultiplier: 1.8
   moveSpeed: 7
   acceleration: 5
-  deceleration: 10
+  deceleration: 6
+  runAnimationSpeedThreshold: 0.8
   coyoteDuration: 0.15
   jumpBufferDuration: 0.2
   hookCooldownDuration: 0.4

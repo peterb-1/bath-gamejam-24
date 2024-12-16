@@ -23,9 +23,12 @@ namespace Gameplay.Colour
         public Color DroneColour { get; private set; }
         
         [field: SerializeField]
+        public Color PlatformColour { get; private set; }
+        
+        [field: SerializeField]
         public Color Background { get; private set; }
 
-        public Color GetColour()
+        public Color GetRandomColour()
         {
             var lerp = Random.Range(0f, 1f);
 
