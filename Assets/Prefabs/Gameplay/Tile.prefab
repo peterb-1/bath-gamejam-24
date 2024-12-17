@@ -80,6 +80,21 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   flashDuration: 3
+  districtSprites:
+  - <Sprites>k__BackingField:
+    - {fileID: 21300000, guid: 8e8a5df8e0102fb4cace15d7a1cb387d, type: 3}
+  - <Sprites>k__BackingField:
+    - {fileID: 21300000, guid: e5e3f463359a84d4b9c8b4146d442cf8, type: 3}
+    - {fileID: 21300000, guid: 191aae8f3d13f0347be798d4b48cf515, type: 3}
+    - {fileID: 21300000, guid: 45c98d92a92b1244fb5fb5f24191be47, type: 3}
+  - <Sprites>k__BackingField:
+    - {fileID: 21300000, guid: 07a5fb9ce03064d46a32bb493a719768, type: 3}
+  - <Sprites>k__BackingField: []
+  - <Sprites>k__BackingField: []
+  - <Sprites>k__BackingField: []
+  - <Sprites>k__BackingField: []
+  - <Sprites>k__BackingField: []
+  - <Sprites>k__BackingField: []
   baseColour: {r: 0, g: 0, b: 0, a: 0}
 --- !u!212 &6862818853434839081
 SpriteRenderer:

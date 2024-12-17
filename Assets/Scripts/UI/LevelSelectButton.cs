@@ -33,7 +33,7 @@ namespace UI
 
             if (sceneConfig.IsLevelScene)
             {
-                levelNumberText.text = sceneConfig.LevelConfig.GetLevelNumber();
+                levelNumberText.text = sceneConfig.LevelConfig.GetLevelCode();
             }
             else
             {

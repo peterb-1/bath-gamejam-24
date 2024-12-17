@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
 using Gameplay.Core;
 using NaughtyAttributes;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Utils;
 using Random = UnityEngine.Random;
 
@@ -67,7 +70,7 @@ namespace Gameplay.Environment
         [SerializeField] 
         private ColourDatabase colourDatabase;
         
-        [SerializeField, ReadOnly] 
+        [SerializeField] 
         private List<Tile> tiles;
 
         private bool isActive;
@@ -204,6 +207,11 @@ namespace Gameplay.Environment
                 return;
             }
             
+            var activeScene = SceneManager.GetActiveScene();
+            var sceneLoader = GameObject.Find("SceneLoader").GetComponent<SceneLoader>();
+            var sceneConfig = sceneLoader.SceneConfigs.First(scene => scene.ScenePath == activeScene.path);
+            var districtNumber = sceneConfig.LevelConfig.DistrictNumber;
+            
             var occupiedTiles = new HashSet<(int, int)>();
 
             var buildingSize = mainCollider.size;
@@ -239,6 +247,7 @@ namespace Gameplay.Environment
                     tile.SetPosition(buildingMin + offset);
                     tile.SetColour(colourConfig.GetRandomColour());
                     tile.SetOrder(sortingOrder);
+                    tile.SetSprite(districtNumber);
 
                     tiles.Add(tile);
                     

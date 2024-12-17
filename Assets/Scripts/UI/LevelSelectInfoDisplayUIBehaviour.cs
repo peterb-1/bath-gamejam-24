@@ -45,7 +45,7 @@ namespace UI
 
             if (sceneConfig.IsLevelScene)
             {
-                levelCodeText.text = sceneConfig.LevelConfig.GetLevelNumber();
+                levelCodeText.text = sceneConfig.LevelConfig.GetLevelCode();
                 
                 if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(sceneConfig.LevelConfig, out var levelData))
                 {

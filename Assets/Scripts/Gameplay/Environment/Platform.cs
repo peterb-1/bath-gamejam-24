@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
 using Gameplay.Core;
 using NaughtyAttributes;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Utils;
 using Random = UnityEngine.Random;
 
@@ -48,7 +51,7 @@ namespace Gameplay.Environment
         private ColourDatabase colourDatabase;
 
         [SerializeField, ReadOnly]
-        private ColourConfig colourConfig;
+        private Color platformColour;
         
         private bool isActive;
         
@@ -96,7 +99,7 @@ namespace Gameplay.Environment
 
             var initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
             var startColour = mainSpriteRenderer.color;
-            var targetColour = isActive ? colourConfig.PlatformColour : Color.clear;
+            var targetColour = isActive ? platformColour : Color.clear;
             var timeElapsed = 0f;
 
             // run independent of timescale, since this happens during the slowdown
@@ -124,7 +127,7 @@ namespace Gameplay.Environment
         [Button("Setup Platform")]
         private void SetupPlatform()
         {
-            if (!colourDatabase.TryGetColourConfig(colourId, out colourConfig))
+            if (!colourDatabase.TryGetColourConfig(colourId, out var colourConfig))
             {
                 GameLogger.LogError($"Cannot fill tiles since the colour config for {colourId} could not be found in the colour database!", colourDatabase);
                 return;
@@ -133,12 +136,18 @@ namespace Gameplay.Environment
             var platformSize = mainCollider.size;
             var rendererPosition = mainCollider.bounds.center.xy();
             var backgroundColour = colourConfig.Background;
+            var activeScene = SceneManager.GetActiveScene();
+            var sceneLoader = GameObject.Find("SceneLoader").GetComponent<SceneLoader>();
+            var sceneConfig = sceneLoader.SceneConfigs.First(scene => scene.ScenePath == activeScene.path);
+            var districtNumber = sceneConfig.LevelConfig.DistrictNumber;
+            
+            platformColour = colourConfig.DistrictPlatformColours[districtNumber - 1];
             
             backgroundColour.a = backgroundAlpha;
             
             mainSpriteRenderer.size = platformSize;
             mainSpriteRenderer.transform.position = rendererPosition;
-            mainSpriteRenderer.color = colourConfig.PlatformColour;
+            mainSpriteRenderer.color = platformColour;
             
             backgroundSpriteRenderer.size = platformSize;
             backgroundSpriteRenderer.transform.position = rendererPosition + backgroundOffset;

@@ -1,6 +1,8 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Unity.Collections;
 using UnityEngine;
+using Utils;
 using Random = UnityEngine.Random;
 
 namespace Gameplay.Environment
@@ -15,6 +17,9 @@ namespace Gameplay.Environment
 
         [SerializeField] 
         private float flashDuration;
+
+        [SerializeField] 
+        private DistrictTileSprites[] districtSprites;
 
         [SerializeField, ReadOnly]
         private Color baseColour;
@@ -80,5 +85,17 @@ namespace Gameplay.Environment
         {
             spriteRenderer.sortingOrder = order;
         }
+
+        public void SetSprite(int district)
+        {
+            spriteRenderer.sprite = districtSprites[district - 1].Sprites.RandomChoice();
+        }
+    }
+
+    [Serializable]
+    public class DistrictTileSprites
+    {
+        [field: SerializeField] 
+        public Sprite[] Sprites { get; private set; }
     }
 }

@@ -31,7 +31,10 @@ namespace Gameplay.Core
         [SerializeField] 
         private float rainbowTime;
 
-        public string GetLevelNumber()
+        public int DistrictNumber => districtNumber;
+        public int MissionNumber => missionNumber;
+        
+        public string GetLevelCode()
         {
             return $"{GetRomanNumeral(districtNumber)}-{missionNumber}";
         }
