@@ -45,6 +45,9 @@ namespace Gameplay.Player
 
         [SerializeField] 
         private float jumpBufferDuration;
+        
+        [SerializeField] 
+        private float jumpCooldown;
 
         [SerializeField] 
         private float hookCooldownDuration;
@@ -78,6 +81,12 @@ namespace Gameplay.Player
         private Transform rightGroundCheck;
         
         [SerializeField]
+        private Transform leftMidCheck;
+        
+        [SerializeField]
+        private Transform rightMidCheck;
+        
+        [SerializeField]
         private Transform leftHeadCheck;
 
         [SerializeField]
@@ -96,6 +105,7 @@ namespace Gameplay.Player
         
         private float coyoteCountdown;
         private float jumpBufferCountdown;
+        private float jumpCooldownCountdown;
         private float hookCountdown;
         
         private bool isGrounded;
@@ -118,12 +128,15 @@ namespace Gameplay.Player
 
             playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
+
+            hasDoubleJumped = true;
         }
 
         private void Update()
         {
             if (!isGrounded) coyoteCountdown -= Time.deltaTime;
             if (jumpBufferCountdown > 0f) jumpBufferCountdown -= Time.deltaTime;
+            if (jumpCooldownCountdown > 0f) jumpCooldownCountdown -= Time.deltaTime;
             if (hookCountdown > 0f) hookCountdown -= Time.deltaTime;
 
             var trans = transform;
@@ -143,9 +156,11 @@ namespace Gameplay.Player
             isGrounded = doesRaycastDownHit && !doesRaycastUpHit;
             
             isTouchingLeftWall = Physics2D.Raycast(leftGroundPosition, left, groundCheckDistance, groundLayers) ||
+                                 Physics2D.Raycast(leftMidCheck.position, left, groundCheckDistance, groundLayers) ||
                                  Physics2D.Raycast(leftHeadCheck.position, left, groundCheckDistance, groundLayers);
             
-            isTouchingRightWall = Physics2D.Raycast(rightGroundPosition, right, groundCheckDistance, groundLayers) || 
+            isTouchingRightWall = Physics2D.Raycast(rightGroundPosition, right, groundCheckDistance, groundLayers) ||
+                                  Physics2D.Raycast(rightMidCheck.position, right, groundCheckDistance, groundLayers) ||
                                   Physics2D.Raycast(rightHeadCheck.position, right, groundCheckDistance, groundLayers);
             
             playerAnimator.SetBool(IsGrounded, isGrounded);
@@ -201,7 +216,10 @@ namespace Gameplay.Player
                 spriteRendererTransform.localScale = spriteScale;
             }
 
-            TryJump();
+            if (jumpBufferCountdown > 0f)
+            {
+                TryJump();
+            }
         }
         
         private void HandleJumpPerformed()
@@ -211,23 +229,23 @@ namespace Gameplay.Player
         
         private void TryJump()
         {
-            if (jumpBufferCountdown <= 0f) return;
+            var isJumpCooldownValid = jumpCooldownCountdown <= 0f;
             
-            if (isGrounded || isHooked || coyoteCountdown > 0f)
+            if (isJumpCooldownValid && (isGrounded || isHooked || coyoteCountdown > 0f))
             {
                 PerformJump(jumpForce);
             }
-            else if (isTouchingLeftWall)
+            else if (isJumpCooldownValid && isTouchingLeftWall)
             {
                 PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y));
             }
-            else if (isTouchingRightWall)
+            else if (isJumpCooldownValid && isTouchingRightWall)
             {
                 PerformWallJump(new Vector2(-wallJumpForce.x, wallJumpForce.y));
             }
             else if (!hasDoubleJumped)
             {
-                PerformJump(doubleJumpForce);
+                PerformJump(Mathf.Max(doubleJumpForce, rigidBody.linearVelocityY));
                 hasDoubleJumped = true;
                 playerAnimator.SetTrigger(DoubleJump);
             }
@@ -239,15 +257,20 @@ namespace Gameplay.Player
             
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, force);
+            
             jumpBufferCountdown = 0f;
+            coyoteCountdown = 0f;
+            jumpCooldownCountdown = jumpCooldown;
         }
 
         private void PerformWallJump(Vector2 force)
         {
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
             rigidBody.linearVelocity = force;
-            hasDoubleJumped = true;
+            
             jumpBufferCountdown = 0f;
+            coyoteCountdown = 0f;
+            jumpCooldownCountdown = jumpCooldown;
         }
 
         public void PerformHeadJump()
