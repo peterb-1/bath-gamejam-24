@@ -229,17 +229,15 @@ namespace Gameplay.Player
         
         private void TryJump()
         {
-            var isJumpCooldownValid = jumpCooldownCountdown <= 0f;
-            
-            if (isJumpCooldownValid && (isGrounded || isHooked || coyoteCountdown > 0f))
+            if (jumpCooldownCountdown <= 0f && (isGrounded || isHooked || coyoteCountdown > 0f))
             {
                 PerformJump(jumpForce);
             }
-            else if (isJumpCooldownValid && isTouchingLeftWall)
+            else if (isTouchingLeftWall)
             {
                 PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y));
             }
-            else if (isJumpCooldownValid && isTouchingRightWall)
+            else if (isTouchingRightWall)
             {
                 PerformWallJump(new Vector2(-wallJumpForce.x, wallJumpForce.y));
             }
@@ -270,7 +268,6 @@ namespace Gameplay.Player
             
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
-            jumpCooldownCountdown = jumpCooldown;
         }
 
         public void PerformHeadJump()

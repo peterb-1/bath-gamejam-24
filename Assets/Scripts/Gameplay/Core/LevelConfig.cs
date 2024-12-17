@@ -18,6 +18,18 @@ namespace Gameplay.Core
 
         [field: SerializeField]
         public bool IsUnlockedByDefault { get; private set; }
+        
+        [SerializeField] 
+        private float oneStarTime;
+        
+        [SerializeField] 
+        private float twoStarTime;
+        
+        [SerializeField] 
+        private float threeStarTime;
+        
+        [SerializeField] 
+        private float rainbowTime;
 
         public string GetLevelNumber()
         {
@@ -26,7 +38,7 @@ namespace Gameplay.Core
         
         public string GetLevelText()
         {
-            return $"District {GetRomanNumeral(districtNumber)}  —  Mission {missionNumber}";
+            return $"{GetDistrictName(districtNumber)}  —  Mission {missionNumber}";
         }
 
         public static string GetRomanNumeral(int i)
@@ -43,6 +55,24 @@ namespace Gameplay.Core
                 8 => "viii",
                 9 => "ix",
                 10 => "x",
+                _ => throw new ArgumentOutOfRangeException(nameof(i), i, null)
+            };
+        }
+        
+        public static string GetDistrictName(int i)
+        {
+            return i switch
+            {
+                1 => "The Outskirts",
+                2 => "Scrapyard North",
+                3 => "Transit Hub",
+                4 => "Power Station",
+                5 => "Chroma Springs",
+                6 => "UNNAMED",
+                7 => "Security Perimeter",
+                8 => "UNNAMED",
+                9 => "UNNAMED",
+                10 => "Production Core",
                 _ => throw new ArgumentOutOfRangeException(nameof(i), i, null)
             };
         }

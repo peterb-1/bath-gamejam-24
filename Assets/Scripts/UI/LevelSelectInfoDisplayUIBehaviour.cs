@@ -58,7 +58,7 @@ namespace UI
 
         public void SetNextDistrict(int district)
         {
-            nextDistrictText.text = $"District {LevelConfig.GetRomanNumeral(district)}";
+            nextDistrictText.text = LevelConfig.GetDistrictName(district);
             
             pageGroup.SetPage(nextDistrictPage);
         }

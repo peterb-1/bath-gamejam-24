@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using Gameplay.Player;
 using NaughtyAttributes;
 using UnityEngine;
@@ -21,10 +22,13 @@ namespace Gameplay.Zipline
         private int curveSegmentCount;
 
         [SerializeField] 
-        private float activationDistanceThreshold;
-
-        [SerializeField] 
         private float traversalSpeed;
+        
+        [SerializeField] 
+        private float gradientSpeedMultiplier;
+        
+        [SerializeField] 
+        private float activationDistanceThreshold;
 
         [SerializeField] 
         private float endThreshold;
@@ -32,6 +36,7 @@ namespace Gameplay.Zipline
         private PlayerMovementBehaviour playerMovementBehaviour;
         private Transform playerTransform;
         
+        private float gradientSpeed;
         private float curveProgress;
         private bool isMovingForwards;
 
@@ -41,6 +46,8 @@ namespace Gameplay.Zipline
 
             playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
             playerTransform = PlayerAccessService.Instance.PlayerTransform;
+
+            gradientSpeed = Mathf.Sqrt(traversalSpeed) * gradientSpeedMultiplier;
         }
 
         private void Update()
@@ -53,6 +60,8 @@ namespace Gameplay.Zipline
             {
                 MovePlayerAlongZipline();
             }
+            
+            UpdateGradient();
         }
 
         private void TryHookPlayer()
@@ -93,6 +102,47 @@ namespace Gameplay.Zipline
             {
                 playerMovementBehaviour.UnhookPlayer();
             }
+        }
+        
+        private void UpdateGradient()
+        {
+            var colourKeys = lineRenderer.colorGradient.colorKeys;
+            var newColourKeys = new GradientColorKey[colourKeys.Length];
+            
+            for (var i = 0; i < colourKeys.Length; i++)
+            {
+                newColourKeys[i] = colourKeys[i];
+            }
+
+            for (var i = 1; i < newColourKeys.Length - 1; i++)
+            {
+                var colourKey = newColourKeys[i];
+                
+                colourKey.time += gradientSpeed * Time.deltaTime;
+                colourKey.time %= 1f;
+                    
+                newColourKeys[i] = colourKey;
+            }
+            
+            Array.Sort(newColourKeys, (a, b) => a.time.CompareTo(b.time));
+
+            var secondKey = newColourKeys[1];
+            var penultimateKey = newColourKeys[^2];
+            var secondKeyContribution = 1f - penultimateKey.time;
+            var penultimateKeyContribution = secondKey.time;
+
+            if (secondKeyContribution + penultimateKeyContribution > 0f)
+            {
+                var unnormalisedColour = secondKey.color * secondKeyContribution + penultimateKey.color * penultimateKeyContribution;
+                var endColour = unnormalisedColour / (secondKeyContribution + penultimateKeyContribution);
+
+                newColourKeys[0].color = endColour;
+                newColourKeys[^1].color = endColour;
+            }
+
+            var newGradient = lineRenderer.colorGradient;
+            newGradient.colorKeys = newColourKeys;
+            lineRenderer.colorGradient = newGradient;
         }
 
 #if UNITY_EDITOR

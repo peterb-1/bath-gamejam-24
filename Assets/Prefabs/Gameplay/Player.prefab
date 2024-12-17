@@ -259,7 +259,7 @@ MonoBehaviour:
   runAnimationSpeedThreshold: 0.8
   coyoteDuration: 0.15
   jumpBufferDuration: 0.2
-  jumpCooldown: 0.2
+  jumpCooldown: 0.25
   hookCooldownDuration: 0.4
   hookOffset: {x: 0, y: -0.5, z: 0}
   groundCheckDistance: 0.25

@@ -7,8 +7,8 @@ namespace Gameplay.Colour
     [Serializable]
     public class ColourConfig
     {
-        [SerializeField] 
-        public ColourId colourId;
+        [field: SerializeField] 
+        public ColourId ColourId { get; private set; }
 
         [SerializeField] 
         private Color min;
@@ -27,6 +27,9 @@ namespace Gameplay.Colour
         
         [field: SerializeField]
         public Color Background { get; private set; }
+        
+        [field: SerializeField]
+        public Color TextColour { get; private set; }
 
         public Color GetRandomColour()
         {

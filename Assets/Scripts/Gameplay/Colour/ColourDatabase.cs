@@ -12,7 +12,7 @@ namespace Gameplay.Colour
         {
             foreach (var config in colourConfigs)
             {
-                if (config.colourId == colourId)
+                if (config.ColourId == colourId)
                 {
                     colourConfig = config;
                     return true;
