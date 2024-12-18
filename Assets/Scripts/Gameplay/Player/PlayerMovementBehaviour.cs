@@ -319,6 +319,8 @@ namespace Gameplay.Player
             isHooked = false;
             hookCountdown = hookCooldownDuration;
             
+            hook.transform.Rotate(Vector3.forward, -transform.eulerAngles.z);
+            
             hook.connectedBody = null;
             transform.parent = null;
 

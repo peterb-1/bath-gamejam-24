@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using Gameplay.Player;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.InputSystem.Controls;
 using Utils;
 
 namespace Gameplay.Zipline
@@ -39,6 +40,8 @@ namespace Gameplay.Zipline
         private float gradientSpeed;
         private float curveProgress;
         private bool isMovingForwards;
+        private float currentAngle;
+
 
         private async void Awake()
         {
@@ -93,15 +96,30 @@ namespace Gameplay.Zipline
         private void MovePlayerAlongZipline()
         {
             curveProgress += Time.deltaTime * traversalSpeed * (isMovingForwards ? 1f : -1f);
+            currentAngle = hook.transform.eulerAngles.z;
 
             if (curveProgress is > 0f and < 1f)
             {
                 hook.transform.position = bezierCurve.GetPoint(curveProgress);
+                RotateHook();
             }
             else
             {
                 playerMovementBehaviour.UnhookPlayer();
             }
+        }
+
+        // can definitely be improved - current approach is primitive and just maps change in curve x pos to a swing angle
+        private void RotateHook()
+        {   
+            var curveProgressDelta = Time.deltaTime * traversalSpeed * (isMovingForwards ? 1f : -1f);
+            var horizontalVelocity =
+                (bezierCurve.GetPoint(Mathf.Clamp(curveProgress + curveProgressDelta, 0f, 1f)).x - 
+                 bezierCurve.GetPoint(Mathf.Clamp(curveProgress - curveProgressDelta, 0f, 1f)).x) / Time.deltaTime;
+            // misleading use of atan, just scaling horizontal velocity between +/- 60 degrees in a smooth way
+            var targetAngle = Mathf.Rad2Deg * Mathf.Atan(horizontalVelocity / Physics2D.gravity.y) / 3;
+            
+            hook.transform.Rotate(Vector3.forward, targetAngle - currentAngle);
         }
         
         private void UpdateGradient()
