@@ -5,6 +5,7 @@ using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
 using Gameplay.Core;
+using Gameplay.Player;
 using NaughtyAttributes;
 using UnityEditor;
 using UnityEngine;
@@ -73,6 +74,8 @@ namespace Gameplay.Environment
         [SerializeField] 
         private List<Tile> tiles;
 
+        private PlayerMovementBehaviour playerMovementBehaviour;
+
         private bool isActive;
         private float flashChance;
         
@@ -80,7 +83,7 @@ namespace Gameplay.Environment
         private static readonly int Tiling = Shader.PropertyToID("_Tiling");
         private static readonly int Strength = Shader.PropertyToID("_Strength");
 
-        private void Awake()
+        private async void Awake()
         {
             ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
             ColourManager.OnColourChangeInstant += HandleColourChangeInstant;
@@ -88,6 +91,13 @@ namespace Gameplay.Environment
             InitialiseHologramSettings();
 
             flashChance = flashChancePerTile * tiles.Count;
+
+            await UniTask.WaitUntil(PlayerAccessService.IsReady);
+
+            playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
+            
+            playerMovementBehaviour.OnPlayerHooked += HandlePlayerHooked;
+            playerMovementBehaviour.OnPlayerUnhooked += HandlePlayerUnhooked;
         }
         
         private void InitialiseHologramSettings()
@@ -114,6 +124,16 @@ namespace Gameplay.Environment
         {
             isActive = colourId == colour;
             ToggleBuildingAsync(0f).Forget();
+        }
+        
+        private void HandlePlayerHooked()
+        {
+            mainCollider.enabled = false;
+        }
+
+        private void HandlePlayerUnhooked()
+        {
+            mainCollider.enabled = isActive;
         }
 
         private void Update()
@@ -145,7 +165,7 @@ namespace Gameplay.Environment
             var currentTile = 1;
             var tilesPerCycle = duration == 0f 
                 ? totalTiles + 1 
-                : Mathf.Max(1, (int) (totalTiles * DELAY / duration));
+                : Mathf.Max(1, Mathf.Ceil(totalTiles * DELAY / duration));
 
             try
             {
@@ -182,13 +202,16 @@ namespace Gameplay.Environment
 
             await UniTask.DelayFrame(mainColliderDelayFrames);
             
-            mainCollider.enabled = isActive;
+            mainCollider.enabled = isActive && !playerMovementBehaviour.IsHooked;
         }
         
         private void OnDestroy()
         {
             ColourManager.OnColourChangeStarted -= HandleColourChangeStarted;
             ColourManager.OnColourChangeInstant -= HandleColourChangeInstant;
+            
+            playerMovementBehaviour.OnPlayerHooked -= HandlePlayerHooked;
+            playerMovementBehaviour.OnPlayerUnhooked -= HandlePlayerUnhooked;
         }
 
 #if UNITY_EDITOR

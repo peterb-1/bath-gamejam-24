@@ -124,6 +124,7 @@ namespace Gameplay.Core
 
         private void OnDestroy()
         {
+            if (Instance != this) return;
             Instance = null;
             
             InputManager.OnPauseToggled -= HandlePauseToggled;

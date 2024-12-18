@@ -1,3 +1,4 @@
+using System;
 using Audio;
 using Core;
 using Cysharp.Threading.Tasks;
@@ -102,6 +103,8 @@ namespace Gameplay.Player
 
         private Vector2 lastZiplinePosition;
         private Vector2 ziplineVelocity;
+
+        public bool IsHooked => isHooked;
         
         private float coyoteCountdown;
         private float jumpBufferCountdown;
@@ -118,8 +121,11 @@ namespace Gameplay.Player
         
         private static readonly int IsGrounded = Animator.StringToHash("isGrounded");
         private static readonly int IsRunning = Animator.StringToHash("isRunning");
-        private static readonly int IsHooked = Animator.StringToHash("isHooked");
+        private static readonly int IsHookedHash = Animator.StringToHash("isHooked");
         private static readonly int DoubleJump = Animator.StringToHash("doubleJump");
+
+        public event Action OnPlayerHooked;
+        public event Action OnPlayerUnhooked;
 
         private void Awake()
         {
@@ -297,7 +303,9 @@ namespace Gameplay.Player
             trans.parent = hook.transform;
             trans.localPosition = hookOffset;
             
-            playerAnimator.SetBool(IsHooked, true);
+            playerAnimator.SetBool(IsHookedHash, true);
+            
+            OnPlayerHooked?.Invoke();
 
             return true;
         }
@@ -305,6 +313,8 @@ namespace Gameplay.Player
         public void UnhookPlayer()
         {
             if (!isHooked) return;
+            
+            OnPlayerUnhooked?.Invoke();
             
             isHooked = false;
             hookCountdown = hookCooldownDuration;
@@ -315,7 +325,7 @@ namespace Gameplay.Player
             rigidBody.linearVelocity = ziplineVelocity * ziplineForceMultiplier;
             rigidBody.gravityScale = 1f;
             
-            playerAnimator.SetBool(IsHooked, false);
+            playerAnimator.SetBool(IsHookedHash, false);
         }
         
         private void HandleSceneLoadStart()

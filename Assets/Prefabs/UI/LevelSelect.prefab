@@ -226,15 +226,16 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 3596816563613872424, guid: 05209929063325e4bb40347260164103, type: 3}
+    - {fileID: 1574082463013089537, guid: 05209929063325e4bb40347260164103, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3495050392053917900, guid: 05209929063325e4bb40347260164103, type: 3}
-      insertIndex: -1
+      insertIndex: 0
       addedObject: {fileID: 14953126847352405}
     - targetCorrespondingSourceObject: {fileID: 3495050392053917900, guid: 05209929063325e4bb40347260164103, type: 3}
-      insertIndex: -1
+      insertIndex: 1
       addedObject: {fileID: 6487140637810367132}
     - targetCorrespondingSourceObject: {fileID: 3495050392053917900, guid: 05209929063325e4bb40347260164103, type: 3}
-      insertIndex: -1
+      insertIndex: 2
       addedObject: {fileID: 3533522731777501672}
     - targetCorrespondingSourceObject: {fileID: 2048210938741480497, guid: 05209929063325e4bb40347260164103, type: 3}
       insertIndex: -1
@@ -531,6 +532,22 @@ PrefabInstance:
     - target: {fileID: 7385974805340851115, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -43
+      objectReference: {fileID: 0}
+    - target: {fileID: 7970965165703425368, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 25f473f5740b2994aaf3e9363884f192, type: 3}
+    - target: {fileID: 7970965165703425368, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
+      propertyPath: m_Color.b
+      value: 0.2264151
+      objectReference: {fileID: 0}
+    - target: {fileID: 7970965165703425368, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
+      propertyPath: m_Color.g
+      value: 0.2264151
+      objectReference: {fileID: 0}
+    - target: {fileID: 7970965165703425368, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
+      propertyPath: m_Color.r
+      value: 0.2264151
       objectReference: {fileID: 0}
     - target: {fileID: 8003185127796193812, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
       propertyPath: sceneConfig
@@ -987,6 +1004,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2050357690411221424}
     m_Modifications:
+    - target: {fileID: 441711636961903237, guid: 05209929063325e4bb40347260164103, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 441711636961903237, guid: 05209929063325e4bb40347260164103, type: 3}
+      propertyPath: m_OverrideSorting
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1440845906237661293, guid: 05209929063325e4bb40347260164103, type: 3}
       propertyPath: m_Name
       value: LevelDataPageGroup
@@ -1118,7 +1143,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 5964283293988832697, guid: 05209929063325e4bb40347260164103, type: 3}
     - {fileID: 701702773331925959, guid: 05209929063325e4bb40347260164103, type: 3}
-    - {fileID: 441711636961903237, guid: 05209929063325e4bb40347260164103, type: 3}
     m_RemovedGameObjects:
     - {fileID: 1574082463013089537, guid: 05209929063325e4bb40347260164103, type: 3}
     m_AddedGameObjects:
@@ -2691,6 +2715,22 @@ PrefabInstance:
     - target: {fileID: 7385974805340851115, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -150
+      objectReference: {fileID: 0}
+    - target: {fileID: 7970965165703425368, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1c2bdce10b3e5d745bfb68854291fc14, type: 3}
+    - target: {fileID: 7970965165703425368, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
+      propertyPath: m_Color.b
+      value: 0.26415092
+      objectReference: {fileID: 0}
+    - target: {fileID: 7970965165703425368, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
+      propertyPath: m_Color.g
+      value: 0.26415092
+      objectReference: {fileID: 0}
+    - target: {fileID: 7970965165703425368, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
+      propertyPath: m_Color.r
+      value: 0.26415092
       objectReference: {fileID: 0}
     - target: {fileID: 8003185127796193812, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
       propertyPath: sceneConfig

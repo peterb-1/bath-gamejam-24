@@ -301,6 +301,7 @@ namespace Audio
         private void OnDestroy()
         {
             if (Instance != this) return;
+            Instance = null;
             
             ColourManager.OnColourChangeStarted -= HandleColourChangeStarted;
             SceneLoader.OnSceneLoadStart -= HandleSceneLoadStart;

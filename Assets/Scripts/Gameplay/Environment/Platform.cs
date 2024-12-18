@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
 using Gameplay.Core;
 using NaughtyAttributes;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
 using Random = UnityEngine.Random;
+
+#if UNITY_EDITOR
+using System;
+using System.Collections.Generic;
+using UnityEditor;
+#endif
 
 namespace Gameplay.Environment
 {

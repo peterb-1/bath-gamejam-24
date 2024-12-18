@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Gameplay.Input;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -55,6 +56,8 @@ namespace Core
             }
 
             PreviousSceneConfig = null;
+
+            InputManager.OnRestartPerformed += ReloadCurrentScene;
         }
         
         public static bool IsReady() => Instance != null;
@@ -100,6 +103,14 @@ namespace Core
             isLoading = false;
         }
         
+        private void OnDestroy()
+        {
+            if (Instance != this) return;
+            Instance = null;
+            
+            InputManager.OnRestartPerformed -= ReloadCurrentScene;
+        }
+
 #if UNITY_EDITOR
         private void OnValidate()
         {

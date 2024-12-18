@@ -28,6 +28,9 @@ namespace Gameplay.Input
         private InputActionReference pauseAction;
         
         [SerializeField] 
+        private InputActionReference restartAction;
+        
+        [SerializeField] 
         private InputActionReference blueAction;
         
         [SerializeField] 
@@ -46,6 +49,7 @@ namespace Gameplay.Input
         public static event Action OnJumpPerformed;
         public static event Action<ControlScheme> OnControlSchemeChanged;
         public static event Action OnPauseToggled;
+        public static event Action OnRestartPerformed;
         
         public static InputManager Instance { get; private set; }
         
@@ -176,6 +180,7 @@ namespace Gameplay.Input
             moveAction.action.Enable();
             jumpAction.action.Enable();
             pauseAction.action.Enable();
+            restartAction.action.Enable();
             blueAction.action.Enable();
             redAction.action.Enable();
             yellowAction.action.Enable();
@@ -188,6 +193,7 @@ namespace Gameplay.Input
             moveAction.action.Disable();
             jumpAction.action.Disable();
             pauseAction.action.Disable();
+            restartAction.action.Disable();
             blueAction.action.Disable();
             redAction.action.Disable();
             yellowAction.action.Disable();
@@ -197,6 +203,7 @@ namespace Gameplay.Input
         {
             jumpAction.action.performed += HandleJumpPerformed;
             pauseAction.action.performed += HandlePausePerformed;
+            restartAction.action.performed += HandleRestartPerformed;
             blueAction.action.performed += HandleBluePerformed;
             redAction.action.performed += HandleRedPerformed;
             yellowAction.action.performed += HandleYellowPerformed;
@@ -206,6 +213,7 @@ namespace Gameplay.Input
         {
             jumpAction.action.performed -= HandleJumpPerformed;
             pauseAction.action.performed -= HandlePausePerformed;
+            restartAction.action.performed -= HandleRestartPerformed;
             blueAction.action.performed -= HandleBluePerformed;
             redAction.action.performed -= HandleRedPerformed;
             yellowAction.action.performed -= HandleYellowPerformed;
@@ -220,6 +228,12 @@ namespace Gameplay.Input
         private static void HandlePausePerformed(InputAction.CallbackContext _)
         {
             OnPauseToggled?.Invoke();
+        }
+        
+        private void HandleRestartPerformed(InputAction.CallbackContext _)
+        {
+            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
+            OnRestartPerformed?.Invoke();
         }
 
         private static void HandleBluePerformed(InputAction.CallbackContext _)
@@ -250,6 +264,7 @@ namespace Gameplay.Input
             playerInput.onControlsChanged -= HandleControlSchemeChanged;
             playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
+            
             SceneLoader.OnSceneLoaded -= HandleSceneLoaded;
         }
     }
