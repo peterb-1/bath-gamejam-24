@@ -33,6 +33,21 @@ namespace Gameplay.Core
 
         public int DistrictNumber => districtNumber;
         public int MissionNumber => missionNumber;
+
+        public float OneStarTime => oneStarTime;
+        public float TwoStarTime => twoStarTime;
+        public float ThreeStarTime => threeStarTime;
+        public float RainbowTime => rainbowTime;
+
+        public TimeRanking GetTimeRanking(float time)
+        {
+            if (time <= rainbowTime) return TimeRanking.Rainbow;
+            if (time <= threeStarTime) return TimeRanking.ThreeStar;
+            if (time <= twoStarTime) return TimeRanking.TwoStar;
+            if (time <= oneStarTime) return TimeRanking.OneStar;
+
+            return TimeRanking.Unranked;
+        }
         
         public string GetLevelCode()
         {

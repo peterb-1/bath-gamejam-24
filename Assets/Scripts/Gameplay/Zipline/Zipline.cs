@@ -107,7 +107,7 @@ namespace Gameplay.Zipline
             }
             else
             {
-                hook.transform.position = bezierCurve.GetPoint(Mathf.Clamp(curveProgress,0f,1f));
+                hook.transform.position = bezierCurve.GetPoint(Mathf.Clamp(curveProgress, 0f, 1f));
                 playerMovementBehaviour.UnhookPlayer();
             }
         }

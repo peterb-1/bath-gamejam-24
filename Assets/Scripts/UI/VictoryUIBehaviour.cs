@@ -1,6 +1,8 @@
+using System;
 using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
+using Gameplay.Core;
 using Gameplay.Player;
 using NaughtyAttributes;
 using TMPro;
@@ -34,12 +36,40 @@ namespace UI
         private TMP_Text levelInfoText;
 
         [SerializeField] 
+        private TMP_Text oneStarText;
+        
+        [SerializeField] 
+        private TMP_Text twoStarsText;
+        
+        [SerializeField] 
+        private TMP_Text threeStarsText;
+
+        [SerializeField] 
+        private TMP_Text rainbowText;
+        
+        [SerializeField] 
+        private Animator newBestAnimator;
+
+        [SerializeField] 
+        private RankingStar firstStar;
+        
+        [SerializeField] 
+        private RankingStar secondStar;
+        
+        [SerializeField] 
+        private RankingStar thirdStar;
+
+        [SerializeField] 
+        private float starAnimationDelay;
+
+        [SerializeField] 
         private bool overrideNextSceneConfig;
         
         [SerializeField, ShowIf(nameof(overrideNextSceneConfig))] 
         private SceneConfig nextSceneConfig;
 
         private PlayerVictoryBehaviour playerVictoryBehaviour;
+        private static readonly int Show = Animator.StringToHash("Show");
 
         private async void Awake()
         {
@@ -76,15 +106,16 @@ namespace UI
             SceneLoader.Instance.LoadLevelSelect();
         }
 
-        private void HandleVictorySequenceFinish()
+        private async void HandleVictorySequenceFinish()
         {
             SetLevelInfoText();
             
             timerText.text = timerBehaviour.GetFormattedTimeElapsed();
             
-            UpdateSaveData();
+            var (ranking, isNewBest) = ProcessLevelCompletion();
 
-            victoryPageGroup.ShowGroup();
+            await victoryPageGroup.ShowGroupAsync();
+            await DisplayRankingAsync(ranking, isNewBest);
         }
         
         private void SetLevelInfoText()
@@ -102,16 +133,34 @@ namespace UI
             }
         }
 
-        private void UpdateSaveData()
+        private (TimeRanking, bool) ProcessLevelCompletion()
         {
             var campaignData = SaveManager.Instance.SaveData.CampaignData;
             var currentSceneConfig = SceneLoader.Instance.CurrentSceneConfig;
             var shouldSave = false;
+
+            var ranking = TimeRanking.Unranked;
+            var isNewBest = false;
             
             if (currentSceneConfig.IsLevelScene &&
                 campaignData.TryGetLevelData(currentSceneConfig.LevelConfig, out var levelData))
             {
-                shouldSave |= levelData.TrySetTime(timerBehaviour.TimeElapsed);
+                var levelConfig = currentSceneConfig.LevelConfig;
+                var time = timerBehaviour.TimeElapsed;
+
+                oneStarText.text = TimerBehaviour.GetFormattedTime(levelConfig.OneStarTime);
+                twoStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.TwoStarTime);
+                threeStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.ThreeStarTime);
+                rainbowText.text = TimerBehaviour.GetFormattedTime(levelConfig.RainbowTime);
+
+                ranking = levelConfig.GetTimeRanking(time);
+                isNewBest = levelData.TrySetTime(time);
+                shouldSave |= isNewBest;
+
+                if (!isNewBest)
+                {
+                    newBestAnimator.gameObject.SetActive(false);
+                }
             }
 
             if (currentSceneConfig.NextSceneConfig != null && 
@@ -124,6 +173,42 @@ namespace UI
             if (shouldSave)
             {
                 SaveManager.Instance.Save();
+            }
+
+            return (ranking, isNewBest);
+        }
+
+        private async UniTask DisplayRankingAsync(TimeRanking ranking, bool isNewBest)
+        {
+            if (ranking >= TimeRanking.OneStar)
+            {
+                firstStar.SetActive(true);
+            }
+
+            if (ranking >= TimeRanking.TwoStar)
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(starAnimationDelay));
+                secondStar.SetActive(true);
+            }
+            
+            if (ranking >= TimeRanking.ThreeStar)
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(starAnimationDelay));
+                thirdStar.SetActive(true);
+            }
+
+            if (ranking == TimeRanking.Rainbow)
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(starAnimationDelay));
+                
+                firstStar.SetRainbowState(true);
+                secondStar.SetRainbowState(true);
+                thirdStar.SetRainbowState(true);
+            }
+
+            if (isNewBest)
+            {
+                newBestAnimator.SetTrigger(Show);
             }
         }
 

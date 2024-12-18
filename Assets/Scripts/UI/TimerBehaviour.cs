@@ -43,6 +43,9 @@ namespace UI
         public static string GetFormattedTime(float time)
         {
             if (Math.Abs(time - float.MaxValue) < 0.01f) return "N/A";
+
+            // so that floating point error for exact values e.g. 18.40 doesn't bring the time down to 18.39
+            time += 1e-6f;
             
             var minutes = (int) (time / 60);
             var seconds = (int) (time % 60);

@@ -151,31 +151,30 @@ namespace Gameplay.Player
             if (jumpCooldownCountdown > 0f) jumpCooldownCountdown -= Time.deltaTime;
             if (hookCountdown > 0f) hookCountdown -= Time.deltaTime;
 
-            var trans = transform;
-            var up = trans.up;
-            var down = -up;
-            var right = trans.right;
-            var left = -right;
+            var wasGrounded = isGrounded;
             var leftGroundPosition = leftGroundCheck.position;
             var rightGroundPosition = rightGroundCheck.position;
 
-            var doesRaycastUpHit = Physics2D.Raycast(leftGroundPosition, up, groundCheckDistance, groundLayers) ||
-                                   Physics2D.Raycast(rightGroundPosition, up, groundCheckDistance, groundLayers); 
+            var doesRaycastUpHit = Physics2D.Raycast(leftGroundPosition, Vector2.up, groundCheckDistance, groundLayers) || 
+                                   Physics2D.Raycast(rightGroundPosition, Vector2.up, groundCheckDistance, groundLayers);
             
-            var doesRaycastDownHit = Physics2D.Raycast(leftGroundPosition, down, groundCheckDistance, groundLayers) ||
-                                     Physics2D.Raycast(rightGroundPosition, down, groundCheckDistance, groundLayers);
+            var doesRaycastDownHit = Physics2D.Raycast(leftGroundPosition, Vector2.down, groundCheckDistance, groundLayers) ||
+                                     Physics2D.Raycast(rightGroundPosition, Vector2.down, groundCheckDistance, groundLayers);
+            
+            var doesRaycastLeftHit = Physics2D.Raycast(leftGroundPosition, Vector2.left, groundCheckDistance, groundLayers) || 
+                                     Physics2D.Raycast(leftMidCheck.position, Vector2.left, groundCheckDistance, groundLayers) ||
+                                     Physics2D.Raycast(leftHeadCheck.position, Vector2.left, groundCheckDistance, groundLayers);
+            
+            var doesRaycastRightHit = Physics2D.Raycast(rightGroundPosition, Vector2.right, groundCheckDistance, groundLayers) ||
+                                      Physics2D.Raycast(rightMidCheck.position, Vector2.right, groundCheckDistance, groundLayers) ||
+                                      Physics2D.Raycast(rightHeadCheck.position, Vector2.right, groundCheckDistance, groundLayers);
 
+            var leftWallProbe = Physics2D.OverlapCircle(leftGroundPosition + Vector3.right * wallCheckOffset, wallCheckDistance, groundLayers);
+            var rightWallProbe = Physics2D.OverlapCircle(rightGroundPosition + Vector3.left * wallCheckOffset, wallCheckDistance, groundLayers);
+            
             isGrounded = doesRaycastDownHit && !doesRaycastUpHit;
-            
-            isTouchingLeftWall = (Physics2D.Raycast(leftGroundPosition, left, groundCheckDistance, groundLayers) ||
-                                 Physics2D.Raycast(leftMidCheck.position, left, groundCheckDistance, groundLayers) ||
-                                 Physics2D.Raycast(leftHeadCheck.position, left, groundCheckDistance, groundLayers)) &&
-                                 !Physics2D.OverlapCircle(leftGroundPosition + Vector3.right*wallCheckOffset, wallCheckDistance, groundLayers);
-            
-            isTouchingRightWall = (Physics2D.Raycast(rightGroundPosition, right, groundCheckDistance, groundLayers) ||
-                                  Physics2D.Raycast(rightMidCheck.position, right, groundCheckDistance, groundLayers) ||
-                                  Physics2D.Raycast(rightHeadCheck.position, right, groundCheckDistance, groundLayers))&&
-                                  !Physics2D.OverlapCircle(rightGroundPosition + Vector3.left*wallCheckOffset, wallCheckDistance, groundLayers);
+            isTouchingLeftWall = doesRaycastLeftHit && !leftWallProbe;
+            isTouchingRightWall = doesRaycastRightHit && !rightWallProbe;
             
             playerAnimator.SetBool(IsGrounded, isGrounded);
 
@@ -183,6 +182,11 @@ namespace Gameplay.Player
             {
                 coyoteCountdown = coyoteDuration;
                 hasDoubleJumped = false;
+            }
+
+            if (isGrounded && !wasGrounded)
+            {
+                // play landing SFX
             }
 
             if (isHooked)
