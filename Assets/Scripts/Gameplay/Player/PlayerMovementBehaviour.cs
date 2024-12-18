@@ -60,12 +60,6 @@ namespace Gameplay.Player
         private float groundCheckDistance;
         
         [SerializeField]
-        private float wallCheckDistance;
-        
-        [SerializeField]
-        private float wallCheckOffset;
-        
-        [SerializeField]
         private LayerMask groundLayers;
 
         [SerializeField] 
@@ -167,15 +161,13 @@ namespace Gameplay.Player
 
             isGrounded = doesRaycastDownHit && !doesRaycastUpHit;
             
-            isTouchingLeftWall = (Physics2D.Raycast(leftGroundPosition, left, groundCheckDistance, groundLayers) ||
+            isTouchingLeftWall = Physics2D.Raycast(leftGroundPosition, left, groundCheckDistance, groundLayers) ||
                                  Physics2D.Raycast(leftMidCheck.position, left, groundCheckDistance, groundLayers) ||
-                                 Physics2D.Raycast(leftHeadCheck.position, left, groundCheckDistance, groundLayers)) &&
-                                 !Physics2D.OverlapCircle(leftGroundPosition + Vector3.right*wallCheckOffset, wallCheckDistance, groundLayers);
+                                 Physics2D.Raycast(leftHeadCheck.position, left, groundCheckDistance, groundLayers);
             
-            isTouchingRightWall = (Physics2D.Raycast(rightGroundPosition, right, groundCheckDistance, groundLayers) ||
+            isTouchingRightWall = Physics2D.Raycast(rightGroundPosition, right, groundCheckDistance, groundLayers) ||
                                   Physics2D.Raycast(rightMidCheck.position, right, groundCheckDistance, groundLayers) ||
-                                  Physics2D.Raycast(rightHeadCheck.position, right, groundCheckDistance, groundLayers))&&
-                                  !Physics2D.OverlapCircle(rightGroundPosition + Vector3.left*wallCheckOffset, wallCheckDistance, groundLayers);
+                                  Physics2D.Raycast(rightHeadCheck.position, right, groundCheckDistance, groundLayers);
             
             playerAnimator.SetBool(IsGrounded, isGrounded);
 

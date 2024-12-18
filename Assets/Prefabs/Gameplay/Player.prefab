@@ -263,8 +263,6 @@ MonoBehaviour:
   hookCooldownDuration: 0.4
   hookOffset: {x: 0, y: -0.5, z: 0}
   groundCheckDistance: 0.25
-  wallCheckDistance: 0.25
-  wallCheckOffset: 1
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
