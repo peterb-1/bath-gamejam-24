@@ -99,7 +99,7 @@ namespace Gameplay.Player
         [SerializeField]
         private PlayerVictoryBehaviour playerVictoryBehaviour;
 
-        public Vector2 Velocity => rigidBody.linearVelocity;
+        public Vector2 Velocity => isHooked ? ziplineVelocity : rigidBody.linearVelocity;
 
         private Vector2 lastZiplinePosition;
         private Vector2 ziplineVelocity;
@@ -179,7 +179,7 @@ namespace Gameplay.Player
 
             if (isHooked)
             {
-                var currentPosition = transform.position.xy();
+                var currentPosition = hook.transform.position.xy();
 
                 ziplineVelocity = currentPosition == lastZiplinePosition 
                     ? Vector2.zero 
@@ -288,19 +288,20 @@ namespace Gameplay.Player
             {
                 return false;
             }
-
-            var trans = transform;
-
+            
             hook = newHook;
             isHooked = true;
             hookCountdown = 0f;
 
+            var trans = transform;
+            var hookTransform = hook.transform;
+
             hook.connectedBody = rigidBody;
             rigidBody.linearVelocity = Vector2.zero;
             rigidBody.gravityScale = 0f;
-            lastZiplinePosition = trans.position.xy();
+            lastZiplinePosition = hookTransform.position.xy();
             
-            trans.parent = hook.transform;
+            trans.parent = hookTransform;
             trans.localPosition = hookOffset;
             
             playerAnimator.SetBool(IsHookedHash, true);

@@ -243,6 +243,8 @@ MonoBehaviour:
   gradientSpeedMultiplier: 0.65
   activationDistanceThreshold: 0.5
   endThreshold: 0.025
+  swingSensitivity: 0.05
+  swingStrength: 0.6
 --- !u!120 &6813993196282001183
 LineRenderer:
   serializedVersion: 2
