@@ -44,6 +44,7 @@ namespace Gameplay.Zipline
         
         private float gradientSpeed;
         private float curveProgress;
+        private Vector2 prevPlayerVelocity;
         private bool isMovingForwards;
 
         private async void Awake()
@@ -94,6 +95,8 @@ namespace Gameplay.Zipline
                 var tangent = bezierCurve.GetTangent(curveProgress).xy();
                 isMovingForwards = tangent.x * preHookVelocity.x >= 0f;
             }
+            
+            prevPlayerVelocity = playerMovementBehaviour.Velocity;
         }
 
         private void MovePlayerAlongZipline()
@@ -109,19 +112,23 @@ namespace Gameplay.Zipline
             {
                 hook.transform.position = bezierCurve.GetPoint(Mathf.Clamp(curveProgress, 0f, 1f));
                 playerMovementBehaviour.UnhookPlayer();
+                prevPlayerVelocity = Vector2.zero;
             }
         }
-
-        // can definitely be improved - current approach is primitive and just maps change in curve x pos to a swing angle
+        
         private void RotateHook()
         {   
             var horizontalVelocity = playerMovementBehaviour.Velocity.x;
+            var horizontalAccel = (horizontalVelocity - prevPlayerVelocity.x) / Time.deltaTime;
             var currentAngle = hook.transform.eulerAngles.z;
             
-            // misleading use of atan, just scaling horizontal velocity between +/- 60 degrees in a smooth way
-            var targetAngle = -Mathf.Rad2Deg * Mathf.Atan(horizontalVelocity * swingSensitivity) * swingStrength;
+            //Debug.Log(horizontalVelocity);
+            var targetAngle = -Mathf.Rad2Deg * Mathf.Atan((horizontalVelocity + horizontalAccel*0.4f) * swingSensitivity) * swingStrength;
             
+            //var targetAngle = -Mathf.Rad2Deg * Mathf.Atan(horizontalVelocity * swingSensitivity) * swingStrength;
+
             hook.transform.Rotate(Vector3.forward, targetAngle - currentAngle);
+            prevPlayerVelocity = playerMovementBehaviour.Velocity;
         }
         
         private void UpdateGradient()
