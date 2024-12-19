@@ -1,5 +1,6 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
+using Gameplay.Core;
 using Gameplay.Player;
 using NaughtyAttributes;
 using UnityEngine;
@@ -45,13 +46,17 @@ namespace Gameplay.Zipline
         [SerializeField]
         private float accelWeight;
 
+        [SerializeField] 
+        private int stabilisationFrames;
+
         private PlayerMovementBehaviour playerMovementBehaviour;
         private Transform playerTransform;
         
         private float gradientSpeed;
         private float curveProgress;
+        private float previousHorizontalVelocity;
         
-        private Vector2 prevPlayerVelocity;
+        private int stabilisationFramesRemaining;
         
         private bool isMovingForwards;
 
@@ -67,6 +72,8 @@ namespace Gameplay.Zipline
 
         private void Update()
         {
+            if (PauseManager.Instance.IsPaused) return;
+            
             if (hook.connectedBody == null)
             {
                 TryHookPlayer();
@@ -104,7 +111,8 @@ namespace Gameplay.Zipline
                 isMovingForwards = tangent.x * preHookVelocity.x >= 0f;
             }
             
-            prevPlayerVelocity = playerMovementBehaviour.Velocity;
+            stabilisationFramesRemaining = stabilisationFrames;
+            previousHorizontalVelocity = playerMovementBehaviour.Velocity.x;
         }
 
         private void MovePlayerAlongZipline()
@@ -120,24 +128,53 @@ namespace Gameplay.Zipline
             {
                 hook.transform.position = bezierCurve.GetPoint(Mathf.Clamp(curveProgress, 0f, 1f));
                 playerMovementBehaviour.UnhookPlayer();
-                prevPlayerVelocity = Vector2.zero;
+                previousHorizontalVelocity = 0f;
             }
         }
         
         private void RotateHook()
         {
+            // seems like dividing acceleration by time leads to a jitter for some reason
             var horizontalVelocity = playerMovementBehaviour.Velocity.x;
-            var horizontalAccel = (horizontalVelocity - prevPlayerVelocity.x) / Time.deltaTime;
-            
-            var accelContribution = accelWeight * Mathf.Atan(accelSensitivity * horizontalAccel);
-            var currentAngle = hook.transform.eulerAngles.z;
+            var horizontalAccel = horizontalVelocity - previousHorizontalVelocity; 
 
-            var targetAngle = -Mathf.Rad2Deg *
-                              Mathf.Atan((horizontalVelocity + accelContribution) * swingSensitivity) *
-                              swingStrength;
+            switch (stabilisationFramesRemaining)
+            {
+                case > 0:
+                {
+                    var predictedFrameProgressGain = Time.deltaTime * traversalSpeed * (isMovingForwards ? 1f : -1f);
+
+                    var predictedCurveProgress = curveProgress + predictedFrameProgressGain;
+                    var predictedPosition = bezierCurve.GetPoint(predictedCurveProgress);
+                    var predictedVelocity = (predictedPosition - hook.transform.position).x / Time.deltaTime;
+                
+                    var nextPredictedCurveProgress = predictedCurveProgress + predictedFrameProgressGain;
+                    var nextPredictedPosition = bezierCurve.GetPoint(nextPredictedCurveProgress);
+                    var nextPredictedVelocity = (nextPredictedPosition - predictedPosition).x / Time.deltaTime;
+
+                    horizontalVelocity = predictedVelocity;
+                    horizontalAccel = nextPredictedVelocity - predictedVelocity;
+
+                    stabilisationFramesRemaining--;
+                    break;
+                }
+                case 0:
+                {
+                    // nobody will ever know why this works
+                    horizontalAccel = -horizontalAccel;
+                
+                    stabilisationFramesRemaining--;
+                    break;
+                }
+            }
             
-            hook.transform.Rotate(Vector3.forward, targetAngle-currentAngle);
-            prevPlayerVelocity = playerMovementBehaviour.Velocity;
+            var currentAngle = hook.transform.eulerAngles.z;
+            var accelContribution = accelWeight * Mathf.Atan(accelSensitivity * horizontalAccel);
+            var targetAngle = -Mathf.Rad2Deg * Mathf.Atan((horizontalVelocity + accelContribution) * swingSensitivity) * swingStrength;
+            
+            hook.transform.Rotate(Vector3.forward, targetAngle - currentAngle);
+            
+            previousHorizontalVelocity = horizontalVelocity;
         }
         
         private void UpdateGradient()
