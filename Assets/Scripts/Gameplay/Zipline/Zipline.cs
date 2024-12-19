@@ -117,17 +117,24 @@ namespace Gameplay.Zipline
 
         private void MovePlayerAlongZipline()
         {
-            curveProgress += Time.deltaTime * traversalSpeed * (isMovingForwards ? 1f : -1f);
+            var oldPosition = hook.transform.position;
+            var oldProgress = curveProgress;
+            var desiredProgress = Time.deltaTime * traversalSpeed * (isMovingForwards ? 1f : -1f);
+
+            curveProgress += desiredProgress;
+            hook.transform.position = bezierCurve.GetPoint(curveProgress);
 
             if (curveProgress is > 0f and < 1f)
             {
-                hook.transform.position = bezierCurve.GetPoint(curveProgress);
                 RotateHook();
             }
             else
             {
-                hook.transform.position = bezierCurve.GetPoint(Mathf.Clamp(curveProgress, 0f, 1f));
-                playerMovementBehaviour.UnhookPlayer();
+                var actualProgress = Mathf.Clamp(curveProgress, 0f, 1f) - oldProgress;
+                var inverseProgressProportion = desiredProgress / actualProgress;
+                var unhookVelocity = (hook.transform.position - oldPosition).xy() * inverseProgressProportion / Time.deltaTime;
+                
+                playerMovementBehaviour.UnhookPlayer(unhookVelocity);
                 previousHorizontalVelocity = 0f;
             }
         }

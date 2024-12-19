@@ -323,7 +323,7 @@ namespace Gameplay.Player
             return true;
         }
 
-        public void UnhookPlayer()
+        public void UnhookPlayer(Vector2? unhookVelocity = null)
         {
             if (!isHooked) return;
             
@@ -336,6 +336,8 @@ namespace Gameplay.Player
             
             hook.connectedBody = null;
             transform.parent = null;
+
+            if (unhookVelocity != null) ziplineVelocity = unhookVelocity.Value;
 
             rigidBody.linearVelocity = ziplineVelocity * ziplineForceMultiplier;
             rigidBody.gravityScale = 1f;
