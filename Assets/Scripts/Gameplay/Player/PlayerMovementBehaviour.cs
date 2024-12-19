@@ -54,6 +54,9 @@ namespace Gameplay.Player
         private float hookCooldownDuration;
 
         [SerializeField] 
+        private float moveToHookDuration;
+
+        [SerializeField] 
         private Vector3 hookOffset;
 
         [SerializeField]
@@ -107,6 +110,7 @@ namespace Gameplay.Player
 
         public Vector2 Velocity => isHooked ? ziplineVelocity : rigidBody.linearVelocity;
 
+        private Vector3 ziplineLocalStartOffset;
         private Vector2 lastZiplinePosition;
         private Vector2 ziplineVelocity;
 
@@ -116,6 +120,7 @@ namespace Gameplay.Player
         private float jumpBufferCountdown;
         private float jumpCooldownCountdown;
         private float hookCountdown;
+        private float moveToHookCountdown;
         
         private bool isGrounded;
         private bool isTouchingLeftWall;
@@ -198,6 +203,15 @@ namespace Gameplay.Player
                     : (currentPosition - lastZiplinePosition) / Time.deltaTime;
                 
                 lastZiplinePosition = currentPosition;
+
+                if (moveToHookCountdown > 0)
+                {
+                    moveToHookCountdown -= Time.deltaTime;
+                    
+                    var lerp = (moveToHookDuration - moveToHookCountdown) / moveToHookDuration;
+                    
+                    transform.localPosition = Vector3.Lerp(ziplineLocalStartOffset, hookOffset,  Mathf.Clamp(lerp, 0f, 1f));
+                }
             }
         }
 
@@ -304,17 +318,22 @@ namespace Gameplay.Player
             hook = newHook;
             isHooked = true;
             hookCountdown = 0f;
+            moveToHookCountdown = moveToHookDuration;
 
             var trans = transform;
             var hookTransform = hook.transform;
+            var oldWorldPosition = trans.position;
+            var hookPosition = hookTransform.position;
 
             hook.connectedBody = rigidBody;
             rigidBody.linearVelocity = Vector2.zero;
             rigidBody.gravityScale = 0f;
-            lastZiplinePosition = hookTransform.position.xy();
+            
+            lastZiplinePosition = hookPosition.xy();
+            ziplineLocalStartOffset = oldWorldPosition - hookPosition;
             
             trans.parent = hookTransform;
-            trans.localPosition = hookOffset;
+            trans.localPosition = ziplineLocalStartOffset;
             
             playerAnimator.SetBool(IsHookedHash, true);
             
