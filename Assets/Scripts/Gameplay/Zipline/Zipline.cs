@@ -38,13 +38,21 @@ namespace Gameplay.Zipline
         
         [SerializeField] 
         private float swingStrength;
+        
+        [SerializeField]
+        private float accelSensitivity;
+        
+        [SerializeField]
+        private float accelWeight;
 
         private PlayerMovementBehaviour playerMovementBehaviour;
         private Transform playerTransform;
         
         private float gradientSpeed;
         private float curveProgress;
+        
         private Vector2 prevPlayerVelocity;
+        
         private bool isMovingForwards;
 
         private async void Awake()
@@ -117,17 +125,18 @@ namespace Gameplay.Zipline
         }
         
         private void RotateHook()
-        {   
+        {
             var horizontalVelocity = playerMovementBehaviour.Velocity.x;
             var horizontalAccel = (horizontalVelocity - prevPlayerVelocity.x) / Time.deltaTime;
+            
+            var accelContribution = accelWeight * Mathf.Atan(accelSensitivity * horizontalAccel);
             var currentAngle = hook.transform.eulerAngles.z;
-            
-            //Debug.Log(horizontalVelocity);
-            var targetAngle = -Mathf.Rad2Deg * Mathf.Atan((horizontalVelocity + horizontalAccel*0.4f) * swingSensitivity) * swingStrength;
-            
-            //var targetAngle = -Mathf.Rad2Deg * Mathf.Atan(horizontalVelocity * swingSensitivity) * swingStrength;
 
-            hook.transform.Rotate(Vector3.forward, targetAngle - currentAngle);
+            var targetAngle = -Mathf.Rad2Deg *
+                              Mathf.Atan((horizontalVelocity + accelContribution) * swingSensitivity) *
+                              swingStrength;
+            
+            hook.transform.Rotate(Vector3.forward, targetAngle-currentAngle);
             prevPlayerVelocity = playerMovementBehaviour.Velocity;
         }
         
