@@ -48,11 +48,14 @@ MonoBehaviour:
   playerInput: {fileID: 5322766936052464416}
   moveAction: {fileID: -1680190386980627800, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   jumpAction: {fileID: -2099379676528639254, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
+  dropAction: {fileID: 6402580411870947842, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   pauseAction: {fileID: -3662211684014425959, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   restartAction: {fileID: -7268409771993033521, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   blueAction: {fileID: -4712871377477003836, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   redAction: {fileID: 7458181770686317865, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   yellowAction: {fileID: 6870097182979891522, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
+  gamepadDropThreshold: -0.625
+  movementThreshold: 0.01
 --- !u!114 &5322766936052464416
 MonoBehaviour:
   m_ObjectHideFlags: 0

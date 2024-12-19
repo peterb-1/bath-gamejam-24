@@ -127,6 +127,7 @@ namespace Gameplay.Player
         private bool isTouchingRightWall;
         private bool hasDoubleJumped;
         private bool isHooked;
+        private bool hasDroppedThisFrame;
 
         private HingeJoint2D hook;
         
@@ -141,6 +142,8 @@ namespace Gameplay.Player
         private void Awake()
         {
             InputManager.OnJumpPerformed += HandleJumpPerformed;
+            InputManager.OnDropPerformed += HandleDropPerformed;
+            
             SceneLoader.OnSceneLoadStart += HandleSceneLoadStart;
 
             playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
@@ -151,6 +154,8 @@ namespace Gameplay.Player
 
         private void Update()
         {
+            hasDroppedThisFrame = false;
+            
             if (!isGrounded) coyoteCountdown -= Time.deltaTime;
             if (jumpBufferCountdown > 0f) jumpBufferCountdown -= Time.deltaTime;
             if (jumpCooldownCountdown > 0f) jumpCooldownCountdown -= Time.deltaTime;
@@ -256,7 +261,14 @@ namespace Gameplay.Player
         
         private void HandleJumpPerformed()
         {
+            if (hasDroppedThisFrame) return;
+            
             jumpBufferCountdown = jumpBufferDuration;
+        }
+        
+        private void HandleDropPerformed()
+        {
+            hasDroppedThisFrame = TryUnhookPlayer();
         }
         
         private void TryJump()
@@ -283,7 +295,7 @@ namespace Gameplay.Player
         
         private void PerformJump(float force)
         {
-            UnhookPlayer();
+            TryUnhookPlayer();
             
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, force);
@@ -342,9 +354,9 @@ namespace Gameplay.Player
             return true;
         }
 
-        public void UnhookPlayer(Vector2? unhookVelocity = null)
+        public bool TryUnhookPlayer(Vector2? unhookVelocity = null)
         {
-            if (!isHooked) return;
+            if (!isHooked) return false;
             
             OnPlayerUnhooked?.Invoke();
             
@@ -362,6 +374,8 @@ namespace Gameplay.Player
             rigidBody.gravityScale = 1f;
             
             playerAnimator.SetBool(IsHookedHash, false);
+
+            return true;
         }
         
         private void HandleSceneLoadStart()
@@ -372,7 +386,7 @@ namespace Gameplay.Player
         
         private void HandleDeathSequenceStart()
         {
-            UnhookPlayer();
+            TryUnhookPlayer();
             
             rigidBody.linearVelocity = Vector2.zero;
             rigidBody.gravityScale = 0f;
@@ -415,6 +429,8 @@ namespace Gameplay.Player
         private void OnDestroy()
         {
             InputManager.OnJumpPerformed -= HandleJumpPerformed;
+            InputManager.OnDropPerformed -= HandleDropPerformed;
+            
             SceneLoader.OnSceneLoadStart -= HandleSceneLoadStart;
             
             playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;

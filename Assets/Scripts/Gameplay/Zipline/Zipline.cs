@@ -134,7 +134,7 @@ namespace Gameplay.Zipline
                 var inverseProgressProportion = desiredProgress / actualProgress;
                 var unhookVelocity = (hook.transform.position - oldPosition).xy() * inverseProgressProportion / Time.deltaTime;
                 
-                playerMovementBehaviour.UnhookPlayer(unhookVelocity);
+                playerMovementBehaviour.TryUnhookPlayer(unhookVelocity);
                 previousHorizontalVelocity = 0f;
             }
         }
