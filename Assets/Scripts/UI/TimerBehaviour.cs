@@ -37,7 +37,9 @@ namespace UI
 
         public string GetFormattedTimeElapsed()
         {
-            return GetFormattedTime(TimeElapsed);
+            // round so that e.g. 18.401 (which fails an 18.40 time threshold) displays as 18.41
+            var roundedTime = Mathf.Ceil(TimeElapsed * 100f) / 100f;
+            return GetFormattedTime(roundedTime);
         }
 
         public static string GetFormattedTime(float time)
