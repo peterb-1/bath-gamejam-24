@@ -34,7 +34,7 @@ MonoBehaviour:
   - <ColourId>k__BackingField: 1
     min: {r: 0.8962264, g: 0.3931559, b: 0.5842448, a: 1}
     max: {r: 0.6981132, g: 0.1745283, b: 0.2260284, a: 1}
-    <PlayerColour>k__BackingField: {r: 0.9647059, g: 0.28627452, b: 0.38039216, a: 1}
+    <PlayerColour>k__BackingField: {r: 0.84313726, g: 0.36862746, b: 0.43529412, a: 1}
     <DroneColour>k__BackingField: {r: 1, g: 0.57254905, b: 0.6666667, a: 1}
     <DistrictPlatformColours>k__BackingField:
     - {r: 0.8392157, g: 0.38431373, b: 0.5137255, a: 1}

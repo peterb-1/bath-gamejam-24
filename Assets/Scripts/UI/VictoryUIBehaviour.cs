@@ -146,15 +146,17 @@ namespace UI
                 campaignData.TryGetLevelData(currentSceneConfig.LevelConfig, out var levelData))
             {
                 var levelConfig = currentSceneConfig.LevelConfig;
+                var oldTime = levelData.BestTime;
                 var time = timerBehaviour.TimeElapsed;
+                var doFormattedTimesMatch = TimerBehaviour.GetFormattedTime(oldTime) == TimerBehaviour.GetFormattedTime(time);
 
-                oneStarText.text = TimerBehaviour.GetFormattedTime(levelConfig.OneStarTime);
-                twoStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.TwoStarTime);
-                threeStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.ThreeStarTime);
-                rainbowText.text = TimerBehaviour.GetFormattedTime(levelConfig.RainbowTime);
+                oneStarText.text = TimerBehaviour.GetFormattedTime(levelConfig.OneStarTime, round: false);
+                twoStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.TwoStarTime, round: false);
+                threeStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.ThreeStarTime, round: false);
+                rainbowText.text = TimerBehaviour.GetFormattedTime(levelConfig.RainbowTime, round: false);
 
                 ranking = levelConfig.GetTimeRanking(time);
-                isNewBest = levelData.TrySetTime(time);
+                isNewBest = levelData.TrySetTime(time) && !doFormattedTimesMatch;
                 shouldSave |= isNewBest;
 
                 if (!isNewBest)

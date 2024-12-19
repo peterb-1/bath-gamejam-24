@@ -37,17 +37,23 @@ namespace UI
 
         public string GetFormattedTimeElapsed()
         {
-            // round so that e.g. 18.401 (which fails an 18.40 time threshold) displays as 18.41
-            var roundedTime = Mathf.Ceil(TimeElapsed * 100f) / 100f;
-            return GetFormattedTime(roundedTime);
+            return GetFormattedTime(TimeElapsed);
         }
 
-        public static string GetFormattedTime(float time)
+        public static string GetFormattedTime(float time, bool round = true)
         {
             if (Math.Abs(time - float.MaxValue) < 0.01f) return "N/A";
 
-            // so that floating point error for exact values e.g. 18.40 doesn't bring the time down to 18.39
-            time += 1e-6f;
+            if (round)
+            {
+                // round so that e.g. 18.401 (which fails an 18.40 time threshold) displays as 18.41
+                time = Mathf.Ceil(time * 100f) / 100f;
+            }
+            else
+            {
+                // add small epsilon so that floating point error for exact values e.g. 18.40 doesn't bring the time down to 18.39
+                time += 1e-6f;
+            }
             
             var minutes = (int) (time / 60);
             var seconds = (int) (time % 60);
