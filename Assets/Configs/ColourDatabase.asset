@@ -31,6 +31,36 @@ MonoBehaviour:
     - {r: 0.25882354, g: 0.31764707, b: 1, a: 1}
     <Background>k__BackingField: {r: 0.2659695, g: 0.23028658, b: 0.7075472, a: 1}
     <TextColour>k__BackingField: {r: 0.43529412, g: 0.47058824, b: 0.9137255, a: 1}
+    <ZiplineGradient>k__BackingField:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 0.49279103, g: 0.6024948, b: 0.9245283, a: 1}
+      key2: {r: 0.15477037, g: 0.21273415, b: 0.8867924, a: 0}
+      key3: {r: 1, g: 1, b: 1, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 16384
+      ctime2: 49151
+      ctime3: 65535
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: 0
+      m_NumColorKeys: 4
+      m_NumAlphaKeys: 2
   - <ColourId>k__BackingField: 1
     min: {r: 0.8962264, g: 0.3931559, b: 0.5842448, a: 1}
     max: {r: 0.6981132, g: 0.1745283, b: 0.2260284, a: 1}
@@ -49,6 +79,36 @@ MonoBehaviour:
     - {r: 0.8392157, g: 0.38431373, b: 0.5137255, a: 1}
     <Background>k__BackingField: {r: 0.735849, g: 0.2256141, b: 0.31888276, a: 1}
     <TextColour>k__BackingField: {r: 0.90588236, g: 0.37254903, b: 0.46666667, a: 1}
+    <ZiplineGradient>k__BackingField:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 0.8867924, g: 0.51450694, b: 0.5972371, a: 1}
+      key2: {r: 0.8207547, g: 0.21293166, b: 0.3376133, a: 0}
+      key3: {r: 1, g: 1, b: 1, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 16384
+      ctime2: 49151
+      ctime3: 65535
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: 0
+      m_NumColorKeys: 4
+      m_NumAlphaKeys: 2
   - <ColourId>k__BackingField: 2
     min: {r: 0.7735849, g: 0.5207302, b: 0.22258809, a: 1}
     max: {r: 0.8396226, g: 0.74853146, b: 0.35248306, a: 1}
@@ -67,3 +127,33 @@ MonoBehaviour:
     - {r: 0.87058824, g: 0.6039216, b: 0.2509804, a: 1}
     <Background>k__BackingField: {r: 0.8396226, g: 0.64618754, b: 0.122774996, a: 1}
     <TextColour>k__BackingField: {r: 0.93333334, g: 0.7176471, b: 0.2509804, a: 1}
+    <ZiplineGradient>k__BackingField:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 0.9716981, g: 0.8498989, b: 0.5271004, a: 1}
+      key2: {r: 0.8396226, g: 0.5820829, b: 0.14653791, a: 0}
+      key3: {r: 1, g: 1, b: 1, a: 0}
+      key4: {r: 1, g: 1, b: 1, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 16384
+      ctime2: 49151
+      ctime3: 65535
+      ctime4: 65535
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: 0
+      m_NumColorKeys: 4
+      m_NumAlphaKeys: 2

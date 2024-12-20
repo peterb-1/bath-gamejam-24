@@ -30,6 +30,9 @@ namespace Gameplay.Colour
         
         [field: SerializeField]
         public Color TextColour { get; private set; }
+        
+        [field: SerializeField]
+        public Gradient ZiplineGradient { get; private set; }
 
         public Color GetRandomColour()
         {
