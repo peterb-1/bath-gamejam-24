@@ -377,6 +377,27 @@ namespace Gameplay.Player
 
             return true;
         }
+
+        public void PerformSpringJump(float angle, float minBounce, float verticalDamping)
+        {
+            if (IsHooked) return;
+            
+            angle = Mathf.Deg2Rad * angle;
+            
+            var parallelComponent = (Velocity.x * Mathf.Cos(angle)) + (Velocity.y * Mathf.Sin(angle));
+            var perpendicularComponent = (-Velocity.x * Mathf.Sin(angle)) + (Velocity.y * Mathf.Cos(angle));
+            
+            perpendicularComponent = Mathf.Max(
+                Mathf.Max(-perpendicularComponent, minBounce),
+                perpendicularComponent + minBounce);
+            rigidBody.linearVelocity =
+                Vector2.right * (parallelComponent * Mathf.Cos(angle) - perpendicularComponent * Mathf.Sin(angle)) +
+                Vector2.up * Mathf.Max(
+                    verticalDamping * (parallelComponent * Mathf.Sin(angle) + perpendicularComponent * Mathf.Cos(angle)),
+                    minBounce);
+
+            hasDoubleJumped = false;
+        }
         
         private void HandleSceneLoadStart()
         {

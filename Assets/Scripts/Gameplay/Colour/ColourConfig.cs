@@ -23,6 +23,9 @@ namespace Gameplay.Colour
         public Color DroneColour { get; private set; }
         
         [field: SerializeField]
+        public Color SpringColour { get; private set; }
+        
+        [field: SerializeField]
         public Color[] DistrictPlatformColours { get; private set; }
         
         [field: SerializeField]
