@@ -32,6 +32,8 @@ namespace Utils
                 GameLogger.LogError("Bezier curve must have at least two control points!");
                 return default;
             }
+
+            t = Mathf.Clamp(t, 0f, 1f);
             
             var points = new List<Vector3>();
             foreach (var point in controlPoints)
@@ -105,6 +107,8 @@ namespace Utils
                 GameLogger.LogError("Bezier curve must have at least two control points!");
                 return default;
             }
+            
+            t = Mathf.Clamp(t, 0f, 1f);
 
             var points = new List<Vector3>();
             foreach (var point in controlPoints)

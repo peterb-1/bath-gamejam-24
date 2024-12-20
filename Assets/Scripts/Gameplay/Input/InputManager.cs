@@ -25,6 +25,9 @@ namespace Gameplay.Input
         private InputActionReference jumpAction;
 
         [SerializeField] 
+        private InputActionReference dropAction;
+
+        [SerializeField] 
         private InputActionReference pauseAction;
         
         [SerializeField] 
@@ -39,17 +42,26 @@ namespace Gameplay.Input
         [SerializeField] 
         private InputActionReference yellowAction;
         
+        [SerializeField] 
+        private float gamepadDropThreshold;
+
+        [SerializeField] 
+        private float movementThreshold;
+        
         private PlayerDeathBehaviour playerDeathBehaviour;
         private PlayerVictoryBehaviour playerVictoryBehaviour;
+
+        private static bool isPrimedForGamepadDrop;
         
         public static ControlScheme CurrentControlScheme { get; private set; }
         public static bool AreInputsEnabled { get; private set; }
         public static float MoveAmount { get; private set; }
         public static event Action<ColourId> OnColourChanged;
         public static event Action OnJumpPerformed;
-        public static event Action<ControlScheme> OnControlSchemeChanged;
+        public static event Action OnDropPerformed;
         public static event Action OnPauseToggled;
         public static event Action OnRestartPerformed;
+        public static event Action<ControlScheme> OnControlSchemeChanged;
         
         public static InputManager Instance { get; private set; }
         
@@ -139,7 +151,15 @@ namespace Gameplay.Input
         
         private void Update()
         {
-            MoveAmount = moveAction.action.ReadValue<Vector2>().x;
+            var moveVector = moveAction.action.ReadValue<Vector2>();
+            var horizontalAmount = moveVector.x;
+            var verticalAmount = moveVector.y;
+
+            MoveAmount = Mathf.Abs(horizontalAmount) > movementThreshold
+                ? Mathf.Sign(horizontalAmount)
+                : 0f;
+
+            isPrimedForGamepadDrop = verticalAmount < gamepadDropThreshold && CurrentControlScheme is ControlScheme.Gamepad;
             
             if (CurrentControlScheme is not ControlScheme.Mouse && IsMouseActive())
             {
@@ -179,6 +199,7 @@ namespace Gameplay.Input
             
             moveAction.action.Enable();
             jumpAction.action.Enable();
+            dropAction.action.Enable();
             pauseAction.action.Enable();
             restartAction.action.Enable();
             blueAction.action.Enable();
@@ -192,6 +213,7 @@ namespace Gameplay.Input
             
             moveAction.action.Disable();
             jumpAction.action.Disable();
+            dropAction.action.Disable();
             pauseAction.action.Disable();
             restartAction.action.Disable();
             blueAction.action.Disable();
@@ -202,6 +224,7 @@ namespace Gameplay.Input
         private void SubscribeToInputCallbacks()
         {
             jumpAction.action.performed += HandleJumpPerformed;
+            dropAction.action.performed += HandleDropPerformed;
             pauseAction.action.performed += HandlePausePerformed;
             restartAction.action.performed += HandleRestartPerformed;
             blueAction.action.performed += HandleBluePerformed;
@@ -212,6 +235,7 @@ namespace Gameplay.Input
         private void UnsubscribeFromInputCallbacks()
         {
             jumpAction.action.performed -= HandleJumpPerformed;
+            dropAction.action.performed -= HandleDropPerformed;
             pauseAction.action.performed -= HandlePausePerformed;
             restartAction.action.performed -= HandleRestartPerformed;
             blueAction.action.performed -= HandleBluePerformed;
@@ -222,7 +246,19 @@ namespace Gameplay.Input
         private static void HandleJumpPerformed(InputAction.CallbackContext _)
         {
             if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
+            
+            if (isPrimedForGamepadDrop)
+            {
+                OnDropPerformed?.Invoke();
+            }
+
             OnJumpPerformed?.Invoke();
+        }
+        
+        private void HandleDropPerformed(InputAction.CallbackContext _)
+        {
+            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
+            OnDropPerformed?.Invoke();
         }
 
         private static void HandlePausePerformed(InputAction.CallbackContext _)

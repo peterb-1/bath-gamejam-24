@@ -97,19 +97,5 @@ namespace Gameplay.Drone
                 ColourManager.OnColourChangeInstant -= HandleColourChangeInstant;
             }
         }
-
-
-        /*
-    #if UNITY_EDITOR
-    [Button("Colour Drone")]
-    private void ColourDrone()
-    {
-        if(isColoured)
-        {
-            // write code
-        }
-    }
-    #endif
-    */
     }
 }
