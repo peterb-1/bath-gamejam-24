@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
+using Gameplay.Spring;
 using UnityEngine;
 
 namespace Gameplay.Core
@@ -29,6 +30,7 @@ namespace Gameplay.Core
             UnpausedRealtimeSinceStartup = 0f;
             
             ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
+            SpringPhysicsBehaviour.OnBounce += HandleSpringHit;
         }
         
         private void Update()
@@ -40,6 +42,11 @@ namespace Gameplay.Core
         }
 
         private void HandleColourChangeStarted(ColourId _, float duration)
+        {
+            RunSlowdownAsync(duration).Forget();
+        }
+
+        public void HandleSpringHit(float duration)
         {
             RunSlowdownAsync(duration).Forget();
         }

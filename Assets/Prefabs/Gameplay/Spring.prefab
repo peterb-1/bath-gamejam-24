@@ -151,6 +151,9 @@ MonoBehaviour:
   bounceCooldown: 0.5
   minBounce: 10
   verticalDamping: 0.7
+  timeSlowDuration: 0.4
+  springCushionDuration: 0.15
+  springCushionStrength: 0.6
 --- !u!114 &2712339727560057292
 MonoBehaviour:
   m_ObjectHideFlags: 0

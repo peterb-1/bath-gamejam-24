@@ -58,7 +58,7 @@ namespace Gameplay.Player
 
         [SerializeField] 
         private Vector3 hookOffset;
-
+        
         [SerializeField]
         private float groundCheckDistance;
         
@@ -378,10 +378,15 @@ namespace Gameplay.Player
             return true;
         }
 
+        public void PerformSpringSlowdown(float damping)
+        {
+            if (isHooked) return;
+            rigidBody.linearVelocity = Velocity * damping;
+        }
+        
         public void PerformSpringJump(float angle, float minBounce, float verticalDamping)
         {
-            if (IsHooked) return;
-            
+            if (isHooked) return;
             angle = Mathf.Deg2Rad * angle;
             
             var parallelComponent = (Velocity.x * Mathf.Cos(angle)) + (Velocity.y * Mathf.Sin(angle));
