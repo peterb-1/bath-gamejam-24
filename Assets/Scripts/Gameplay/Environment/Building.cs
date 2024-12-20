@@ -19,6 +19,9 @@ namespace Gameplay.Environment
     public class Building : MonoBehaviour
     {
         private const float DELAY = 0.03f;
+
+        [SerializeField] 
+        private bool isGameplay = true;
         
         [SerializeField] 
         private ColourId colourId;
@@ -47,10 +50,10 @@ namespace Gameplay.Environment
         [SerializeField, Range(0f, 1f)] 
         private float largeTileChance;
 
-        [SerializeField] 
+        [SerializeField, ShowIf(nameof(isGameplay))] 
         private float deathColliderBoundary;
 
-        [SerializeField] 
+        [SerializeField, ShowIf(nameof(isGameplay))] 
         private int mainColliderDelayFrames;
         
         [SerializeField] 
@@ -59,10 +62,10 @@ namespace Gameplay.Environment
         [SerializeField] 
         private int sortingOrder;
 
-        [SerializeField] 
+        [SerializeField, ShowIf(nameof(isGameplay))] 
         private BoxCollider2D mainCollider;
         
-        [SerializeField] 
+        [SerializeField, ShowIf(nameof(isGameplay))] 
         private BoxCollider2D deathCollider;
         
         [SerializeField] 
@@ -92,12 +95,15 @@ namespace Gameplay.Environment
 
             flashChance = flashChancePerTile * tiles.Count;
 
-            await UniTask.WaitUntil(PlayerAccessService.IsReady);
+            if (isGameplay)
+            {
+                await UniTask.WaitUntil(PlayerAccessService.IsReady);
 
-            playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
+                playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
             
-            playerMovementBehaviour.OnPlayerHooked += HandlePlayerHooked;
-            playerMovementBehaviour.OnPlayerUnhooked += HandlePlayerUnhooked;
+                playerMovementBehaviour.OnPlayerHooked += HandlePlayerHooked;
+                playerMovementBehaviour.OnPlayerUnhooked += HandlePlayerUnhooked;
+            }
         }
         
         private void InitialiseHologramSettings()
@@ -148,8 +154,11 @@ namespace Gameplay.Environment
 
         private async UniTask ToggleBuildingAsync(float duration)
         {
-            ToggleCollidersAsync().Forget();
-            
+            if (isGameplay)
+            {
+                ToggleCollidersAsync().Forget();
+            }
+
             var shuffledTiles = new List<Tile>();
 
             while (tiles.Count > 0)
@@ -209,9 +218,12 @@ namespace Gameplay.Environment
         {
             ColourManager.OnColourChangeStarted -= HandleColourChangeStarted;
             ColourManager.OnColourChangeInstant -= HandleColourChangeInstant;
-            
-            playerMovementBehaviour.OnPlayerHooked -= HandlePlayerHooked;
-            playerMovementBehaviour.OnPlayerUnhooked -= HandlePlayerUnhooked;
+
+            if (isGameplay)
+            {
+                playerMovementBehaviour.OnPlayerHooked -= HandlePlayerHooked;
+                playerMovementBehaviour.OnPlayerUnhooked -= HandlePlayerUnhooked;
+            }
         }
 
 #if UNITY_EDITOR

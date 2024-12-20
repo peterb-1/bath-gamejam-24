@@ -68,7 +68,7 @@ namespace Gameplay.Zipline
         {
             isActive = active;
 
-            if (!isActive)
+            if (!isActive && hook.connectedBody != null && playerMovementBehaviour != null)
             {
                 playerMovementBehaviour.TryUnhookPlayer();
             }
