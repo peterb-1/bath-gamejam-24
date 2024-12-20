@@ -1,4 +1,5 @@
-﻿using Gameplay.Input;
+﻿using Core;
+using Gameplay.Input;
 using UI;
 using UnityEngine;
 using Utils;
@@ -69,6 +70,8 @@ namespace Gameplay.Core
         // toggle pause for losing focus without bringing up the menu
         private void TogglePauseInvisible()
         {
+            if (SceneLoader.Instance != null && SceneLoader.Instance.IsLoading) return;
+            
             IsPaused = !IsPaused;
             
             if (IsPaused)
@@ -86,6 +89,8 @@ namespace Gameplay.Core
         // full pause toggle for standard purposes
         private void TogglePause()
         {
+            if (SceneLoader.Instance != null && SceneLoader.Instance.IsLoading) return;
+            
             IsPaused = !IsPaused;
 
             if (IsPaused)

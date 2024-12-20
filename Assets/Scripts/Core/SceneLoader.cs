@@ -29,7 +29,7 @@ namespace Core
         public SceneConfig CurrentSceneConfig { get; private set; }
         public SceneConfig PreviousSceneConfig { get; private set; }
 
-        private bool isLoading;
+        public bool IsLoading { get; private set; }
         
         public static event Action OnSceneLoadStart;
         public static event Action OnSceneLoaded;
@@ -74,7 +74,7 @@ namespace Core
 
         public void LoadScene(SceneConfig sceneConfig)
         {
-            if (isLoading) return;
+            if (IsLoading) return;
 
             LoadSceneAsync(sceneConfig).Forget();
         }
@@ -83,7 +83,7 @@ namespace Core
         {
             GameLogger.Log($"Loading scene {sceneConfig.name}...", this);
             
-            isLoading = true;
+            IsLoading = true;
             
             OnSceneLoadStart?.Invoke();
 
@@ -100,7 +100,7 @@ namespace Core
             
             await loadingScreen.HideAsync();
             
-            isLoading = false;
+            IsLoading = false;
         }
         
         private void OnDestroy()
