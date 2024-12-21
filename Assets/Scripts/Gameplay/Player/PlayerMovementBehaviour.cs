@@ -2,6 +2,7 @@ using System;
 using Audio;
 using Core;
 using Cysharp.Threading.Tasks;
+using Gameplay.Core;
 using Gameplay.Input;
 using UnityEngine;
 using Utils;
@@ -55,6 +56,9 @@ namespace Gameplay.Player
 
         [SerializeField] 
         private float moveToHookDuration;
+        
+        [SerializeField] 
+        private float springJumpDuration;
 
         [SerializeField] 
         private Vector3 hookOffset;
@@ -128,6 +132,7 @@ namespace Gameplay.Player
         private bool hasDoubleJumped;
         private bool isHooked;
         private bool hasDroppedThisFrame;
+        private bool isSpringJumping;
 
         private HingeJoint2D hook;
         
@@ -253,7 +258,7 @@ namespace Gameplay.Player
                 spriteRendererTransform.localScale = spriteScale;
             }
 
-            if (jumpBufferCountdown > 0f)
+            if (jumpBufferCountdown > 0f && !isSpringJumping)
             {
                 TryJump();
             }
@@ -319,6 +324,60 @@ namespace Gameplay.Player
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, headJumpForce);
         }
+        
+        public void PerformSpringJump(float radians, Vector2 minBounce, float verticalDamping)
+        {
+            if (isHooked) return;
+            
+            var parallelComponent = Velocity.x * Mathf.Cos(radians) + Velocity.y * Mathf.Sin(radians);
+            var perpendicularComponent = -Velocity.x * Mathf.Sin(radians) + Velocity.y * Mathf.Cos(radians);
+            
+            var horizontalComponent = parallelComponent * Mathf.Cos(radians) - perpendicularComponent * Mathf.Sin(radians);
+            var verticalComponent = verticalDamping * (parallelComponent * Mathf.Sin(radians) - perpendicularComponent * Mathf.Cos(radians));
+
+            if (Mathf.Abs(minBounce.x) > 1e-3f)
+            {
+                horizontalComponent = minBounce.x > 0
+                    ? Mathf.Max(horizontalComponent, minBounce.x)
+                    : Mathf.Min(-horizontalComponent, minBounce.x);
+            }
+
+            if (Mathf.Abs(minBounce.y) > 1e-3f)
+            {
+                verticalComponent = minBounce.y > 0
+                    ? Mathf.Max(verticalComponent, minBounce.y)
+                    : Mathf.Min(-verticalComponent, minBounce.y);
+            }
+            
+            var targetVelocity = Vector2.right * horizontalComponent + Vector2.up * verticalComponent;
+            
+            PerformSpringJumpAsync(targetVelocity).Forget();
+        }
+
+        private async UniTask PerformSpringJumpAsync(Vector2 targetVelocity)
+        {
+            isSpringJumping = true;
+            
+            var initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
+            var startVelocity = rigidBody.linearVelocity;
+            var timeElapsed = 0f;
+
+            // run independent of timescale, since this happens during the slowdown
+            while (timeElapsed < springJumpDuration)
+            {
+                var lerp = timeElapsed / springJumpDuration;
+
+                rigidBody.linearVelocity = Vector2.Lerp(startVelocity, targetVelocity, lerp);
+                
+                await UniTask.Yield();
+                
+                timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
+            }
+            
+            rigidBody.linearVelocity = targetVelocity;
+            hasDoubleJumped = false;
+            isSpringJumping = false;
+        }
 
         public bool TryHookPlayer(HingeJoint2D newHook)
         {
@@ -376,32 +435,6 @@ namespace Gameplay.Player
             playerAnimator.SetBool(IsHookedHash, false);
 
             return true;
-        }
-
-        public void PerformSpringSlowdown(float damping)
-        {
-            if (isHooked) return;
-            rigidBody.linearVelocity = Velocity * damping;
-        }
-        
-        public void PerformSpringJump(float angle, float minBounce, float verticalDamping)
-        {
-            if (isHooked) return;
-            angle = Mathf.Deg2Rad * angle;
-            
-            var parallelComponent = (Velocity.x * Mathf.Cos(angle)) + (Velocity.y * Mathf.Sin(angle));
-            var perpendicularComponent = (-Velocity.x * Mathf.Sin(angle)) + (Velocity.y * Mathf.Cos(angle));
-            
-            perpendicularComponent = Mathf.Max(
-                Mathf.Max(-perpendicularComponent, minBounce),
-                perpendicularComponent + minBounce);
-            rigidBody.linearVelocity =
-                Vector2.right * (parallelComponent * Mathf.Cos(angle) - perpendicularComponent * Mathf.Sin(angle)) +
-                Vector2.up * Mathf.Max(
-                    verticalDamping * (parallelComponent * Mathf.Sin(angle) + perpendicularComponent * Mathf.Cos(angle)),
-                    minBounce);
-
-            hasDoubleJumped = false;
         }
         
         private void HandleSceneLoadStart()

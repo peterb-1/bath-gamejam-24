@@ -148,12 +148,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e85fd3eff2c7409429530c5771a3a7ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  minBounce: {x: 20, y: 10}
   bounceCooldown: 0.5
-  minBounce: 10
   verticalDamping: 0.7
-  timeSlowDuration: 0.4
-  springCushionDuration: 0.15
-  springCushionStrength: 0.6
+  timeSlowDuration: 0.25
 --- !u!114 &2712339727560057292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,8 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6e3d01743a54c4d98ad196c68c3299, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isColoured: 1
-  colourId: 1
+  isColoured: 0
+  colourId: 0
   fadeCurve:
     serializedVersion: 2
     m_Curve:

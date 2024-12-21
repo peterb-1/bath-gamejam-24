@@ -7,31 +7,31 @@ namespace Gameplay.Spring
 {
     public class SpringPhysicsBehaviour : MonoBehaviour
     {
+        [SerializeField] 
+        private LayerMask playerLayers;
+
+        [SerializeField]
+        private Vector2 minBounce;
+        
         [SerializeField]
         private float bounceCooldown;
 
-        [SerializeField]
-        private float minBounce;
-        
         [SerializeField]
         private float verticalDamping;
         
         [SerializeField]
         private float timeSlowDuration;
         
-        [SerializeField] 
-        private float springCushionDuration;
-        
-        [SerializeField] 
-        private float springCushionStrength;
-        
         private PlayerMovementBehaviour playerMovementBehaviour;
-        public static event Action<float> OnBounce;
 
+        private Vector2 minDirectionalBounce;
         private float bounceCooldownTimer;
+        private float angleRadians;
         private float angle;
         private float springCushionCountdown;
         private bool canSpringJump;
+        
+        public static event Action<float> OnBounce;
         
         private async void Awake()
         {
@@ -40,41 +40,26 @@ namespace Gameplay.Spring
             playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
             
             // angle of 0 represents straight upwards
-            angle = transform.eulerAngles.z;
+            angleRadians = Mathf.Deg2Rad * transform.eulerAngles.z;
+            minDirectionalBounce = new Vector2(-Mathf.Sin(angleRadians), Mathf.Cos(angleRadians)) * minBounce;
         }
 
-        void Update()
+        private void Update()
         {
             if (bounceCooldownTimer > 0) bounceCooldownTimer -= Time.deltaTime;
-            if (springCushionCountdown > 0)
-            {
-                springCushionCountdown -= Time.deltaTime;
-                playerMovementBehaviour.PerformSpringSlowdown(springCushionStrength);
-            }
-
-            if (springCushionCountdown <= 0)
-            {
-                if (canSpringJump) InitiateSpringJump();
-                canSpringJump = false;
-            }
         }
 
-        void OnTriggerEnter2D(Collider2D other)
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            if (bounceCooldownTimer > 0) return;
-            springCushionCountdown = springCushionDuration;
-            canSpringJump = true;
-        }
-
-        private void InitiateSpringJump()
-        {
-            if (bounceCooldownTimer <= 0)
+            if ((playerLayers.value & (1 << other.gameObject.layer)) != 0)
             {
-                playerMovementBehaviour.PerformSpringJump(angle, minBounce, verticalDamping);
+                if (!(bounceCooldownTimer <= 0)) return;
+                
+                playerMovementBehaviour.PerformSpringJump(angle, minDirectionalBounce, verticalDamping);
                 bounceCooldownTimer = bounceCooldown;
+                
                 OnBounce?.Invoke(timeSlowDuration);
             }
         }
     }
-
 }
