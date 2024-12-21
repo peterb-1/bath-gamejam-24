@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b3fa3f906a42264b8feca96116df992, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isGameplay: 1
   colourId: 0
   tileDimensions: {x: 4, y: 8}
   randomSizeRange: {x: 0.04, y: 0.04}
@@ -108,6 +109,7 @@ MonoBehaviour:
   sortingOrder: 0
   mainCollider: {fileID: 3006960036633237438}
   deathCollider: {fileID: 3424654316196088503}
+  minDeathColliderSize: {x: 0.05, y: 0.05}
   backgroundSpriteRenderer: {fileID: 3458241876330023620}
   colourDatabase: {fileID: 11400000, guid: 9ee9ba719534f7b428301db4856b7bda, type: 2}
   tiles: []

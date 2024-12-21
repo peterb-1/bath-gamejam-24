@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Gameplay.Player;
 using UnityEngine;
+using Utils;
 using Random = UnityEngine.Random;
 
 namespace Gameplay.Camera
@@ -10,9 +11,21 @@ namespace Gameplay.Camera
     {
         [SerializeField] 
         private Vector3 followOffset;
+
+        [SerializeField] 
+        private Vector2 minLookaheadVelocity;
+        
+        [SerializeField] 
+        private Vector2 maxLookaheadVelocity;
+        
+        [SerializeField] 
+        private Vector2 lookaheadStrength;
         
         [SerializeField]
         private float smoothTime;
+        
+        [SerializeField]
+        private float lookaheadSmoothTime;
 
         [SerializeField] 
         private float velocityShakeThreshold;
@@ -23,19 +36,25 @@ namespace Gameplay.Camera
         [SerializeField] 
         private float maxShakeStrength;
 
+        private PlayerMovementBehaviour playerMovementBehaviour;
         private PlayerDeathBehaviour playerDeathBehaviour;
         private Transform target;
         private Vector3 deathPosition;
         private Vector3 velocity;
+        private Vector2 currentLookahead;
+        private Vector2 lookaheadVelocity;
         private bool useDeathPosition;
 
         private async void Awake()
         {
             await UniTask.WaitUntil(PlayerAccessService.IsReady);
             
+            playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
             playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
             target = PlayerAccessService.Instance.PlayerTransform;
+            
             velocity = Vector3.zero;
+            lookaheadVelocity = Vector2.zero;
             useDeathPosition = false;
 
             playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
@@ -66,8 +85,23 @@ namespace Gameplay.Camera
 
         private Vector3 GetTargetPosition()
         {
-            var currentPosition = useDeathPosition ? deathPosition : target.position;
-            return new Vector3(currentPosition.x + followOffset.x, currentPosition.y + followOffset.y, followOffset.z);
+            if (useDeathPosition) return deathPosition;
+            
+            var playerVelocity = playerMovementBehaviour.Velocity;
+            
+            var signVector = new Vector2(Mathf.Sign(playerVelocity.x), Mathf.Sign(playerVelocity.y));
+            var absoluteVelocity = new Vector2(Mathf.Abs(playerVelocity.x), Mathf.Abs(playerVelocity.y));
+            var normalisedLookahead = new Vector2(
+                Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(minLookaheadVelocity.x, maxLookaheadVelocity.x, absoluteVelocity.x)),
+                Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(minLookaheadVelocity.y, maxLookaheadVelocity.y, absoluteVelocity.y)));
+
+            var targetLookahead = normalisedLookahead * signVector * lookaheadStrength;
+            var smoothedLookahead = Vector2.SmoothDamp(currentLookahead, targetLookahead, ref lookaheadVelocity, lookaheadSmoothTime);
+            var targetPosition = target.position.xy() + smoothedLookahead;
+
+            currentLookahead = smoothedLookahead;
+            
+            return (Vector3) targetPosition + followOffset;
         }
 
         private void OnDestroy()

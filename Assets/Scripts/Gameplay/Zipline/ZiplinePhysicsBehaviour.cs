@@ -14,6 +14,12 @@ namespace Gameplay.Zipline
 
         [SerializeField] 
         private HingeJoint2D hook;
+
+        [SerializeField] 
+        private Transform endpointA;
+        
+        [SerializeField] 
+        private Transform endpointB;
         
         [SerializeField] 
         private BezierCurve bezierCurve;
@@ -29,6 +35,9 @@ namespace Gameplay.Zipline
 
         [SerializeField] 
         private float endThreshold;
+
+        [SerializeField] 
+        private float forwardsThreshold;
 
         [SerializeField] 
         private float swingSensitivity;
@@ -95,7 +104,7 @@ namespace Gameplay.Zipline
                 
             hook.transform.position = closestPoint;
                 
-            var preHookVelocity = playerMovementBehaviour.Velocity;
+            var preHookVelocity = playerMovementBehaviour.Velocity.normalized;
 
             if (!playerMovementBehaviour.TryHookPlayer(hook)) return;
             
@@ -110,7 +119,7 @@ namespace Gameplay.Zipline
             else
             {
                 var tangent = bezierCurve.GetTangent(curveProgress).xy();
-                isMovingForwards = tangent.x * preHookVelocity.x >= 0f;
+                isMovingForwards = tangent.x * preHookVelocity.x >= forwardsThreshold;
             }
             
             stabilisationFramesRemaining = stabilisationFrames;
@@ -192,6 +201,9 @@ namespace Gameplay.Zipline
         {
             lineRenderer.positionCount = curveSegmentCount + 1;
             lineRenderer.SetPositions(bezierCurve.GenerateCurvePoints(curveSegmentCount).ToArray());
+
+            endpointA.position = bezierCurve.GetPoint(0f);
+            endpointB.position = bezierCurve.GetPoint(1f);
         }
 
         [Button("Add Control Point")]

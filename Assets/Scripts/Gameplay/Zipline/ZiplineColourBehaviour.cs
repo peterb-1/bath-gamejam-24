@@ -22,6 +22,9 @@ namespace Gameplay.Zipline
         private LineRenderer lineRenderer;
         
         [SerializeField] 
+        private SpriteRenderer[] endpointRenderers;
+
+        [SerializeField] 
         private ColourDatabase colourDatabase;
         
         [SerializeField] 
@@ -48,6 +51,11 @@ namespace Gameplay.Zipline
                 if (colourDatabase.TryGetColourConfig(colourId, out var colourConfig))
                 {
                     lineRenderer.colorGradient = colourConfig.ZiplineGradient;
+
+                    foreach (var spriteRenderer in endpointRenderers)
+                    {
+                        spriteRenderer.color = colourConfig.TextColour;
+                    }
                 }
             }
             else

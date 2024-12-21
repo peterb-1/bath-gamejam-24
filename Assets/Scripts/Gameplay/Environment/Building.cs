@@ -68,6 +68,9 @@ namespace Gameplay.Environment
         [SerializeField, ShowIf(nameof(isGameplay))] 
         private BoxCollider2D deathCollider;
         
+        [SerializeField, ShowIf(nameof(isGameplay))] 
+        private Vector2 minDeathColliderSize;
+        
         [SerializeField] 
         private SpriteRenderer backgroundSpriteRenderer;
 
@@ -298,6 +301,9 @@ namespace Gameplay.Environment
 
             deathCollider.offset = mainCollider.offset;
             deathCollider.size = buildingSize - 2f * deathColliderBoundary * Vector2.one;
+
+            if (deathCollider.size.x <= minDeathColliderSize.x) deathCollider.size = new Vector2(minDeathColliderSize.x, deathCollider.size.y);
+            if (deathCollider.size.y <= minDeathColliderSize.y) deathCollider.size = new Vector2(deathCollider.size.x, minDeathColliderSize.y);
 
             backgroundSpriteRenderer.size = buildingSize;
             backgroundSpriteRenderer.transform.position = mainCollider.bounds.center.xy() + backgroundOffset;

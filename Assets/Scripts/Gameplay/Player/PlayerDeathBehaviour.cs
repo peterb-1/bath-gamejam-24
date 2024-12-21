@@ -43,7 +43,7 @@ namespace Gameplay.Player
 
         public void KillPlayer()
         {
-            if (!IsAlive) return;
+            if (!IsAlive || SceneLoader.Instance.IsLoading) return;
             
             IsAlive = false;
             
