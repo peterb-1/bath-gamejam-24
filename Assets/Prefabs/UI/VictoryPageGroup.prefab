@@ -2495,15 +2495,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_fontColor.b
-      value: 0.30286258
+      value: 0.3137255
       objectReference: {fileID: 0}
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_fontColor.g
-      value: 0.2991723
+      value: 0.3137255
       objectReference: {fileID: 0}
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_fontColor.r
-      value: 0.764151
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_fontSizeBase
@@ -2511,7 +2511,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4283256003
+      value: 4283453644
       objectReference: {fileID: 0}
     - target: {fileID: 2689640665904474361, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_Name
@@ -3135,6 +3135,8 @@ MonoBehaviour:
   secondStar: {fileID: 6622961734179762879}
   thirdStar: {fileID: 8238135685997259131}
   starAnimationDelay: 0.4
+  rainbowAnimationDelay: 0.56
+  newRecordDelay: 0.2
   overrideNextSceneConfig: 0
   nextSceneConfig: {fileID: 0}
 --- !u!224 &7209971690187909071 stripped
@@ -3244,7 +3246,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3984225271042433086, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
       propertyPath: m_Navigation.m_Mode
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3984225271042433086, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
       propertyPath: m_Navigation.m_SelectOnLeft
@@ -3507,7 +3509,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3984225271042433086, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
       propertyPath: m_Navigation.m_Mode
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3984225271042433086, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
       propertyPath: m_Navigation.m_SelectOnRight
@@ -4042,7 +4044,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3984225271042433086, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
       propertyPath: m_Navigation.m_Mode
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3984225271042433086, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
       propertyPath: m_Navigation.m_SelectOnLeft

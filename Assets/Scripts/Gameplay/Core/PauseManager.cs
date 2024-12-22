@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Audio;
+using Core;
 using Gameplay.Input;
 using UI;
 using UnityEngine;
@@ -65,6 +66,11 @@ namespace Gameplay.Core
         private void HandlePauseToggled()
         {
             TogglePause();
+
+            if (IsPaused)
+            {
+                AudioManager.Instance.Play(AudioClipIdentifier.ButtonClick);
+            }
         }
 
         // toggle pause for losing focus without bringing up the menu

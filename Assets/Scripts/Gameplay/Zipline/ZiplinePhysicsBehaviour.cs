@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Core;
+using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Gameplay.Player;
 using NaughtyAttributes;
@@ -85,7 +86,7 @@ namespace Gameplay.Zipline
 
         private void Update()
         {
-            if (!isActive || PauseManager.Instance.IsPaused) return;
+            if (!isActive || PauseManager.Instance.IsPaused || SceneLoader.Instance.IsLoading) return;
             
             if (hook.connectedBody == null)
             {

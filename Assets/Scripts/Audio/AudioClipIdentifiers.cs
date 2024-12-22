@@ -3,13 +3,23 @@ namespace Audio
     public enum AudioClipIdentifier
     {
         ButtonClick,
+        ButtonDenied,
+        ButtonHover,
         ColourSwitch,
         Death,
         DroneDeath,
-        DoubleJump,
         Jump,
         Victory,
-        WallJump,
+        Dash, // needs clip
+        DashCollected, // needs clip
+        Land,
+        NewRecord,
+        RainbowResult,
+        RankingStar,
+        SpringJump, // needs clip
+        Toggle,
+        ZiplineAttach,
+        ZiplineDetach,
         MusicAstronautica,
         MusicNightShift,
         MusicRaveProtocol

@@ -52,6 +52,10 @@ namespace UI
             {
                 AudioManager.Instance.Play(AudioClipIdentifier.ButtonClick);
             }
+            else
+            {
+                AudioManager.Instance.Play(AudioClipIdentifier.ButtonDenied);
+            }
             
             base.OnPointerClick(eventData);
         }
@@ -60,6 +64,7 @@ namespace UI
         {
             if (interactable)
             {
+                AudioManager.Instance.Play(AudioClipIdentifier.ButtonHover);
                 OnHover?.Invoke(this);
             }
             
@@ -77,6 +82,7 @@ namespace UI
         {
             if (interactable)
             {
+                AudioManager.Instance.Play(AudioClipIdentifier.ButtonHover);
                 OnHover?.Invoke(this);
             }
             

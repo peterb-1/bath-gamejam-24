@@ -201,7 +201,7 @@ namespace Gameplay.Player
 
             if (isGrounded && !wasGrounded)
             {
-                // play landing SFX
+                AudioManager.Instance.Play(AudioClipIdentifier.Land);
             }
 
             if (isHooked)
@@ -351,10 +351,12 @@ namespace Gameplay.Player
             
             var targetVelocity = Vector2.right * horizontalComponent + Vector2.up * verticalComponent;
             
-            PerformSpringJumpAsync(targetVelocity).Forget();
+            AudioManager.Instance.Play(AudioClipIdentifier.SpringJump);
+            
+            SmoothSpringJumpAsync(targetVelocity).Forget();
         }
 
-        private async UniTask PerformSpringJumpAsync(Vector2 targetVelocity)
+        private async UniTask SmoothSpringJumpAsync(Vector2 targetVelocity)
         {
             isSpringJumping = true;
             
@@ -385,6 +387,8 @@ namespace Gameplay.Player
             {
                 return false;
             }
+            
+            AudioManager.Instance.Play(AudioClipIdentifier.ZiplineAttach);
             
             hook = newHook;
             isHooked = true;
@@ -419,11 +423,12 @@ namespace Gameplay.Player
             
             OnPlayerUnhooked?.Invoke();
             
+            AudioManager.Instance.Stop(AudioClipIdentifier.ZiplineAttach);
+            AudioManager.Instance.Play(AudioClipIdentifier.ZiplineDetach);
+            
             isHooked = false;
             hookCountdown = hookCooldownDuration;
-            
             hook.transform.Rotate(Vector3.forward, -transform.eulerAngles.z);
-            
             hook.connectedBody = null;
             transform.parent = null;
 

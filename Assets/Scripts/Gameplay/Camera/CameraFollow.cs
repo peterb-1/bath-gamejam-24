@@ -37,33 +37,45 @@ namespace Gameplay.Camera
         private float maxShakeStrength;
 
         private PlayerMovementBehaviour playerMovementBehaviour;
+        private PlayerVictoryBehaviour playerVictoryBehaviour;
         private PlayerDeathBehaviour playerDeathBehaviour;
         private Transform target;
-        private Vector3 deathPosition;
+        
+        private Vector3 positionOverride;
         private Vector3 velocity;
         private Vector2 currentLookahead;
         private Vector2 lookaheadVelocity;
-        private bool useDeathPosition;
+        
+        private bool shouldOverridePosition;
+        private bool shouldUseLookahead;
 
         private async void Awake()
         {
             await UniTask.WaitUntil(PlayerAccessService.IsReady);
             
             playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
+            playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
             playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
             target = PlayerAccessService.Instance.PlayerTransform;
             
             velocity = Vector3.zero;
             lookaheadVelocity = Vector2.zero;
-            useDeathPosition = false;
+            shouldOverridePosition = false;
+            shouldUseLookahead = true;
 
+            playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
             playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
+        }
+
+        private void HandleVictorySequenceStart(Vector2 position, float _)
+        {
+            shouldUseLookahead = false;
         }
 
         private void HandleDeathSequenceStart()
         {
-            deathPosition = transform.position;
-            useDeathPosition = true;
+            positionOverride = transform.position;
+            shouldOverridePosition = true;
         }
 
         private void Update()
@@ -85,7 +97,15 @@ namespace Gameplay.Camera
 
         private Vector3 GetTargetPosition()
         {
-            if (useDeathPosition) return deathPosition;
+            if (shouldOverridePosition)
+            {
+                return positionOverride;
+            }
+
+            if (!shouldUseLookahead)
+            {
+                return target.position + followOffset;
+            }
             
             var playerVelocity = playerMovementBehaviour.Velocity;
             
@@ -106,6 +126,7 @@ namespace Gameplay.Camera
 
         private void OnDestroy()
         {
+            playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
             playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Audio;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
 using NaughtyAttributes;
@@ -57,10 +58,19 @@ namespace Core
 
             PreviousSceneConfig = null;
 
-            InputManager.OnRestartPerformed += ReloadCurrentScene;
+            InputManager.OnRestartPerformed += HandleRestartPerformed;
         }
         
         public static bool IsReady() => Instance != null;
+
+        private void HandleRestartPerformed()
+        {
+            if (IsLoading) return;
+            
+            AudioManager.Instance.Play(AudioClipIdentifier.ButtonClick);
+            
+            ReloadCurrentScene();
+        }
         
         public void ReloadCurrentScene()
         {
@@ -108,7 +118,7 @@ namespace Core
             if (Instance != this) return;
             Instance = null;
             
-            InputManager.OnRestartPerformed -= ReloadCurrentScene;
+            InputManager.OnRestartPerformed -= HandleRestartPerformed;
         }
 
 #if UNITY_EDITOR

@@ -57,8 +57,8 @@ namespace Audio
 
         public static AudioManager Instance { get; private set; }
 
-        private Pool<AudioSource> audioSourcePool;
         private readonly HashSet<(AudioClipData, AudioSource)> playingAudioSources = new();
+        private Pool<AudioSource> audioSourcePool;
         private PlayerDeathBehaviour playerDeathBehaviour;
         private PlayerVictoryBehaviour playerVictoryBehaviour;
 
@@ -89,6 +89,9 @@ namespace Audio
 
         private void HandleSceneLoadStart()
         {
+            // stop any "long" sounds
+            Stop(AudioClipIdentifier.ZiplineAttach);
+            
             DisableFxAsync().Forget();
         }
 

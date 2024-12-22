@@ -1,8 +1,10 @@
 using System;
+using Audio;
 using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
+using Gameplay.Input;
 using Gameplay.Player;
 using NaughtyAttributes;
 using TMPro;
@@ -61,6 +63,12 @@ namespace UI
 
         [SerializeField] 
         private float starAnimationDelay;
+        
+        [SerializeField] 
+        private float rainbowAnimationDelay;
+        
+        [SerializeField] 
+        private float newRecordDelay;
 
         [SerializeField] 
         private bool overrideNextSceneConfig;
@@ -185,32 +193,42 @@ namespace UI
             if (ranking >= TimeRanking.OneStar)
             {
                 firstStar.SetActive(true);
+                AudioManager.Instance.Play(AudioClipIdentifier.RankingStar);
             }
 
             if (ranking >= TimeRanking.TwoStar)
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(starAnimationDelay));
+                
                 secondStar.SetActive(true);
+                AudioManager.Instance.Play(AudioClipIdentifier.RankingStar);
             }
             
             if (ranking >= TimeRanking.ThreeStar)
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(starAnimationDelay));
+                
                 thirdStar.SetActive(true);
+                AudioManager.Instance.Play(AudioClipIdentifier.RankingStar);
             }
 
             if (ranking == TimeRanking.Rainbow)
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(starAnimationDelay));
+                await UniTask.Delay(TimeSpan.FromSeconds(rainbowAnimationDelay));
                 
                 firstStar.SetRainbowState(true);
                 secondStar.SetRainbowState(true);
                 thirdStar.SetRainbowState(true);
+                
+                AudioManager.Instance.Play(AudioClipIdentifier.RainbowResult);
             }
 
             if (isNewBest)
             {
+                await UniTask.Delay(TimeSpan.FromSeconds(newRecordDelay));
+                
                 newBestAnimator.SetTrigger(Show);
+                AudioManager.Instance.Play(AudioClipIdentifier.NewRecord);
             }
         }
 
