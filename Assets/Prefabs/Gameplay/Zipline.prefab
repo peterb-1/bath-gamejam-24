@@ -642,7 +642,7 @@ MonoBehaviour:
   curveSegmentCount: 30
   traversalSpeed: 1
   activationDistanceThreshold: 0.5
-  endThreshold: 0.025
+  endThreshold: 0.7
   forwardsThreshold: -0.1
   swingSensitivity: 0.05
   swingStrength: 0.75

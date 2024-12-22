@@ -4,7 +4,6 @@ using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
-using Gameplay.Input;
 using Gameplay.Player;
 using NaughtyAttributes;
 using TMPro;
@@ -50,6 +49,12 @@ namespace UI
         private TMP_Text rainbowText;
         
         [SerializeField] 
+        private TMP_Text oldBestText;
+        
+        [SerializeField] 
+        private Animator oldBestAnimator;
+        
+        [SerializeField] 
         private Animator newBestAnimator;
 
         [SerializeField] 
@@ -69,6 +74,9 @@ namespace UI
         
         [SerializeField] 
         private float newRecordDelay;
+
+        [SerializeField] 
+        private GameObjectStateSetter rainbowVisibilitySetter;
 
         [SerializeField] 
         private bool overrideNextSceneConfig;
@@ -155,8 +163,10 @@ namespace UI
             {
                 var levelConfig = currentSceneConfig.LevelConfig;
                 var oldTime = levelData.BestTime;
+                var oldFormattedTime = TimerBehaviour.GetFormattedTime(oldTime);
+                var oldRanking = levelConfig.GetTimeRanking(oldTime);
                 var time = timerBehaviour.TimeElapsed;
-                var doFormattedTimesMatch = TimerBehaviour.GetFormattedTime(oldTime) == TimerBehaviour.GetFormattedTime(time);
+                var doFormattedTimesMatch = oldFormattedTime == TimerBehaviour.GetFormattedTime(time);
 
                 oneStarText.text = TimerBehaviour.GetFormattedTime(levelConfig.OneStarTime, round: false);
                 twoStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.TwoStarTime, round: false);
@@ -167,9 +177,20 @@ namespace UI
                 isNewBest = levelData.TrySetTime(time) && !doFormattedTimesMatch;
                 shouldSave |= isNewBest;
 
-                if (!isNewBest)
+                if (isNewBest)
                 {
+                    oldBestAnimator.gameObject.SetActive(false);
+                }
+                else
+                {
+                    oldBestText.text = $"BEST — {oldFormattedTime}";
                     newBestAnimator.gameObject.SetActive(false);
+                }
+                
+                var bestRanking = ranking > oldRanking ? ranking : oldRanking;
+                if (bestRanking < TimeRanking.ThreeStar)
+                {
+                    rainbowVisibilitySetter.SetInverseState();
                 }
             }
 
@@ -227,8 +248,12 @@ namespace UI
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(newRecordDelay));
                 
-                newBestAnimator.SetTrigger(Show);
                 AudioManager.Instance.Play(AudioClipIdentifier.NewRecord);
+                newBestAnimator.SetTrigger(Show);
+            }
+            else
+            {
+                oldBestAnimator.SetTrigger(Show);
             }
         }
 

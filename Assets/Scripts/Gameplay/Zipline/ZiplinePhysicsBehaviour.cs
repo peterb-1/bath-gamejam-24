@@ -102,18 +102,22 @@ namespace Gameplay.Zipline
         {
             var playerDistance = bezierCurve.GetDistanceToCurve(playerTransform.position, out var closestPoint, out curveProgress);
             if (playerDistance > activationDistanceThreshold) return;
-                
+            
             hook.transform.position = closestPoint;
-                
+            
             var preHookVelocity = playerMovementBehaviour.Velocity.normalized;
 
             if (!playerMovementBehaviour.TryHookPlayer(hook)) return;
             
-            if (curveProgress < endThreshold)
+            var distanceToStart = (closestPoint - bezierCurve.GetPoint(0f)).magnitude;
+            var distanceToEnd = (closestPoint - bezierCurve.GetPoint(1f)).magnitude;
+            
+            // this is an approximation assuming the curve is relatively straight near the end
+            if (distanceToStart < endThreshold)
             {
                 isMovingForwards = true;
             }
-            else if (curveProgress > 1f - endThreshold)
+            else if (distanceToEnd < endThreshold)
             {
                 isMovingForwards = false;
             }
