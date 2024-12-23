@@ -42,9 +42,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Red",
+                    "name": "Blue",
                     "type": "Button",
-                    "id": "8be4c52c-1c7a-46b0-be78-041aa4e98396",
+                    "id": "eb961a44-cddd-4fd0-b399-ea7b0090224e",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -60,9 +60,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Blue",
+                    "name": "Red",
                     "type": "Button",
-                    "id": "eb961a44-cddd-4fd0-b399-ea7b0090224e",
+                    "id": "8be4c52c-1c7a-46b0-be78-041aa4e98396",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -308,45 +308,12 @@
                 },
                 {
                     "name": "",
-                    "id": "248a17bc-c5e7-4e85-a9f7-9315d7bf28c9",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Blue",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "effcfefc-7642-4971-95d4-c96714cddb66",
-                    "path": "<Keyboard>/numpad3",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Blue",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "67c4cfe9-950b-4761-8cc0-5b1c949e1954",
-                    "path": "<Keyboard>/c",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Blue",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "462ba6e2-e728-4d64-9a23-3f4b98b0947a",
                     "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Red",
+                    "action": "Blue",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -357,7 +324,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Red",
+                    "action": "Blue",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -365,6 +332,39 @@
                     "name": "",
                     "id": "e0f3eb65-8d73-481e-8730-e2733047daa1",
                     "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Blue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "248a17bc-c5e7-4e85-a9f7-9315d7bf28c9",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Red",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "effcfefc-7642-4971-95d4-c96714cddb66",
+                    "path": "<Keyboard>/numpad3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Red",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "67c4cfe9-950b-4761-8cc0-5b1c949e1954",
+                    "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
