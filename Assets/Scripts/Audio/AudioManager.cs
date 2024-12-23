@@ -52,12 +52,11 @@ namespace Audio
         [SerializeField] 
         private float disableFxDuration;
 
-        [SerializeField] 
-        private AudioClipIdentifier[] musicTracks;
-
         public static AudioManager Instance { get; private set; }
 
-        private readonly HashSet<(AudioClipData, AudioSource)> playingAudioSources = new();
+        // store audio source as well to uniquely identify multiple instances of the same clip
+        private readonly HashSet<(AudioClipData, AudioSource)> playingSfxSources = new();
+        private readonly HashSet<(MusicData, AudioSource)> playingMusicSources = new();
         private Pool<AudioSource> audioSourcePool;
         private PlayerDeathBehaviour playerDeathBehaviour;
         private PlayerVictoryBehaviour playerVictoryBehaviour;
@@ -140,24 +139,26 @@ namespace Audio
 
         private async UniTask PlayMusicAsync()
         {
-            var selectedTrack = musicTracks.RandomChoice();
-            var previousTrack = musicTracks.RandomChoice();
-            
-            while (true)
-            {
-                while (selectedTrack == previousTrack)
-                {
-                    selectedTrack = musicTracks.RandomChoice();
-                }
-                
-                GameLogger.Log($"Playing music track {selectedTrack}...");
-                
-                await PlayAsync(selectedTrack);
-                
-                GameLogger.Log($"Music track {selectedTrack} finished!");
+            PlayMusic(MusicIdentifier.District01);
 
-                previousTrack = selectedTrack;
-            }
+            // var selectedTrack = musicTracks.RandomChoice();
+            // var previousTrack = musicTracks.RandomChoice();
+            //
+            // while (true)
+            // {
+            //     while (selectedTrack == previousTrack)
+            //     {
+            //         selectedTrack = musicTracks.RandomChoice();
+            //     }
+            //     
+            //     GameLogger.Log($"Playing music track {selectedTrack}...");
+            //     
+            //     await PlayAsync(selectedTrack);
+            //     
+            //     GameLogger.Log($"Music track {selectedTrack} finished!");
+            //
+            //     previousTrack = selectedTrack;
+            // }
         }
 
         public void Play(AudioClipIdentifier identifier, Action onFinishedCallback = null)
@@ -172,7 +173,19 @@ namespace Audio
             }
         }
 
-        public async UniTask PlayAsync(AudioClipIdentifier identifier)
+        public void PlayMusic(MusicIdentifier identifier)
+        {
+            if (audioDatabase.TryGetMusicData(identifier, out var musicData))
+            {
+                PlayMusic(musicData);
+            }
+            else
+            {
+                GameLogger.LogError($"Cannot find music data for identifier {identifier}!", this);
+            }
+        }
+
+        private async UniTask PlayAsync(AudioClipIdentifier identifier)
         {
             if (audioDatabase.TryGetClipData(identifier, out var clipData))
             {
@@ -188,7 +201,7 @@ namespace Audio
         {
             var itemsToRemove = new List<(AudioClipData, AudioSource)>();
 
-            foreach (var (clipData, audioSource) in playingAudioSources)
+            foreach (var (clipData, audioSource) in playingSfxSources)
             {
                 if (clipData.Identifier == identifier)
                 {
@@ -201,7 +214,7 @@ namespace Audio
 
             foreach (var item in itemsToRemove)
             {
-                playingAudioSources.Remove(item);
+                playingSfxSources.Remove(item);
             }
         }
 
@@ -216,18 +229,58 @@ namespace Audio
             audioSource.outputAudioMixerGroup = clipData.MixerGroup;
             audioSource.Play();
             
-            playingAudioSources.Add((clipData, audioSource));
+            playingSfxSources.Add((clipData, audioSource));
 
             await UniTask.WaitUntil(() => audioSource.time >= duration - PLAYBACK_END_TOLERANCE);
 
             // check if it's still playing and hasn't been stopped externally
-            if (playingAudioSources.Contains((clipData, audioSource)))
+            if (playingSfxSources.Contains((clipData, audioSource)))
             {
-                playingAudioSources.Remove((clipData, audioSource));
+                playingSfxSources.Remove((clipData, audioSource));
             
                 audioSourcePool.Release(audioSource);
             
                 onFinishedCallback?.Invoke();
+            }
+        }
+        
+        private void PlayMusic(MusicData musicData)
+        {
+            var itemsToRemove = new List<(MusicData, AudioSource)>();
+            
+            foreach (var (data, audioSource) in playingMusicSources)
+            {
+                if (data.Identifier != musicData.Identifier)
+                {
+                    audioSource.Stop();
+                    audioSourcePool.Release(audioSource);
+                    
+                    itemsToRemove.Add((data, audioSource));
+                }
+            }
+
+            // if we have nothing to remove, then we're not changing districts
+            if (playingMusicSources.Count > 0 && itemsToRemove.Count == 0) return;
+            
+            // TODO: SFX for switching music? should probably be punctuated by button click, but might want to lowpass or similar
+            
+            foreach (var item in itemsToRemove)
+            {
+                playingMusicSources.Remove(item);
+            }
+
+            foreach (var clip in musicData.ParallelAudioClips)
+            {
+                var audioSource = audioSourcePool.Get();
+                
+                audioSource.clip = clip;
+                audioSource.volume = musicData.Volume;
+                audioSource.outputAudioMixerGroup = musicData.MixerGroup;
+                audioSource.loop = true;
+                
+                audioSource.Play();
+                
+                playingMusicSources.Add((musicData, audioSource));
             }
         }
         

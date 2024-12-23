@@ -19,9 +19,6 @@ namespace Audio
         SpringJump, // needs clip
         Toggle,
         ZiplineAttach,
-        ZiplineDetach,
-        MusicAstronautica,
-        MusicNightShift,
-        MusicRaveProtocol
+        ZiplineDetach
     }
 }

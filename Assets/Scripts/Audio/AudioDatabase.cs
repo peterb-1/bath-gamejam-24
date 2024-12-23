@@ -9,6 +9,9 @@ namespace Audio
     {
         [SerializeField] 
         private AudioClipData[] audioClips;
+        
+        [SerializeField] 
+        private MusicData[] musicClips;
 
         private readonly Dictionary<AudioClipIdentifier, List<AudioClipData>> audioClipDictionary = new();
 
@@ -34,6 +37,21 @@ namespace Audio
             }
 
             clip = null;
+            return false;
+        }
+        
+        public bool TryGetMusicData(MusicIdentifier identifier, out MusicData musicData)
+        {
+            foreach (var data in musicClips)
+            {
+                if (data.Identifier == identifier)
+                {
+                    musicData = data;
+                    return true;
+                }
+            }
+
+            musicData = null;
             return false;
         }
     }
