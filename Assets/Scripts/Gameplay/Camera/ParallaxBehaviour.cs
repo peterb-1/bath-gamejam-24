@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Utils;
 
@@ -12,16 +13,13 @@ namespace Gameplay.Camera
         private Vector3 cameraStartPosition;
         private Vector3 startPosition;
 
-        private void Awake()
+        private async void Awake()
         {
-            var targetCamera = UnityEngine.Camera.main;
-
-            if (targetCamera != null)
-            {
-                targetCameraTransform = targetCamera.transform;
-            }
-
             startPosition = transform.position;
+            
+            await UniTask.WaitUntil(CameraAccessService.IsReady);
+
+            targetCameraTransform = CameraAccessService.Instance.CameraTransform;
         }
 
         private void Update()
