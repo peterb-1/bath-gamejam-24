@@ -107,6 +107,11 @@ namespace Gameplay.Environment
                 playerMovementBehaviour.OnPlayerHooked += HandlePlayerHooked;
                 playerMovementBehaviour.OnPlayerUnhooked += HandlePlayerUnhooked;
             }
+            else
+            {
+                mainCollider.enabled = false;
+                deathCollider.enabled = false;
+            }
         }
         
         private void InitialiseHologramSettings()
@@ -137,12 +142,12 @@ namespace Gameplay.Environment
         
         private void HandlePlayerHooked()
         {
-            mainCollider.enabled = false;
+            if (isGameplay) mainCollider.enabled = false;
         }
 
         private void HandlePlayerUnhooked()
         {
-            mainCollider.enabled = isActive;
+            if (isGameplay) mainCollider.enabled = isActive;
         }
 
         private void Update()
@@ -150,8 +155,9 @@ namespace Gameplay.Environment
             if (isActive && !PauseManager.Instance.IsPaused && Random.Range(0f, 1f) < flashChance)
             {
                 var tile = tiles.RandomChoice();
+                var flashColour = isGameplay ? Color.white : Color.grey;
             
-                tile.FlashAsync().Forget();
+                tile.FlashAsync(flashColour).Forget();
             }
         }
 
@@ -255,6 +261,7 @@ namespace Gameplay.Environment
             var buildingSize = mainCollider.size;
             var tileSize = buildingSize / tileDimensions;
             var buildingMin = mainCollider.bounds.min.xy() + tileSize / 2f;
+            var sortingLayer = isGameplay ? "Default" : "BackgroundBuildings";
 
             var tilePrefabGuid = AssetDatabase.FindAssets("Tile t:GameObject")[0];
             var tilePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(tilePrefabGuid));
@@ -279,12 +286,13 @@ namespace Gameplay.Environment
 
                     var indexOffset = (tileMultiplier - 1) / 2f;
                     var offset = new Vector2((j + indexOffset) * tileSize.x, (i + indexOffset) * tileSize.y);
+                    var colour = isGameplay ? colourConfig.GetRandomColour() : colourConfig.GetRandomDesaturatedColour();
                     
                     tileGameObject.transform.parent = transform;
                     tile.SetSize(tileSize * tileMultiplier, randomSizeRange);
                     tile.SetPosition(buildingMin + offset);
-                    tile.SetColour(colourConfig.GetRandomColour());
-                    tile.SetOrder(sortingOrder);
+                    tile.SetColour(colour);
+                    tile.SetOrder(sortingLayer, sortingOrder);
                     tile.SetSprite(districtNumber);
 
                     tiles.Add(tile);
@@ -307,8 +315,9 @@ namespace Gameplay.Environment
 
             backgroundSpriteRenderer.size = buildingSize;
             backgroundSpriteRenderer.transform.position = mainCollider.bounds.center.xy() + backgroundOffset;
-            backgroundSpriteRenderer.color = colourConfig.Background;
+            backgroundSpriteRenderer.color = isGameplay ? colourConfig.Background : colourConfig.BackgroundDesaturated;
             backgroundSpriteRenderer.sortingOrder = sortingOrder - 1;
+            backgroundSpriteRenderer.sortingLayerName = sortingLayer;
         }
 
         [Button("Clear Tiles")]
@@ -325,9 +334,11 @@ namespace Gameplay.Environment
         [Button("Update Sort Order")]
         private void UpdateSortOrder()
         {
+            var sortingLayer = isGameplay ? "Default" : "BackgroundBuildings";
+            
             foreach (var tile in tiles)
             {
-                tile.SetOrder(sortingOrder);
+                tile.SetOrder(sortingLayer, sortingOrder);
             }
         }
 #endif

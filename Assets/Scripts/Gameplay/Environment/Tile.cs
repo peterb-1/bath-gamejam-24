@@ -26,7 +26,7 @@ namespace Gameplay.Environment
         
         private bool isFlashing;
 
-        public async UniTask FlashAsync()
+        public async UniTask FlashAsync(Color flashColour)
         {
             if (isFlashing) return;
             
@@ -38,7 +38,7 @@ namespace Gameplay.Environment
             {
                 var lerp = flashCurve.Evaluate(timeElapsed / flashDuration);
 
-                spriteRenderer.color = (1f - lerp) * baseColour + lerp * Color.white;
+                spriteRenderer.color = (1f - lerp) * baseColour + lerp * flashColour;
 
                 await UniTask.DelayFrame(1, cancellationToken: destroyCancellationToken);
                 
@@ -81,8 +81,9 @@ namespace Gameplay.Environment
             spriteRenderer.color = colour;
         }
 
-        public void SetOrder(int order)
+        public void SetOrder(string layer, int order)
         {
+            spriteRenderer.sortingLayerName = layer;
             spriteRenderer.sortingOrder = order;
         }
 

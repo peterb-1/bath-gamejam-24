@@ -16,6 +16,12 @@ namespace Gameplay.Colour
         [SerializeField] 
         private Color max;
         
+        [SerializeField] 
+        private Color minDesaturated;
+        
+        [SerializeField] 
+        private Color maxDesaturated;
+        
         [field: SerializeField]
         public Color PlayerColour { get; private set; }
         
@@ -32,6 +38,9 @@ namespace Gameplay.Colour
         public Color Background { get; private set; }
         
         [field: SerializeField]
+        public Color BackgroundDesaturated { get; private set; }
+        
+        [field: SerializeField]
         public Color TextColour { get; private set; }
         
         [field: SerializeField]
@@ -42,6 +51,13 @@ namespace Gameplay.Colour
             var lerp = Random.Range(0f, 1f);
 
             return (1f - lerp) * min + lerp * max;
+        }
+        
+        public Color GetRandomDesaturatedColour()
+        {
+            var lerp = Random.Range(0f, 1f);
+
+            return (1f - lerp) * minDesaturated + lerp * maxDesaturated;
         }
     }
 }

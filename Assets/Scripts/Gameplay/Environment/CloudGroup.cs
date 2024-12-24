@@ -11,6 +11,12 @@ namespace Gameplay.Environment
     public class CloudGroup : MonoBehaviour
     {
         [SerializeField] 
+        private bool isBackground;
+        
+        [SerializeField, ShowIf(nameof(isBackground))] 
+        private bool isDistance;
+        
+        [SerializeField] 
         private int cloudCount;
         
         [SerializeField] 
@@ -50,7 +56,12 @@ namespace Gameplay.Environment
             var span = rightEnd - leftEnd;
             var interCloudDistance = span / cloudCount;
 
-            var cloudPrefabGuid = AssetDatabase.FindAssets("Cloud t:GameObject")[0];
+            // stupid hack, can't be bothered - will need changing if we add more prefabs
+            var cloudPrefabGuid = isBackground 
+                ? isDistance 
+                    ? AssetDatabase.FindAssets("Cloud t:GameObject")[6] 
+                    : AssetDatabase.FindAssets("Cloud t:GameObject")[0]
+                : AssetDatabase.FindAssets("Cloud t:GameObject")[2];
             var cloudPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(cloudPrefabGuid));
 
             clouds = new Cloud[cloudCount];

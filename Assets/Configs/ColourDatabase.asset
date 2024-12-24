@@ -16,6 +16,8 @@ MonoBehaviour:
   - <ColourId>k__BackingField: 0
     min: {r: 0.3597845, g: 0.33922213, b: 0.7264151, a: 1}
     max: {r: 0.23820755, g: 0.4521082, b: 0.9528302, a: 1}
+    minDesaturated: {r: 0.09993478, g: 0.08966714, b: 0.2924528, a: 1}
+    maxDesaturated: {r: 0.11894803, g: 0.16274446, b: 0.254717, a: 1}
     <PlayerColour>k__BackingField: {r: 0.23529412, g: 0.3254902, b: 0.90588236, a: 1}
     <DroneColour>k__BackingField: {r: 0.4509804, g: 0.5019608, b: 1, a: 1}
     <SpringColour>k__BackingField: {r: 0.4509804, g: 0.5019608, b: 1, a: 1}
@@ -31,6 +33,7 @@ MonoBehaviour:
     - {r: 0.25882354, g: 0.31764707, b: 1, a: 1}
     - {r: 0.25882354, g: 0.31764707, b: 1, a: 1}
     <Background>k__BackingField: {r: 0.2659695, g: 0.23028658, b: 0.7075472, a: 1}
+    <BackgroundDesaturated>k__BackingField: {r: 0.0827821, g: 0.07342471, b: 0.20754719, a: 1}
     <TextColour>k__BackingField: {r: 0.43529412, g: 0.47058824, b: 0.9137255, a: 1}
     <ZiplineGradient>k__BackingField:
       serializedVersion: 2
@@ -65,6 +68,8 @@ MonoBehaviour:
   - <ColourId>k__BackingField: 1
     min: {r: 0.8962264, g: 0.3931559, b: 0.5842448, a: 1}
     max: {r: 0.6981132, g: 0.1745283, b: 0.2260284, a: 1}
+    minDesaturated: {r: 0.3207547, g: 0.11347455, b: 0.19371206, a: 1}
+    maxDesaturated: {r: 0.26415092, g: 0.12086151, b: 0.1356845, a: 1}
     <PlayerColour>k__BackingField: {r: 0.84313726, g: 0.36862746, b: 0.43529412, a: 1}
     <DroneColour>k__BackingField: {r: 1, g: 0.57254905, b: 0.6666667, a: 1}
     <SpringColour>k__BackingField: {r: 1, g: 0.57254905, b: 0.6666667, a: 1}
@@ -80,6 +85,7 @@ MonoBehaviour:
     - {r: 0.8392157, g: 0.38431373, b: 0.5137255, a: 1}
     - {r: 0.8392157, g: 0.38431373, b: 0.5137255, a: 1}
     <Background>k__BackingField: {r: 0.735849, g: 0.2256141, b: 0.31888276, a: 1}
+    <BackgroundDesaturated>k__BackingField: {r: 0.2924528, g: 0.062077258, b: 0.10431279, a: 1}
     <TextColour>k__BackingField: {r: 0.90588236, g: 0.37254903, b: 0.46666667, a: 1}
     <ZiplineGradient>k__BackingField:
       serializedVersion: 2
@@ -114,6 +120,8 @@ MonoBehaviour:
   - <ColourId>k__BackingField: 2
     min: {r: 0.7735849, g: 0.5207302, b: 0.22258809, a: 1}
     max: {r: 0.8396226, g: 0.74853146, b: 0.35248306, a: 1}
+    minDesaturated: {r: 0.3490566, g: 0.21958233, b: 0.06421325, a: 1}
+    maxDesaturated: {r: 0.2735849, g: 0.21722007, b: 0.058072276, a: 1}
     <PlayerColour>k__BackingField: {r: 0.8509804, g: 0.5176471, b: 0.11764706, a: 1}
     <DroneColour>k__BackingField: {r: 1, g: 0.78039217, b: 0.39215687, a: 1}
     <SpringColour>k__BackingField: {r: 1, g: 0.78039217, b: 0.39215687, a: 1}
@@ -129,6 +137,7 @@ MonoBehaviour:
     - {r: 0.87058824, g: 0.6039216, b: 0.2509804, a: 1}
     - {r: 0.87058824, g: 0.6039216, b: 0.2509804, a: 1}
     <Background>k__BackingField: {r: 0.8396226, g: 0.64618754, b: 0.122774996, a: 1}
+    <BackgroundDesaturated>k__BackingField: {r: 0.3584906, g: 0.26561278, b: 0.07271271, a: 1}
     <TextColour>k__BackingField: {r: 0.93333334, g: 0.7176471, b: 0.2509804, a: 1}
     <ZiplineGradient>k__BackingField:
       serializedVersion: 2
