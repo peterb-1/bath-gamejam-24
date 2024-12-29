@@ -38,6 +38,15 @@ namespace Gameplay.Player
 
         [SerializeField] 
         private float deceleration;
+        
+        [SerializeField] 
+        private float wallJumpDeceleration;
+        
+        [SerializeField] 
+        private float clingFallMultiplier;
+        
+        [SerializeField] 
+        private float clingVelocityMultiplier;
 
         [SerializeField] 
         private float runAnimationSpeedThreshold;
@@ -50,6 +59,12 @@ namespace Gameplay.Player
         
         [SerializeField] 
         private float jumpCooldown;
+        
+        [SerializeField] 
+        private float wallJumpDecelerationDuration;
+        
+        [SerializeField] 
+        private float clingDuration;
 
         [SerializeField] 
         private float hookCooldownDuration;
@@ -119,10 +134,14 @@ namespace Gameplay.Player
         private Vector2 ziplineVelocity;
 
         public bool IsHooked => isHooked;
+
+        private float currentFallMultiplier;
         
         private float coyoteCountdown;
         private float jumpBufferCountdown;
         private float jumpCooldownCountdown;
+        private float wallJumpDecelerationCountdown;
+        private float clingCountdown;
         private float hookCountdown;
         private float moveToHookCountdown;
         
@@ -131,6 +150,7 @@ namespace Gameplay.Player
         private bool isTouchingRightWall;
         private bool hasDoubleJumped;
         private bool isHooked;
+        private bool isClinging;
         private bool hasDroppedThisFrame;
         private bool isSpringJumping;
 
@@ -155,6 +175,7 @@ namespace Gameplay.Player
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
 
             hasDoubleJumped = true;
+            currentFallMultiplier = fallMultiplier;
         }
 
         private void Update()
@@ -164,6 +185,8 @@ namespace Gameplay.Player
             if (!isGrounded) coyoteCountdown -= Time.deltaTime;
             if (jumpBufferCountdown > 0f) jumpBufferCountdown -= Time.deltaTime;
             if (jumpCooldownCountdown > 0f) jumpCooldownCountdown -= Time.deltaTime;
+            if (wallJumpDecelerationCountdown > 0f) wallJumpDecelerationCountdown -= Time.deltaTime;
+            if (clingCountdown > 0f) clingCountdown -= Time.deltaTime;
             if (hookCountdown > 0f) hookCountdown -= Time.deltaTime;
 
             var wasGrounded = isGrounded;
@@ -223,6 +246,30 @@ namespace Gameplay.Player
                     transform.localPosition = Vector3.Lerp(ziplineLocalStartOffset, hookOffset,  Mathf.Clamp(lerp, 0f, 1f));
                 }
             }
+
+            if (isTouchingLeftWall || isTouchingRightWall)
+            {
+                if (!isClinging)
+                {
+                    isClinging = true;
+                    currentFallMultiplier = clingFallMultiplier;
+                    clingCountdown = clingDuration;
+                    
+                    if (rigidBody.linearVelocityY < 0f)
+                    {
+                        rigidBody.linearVelocityY *= clingVelocityMultiplier;
+                    }
+                }
+                else if (clingCountdown <= 0f)
+                {
+                    currentFallMultiplier = fallMultiplier;
+                }
+            }
+            else
+            {
+                currentFallMultiplier = fallMultiplier;
+                isClinging = false;
+            }
         }
 
         private void FixedUpdate()
@@ -232,14 +279,16 @@ namespace Gameplay.Player
 
             if (!isHooked)
             {
-                rigidBody.linearVelocity = moveAmount == 0f
-                    ? new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, 0f, deceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY)
-                    : new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, desiredVelocity, acceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY);
+                var targetDeceleration = wallJumpDecelerationCountdown > 0f ? wallJumpDeceleration : deceleration;
+
+                rigidBody.linearVelocity = moveAmount != 0f
+                    ? new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, desiredVelocity, acceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY)
+                    : new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, 0f, targetDeceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY);
             }
 
             if (rigidBody.linearVelocityY < 0f)
             {
-                rigidBody.linearVelocity += Vector2.up * (Physics2D.gravity.y * (fallMultiplier - 1f) * Time.deltaTime);
+                rigidBody.linearVelocity += Vector2.up * (Physics2D.gravity.y * (currentFallMultiplier - 1f) * Time.deltaTime);
             }
 
             var isMoving = Mathf.Abs(rigidBody.linearVelocityX) > runAnimationSpeedThreshold;
@@ -314,7 +363,8 @@ namespace Gameplay.Player
         {
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
             rigidBody.linearVelocity = force;
-            
+
+            wallJumpDecelerationCountdown = wallJumpDecelerationDuration;
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
         }

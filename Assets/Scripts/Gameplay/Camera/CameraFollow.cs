@@ -103,7 +103,7 @@ namespace Gameplay.Camera
             var shakeOffset = new Vector3(Random.Range(-1f, 1f) * shakeIntensity, Random.Range(-1f, 1f) * shakeIntensity, 0f);
 
             rawPosition = Vector3.SmoothDamp(rawPosition, GetTargetPosition(), ref velocity, smoothTime);
-            shakePosition = Vector3.SmoothDamp(shakePosition, shakePosition + shakeOffset, ref shakeVelocity, shakeSmoothTime);
+            shakePosition = Vector3.SmoothDamp(shakePosition, shakeOffset, ref shakeVelocity, shakeSmoothTime);
 
             transform.position = rawPosition + shakePosition;
         }

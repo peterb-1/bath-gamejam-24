@@ -256,15 +256,19 @@ MonoBehaviour:
   moveSpeed: 7
   acceleration: 5
   deceleration: 6
+  wallJumpDeceleration: 3
+  clingFallMultiplier: 1
+  clingVelocityMultiplier: 0.4
   runAnimationSpeedThreshold: 0.8
   coyoteDuration: 0.15
   jumpBufferDuration: 0.2
   jumpCooldown: 0.25
+  wallJumpDecelerationDuration: 0.5
+  clingDuration: 0.3
   hookCooldownDuration: 0.4
   moveToHookDuration: 0.08
   springJumpDuration: 0.25
   hookOffset: {x: 0, y: -0.5, z: 0}
-  springCushionDuration: 0.1
   groundCheckDistance: 0.25
   wallCheckDistance: 0.25
   wallCheckOffset: 1
