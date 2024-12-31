@@ -80,6 +80,7 @@ namespace Gameplay.Input
             
             playerInput.onControlsChanged += HandleControlSchemeChanged;
             SceneLoader.OnSceneLoaded += HandleSceneLoaded;
+            SceneLoader.OnSceneLoadStart += HandleSceneLoadStart;
             
             EnableInputs();
             SubscribeToInputCallbacks();
@@ -91,6 +92,11 @@ namespace Gameplay.Input
         {
             EnableInputs();
             GetPlayerBehavioursAsync().Forget();
+        }
+        
+        private void HandleSceneLoadStart()
+        {
+            DisableInputs();
         }
 
         private async UniTask GetPlayerBehavioursAsync()
@@ -302,6 +308,7 @@ namespace Gameplay.Input
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
             
             SceneLoader.OnSceneLoaded -= HandleSceneLoaded;
+            SceneLoader.OnSceneLoadStart -= HandleSceneLoadStart;
         }
     }
 }

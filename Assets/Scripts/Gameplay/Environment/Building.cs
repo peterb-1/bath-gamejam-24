@@ -69,7 +69,13 @@ namespace Gameplay.Environment
         private BoxCollider2D deathCollider;
         
         [SerializeField, ShowIf(nameof(isGameplay))] 
+        private BoxCollider2D playerDetectionCollider;
+        
+        [SerializeField, ShowIf(nameof(isGameplay))] 
         private Vector2 minDeathColliderSize;
+        
+        [SerializeField, ShowIf(nameof(isGameplay))] 
+        private Vector2 extraPlayerDetectionColliderSize;
         
         [SerializeField] 
         private SpriteRenderer backgroundSpriteRenderer;
@@ -82,6 +88,7 @@ namespace Gameplay.Environment
 
         private PlayerMovementBehaviour playerMovementBehaviour;
 
+        private bool containsPlayer;
         private bool isActive;
         private float flashChance;
         
@@ -106,11 +113,15 @@ namespace Gameplay.Environment
             
                 playerMovementBehaviour.OnPlayerHooked += HandlePlayerHooked;
                 playerMovementBehaviour.OnPlayerUnhooked += HandlePlayerUnhooked;
+
+                playerDetectionCollider.size = mainCollider.size + extraPlayerDetectionColliderSize;
+                playerDetectionCollider.offset = mainCollider.offset;
             }
             else
             {
                 mainCollider.enabled = false;
                 deathCollider.enabled = false;
+                playerDetectionCollider.enabled = false;
             }
         }
         
@@ -148,6 +159,16 @@ namespace Gameplay.Environment
         private void HandlePlayerUnhooked()
         {
             if (isGameplay) mainCollider.enabled = isActive;
+        }
+        
+        public void NotifyPlayerEntered()
+        {
+            containsPlayer = true;
+        }
+        
+        public void NotifyPlayerExited()
+        {
+            containsPlayer = false;
         }
 
         private void Update()
@@ -221,6 +242,11 @@ namespace Gameplay.Environment
             await UniTask.DelayFrame(mainColliderDelayFrames);
             
             mainCollider.enabled = isActive && !playerMovementBehaviour.IsHooked;
+
+            if (isActive && containsPlayer)
+            {
+                playerMovementBehaviour.NotifyEjectedFromBuilding(mainCollider.bounds);
+            }
         }
         
         private void OnDestroy()

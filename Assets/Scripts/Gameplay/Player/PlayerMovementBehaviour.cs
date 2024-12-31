@@ -11,7 +11,7 @@ namespace Gameplay.Player
 {
     public class PlayerMovementBehaviour : MonoBehaviour
     {
-        [Header("Settings")]
+        [Header("Forces and Multipliers")]
         [SerializeField] 
         private float jumpForce; 
 
@@ -48,9 +48,7 @@ namespace Gameplay.Player
         [SerializeField] 
         private float clingVelocityMultiplier;
 
-        [SerializeField] 
-        private float runAnimationSpeedThreshold;
-
+        [Header("Durations")]
         [SerializeField] 
         private float coyoteDuration;
 
@@ -64,6 +62,12 @@ namespace Gameplay.Player
         private float wallJumpDecelerationDuration;
         
         [SerializeField] 
+        private float wallEjectionDuration;
+
+        [SerializeField] 
+        private float doubleJumpCancellationDuration;
+        
+        [SerializeField] 
         private float clingDuration;
 
         [SerializeField] 
@@ -75,6 +79,7 @@ namespace Gameplay.Player
         [SerializeField] 
         private float springJumpDuration;
 
+        [Header("Offsets and Distances")]
         [SerializeField] 
         private Vector3 hookOffset;
         
@@ -87,6 +92,10 @@ namespace Gameplay.Player
         [SerializeField]
         private float wallCheckOffset;
         
+        [Header("Misc")]
+        [SerializeField] 
+        private float runAnimationSpeedThreshold;
+        
         [SerializeField]
         private LayerMask groundLayers;
 
@@ -96,6 +105,9 @@ namespace Gameplay.Player
         [Header("References")]
         [SerializeField] 
         private Rigidbody2D rigidBody;
+        
+        [SerializeField] 
+        private BoxCollider2D boxCollider;
 
         [SerializeField] 
         private Transform spriteRendererTransform;
@@ -141,6 +153,8 @@ namespace Gameplay.Player
         private float jumpBufferCountdown;
         private float jumpCooldownCountdown;
         private float wallJumpDecelerationCountdown;
+        private float wallEjectionCountdown;
+        private float doubleJumpCancellationCountdown;
         private float clingCountdown;
         private float hookCountdown;
         private float moveToHookCountdown;
@@ -153,6 +167,7 @@ namespace Gameplay.Player
         private bool isClinging;
         private bool hasDroppedThisFrame;
         private bool isSpringJumping;
+        private bool wasEjectedLeft;
 
         private HingeJoint2D hook;
         
@@ -160,6 +175,7 @@ namespace Gameplay.Player
         private static readonly int IsRunning = Animator.StringToHash("isRunning");
         private static readonly int IsHookedHash = Animator.StringToHash("isHooked");
         private static readonly int DoubleJump = Animator.StringToHash("doubleJump");
+        private static readonly int CancelDoubleJump = Animator.StringToHash("cancelDoubleJump");
 
         public event Action OnPlayerHooked;
         public event Action OnPlayerUnhooked;
@@ -186,6 +202,8 @@ namespace Gameplay.Player
             if (jumpBufferCountdown > 0f) jumpBufferCountdown -= Time.deltaTime;
             if (jumpCooldownCountdown > 0f) jumpCooldownCountdown -= Time.deltaTime;
             if (wallJumpDecelerationCountdown > 0f) wallJumpDecelerationCountdown -= Time.deltaTime;
+            if (wallEjectionCountdown > 0f) wallEjectionCountdown -= Time.deltaTime;
+            if (doubleJumpCancellationCountdown > 0f) doubleJumpCancellationCountdown -= Time.deltaTime;
             if (clingCountdown > 0f) clingCountdown -= Time.deltaTime;
             if (hookCountdown > 0f) hookCountdown -= Time.deltaTime;
 
@@ -229,35 +247,32 @@ namespace Gameplay.Player
 
             if (isHooked)
             {
-                var currentPosition = hook.transform.position.xy();
-
-                ziplineVelocity = currentPosition == lastZiplinePosition 
-                    ? Vector2.zero 
-                    : (currentPosition - lastZiplinePosition) / Time.deltaTime;
-                
-                lastZiplinePosition = currentPosition;
-
-                if (moveToHookCountdown > 0)
-                {
-                    moveToHookCountdown -= Time.deltaTime;
-                    
-                    var lerp = (moveToHookDuration - moveToHookCountdown) / moveToHookDuration;
-                    
-                    transform.localPosition = Vector3.Lerp(ziplineLocalStartOffset, hookOffset,  Mathf.Clamp(lerp, 0f, 1f));
-                }
+                HookUpdate();
             }
 
+            WallUpdate();
+        }
+
+        private void WallUpdate()
+        {
             if (isTouchingLeftWall || isTouchingRightWall)
             {
                 if (!isClinging)
                 {
-                    isClinging = true;
-                    currentFallMultiplier = clingFallMultiplier;
-                    clingCountdown = clingDuration;
-                    
-                    if (rigidBody.linearVelocityY < 0f)
+                    if (doubleJumpCancellationCountdown > 0f && wallEjectionCountdown > 0f)
                     {
-                        rigidBody.linearVelocityY *= clingVelocityMultiplier;
+                        ReplaceDoubleJumpWithWallJump(isMovingLeft: isTouchingRightWall);
+                    }
+                    else
+                    {
+                        isClinging = true;
+                        currentFallMultiplier = clingFallMultiplier;
+                        clingCountdown = clingDuration;
+                    
+                        if (rigidBody.linearVelocityY < 0f)
+                        {
+                            rigidBody.linearVelocityY *= clingVelocityMultiplier;
+                        }
                     }
                 }
                 else if (clingCountdown <= 0f)
@@ -272,6 +287,26 @@ namespace Gameplay.Player
             }
         }
 
+        private void HookUpdate()
+        {
+            var currentPosition = hook.transform.position.xy();
+
+            ziplineVelocity = currentPosition == lastZiplinePosition 
+                ? Vector2.zero 
+                : (currentPosition - lastZiplinePosition) / Time.deltaTime;
+                
+            lastZiplinePosition = currentPosition;
+
+            if (moveToHookCountdown > 0f)
+            {
+                moveToHookCountdown -= Time.deltaTime;
+                    
+                var lerp = (moveToHookDuration - moveToHookCountdown) / moveToHookDuration;
+                    
+                transform.localPosition = Vector3.Lerp(ziplineLocalStartOffset, hookOffset,  Mathf.Clamp(lerp, 0f, 1f));
+            }
+        }
+        
         private void FixedUpdate()
         {
             var moveAmount = InputManager.MoveAmount;
@@ -339,10 +374,20 @@ namespace Gameplay.Player
             {
                 PerformWallJump(new Vector2(-wallJumpForce.x, wallJumpForce.y));
             }
+            else if (!wasEjectedLeft && wallEjectionCountdown > 0f)
+            {
+                PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y));
+            }
+            else if (wasEjectedLeft && wallEjectionCountdown > 0f)
+            {
+                PerformWallJump(new Vector2(-wallJumpForce.x, wallJumpForce.y));
+            }
             else if (!hasDoubleJumped)
             {
                 PerformJump(Mathf.Max(doubleJumpForce, rigidBody.linearVelocityY));
                 hasDoubleJumped = true;
+                doubleJumpCancellationCountdown = doubleJumpCancellationDuration;
+                playerAnimator.ResetTrigger(CancelDoubleJump);
                 playerAnimator.SetTrigger(DoubleJump);
             }
         }
@@ -354,19 +399,25 @@ namespace Gameplay.Player
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, force);
             
+            jumpCooldownCountdown = jumpCooldown;
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
-            jumpCooldownCountdown = jumpCooldown;
+            wallEjectionCountdown = 0f;
         }
 
-        private void PerformWallJump(Vector2 force)
+        private void PerformWallJump(Vector2 force, bool isAudible = true)
         {
-            AudioManager.Instance.Play(AudioClipIdentifier.Jump);
+            if (isAudible)
+            {
+                AudioManager.Instance.Play(AudioClipIdentifier.Jump);
+            }
+            
             rigidBody.linearVelocity = force;
 
             wallJumpDecelerationCountdown = wallJumpDecelerationDuration;
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
+            wallEjectionCountdown = 0f;
         }
 
         public void PerformHeadJump()
@@ -431,6 +482,22 @@ namespace Gameplay.Player
             isSpringJumping = false;
         }
 
+        private void ReplaceDoubleJumpWithWallJump(bool isMovingLeft)
+        {
+            if (isMovingLeft)
+            {
+                PerformWallJump(new Vector2(-wallJumpForce.x, wallJumpForce.y), isAudible: false);
+            }
+            else
+            {
+                PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y), isAudible: false);
+            }
+            
+            hasDoubleJumped = false;
+            playerAnimator.SetTrigger(CancelDoubleJump);
+            doubleJumpCancellationCountdown = 0f;
+        }
+
         public bool TryHookPlayer(HingeJoint2D newHook)
         {
             if (isHooked || (hookCountdown > 0f && hook == newHook) || !playerDeathBehaviour.IsAlive)
@@ -492,6 +559,34 @@ namespace Gameplay.Player
             return true;
         }
         
+        public void NotifyEjectedFromBuilding(Bounds buildingBounds)
+        {
+            var playerBounds = boxCollider.bounds;
+
+            var min = buildingBounds.min;
+            var max = buildingBounds.max;
+            var playerMin = playerBounds.min;
+            var playerMax = playerBounds.max;
+
+            var leftDistance = playerMin.x - min.x;
+            var rightDistance = max.x - playerMax.x;
+            var downDistance = playerMin.y - min.y;
+            var upDistance = max.y - playerMax.y;
+
+            wasEjectedLeft = leftDistance < rightDistance;
+
+            // we only care about sideways ejections
+            if (Mathf.Min(leftDistance, rightDistance) < Mathf.Min(downDistance, upDistance))
+            {
+                wallEjectionCountdown = wallEjectionDuration;
+
+                if (doubleJumpCancellationCountdown > 0f && (!isTouchingLeftWall || !isTouchingRightWall))
+                {
+                    ReplaceDoubleJumpWithWallJump(wasEjectedLeft);
+                }
+            }
+        }
+
         private void HandleSceneLoadStart()
         {
             rigidBody.linearVelocity = Vector2.zero;

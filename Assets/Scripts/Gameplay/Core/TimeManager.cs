@@ -30,7 +30,7 @@ namespace Gameplay.Core
             UnpausedRealtimeSinceStartup = 0f;
             
             ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
-            SpringPhysicsBehaviour.OnBounce += HandleSpringHit;
+            SpringPhysicsBehaviour.OnBounce += HandleSpringBounce;
         }
         
         private void Update()
@@ -46,7 +46,7 @@ namespace Gameplay.Core
             RunSlowdownAsync(duration).Forget();
         }
 
-        public void HandleSpringHit(float duration)
+        private void HandleSpringBounce(float duration)
         {
             RunSlowdownAsync(duration).Forget();
         }
