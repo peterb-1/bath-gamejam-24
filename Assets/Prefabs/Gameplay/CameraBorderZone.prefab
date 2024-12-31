@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   polygonCollider: {fileID: 7272978070821050484}
-  dampingPower: 0.7
+  dampingPower: 0.6
 --- !u!60 &7272978070821050484
 PolygonCollider2D:
   m_ObjectHideFlags: 0
