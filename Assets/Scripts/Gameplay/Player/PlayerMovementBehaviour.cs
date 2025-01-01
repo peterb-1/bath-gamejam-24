@@ -77,11 +77,17 @@ namespace Gameplay.Player
         private float moveToHookDuration;
         
         [SerializeField] 
+        private float maxLedgeAssistDuration;
+        
+        [SerializeField] 
         private float springJumpDuration;
 
         [Header("Offsets and Distances")]
         [SerializeField] 
         private Vector3 hookOffset;
+        
+        [SerializeField] 
+        private Vector2 ledgeFinishOffset;
         
         [SerializeField]
         private float groundCheckDistance;
@@ -165,10 +171,12 @@ namespace Gameplay.Player
         private bool hasDoubleJumped;
         private bool isHooked;
         private bool isClinging;
+        private bool isClimbingLedge;
         private bool hasDroppedThisFrame;
         private bool isSpringJumping;
         private bool wasEjectedLeft;
 
+        private Collider2D currentGroundCollider;
         private HingeJoint2D hook;
         
         private static readonly int IsGrounded = Animator.StringToHash("isGrounded");
@@ -207,6 +215,8 @@ namespace Gameplay.Player
             if (clingCountdown > 0f) clingCountdown -= Time.deltaTime;
             if (hookCountdown > 0f) hookCountdown -= Time.deltaTime;
 
+            if (isClimbingLedge) return;
+
             var wasGrounded = isGrounded;
             var leftGroundPosition = leftGroundCheck.position;
             var rightGroundPosition = rightGroundCheck.position;
@@ -214,16 +224,18 @@ namespace Gameplay.Player
             var doesRaycastUpHit = Physics2D.Raycast(leftGroundPosition, Vector2.up, groundCheckDistance, groundLayers) || 
                                    Physics2D.Raycast(rightGroundPosition, Vector2.up, groundCheckDistance, groundLayers);
             
-            var doesRaycastDownHit = Physics2D.Raycast(leftGroundPosition, Vector2.down, groundCheckDistance, groundLayers) ||
-                                     Physics2D.Raycast(rightGroundPosition, Vector2.down, groundCheckDistance, groundLayers);
+            var downLeftHit = Physics2D.Raycast(leftGroundPosition, Vector2.down, groundCheckDistance, groundLayers);
+            var downRightHit = Physics2D.Raycast(rightGroundPosition, Vector2.down, groundCheckDistance, groundLayers);
+            var leftGroundHit = Physics2D.Raycast(leftGroundPosition, Vector2.left, groundCheckDistance, groundLayers);
+            var leftMidHit = Physics2D.Raycast(leftMidCheck.position, Vector2.left, groundCheckDistance, groundLayers);
+            var leftHeadHit = Physics2D.Raycast(leftHeadCheck.position, Vector2.left, groundCheckDistance, groundLayers);
+            var rightGroundHit = Physics2D.Raycast(rightGroundPosition, Vector2.right, groundCheckDistance, groundLayers);
+            var rightMidHit = Physics2D.Raycast(rightMidCheck.position, Vector2.right, groundCheckDistance, groundLayers);
+            var rightHeadHit = Physics2D.Raycast(rightHeadCheck.position, Vector2.right, groundCheckDistance, groundLayers);
             
-            var doesRaycastLeftHit = Physics2D.Raycast(leftGroundPosition, Vector2.left, groundCheckDistance, groundLayers) || 
-                                     Physics2D.Raycast(leftMidCheck.position, Vector2.left, groundCheckDistance, groundLayers) ||
-                                     Physics2D.Raycast(leftHeadCheck.position, Vector2.left, groundCheckDistance, groundLayers);
-            
-            var doesRaycastRightHit = Physics2D.Raycast(rightGroundPosition, Vector2.right, groundCheckDistance, groundLayers) ||
-                                      Physics2D.Raycast(rightMidCheck.position, Vector2.right, groundCheckDistance, groundLayers) ||
-                                      Physics2D.Raycast(rightHeadCheck.position, Vector2.right, groundCheckDistance, groundLayers);
+            var doesRaycastDownHit = downLeftHit || downRightHit;
+            var doesRaycastLeftHit = leftGroundHit || leftMidHit || leftHeadHit;
+            var doesRaycastRightHit = rightGroundHit || rightMidHit || rightHeadHit;
 
             var leftWallProbe = Physics2D.OverlapCircle(leftGroundPosition + Vector3.right * wallCheckOffset, wallCheckDistance, groundLayers);
             var rightWallProbe = Physics2D.OverlapCircle(rightGroundPosition + Vector3.left * wallCheckOffset, wallCheckDistance, groundLayers);
@@ -243,6 +255,13 @@ namespace Gameplay.Player
             if (isGrounded && !wasGrounded)
             {
                 AudioManager.Instance.Play(AudioClipIdentifier.Land);
+                
+                currentGroundCollider = downLeftHit.collider;
+                
+                if (currentGroundCollider == null)
+                {
+                    currentGroundCollider = downRightHit.collider;
+                }
             }
 
             if (isHooked)
@@ -251,6 +270,25 @@ namespace Gameplay.Player
             }
 
             WallUpdate();
+
+            if (jumpBufferCountdown <= 0f)
+            {
+                var isOnLeftLedge = leftGroundHit && !leftMidHit;
+                var isOnRightLedge = rightGroundHit && !rightMidHit;
+
+                // make sure we're on exactly ONE ledge - if it's both, we're in the middle of a block and will be pushed out as normal
+                if (isOnLeftLedge != isOnRightLedge)
+                {
+                    if (isOnLeftLedge)
+                    {
+                        TryClimbLedgeAsync(true, leftGroundHit, leftMidHit).Forget();
+                    }
+                    else
+                    {
+                        TryClimbLedgeAsync(false,  rightGroundHit, rightMidHit).Forget();
+                    }
+                }
+            }
         }
 
         private void WallUpdate()
@@ -309,6 +347,8 @@ namespace Gameplay.Player
         
         private void FixedUpdate()
         {
+            if (isClimbingLedge) return;
+            
             var moveAmount = InputManager.MoveAmount;
             var desiredVelocity = moveAmount * moveSpeed;
 
@@ -403,6 +443,8 @@ namespace Gameplay.Player
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
             wallEjectionCountdown = 0f;
+            
+            currentGroundCollider = null;
         }
 
         private void PerformWallJump(Vector2 force, bool isAudible = true)
@@ -418,6 +460,8 @@ namespace Gameplay.Player
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
             wallEjectionCountdown = 0f;
+            
+            currentGroundCollider = null;
         }
 
         public void PerformHeadJump()
@@ -586,6 +630,51 @@ namespace Gameplay.Player
                 }
             }
         }
+        
+        private async UniTask TryClimbLedgeAsync(bool isLeft, RaycastHit2D groundHit, RaycastHit2D midHit)
+        {
+            var ledgeCollider = groundHit.collider;
+            
+            if (ledgeCollider == null)
+            {
+                ledgeCollider = midHit.collider;
+            }
+
+            if (ledgeCollider == currentGroundCollider && 
+                spriteRendererTransform.localScale.x > 0f == isLeft) return;
+            
+            isClimbingLedge = true;
+            
+            var ledgeBounds = ledgeCollider.bounds;
+            var ledgeCornerPosition = isLeft ? ledgeBounds.max.xy() : new Vector2(ledgeBounds.min.x, ledgeBounds.max.y);
+            var finishPosition = ledgeCornerPosition + (isLeft ? new Vector2(-ledgeFinishOffset.x, ledgeFinishOffset.y) : ledgeFinishOffset);
+            
+            rigidBody.gravityScale = 0f;
+            boxCollider.enabled = false;
+
+            var timeElapsed = 0f;
+            var trans = transform;
+            var startPosition = trans.position.xy();
+            var targetDuration = (finishPosition - startPosition).magnitude / rigidBody.linearVelocity.magnitude;
+            var duration = Mathf.Min(maxLedgeAssistDuration, targetDuration);
+            
+            while (timeElapsed < duration)
+            {
+                var lerp = moveTowardsTargetCurve.Evaluate(timeElapsed / duration);
+
+                trans.position = Vector2.Lerp(startPosition, finishPosition, lerp);
+
+                await UniTask.Yield();
+
+                timeElapsed += Time.deltaTime;
+            }
+
+            trans.position = finishPosition;
+            
+            rigidBody.gravityScale = 1f;
+            boxCollider.enabled = true;
+            isClimbingLedge = false;
+        }
 
         private void HandleSceneLoadStart()
         {
@@ -603,10 +692,10 @@ namespace Gameplay.Player
 
         private void HandleVictorySequenceStart(Vector2 position, float duration)
         {
-            MoveToTargetAsync(position, duration).Forget();
+            ShrinkInBlackHoleAsync(position, duration).Forget();
         }
 
-        private async UniTask MoveToTargetAsync(Vector2 targetPosition, float duration)
+        private async UniTask ShrinkInBlackHoleAsync(Vector2 targetPosition, float duration)
         {
             rigidBody.gravityScale = 0f;
             
