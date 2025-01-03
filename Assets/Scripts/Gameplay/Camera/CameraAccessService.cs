@@ -6,6 +6,9 @@ namespace Gameplay.Camera
     public class CameraAccessService : MonoBehaviour
     {
         [field: SerializeField]
+        public UnityEngine.Camera Camera { get; private set; }
+        
+        [field: SerializeField]
         public Transform CameraTransform { get; private set; }
         
         [field: SerializeField]

@@ -612,10 +612,10 @@ namespace Gameplay.Player
             var playerMin = playerBounds.min;
             var playerMax = playerBounds.max;
 
-            var leftDistance = playerMin.x - min.x;
-            var rightDistance = max.x - playerMax.x;
-            var downDistance = playerMin.y - min.y;
-            var upDistance = max.y - playerMax.y;
+            var leftDistance = playerMax.x - min.x;
+            var rightDistance = max.x - playerMin.x;
+            var downDistance = playerMax.y - min.y;
+            var upDistance = max.y - playerMin.y;
 
             wasEjectedLeft = leftDistance < rightDistance;
 
