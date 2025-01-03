@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using Core;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Gameplay.Environment;
 using Gameplay.Input;
+using TMPro;
 using UnityEngine;
 
 namespace UI
@@ -196,15 +198,20 @@ namespace UI
         {
             var districtPage = districtPages[currentPageIndex];
             var leftmostButton = districtPage.GetLeftmostUnlockedLevelButton() ?? forwardButton;
-            var rightmostButton = districtPage.GetRightmostUnlockedLevelButton() ?? backButton;
-            var areAllLevelsUnlocked = rightmostButton == districtPage.LevelSelectButtons[^1];
+            var rightmostLevelButton = districtPage.GetRightmostUnlockedLevelButton();
+            var areAnyLevelsUnlocked = rightmostLevelButton != null;
+            var rightmostButton = areAnyLevelsUnlocked ? rightmostLevelButton : backButton;
+            var isRightmostLevelComplete = areAnyLevelsUnlocked
+                                           && SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(rightmostLevelButton.SceneConfig.LevelConfig, out var levelData)
+                                           && levelData.IsComplete();
+            var areAllLevelsComplete = rightmostButton == districtPage.LevelSelectButtons[^1] && isRightmostLevelComplete;
 
             var leftmostNavigation = leftmostButton.navigation;
             var rightmostNavigation = rightmostButton.navigation;
             var backNavigation = backButton.navigation;
             var forwardNavigation = forwardButton.navigation;
             var isBackActive = currentPageIndex > 0;
-            var isForwardActive = currentPageIndex < districtPages.Length - 1 && areAllLevelsUnlocked;
+            var isForwardActive = currentPageIndex < districtPages.Length - 1 && areAllLevelsComplete;
             
             rightmostNavigation.selectOnRight = isForwardActive ? forwardButton : null;
             forwardNavigation.selectOnLeft = rightmostButton;

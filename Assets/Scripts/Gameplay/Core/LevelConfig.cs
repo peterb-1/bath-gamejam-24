@@ -48,6 +48,11 @@ namespace Gameplay.Core
 
             return TimeRanking.Unranked;
         }
+
+        public int GetStars(float time)
+        {
+            return Mathf.Min((int) GetTimeRanking(time), 3);
+        }
         
         public string GetLevelCode()
         {

@@ -193,6 +193,8 @@ namespace UI
                     rainbowVisibilitySetter.SetInverseState();
                 }
             }
+            
+            GameLogger.Log($"{currentSceneConfig.name} was completed in {timerBehaviour.TimeElapsed}s - awarding ranking of {ranking}!", this);
 
             if (currentSceneConfig.NextSceneConfig != null && 
                 currentSceneConfig.NextSceneConfig.IsLevelScene &&

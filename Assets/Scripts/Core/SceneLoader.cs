@@ -69,6 +69,8 @@ namespace Core
             
             AudioManager.Instance.Play(AudioClipIdentifier.ButtonClick);
             
+            GameLogger.Log("Quick-restarting current level...", this);
+            
             ReloadCurrentScene();
         }
         

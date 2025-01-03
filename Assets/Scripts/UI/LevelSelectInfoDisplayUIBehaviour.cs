@@ -65,7 +65,7 @@ namespace UI
                 var isRainbow = ranking == TimeRanking.Rainbow;
                 
                 firstStar.SetActive(ranking >= TimeRanking.OneStar, shouldAnimate: false);
-                secondStar.SetActive(ranking >= TimeRanking.OneStar, shouldAnimate: false);
+                secondStar.SetActive(ranking >= TimeRanking.TwoStar, shouldAnimate: false);
                 thirdStar.SetActive(ranking >= TimeRanking.ThreeStar, shouldAnimate: false);
                 
                 firstStar.SetRainbowState(isRainbow, shouldAnimate: false);

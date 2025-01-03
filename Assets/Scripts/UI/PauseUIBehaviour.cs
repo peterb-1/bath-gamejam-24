@@ -56,12 +56,14 @@ namespace UI
 
         private void HandleRetryClicked()
         {
+            GameLogger.Log("Restarting current level from pause menu...", this);
             PauseManager.Instance.UnpauseInvisible();
             SceneLoader.Instance.ReloadCurrentScene();
         }
         
         private void HandleQuitClicked()
         {
+            GameLogger.Log("Quitting current level from pause menu...", this);
             PauseManager.Instance.UnpauseInvisible();
             SceneLoader.Instance.LoadLevelSelect();
         }

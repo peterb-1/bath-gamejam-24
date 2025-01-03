@@ -1,6 +1,7 @@
 ﻿using System;
 using Gameplay.Core;
 using UnityEngine;
+using Utils;
 
 namespace Core.Saving
 {
@@ -38,11 +39,18 @@ namespace Core.Saving
         {
             if (!IsUnlocked)
             {
+                GameLogger.Log($"Unlocking level with config GUID {LevelConfigGuid}!");
+                
                 IsUnlocked = true;
                 return true;
             }
 
             return false;
+        }
+
+        public bool IsComplete()
+        {
+            return BestTime < float.MaxValue - 1e6f;
         }
     }
 }

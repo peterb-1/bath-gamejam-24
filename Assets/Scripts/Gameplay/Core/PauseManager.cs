@@ -48,6 +48,8 @@ namespace Gameplay.Core
 
             if (!InputManager.AreInputsEnabled) return;
             
+            GameLogger.Log($"Acting on application focus callback with value {hasFocus}...", this);
+            
             if (!hasFocus)
             {
                 wasPausedBeforeLostFocus = IsPaused;
@@ -80,6 +82,8 @@ namespace Gameplay.Core
             
             IsPaused = !IsPaused;
             
+            GameLogger.Log($"Invisibly setting paused state to {IsPaused}!", this);
+            
             if (IsPaused)
             {
                 prePauseTimeScale = Time.timeScale;
@@ -98,6 +102,8 @@ namespace Gameplay.Core
             if (SceneLoader.Instance != null && SceneLoader.Instance.IsLoading) return;
             
             IsPaused = !IsPaused;
+            
+            GameLogger.Log($"Setting paused state to {IsPaused}!", this);
 
             if (IsPaused)
             {
