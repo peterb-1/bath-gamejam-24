@@ -48,7 +48,7 @@ namespace UI
             playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
             
-            HandleControlSchemeChanged(InputManager.CurrentControlScheme);
+            HandleControlSchemeChanged(InputManager.CurrentNonMouseControlScheme);
         }
 
         private void HandleTimeBonusApplied(float timeBonus)

@@ -54,6 +54,7 @@ namespace Gameplay.Input
         private static bool isPrimedForGamepadDrop;
         
         public static ControlScheme CurrentControlScheme { get; private set; }
+        public static ControlScheme CurrentNonMouseControlScheme { get; private set; }
         public static bool AreInputsEnabled { get; private set; }
         public static float MoveAmount { get; private set; }
         public static event Action<ColourId> OnColourChanged;
@@ -194,6 +195,8 @@ namespace Gameplay.Input
             else
             {
                 Cursor.visible = false;
+
+                CurrentNonMouseControlScheme = controlScheme;
             }
 
             OnControlSchemeChanged?.Invoke(controlScheme);

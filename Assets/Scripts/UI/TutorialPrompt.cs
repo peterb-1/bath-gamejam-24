@@ -43,7 +43,7 @@ namespace UI
 
             playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
             
-            HandleControlSchemeChanged(InputManager.CurrentControlScheme);
+            HandleControlSchemeChanged(InputManager.CurrentNonMouseControlScheme);
         }
 
         private void HandleControlSchemeChanged(ControlScheme controlScheme)
