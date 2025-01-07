@@ -13,6 +13,9 @@ namespace Gameplay.Drone
 
         [SerializeField] 
         private float cycleTime;
+        
+        [SerializeField]
+        private float cycleOffset;
 
         [SerializeField] 
         private bool smoothEnds;
@@ -21,12 +24,14 @@ namespace Gameplay.Drone
         [SerializeField] 
         private DroneHitboxBehaviour droneHitboxBehaviour;
 
-        private float currentCycleTime = 0f;
+        private float currentCycleTime;
         private bool isAlive = true;
 
         private void Awake()
         {
             droneHitboxBehaviour.OnDroneKilled += HandleDroneKilled;
+            
+            currentCycleTime = cycleTime * cycleOffset;
         }
 
         private void HandleDroneKilled(DroneHitboxBehaviour _)
