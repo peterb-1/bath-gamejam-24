@@ -56,6 +56,7 @@ MonoBehaviour:
   yellowAction: {fileID: 6870097182979891522, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   gamepadDropThreshold: -0.625
   movementThreshold: 0.01
+  mouseDetectionThreshold: 2
 --- !u!114 &5322766936052464416
 MonoBehaviour:
   m_ObjectHideFlags: 0

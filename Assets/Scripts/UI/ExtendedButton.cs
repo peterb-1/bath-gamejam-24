@@ -80,7 +80,7 @@ namespace UI
         
         public override void OnPointerEnter(PointerEventData eventData)
         {
-            if (interactable)
+            if (interactable && InputManager.CurrentControlScheme is ControlScheme.Mouse)
             {
                 AudioManager.Instance.Play(AudioClipIdentifier.ButtonHover);
                 OnHover?.Invoke(this);
@@ -91,7 +91,10 @@ namespace UI
 
         public override void OnPointerExit(PointerEventData eventData)
         {
-            OnUnhover?.Invoke(this);
+            if (InputManager.CurrentControlScheme is ControlScheme.Mouse)
+            {
+                OnUnhover?.Invoke(this);
+            }
             
             base.OnPointerExit(eventData);
         }

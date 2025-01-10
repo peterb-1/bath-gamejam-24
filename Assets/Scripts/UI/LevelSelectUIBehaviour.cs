@@ -78,6 +78,8 @@ namespace UI
 
         private void SelectDefaultSelectable()
         {
+            if (InputManager.CurrentControlScheme == ControlScheme.Mouse) return;
+            
             var previousSceneConfig = SceneLoader.Instance.PreviousSceneConfig;
 
             if (previousSceneConfig == null || !levelSelectButtonLookup.TryGetValue(

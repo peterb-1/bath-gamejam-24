@@ -1,6 +1,7 @@
 using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
+using Gameplay.Input;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,6 +21,8 @@ namespace UI
         private Animator borderAnimator;
 
         public SceneConfig SceneConfig => sceneConfig;
+
+        private bool wasSelectedThisFrame;
 
         private static readonly int Selected = Animator.StringToHash("Selected");
 
@@ -64,6 +67,8 @@ namespace UI
             if (interactable)
             {
                 borderAnimator.SetBool(Selected, true);
+
+                SetSelectedStateThisFrameAsync().Forget();
             }
         }
 
@@ -77,6 +82,9 @@ namespace UI
         {
             base.OnPointerEnter(eventData);
             
+            // if it's not mouse, ignore pointer events - we'll get selected/deselected instead
+            if (InputManager.CurrentControlScheme is not ControlScheme.Mouse) return;
+
             if (interactable)
             {
                 borderAnimator.SetBool(Selected, true);
@@ -86,7 +94,22 @@ namespace UI
         public override void OnPointerExit(PointerEventData eventData)
         {
             base.OnPointerExit(eventData);
+            
+            // if it's not mouse, ignore pointer events - we'll get selected/deselected instead
+            if (InputManager.CurrentControlScheme is not ControlScheme.Mouse && wasSelectedThisFrame) return;
+            
             borderAnimator.SetBool(Selected, false);
+        }
+
+        private async UniTask SetSelectedStateThisFrameAsync()
+        {
+            if (wasSelectedThisFrame) return;
+            
+            wasSelectedThisFrame = true;
+
+            await UniTask.DelayFrame(1, PlayerLoopTiming.PostLateUpdate);
+            
+            wasSelectedThisFrame = false;
         }
 
         private void HandleButtonClicked()

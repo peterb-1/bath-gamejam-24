@@ -48,9 +48,13 @@ namespace Gameplay.Input
         [SerializeField] 
         private float movementThreshold;
         
+        [SerializeField, Tooltip("In pixels moved per frame")]
+        private int mouseDetectionThreshold;
+        
         private PlayerDeathBehaviour playerDeathBehaviour;
         private PlayerVictoryBehaviour playerVictoryBehaviour;
 
+        private Vector2 unhiddenMousePosition;
         private static bool isPrimedForGamepadDrop;
         
         public static ControlScheme CurrentControlScheme { get; private set; }
@@ -135,7 +139,12 @@ namespace Gameplay.Input
 
         private bool IsMouseActive()
         {
-            return Mouse.current != null && (Mouse.current.delta.ReadValue() != Vector2.zero || Mouse.current.leftButton.wasPressedThisFrame);
+            if (Mouse.current == null) return false;
+
+            var mouseValue = Mouse.current.delta.ReadValue();
+            var isMouseMoving = Mathf.Abs(mouseValue.x) >= mouseDetectionThreshold || Mathf.Abs(mouseValue.y) >= mouseDetectionThreshold;
+            
+            return isMouseMoving || Mouse.current.leftButton.wasPressedThisFrame;
         }
 
         private async void HandleControlSchemeChanged(PlayerInput _)
@@ -190,11 +199,17 @@ namespace Gameplay.Input
             {
                 Cursor.visible = true;
                 
+                Mouse.current.WarpCursorPosition(unhiddenMousePosition);
+
                 EventSystem.current.SetSelectedGameObject(null);
             }
             else
             {
                 Cursor.visible = false;
+
+                unhiddenMousePosition = Mouse.current.position.ReadValue();
+                
+                Mouse.current.WarpCursorPosition(new Vector2(0, 0));
 
                 CurrentNonMouseControlScheme = controlScheme;
             }
