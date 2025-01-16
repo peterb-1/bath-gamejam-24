@@ -195,6 +195,7 @@ namespace UI
             }
             
             GameLogger.Log($"{currentSceneConfig.name} was completed in {timerBehaviour.TimeElapsed}s - awarding ranking of {ranking}!", this);
+            GameLogger.Log($"Unpaused realtime for completion was {timerBehaviour.RealtimeElapsed}s.", this);
 
             if (currentSceneConfig.NextSceneConfig != null && 
                 currentSceneConfig.NextSceneConfig.IsLevelScene &&

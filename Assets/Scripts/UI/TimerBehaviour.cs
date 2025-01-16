@@ -1,4 +1,5 @@
 ﻿using System;
+using Gameplay.Core;
 using Gameplay.Drone;
 using UnityEngine;
 
@@ -7,6 +8,9 @@ namespace UI
     public class TimerBehaviour : MonoBehaviour
     {
         public float TimeElapsed { get; private set; }
+        public float RealtimeElapsed { get; private set; }
+
+        private float realtimeOnStart;
 
         public event Action<float> OnTimeBonusApplied;
 
@@ -18,11 +22,14 @@ namespace UI
         private void Start()
         {
             TimeElapsed = 0f;
+            RealtimeElapsed = 0f;
+            realtimeOnStart = TimeManager.Instance.UnpausedRealtimeSinceStartup;
         }
         
         private void Update()
         {
             TimeElapsed += Time.deltaTime;
+            RealtimeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - realtimeOnStart;
         }
 
         private void HandleDroneKilled(DroneHitboxBehaviour drone)
