@@ -38,9 +38,15 @@ namespace Core
 
             if (string.IsNullOrWhiteSpace(LevelConfig.Guid))
             {
-                LevelConfig.SetGuid(Guid.NewGuid());
-                EditorUtility.SetDirty(this);
+                RefreshGuid();
             }
+        }
+
+        [Button("Refresh GUID")]
+        private void RefreshGuid()
+        {
+            LevelConfig.SetGuid(Guid.NewGuid());
+            EditorUtility.SetDirty(this);
         }
 #endif
     }
