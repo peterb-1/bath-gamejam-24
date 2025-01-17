@@ -2192,6 +2192,7 @@ MonoBehaviour:
   districtNameText: {fileID: 4009373668237011701}
   totalCompletedText: {fileID: 4667983816379911027}
   totalStarsText: {fileID: 7420071965688762342}
+  linkOffset: 100
   <Page>k__BackingField: {fileID: 8432161366224304095}
   <LevelSelectButtons>k__BackingField:
   - {fileID: 335119664140091360}

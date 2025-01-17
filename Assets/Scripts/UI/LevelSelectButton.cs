@@ -20,9 +20,22 @@ namespace UI
         [SerializeField] 
         private Animator borderAnimator;
 
-        public SceneConfig SceneConfig => sceneConfig;
+        [SerializeField] 
+        private LineRenderer lineRenderer;
 
+        [SerializeField] 
+        private Transform leftConnectionAnchor;
+        
+        [SerializeField] 
+        private Transform rightConnectionAnchor;
+
+        public SceneConfig SceneConfig => sceneConfig;
+        public Transform LeftConnectionAnchor => leftConnectionAnchor;
+        public Transform RightConnectionAnchor => rightConnectionAnchor;
+
+        private Transform previousConnectionAnchor;
         private bool wasSelectedThisFrame;
+        private bool enableLinkUpdates;
 
         private static readonly int Selected = Animator.StringToHash("Selected");
 
@@ -58,6 +71,19 @@ namespace UI
             {
                 gameObject.SetActive(false);
             }
+        }
+        
+        public void EnableLink(Transform previousAnchor)
+        {
+            previousConnectionAnchor = previousAnchor;
+            enableLinkUpdates = true;
+        }
+
+        private void Update()
+        {
+            if (!enableLinkUpdates) return;
+            
+            lineRenderer.SetPositions(new [] {previousConnectionAnchor.position, LeftConnectionAnchor.position});
         }
 
         public override void OnSelect(BaseEventData eventData)

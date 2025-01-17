@@ -19,6 +19,9 @@ namespace UI
         
         [SerializeField] 
         private TMP_Text totalStarsText;
+
+        [SerializeField] 
+        private float linkOffset;
         
         [field: SerializeField]
         public Page Page { get; private set; }
@@ -28,9 +31,29 @@ namespace UI
 
         private void Awake()
         {
+            CreateButtonLinks();
             SetInfoAsync().Forget();
         }
         
+        private void CreateButtonLinks()
+        {
+            for (var i = 1; i < LevelSelectButtons.Length; i++)
+            {
+                var leftButton = LevelSelectButtons[i - 1];
+                var rightButton = LevelSelectButtons[i];
+                var startTarget = leftButton.transform.position;
+                var endTarget = rightButton.transform.position;
+                var startAnchor = leftButton.RightConnectionAnchor;
+                var endAnchor = rightButton.LeftConnectionAnchor;
+                var offset = (endTarget - startTarget).normalized * linkOffset;
+
+                startAnchor.localPosition = offset;
+                endAnchor.localPosition = -offset;
+                
+                rightButton.EnableLink(startAnchor);
+            }
+        }
+
         private async UniTask SetInfoAsync()
         {
             await UniTask.WaitUntil(() => SaveManager.IsReady);
