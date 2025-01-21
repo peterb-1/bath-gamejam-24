@@ -20,8 +20,8 @@ MonoBehaviour:
     districtNumber: 2
     missionNumber: 3
     <IsUnlockedByDefault>k__BackingField: 0
-    oneStarTime: 13.5
-    twoStarTime: 10.4
-    threeStarTime: 8.3
+    oneStarTime: 14.2
+    twoStarTime: 10.8
+    threeStarTime: 8.5
     rainbowTime: 7.1
   <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: c03bcadf1835688468ff5e56ee5fa9ec, type: 2}

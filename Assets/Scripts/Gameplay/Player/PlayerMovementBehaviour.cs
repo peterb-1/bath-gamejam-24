@@ -175,6 +175,7 @@ namespace Gameplay.Player
         private bool hasDroppedThisFrame;
         private bool isSpringJumping;
         private bool wasEjectedLeft;
+        private bool hasLandedAtStart;
 
         private Collider2D currentGroundCollider;
         private HingeJoint2D hook;
@@ -250,6 +251,7 @@ namespace Gameplay.Player
             {
                 coyoteCountdown = coyoteDuration;
                 hasDoubleJumped = false;
+                hasLandedAtStart = true;
             }
 
             if (isGrounded && !wasGrounded)
@@ -382,7 +384,7 @@ namespace Gameplay.Player
                 spriteRendererTransform.localScale = spriteScale;
             }
 
-            if (jumpBufferCountdown > 0f && !isSpringJumping)
+            if (jumpBufferCountdown > 0f && !isSpringJumping && hasLandedAtStart)
             {
                 TryJump();
             }
