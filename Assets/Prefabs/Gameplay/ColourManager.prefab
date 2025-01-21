@@ -45,5 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialColour: 0
-  colourChangeCooldown: 0.2
+  colourChangeCooldown: 0.15
   colourChangeDuration: 0.45
