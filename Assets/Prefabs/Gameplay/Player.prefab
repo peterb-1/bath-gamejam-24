@@ -254,7 +254,7 @@ MonoBehaviour:
   ziplineForceMultiplier: {x: 0.7, y: 0.3}
   fallMultiplier: 1.8
   moveSpeed: 7
-  acceleration: 4.96
+  acceleration: 4.9
   deceleration: 6
   wallJumpDeceleration: 3
   clingFallMultiplier: 1
