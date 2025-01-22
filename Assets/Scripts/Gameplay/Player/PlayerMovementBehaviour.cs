@@ -177,7 +177,6 @@ namespace Gameplay.Player
         private bool wasEjectedLeft;
         private bool hasLandedAtStart;
 
-        private Collider2D currentGroundCollider;
         private HingeJoint2D hook;
         
         private static readonly int IsGrounded = Animator.StringToHash("isGrounded");
@@ -257,13 +256,6 @@ namespace Gameplay.Player
             if (isGrounded && !wasGrounded)
             {
                 AudioManager.Instance.Play(AudioClipIdentifier.Land);
-                
-                currentGroundCollider = downLeftHit.collider;
-                
-                if (currentGroundCollider == null)
-                {
-                    currentGroundCollider = downRightHit.collider;
-                }
             }
 
             if (isHooked)
@@ -445,8 +437,6 @@ namespace Gameplay.Player
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
             wallEjectionCountdown = 0f;
-            
-            currentGroundCollider = null;
         }
 
         private void PerformWallJump(Vector2 force, bool isAudible = true)
@@ -462,8 +452,6 @@ namespace Gameplay.Player
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
             wallEjectionCountdown = 0f;
-            
-            currentGroundCollider = null;
         }
 
         public void PerformHeadJump()
@@ -642,8 +630,7 @@ namespace Gameplay.Player
                 ledgeCollider = midHit.collider;
             }
 
-            if (ledgeCollider == currentGroundCollider && 
-                spriteRendererTransform.localScale.x > 0f == isLeft) return;
+            if (spriteRendererTransform.localScale.x > 0f == isLeft) return;
             
             isClimbingLedge = true;
             
