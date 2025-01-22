@@ -305,7 +305,7 @@ namespace Gameplay.Environment
                     var tileMultiplier = Random.Range(0f, 1f) < largeTileChance ? Random.Range(2, maxTileSize + 1) : 1;
 
                     // reduce tile size if we picked one that's too big
-                    while (i + tileMultiplier > tileDimensions.y || j + tileMultiplier > tileDimensions.x)
+                    while (!IsTileValid())
                     {
                         tileMultiplier--;
                     }
@@ -329,6 +329,21 @@ namespace Gameplay.Environment
                         {
                             occupiedTiles.Add((x, y));
                         }
+                    }
+
+                    bool IsTileValid()
+                    {
+                        if (i + tileMultiplier > tileDimensions.y || j + tileMultiplier > tileDimensions.x) return false;
+
+                        for (var i2 = i; i2 < i + tileMultiplier; i2++)
+                        {
+                            for (var j2 = j; j2 < j + tileMultiplier; j2++)
+                            {
+                                if (occupiedTiles.Contains((j2, i2))) return false;
+                            }
+                        }
+
+                        return true;
                     }
                 }
             }

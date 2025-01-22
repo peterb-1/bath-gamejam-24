@@ -8,9 +8,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 342613414910751253, guid: d9513b7ec788dc946a8363a92ee7457d, type: 3}
+      propertyPath: largeTileChance
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 342613414910751253, guid: d9513b7ec788dc946a8363a92ee7457d, type: 3}
+      propertyPath: randomSizeRange.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 342613414910751253, guid: d9513b7ec788dc946a8363a92ee7457d, type: 3}
+      propertyPath: randomSizeRange.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 342613414910751253, guid: d9513b7ec788dc946a8363a92ee7457d, type: 3}
+      propertyPath: backgroundOffset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 342613414910751253, guid: d9513b7ec788dc946a8363a92ee7457d, type: 3}
+      propertyPath: backgroundOffset.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 688433481476131626, guid: d9513b7ec788dc946a8363a92ee7457d, type: 3}
       propertyPath: m_Name
-      value: Building
+      value: 03Building
       objectReference: {fileID: 0}
     - target: {fileID: 2777871781202239608, guid: d9513b7ec788dc946a8363a92ee7457d, type: 3}
       propertyPath: m_LocalPosition.x
