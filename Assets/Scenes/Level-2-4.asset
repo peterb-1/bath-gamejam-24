@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49e0ef1fb32541ca97a3662a5c22c625, type: 3}
   m_Name: Level-2-4
   m_EditorClassIdentifier: 
-  sceneAsset: {fileID: 102900000, guid: 39fce1f407721f042b464f7fdb9e181a, type: 3}
+  sceneAsset: {fileID: 102900000, guid: 05e26e93df3b36b4bb8c10b6e7499c94, type: 3}
   scenePath: Assets/Scenes/Level-2-4.unity
   <IsLevelScene>k__BackingField: 1
   <LevelConfig>k__BackingField:
-    <Guid>k__BackingField: 4470a071-dd86-4058-b272-da8a6aee9855
+    <Guid>k__BackingField: cd28c9d3-67be-49b8-a7d6-50ce208326aa
     districtNumber: 2
     missionNumber: 4
     <IsUnlockedByDefault>k__BackingField: 0
-  <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: 2765f57f19525b746832cfdc39d82219, type: 2}
+    oneStarTime: 26.3
+    twoStarTime: 21.1
+    threeStarTime: 17.4
+    rainbowTime: 13.5
+  <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: 14234982d0b16fb40aabf55f07446b2d, type: 2}
