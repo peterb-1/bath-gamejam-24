@@ -1,3 +1,4 @@
+using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
 using Gameplay.Core;
@@ -28,7 +29,7 @@ namespace Gameplay.Player
 
         private void HandleColourChangeInstant(ColourId colour)
         {
-            if (colourDatabase.TryGetColourConfig(colour, out var colourConfig))
+            if (colourDatabase.TryGetColourConfig(colour, out var colourConfig, district: SceneLoader.Instance.CurrentDistrict))
             {
                 SetColour(colourConfig);
             }
@@ -40,7 +41,7 @@ namespace Gameplay.Player
 
         private void HandleColourChangeStarted(ColourId colour, float duration)
         {
-            if (colourDatabase.TryGetColourConfig(colour, out var colourConfig))
+            if (colourDatabase.TryGetColourConfig(colour, out var colourConfig, district: SceneLoader.Instance.CurrentDistrict))
             {
                 SetColour(colourConfig);
                 RunFlashAsync(duration).Forget();

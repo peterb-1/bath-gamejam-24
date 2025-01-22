@@ -271,16 +271,16 @@ namespace Gameplay.Environment
                 return;
             }
 
-            if (!colourDatabase.TryGetColourConfig(colourId, out var colourConfig))
-            {
-                GameLogger.LogError($"Cannot fill tiles since the colour config for {colourId} could not be found in the colour database!", colourDatabase);
-                return;
-            }
-            
             var activeScene = SceneManager.GetActiveScene();
             var sceneLoader = GameObject.Find("SceneLoader").GetComponent<SceneLoader>();
             var sceneConfig = sceneLoader.SceneConfigs.First(scene => scene.ScenePath == activeScene.path);
             var districtNumber = sceneConfig.LevelConfig.DistrictNumber;
+            
+            if (!colourDatabase.TryGetColourConfig(colourId, out var colourConfig, district: districtNumber))
+            {
+                GameLogger.LogError($"Cannot fill tiles since the colour config for {colourId} could not be found in the colour database!", colourDatabase);
+                return;
+            }
             
             var occupiedTiles = new HashSet<(int, int)>();
 
@@ -305,7 +305,7 @@ namespace Gameplay.Environment
                     var tileMultiplier = Random.Range(0f, 1f) < largeTileChance ? Random.Range(2, maxTileSize + 1) : 1;
 
                     // reduce tile size if we picked one that's too big
-                    while (!IsTileValid())
+                    while (!IsTileSizeValid())
                     {
                         tileMultiplier--;
                     }
@@ -331,7 +331,7 @@ namespace Gameplay.Environment
                         }
                     }
 
-                    bool IsTileValid()
+                    bool IsTileSizeValid()
                     {
                         if (i + tileMultiplier > tileDimensions.y || j + tileMultiplier > tileDimensions.x) return false;
 

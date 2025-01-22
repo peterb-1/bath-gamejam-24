@@ -8,8 +8,23 @@ namespace Gameplay.Colour
         [SerializeField] 
         private ColourConfig[] colourConfigs;
 
-        public bool TryGetColourConfig(ColourId colourId, out ColourConfig colourConfig)
+        [SerializeField] 
+        private DistrictColourOverride[] districtColourOverrides;
+
+        public bool TryGetColourConfig(ColourId colourId, out ColourConfig colourConfig, int district = -1)
         {
+            if (district != -1)
+            {
+                foreach (var colourOverride in districtColourOverrides)
+                {
+                    if (colourOverride.District == district && colourOverride.ConfigOverride.ColourId == colourId)
+                    {
+                        colourConfig = colourOverride.ConfigOverride;
+                        return true;
+                    }
+                }
+            }
+
             foreach (var config in colourConfigs)
             {
                 if (config.ColourId == colourId)

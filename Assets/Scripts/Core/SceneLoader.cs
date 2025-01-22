@@ -33,6 +33,10 @@ namespace Core
 
         public bool IsLoading { get; private set; }
         
+        public int CurrentDistrict => CurrentSceneConfig != null && CurrentSceneConfig.IsLevelScene
+            ? CurrentSceneConfig.LevelConfig.DistrictNumber
+            : -1;
+
         public static event Action OnSceneLoadStart;
         public static event Action OnSceneLoaded;
         

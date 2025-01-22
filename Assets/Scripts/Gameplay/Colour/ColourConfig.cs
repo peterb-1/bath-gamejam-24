@@ -32,7 +32,7 @@ namespace Gameplay.Colour
         public Color SpringColour { get; private set; }
         
         [field: SerializeField]
-        public Color[] DistrictPlatformColours { get; private set; }
+        public Color PlatformColour { get; private set; }
         
         [field: SerializeField]
         public Color Background { get; private set; }

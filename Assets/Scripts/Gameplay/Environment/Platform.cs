@@ -130,21 +130,22 @@ namespace Gameplay.Environment
         [Button("Setup Platform")]
         private void SetupPlatform()
         {
-            if (!colourDatabase.TryGetColourConfig(colourId, out var colourConfig))
-            {
-                GameLogger.LogError($"Cannot fill tiles since the colour config for {colourId} could not be found in the colour database!", colourDatabase);
-                return;
-            }
-
-            var platformSize = mainCollider.size;
-            var rendererPosition = mainCollider.bounds.center.xy();
-            var backgroundColour = colourConfig.Background;
             var activeScene = SceneManager.GetActiveScene();
             var sceneLoader = GameObject.Find("SceneLoader").GetComponent<SceneLoader>();
             var sceneConfig = sceneLoader.SceneConfigs.First(scene => scene.ScenePath == activeScene.path);
             var districtNumber = sceneConfig.LevelConfig.DistrictNumber;
             
-            platformColour = colourConfig.DistrictPlatformColours[districtNumber - 1];
+            if (!colourDatabase.TryGetColourConfig(colourId, out var colourConfig, district: districtNumber))
+            {
+                GameLogger.LogError($"Cannot fill tiles since the colour config for {colourId} could not be found in the colour database!", colourDatabase);
+                return;
+            }
+            
+            var platformSize = mainCollider.size;
+            var rendererPosition = mainCollider.bounds.center.xy();
+            var backgroundColour = colourConfig.Background;
+            
+            platformColour = colourConfig.PlatformColour;
             
             backgroundColour.a = backgroundAlpha;
             
