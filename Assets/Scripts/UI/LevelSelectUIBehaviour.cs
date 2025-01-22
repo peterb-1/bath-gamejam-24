@@ -72,27 +72,25 @@ namespace UI
 
         private void Start()
         {
-            SelectDefaultSelectable();
+            SetPage();
             SetPageNavigation();
         }
 
-        private void SelectDefaultSelectable()
+        private void SetPage()
         {
-            if (InputManager.CurrentControlScheme == ControlScheme.Mouse) return;
-            
             var previousSceneConfig = SceneLoader.Instance.PreviousSceneConfig;
 
-            if (previousSceneConfig == null || !levelSelectButtonLookup.TryGetValue(
-                    previousSceneConfig, out var previousSceneConfigButtonData))
-            {
-                defaultButton.Select();
-            }
-            else
+            if (previousSceneConfig != null &&
+                levelSelectButtonLookup.TryGetValue(previousSceneConfig, out var previousSceneConfigButtonData))
             {
                 var (districtPage, levelSelectButton) = previousSceneConfigButtonData;
                 
                 pageGroup.SetPage(districtPage.Page);
-                levelSelectButton.Select();
+
+                if (InputManager.CurrentControlScheme is not ControlScheme.Mouse)
+                {
+                    levelSelectButton.Select();
+                }
 
                 for (var i = 0; i < districtPages.Length; i++)
                 {
@@ -101,6 +99,10 @@ namespace UI
                         currentPageIndex = i;
                     }
                 }
+            }
+            else if (InputManager.CurrentControlScheme is not ControlScheme.Mouse)
+            {
+                defaultButton.Select();
             }
         }
         
