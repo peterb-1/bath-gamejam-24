@@ -14,6 +14,9 @@ namespace Gameplay.Camera
         [field: SerializeField]
         public CameraFollow CameraFollow { get; private set; }
         
+        [field: SerializeField]
+        public PostProcessOverrider PostProcessOverrider { get; private set; }
+        
         public static CameraAccessService Instance { get; private set; }
 
         private void Awake()

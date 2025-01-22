@@ -12,8 +12,10 @@ GameObject:
   - component: {fileID: 1788878490613156889}
   - component: {fileID: 8176894495211664109}
   - component: {fileID: 689181713115648687}
+  - component: {fileID: 5366401592391419492}
   - component: {fileID: 6438292713810105194}
   - component: {fileID: 2018094478582857337}
+  - component: {fileID: 420348064759848473}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -102,6 +104,7 @@ MonoBehaviour:
   <Camera>k__BackingField: {fileID: 1788878490613156889}
   <CameraTransform>k__BackingField: {fileID: 2156916594220221010}
   <CameraFollow>k__BackingField: {fileID: 689181713115648687}
+  <PostProcessOverrider>k__BackingField: {fileID: 5366401592391419492}
 --- !u!114 &689181713115648687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,6 +128,30 @@ MonoBehaviour:
   velocityShakeThreshold: 5
   velocityShakeMultiplier: 0.0007
   maxShakeStrength: 0.005
+--- !u!114 &5366401592391419492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179401097378549164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 237fc44d905c46d39eec7865c7aba9c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volume: {fileID: 420348064759848473}
+  districtVolumeProfiles:
+  - {fileID: 11400000, guid: 8f2e9d00f83366644b889c926b4814a5, type: 2}
+  - {fileID: 11400000, guid: 659f19db50fd1564e816a356b4a62d50, type: 2}
+  - {fileID: 11400000, guid: 5d546ec2c85629c4ca2cd2900f005d92, type: 2}
+  - {fileID: 11400000, guid: 07f9d8982c6feb9459f4586b786c9161, type: 2}
+  - {fileID: 11400000, guid: 7cff01dca47a874409fc2f20f268d7b2, type: 2}
+  - {fileID: 11400000, guid: a53c1c897e5228141b583f6435d789d2, type: 2}
+  - {fileID: 11400000, guid: 81bfc518ecf93d34390616658ca03221, type: 2}
+  - {fileID: 11400000, guid: 32567ce18859a5343be1d061480c8197, type: 2}
+  - {fileID: 11400000, guid: 7ae72235689dd274391036a92776aeb2, type: 2}
+  - {fileID: 11400000, guid: 0361a25b63d494b4c9676762b2fd2202, type: 2}
 --- !u!81 &6438292713810105194
 AudioListener:
   m_ObjectHideFlags: 0
@@ -177,3 +204,20 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &420348064759848473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179401097378549164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 0}

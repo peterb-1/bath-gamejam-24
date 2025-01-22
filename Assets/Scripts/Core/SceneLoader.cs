@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Audio;
 using Cysharp.Threading.Tasks;
+using Gameplay.Camera;
 using Gameplay.Input;
 using NaughtyAttributes;
 using UnityEngine;
@@ -105,6 +106,17 @@ namespace Core
             CurrentSceneConfig = sceneConfig;
             
             await SceneManager.LoadSceneAsync(sceneConfig.ScenePath);
+
+            await UniTask.WaitUntil(CameraAccessService.IsReady);
+            
+            if (sceneConfig.IsLevelScene)
+            {
+                CameraAccessService.Instance.PostProcessOverrider.SetPostProcessOverride(sceneConfig.LevelConfig.DistrictNumber);
+            }
+            else
+            {
+                CameraAccessService.Instance.PostProcessOverrider.RemovePostProcessOverride();
+            }
 
             GameLogger.Log($"Loaded scene {sceneConfig.name} successfully!", this);
             
