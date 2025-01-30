@@ -43,6 +43,7 @@ namespace Gameplay.Drone
         private PlayerDeathBehaviour playerDeathBehaviour;
         
         private static readonly int Died = Animator.StringToHash("died");
+        private static readonly int Threshold = Shader.PropertyToID("_Threshold");
 
         public event Action<DroneHitboxBehaviour> OnDroneKilled;
 
@@ -92,7 +93,7 @@ namespace Gameplay.Drone
             droneCollider.enabled = false;
             droneAnimator.SetTrigger(Died);
             
-            RunFadeAsync().Forget();
+            RunDissolveAsync().Forget();
         }
         
         private void HandleDroneKilledPlayer()
@@ -100,23 +101,22 @@ namespace Gameplay.Drone
             playerDeathBehaviour.KillPlayer();
         }
 
-        private async UniTask RunFadeAsync()
+        private async UniTask RunDissolveAsync()
         {
             var timeElapsed = 0f;
-            var startColour = spriteRenderer.color;
 
             while (timeElapsed < fadeDuration)
             {
                 var lerp = fadeCurve.Evaluate(timeElapsed / fadeDuration);
 
-                spriteRenderer.color = lerp * startColour + (1f - lerp) * Color.clear;
+                spriteRenderer.material.SetFloat(Threshold, lerp);
                 
                 await UniTask.Yield();
 
                 timeElapsed += Time.deltaTime;
             }
             
-            spriteRenderer.color = Color.clear;
+            spriteRenderer.material.SetFloat(Threshold, 1f);
 
             rigidBody.simulated = false;
         }
