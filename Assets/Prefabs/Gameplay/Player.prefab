@@ -250,6 +250,7 @@ MonoBehaviour:
   jumpForce: 8
   doubleJumpForce: 6
   headJumpForce: 6
+  dashForce: 15
   wallJumpForce: {x: 18, y: 6}
   ziplineForceMultiplier: {x: 0.7, y: 0.3}
   fallMultiplier: 1.8
@@ -270,6 +271,7 @@ MonoBehaviour:
   moveToHookDuration: 0.08
   maxLedgeAssistDuration: 0.1
   springJumpDuration: 0.25
+  dashDuration: 0.3
   hookOffset: {x: 0, y: -0.5, z: 0}
   ledgeFinishOffset: {x: 0, y: 0.5}
   groundCheckDistance: 0.25

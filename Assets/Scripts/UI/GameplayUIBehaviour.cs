@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using Gameplay.Dash;
 using Gameplay.Input;
 using Gameplay.Player;
 using TMPro;
@@ -34,6 +35,9 @@ namespace UI
         [SerializeField] 
         private Animator timerTextAnimator;
 
+        [SerializeField]
+        private DashOrbUIBehaviour[] dashOrbs;
+
         private PlayerVictoryBehaviour playerVictoryBehaviour;
         
         private static readonly int Pulse = Animator.StringToHash("Pulse");
@@ -41,6 +45,8 @@ namespace UI
         private async void Awake()
         {
             InputManager.OnControlSchemeChanged += HandleControlSchemeChanged;
+            DashTrackerService.OnDashGained += HandleDashGained;
+            DashTrackerService.OnDashUsed += HandleDashUsed;
             timerBehaviour.OnTimeBonusApplied += HandleTimeBonusApplied;
             
             await UniTask.WaitUntil(PlayerAccessService.IsReady);
@@ -73,6 +79,16 @@ namespace UI
                 _ => throw new ArgumentOutOfRangeException(nameof(controlScheme), controlScheme, null)
             };
         }
+        
+        private void HandleDashGained(int orbs)
+        {
+            dashOrbs[orbs - 1].Show();
+        }
+        
+        private void HandleDashUsed(int orbs)
+        {
+            dashOrbs[orbs].Hide();
+        }
 
         private void Update()
         {
@@ -82,6 +98,8 @@ namespace UI
         private void OnDestroy()
         {
             InputManager.OnControlSchemeChanged -= HandleControlSchemeChanged;
+            DashTrackerService.OnDashGained -= HandleDashGained;
+            DashTrackerService.OnDashUsed -= HandleDashUsed;
             timerBehaviour.OnTimeBonusApplied -= HandleTimeBonusApplied;
         }
     }

@@ -3,6 +3,7 @@ using Audio;
 using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
+using Gameplay.Dash;
 using Gameplay.Input;
 using UnityEngine;
 using Utils;
@@ -20,6 +21,9 @@ namespace Gameplay.Player
         
         [SerializeField] 
         private float headJumpForce;
+
+        [SerializeField] 
+        private float dashForce;
         
         [SerializeField]
         private Vector2 wallJumpForce;
@@ -81,6 +85,9 @@ namespace Gameplay.Player
         
         [SerializeField] 
         private float springJumpDuration;
+
+        [SerializeField] 
+        private float dashDuration;
 
         [Header("Offsets and Distances")]
         [SerializeField] 
@@ -146,6 +153,7 @@ namespace Gameplay.Player
         private PlayerVictoryBehaviour playerVictoryBehaviour;
 
         public Vector2 Velocity => isHooked ? ziplineVelocity : rigidBody.linearVelocity;
+        public bool IsDashing => dashCountdown > 0f;
 
         private Vector3 ziplineLocalStartOffset;
         private Vector2 lastZiplinePosition;
@@ -153,11 +161,13 @@ namespace Gameplay.Player
 
         public bool IsHooked => isHooked;
 
+        private float dashDirectionMultiplier;
         private float currentFallMultiplier;
         
         private float coyoteCountdown;
         private float jumpBufferCountdown;
         private float jumpCooldownCountdown;
+        private float dashCountdown;
         private float wallJumpDecelerationCountdown;
         private float wallEjectionCountdown;
         private float doubleJumpCancellationCountdown;
@@ -192,8 +202,8 @@ namespace Gameplay.Player
         {
             InputManager.OnJumpPerformed += HandleJumpPerformed;
             InputManager.OnDropPerformed += HandleDropPerformed;
-            
             SceneLoader.OnSceneLoadStart += HandleSceneLoadStart;
+            DashTrackerService.OnDashUsed += HandleDashUsed;
 
             playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
@@ -209,6 +219,7 @@ namespace Gameplay.Player
             if (!isGrounded) coyoteCountdown -= Time.deltaTime;
             if (jumpBufferCountdown > 0f) jumpBufferCountdown -= Time.deltaTime;
             if (jumpCooldownCountdown > 0f) jumpCooldownCountdown -= Time.deltaTime;
+            if (dashCountdown > 0f) dashCountdown -= Time.deltaTime;
             if (wallJumpDecelerationCountdown > 0f) wallJumpDecelerationCountdown -= Time.deltaTime;
             if (wallEjectionCountdown > 0f) wallEjectionCountdown -= Time.deltaTime;
             if (doubleJumpCancellationCountdown > 0f) doubleJumpCancellationCountdown -= Time.deltaTime;
@@ -300,6 +311,7 @@ namespace Gameplay.Player
                         isClinging = true;
                         currentFallMultiplier = clingFallMultiplier;
                         clingCountdown = clingDuration;
+                        dashCountdown = 0f;
                     
                         if (rigidBody.linearVelocityY < 0f)
                         {
@@ -346,7 +358,11 @@ namespace Gameplay.Player
             var moveAmount = InputManager.MoveAmount;
             var desiredVelocity = moveAmount * moveSpeed;
 
-            if (!isHooked)
+            if (dashCountdown > 0f)
+            {
+                rigidBody.linearVelocity = new Vector2(dashForce * dashDirectionMultiplier, 0f);
+            }
+            else if (!isHooked)
             {
                 var targetDeceleration = wallJumpDecelerationCountdown > 0f ? wallJumpDeceleration : deceleration;
 
@@ -369,10 +385,9 @@ namespace Gameplay.Player
 
             if (isMoving || isHooked)
             {
-                var isMovingRight = (isMoving && rigidBody.linearVelocityX > 0f) ||
-                                    (isHooked && ziplineVelocity.x > 0f);
-                
+                var isMovingRight = (isMoving && rigidBody.linearVelocityX > 0f) || (isHooked && ziplineVelocity.x > 0f);
                 var spriteScale = new Vector3(isMovingRight ? 1f : -1f, 1f, 1f);
+                
                 spriteRendererTransform.localScale = spriteScale;
             }
 
@@ -437,6 +452,7 @@ namespace Gameplay.Player
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
             wallEjectionCountdown = 0f;
+            dashCountdown = 0f;
         }
 
         private void PerformWallJump(Vector2 force, bool isAudible = true)
@@ -452,12 +468,15 @@ namespace Gameplay.Player
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
             wallEjectionCountdown = 0f;
+            dashCountdown = 0f;
         }
 
         public void PerformHeadJump()
         {
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
+            
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, headJumpForce);
+            dashCountdown = 0f;
         }
         
         public void PerformSpringJump(float radians, Vector2 minBounce, float verticalDamping)
@@ -531,6 +550,12 @@ namespace Gameplay.Player
             playerAnimator.SetTrigger(CancelDoubleJump);
             doubleJumpCancellationCountdown = 0f;
         }
+        
+        private void HandleDashUsed(int _)
+        {
+            dashDirectionMultiplier = Mathf.Sign(spriteRendererTransform.localScale.x);
+            dashCountdown = dashDuration;
+        }
 
         public bool TryHookPlayer(HingeJoint2D newHook)
         {
@@ -540,6 +565,8 @@ namespace Gameplay.Player
             }
             
             AudioManager.Instance.Play(AudioClipIdentifier.ZiplineAttach);
+            
+            dashCountdown = 0f;
             
             hook = newHook;
             isHooked = true;
@@ -681,6 +708,8 @@ namespace Gameplay.Player
 
         private void HandleVictorySequenceStart(Vector2 position, float duration)
         {
+            dashCountdown = 0f;
+            
             ShrinkInBlackHoleAsync(position, duration).Forget();
         }
 
@@ -717,8 +746,8 @@ namespace Gameplay.Player
         {
             InputManager.OnJumpPerformed -= HandleJumpPerformed;
             InputManager.OnDropPerformed -= HandleDropPerformed;
-            
             SceneLoader.OnSceneLoadStart -= HandleSceneLoadStart;
+            DashTrackerService.OnDashUsed -= HandleDashUsed;
             
             playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;

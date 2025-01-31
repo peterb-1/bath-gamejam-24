@@ -26,6 +26,9 @@ namespace Gameplay.Input
 
         [SerializeField] 
         private InputActionReference dropAction;
+        
+        [SerializeField] 
+        private InputActionReference dashAction;
 
         [SerializeField] 
         private InputActionReference pauseAction;
@@ -64,6 +67,7 @@ namespace Gameplay.Input
         public static event Action<ColourId> OnColourChanged;
         public static event Action OnJumpPerformed;
         public static event Action OnDropPerformed;
+        public static event Action OnDashPerformed;
         public static event Action OnPauseToggled;
         public static event Action OnRestartPerformed;
         public static event Action<ControlScheme> OnControlSchemeChanged;
@@ -224,6 +228,7 @@ namespace Gameplay.Input
             moveAction.action.Enable();
             jumpAction.action.Enable();
             dropAction.action.Enable();
+            dashAction.action.Enable();
             pauseAction.action.Enable();
             restartAction.action.Enable();
             blueAction.action.Enable();
@@ -238,6 +243,7 @@ namespace Gameplay.Input
             moveAction.action.Disable();
             jumpAction.action.Disable();
             dropAction.action.Disable();
+            dashAction.action.Disable();
             pauseAction.action.Disable();
             restartAction.action.Disable();
             blueAction.action.Disable();
@@ -249,6 +255,7 @@ namespace Gameplay.Input
         {
             jumpAction.action.performed += HandleJumpPerformed;
             dropAction.action.performed += HandleDropPerformed;
+            dashAction.action.performed += HandleDashPerformed;
             pauseAction.action.performed += HandlePausePerformed;
             restartAction.action.performed += HandleRestartPerformed;
             blueAction.action.performed += HandleBluePerformed;
@@ -260,6 +267,7 @@ namespace Gameplay.Input
         {
             jumpAction.action.performed -= HandleJumpPerformed;
             dropAction.action.performed -= HandleDropPerformed;
+            dashAction.action.performed -= HandleDashPerformed;
             pauseAction.action.performed -= HandlePausePerformed;
             restartAction.action.performed -= HandleRestartPerformed;
             blueAction.action.performed -= HandleBluePerformed;
@@ -279,10 +287,16 @@ namespace Gameplay.Input
             OnJumpPerformed?.Invoke();
         }
         
-        private void HandleDropPerformed(InputAction.CallbackContext _)
+        private static void HandleDropPerformed(InputAction.CallbackContext _)
         {
             if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
             OnDropPerformed?.Invoke();
+        }
+        
+        private static void HandleDashPerformed(InputAction.CallbackContext _)
+        {
+            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
+            OnDashPerformed?.Invoke();
         }
 
         private static void HandlePausePerformed(InputAction.CallbackContext _)
@@ -290,7 +304,7 @@ namespace Gameplay.Input
             OnPauseToggled?.Invoke();
         }
         
-        private void HandleRestartPerformed(InputAction.CallbackContext _)
+        private static void HandleRestartPerformed(InputAction.CallbackContext _)
         {
             if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
             OnRestartPerformed?.Invoke();
