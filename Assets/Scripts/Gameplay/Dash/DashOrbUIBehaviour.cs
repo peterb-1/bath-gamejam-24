@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Core;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,8 @@ namespace Gameplay.Dash
 {
     public class DashOrbUIBehaviour : MonoBehaviour
     {
+        private const int DASH_INTRODUCTION_DISTRICT = 4;
+        
         [SerializeField] 
         private Image image;
 
@@ -18,6 +21,11 @@ namespace Gameplay.Dash
         private void Awake()
         {
             SetColour(0f);
+
+            if (SceneLoader.Instance.CurrentSceneConfig.LevelConfig.DistrictNumber < DASH_INTRODUCTION_DISTRICT)
+            {
+                image.enabled = false;
+            }
         }
 
         public void Show()
