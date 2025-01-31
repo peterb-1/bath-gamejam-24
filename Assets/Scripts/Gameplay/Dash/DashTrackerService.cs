@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Audio;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
 using Gameplay.Player;
@@ -46,11 +47,16 @@ namespace Gameplay.Dash
         {
             if (currentOrbs <= 0 || playerMovementBehaviour.IsDashing || playerMovementBehaviour.IsHooked)
             {
+                AudioManager.Instance.Play(AudioClipIdentifier.DashFailed);
+                
                 OnDashFailed?.Invoke();
             }
             else
             {
                 currentOrbs--;
+                
+                AudioManager.Instance.Play(AudioClipIdentifier.Dash);
+                
                 OnDashUsed?.Invoke(currentOrbs);
             }
         }
@@ -61,6 +67,8 @@ namespace Gameplay.Dash
             {
                 return false;
             }
+            
+            AudioManager.Instance.Play(AudioClipIdentifier.DashCollected);
             
             CollectedOrbs.Add(dashOrb);
             currentOrbs++;

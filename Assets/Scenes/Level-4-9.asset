@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49e0ef1fb32541ca97a3662a5c22c625, type: 3}
+  m_Name: Level-4-9
+  m_EditorClassIdentifier: 
+  sceneAsset: {fileID: 102900000, guid: 14a15658d30650c489945f326ad4dbb6, type: 3}
+  scenePath: Assets/Scenes/Level-4-9.unity
+  <IsLevelScene>k__BackingField: 1
+  <LevelConfig>k__BackingField:
+    <Guid>k__BackingField: 4c6755ee-24dc-46f1-ae07-8ee52bf4b52e
+    districtNumber: 4
+    missionNumber: 9
+    <IsUnlockedByDefault>k__BackingField: 0
+    oneStarTime: 0
+    twoStarTime: 0
+    threeStarTime: 0
+    rainbowTime: 0
+  <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: ec493bfdedebb4345a53eb8784c14241, type: 2}

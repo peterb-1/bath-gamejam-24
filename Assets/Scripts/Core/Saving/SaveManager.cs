@@ -52,6 +52,8 @@ namespace Core.Saving
                 }
             }
             
+            Save();
+            
             SceneLoader.Instance.ReloadCurrentScene();
         }
 #endif

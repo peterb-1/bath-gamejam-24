@@ -89,8 +89,10 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 45c98d92a92b1244fb5fb5f24191be47, type: 3}
   - <Sprites>k__BackingField:
     - {fileID: 21300000, guid: 81a5d088f205f9b4d9f613d115b4594b, type: 3}
-  - <Sprites>k__BackingField: []
-  - <Sprites>k__BackingField: []
+  - <Sprites>k__BackingField:
+    - {fileID: 21300000, guid: 6686e5f8d42470a45b28f0539fb7e0b6, type: 3}
+  - <Sprites>k__BackingField:
+    - {fileID: 21300000, guid: 8e8a5df8e0102fb4cace15d7a1cb387d, type: 3}
   - <Sprites>k__BackingField: []
   - <Sprites>k__BackingField: []
   - <Sprites>k__BackingField: []

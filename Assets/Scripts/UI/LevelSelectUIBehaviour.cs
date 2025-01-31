@@ -205,17 +205,14 @@ namespace UI
             var rightmostLevelButton = districtPage.GetRightmostUnlockedLevelButton();
             var areAnyLevelsUnlocked = rightmostLevelButton != null;
             var rightmostButton = areAnyLevelsUnlocked ? rightmostLevelButton : backButton;
-            var isRightmostLevelComplete = areAnyLevelsUnlocked
-                                           && SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(rightmostLevelButton.SceneConfig.LevelConfig, out var levelData)
-                                           && levelData.IsComplete();
-            var areAllLevelsComplete = rightmostButton == districtPage.LevelSelectButtons[^1] && isRightmostLevelComplete;
 
             var leftmostNavigation = leftmostButton.navigation;
             var rightmostNavigation = rightmostButton.navigation;
             var backNavigation = backButton.navigation;
             var forwardNavigation = forwardButton.navigation;
             var isBackActive = currentPageIndex > 0;
-            var isForwardActive = currentPageIndex < districtPages.Length - 1 && areAllLevelsComplete;
+            var isForwardActive = currentPageIndex < districtPages.Length - 1 &&
+                                  districtPages[currentPageIndex + 1].GetLeftmostUnlockedLevelButton() != null;
             
             rightmostNavigation.selectOnRight = isForwardActive ? forwardButton : null;
             forwardNavigation.selectOnLeft = rightmostButton;

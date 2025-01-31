@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49e0ef1fb32541ca97a3662a5c22c625, type: 3}
+  m_Name: Level-5-5
+  m_EditorClassIdentifier: 
+  sceneAsset: {fileID: 102900000, guid: 6a6a2616c9d8f5446bb9ac41accee841, type: 3}
+  scenePath: Assets/Scenes/Level-5-5.unity
+  <IsLevelScene>k__BackingField: 1
+  <LevelConfig>k__BackingField:
+    <Guid>k__BackingField: c420bf92-df91-4687-8b88-3ab97e41bd5b
+    districtNumber: 5
+    missionNumber: 5
+    <IsUnlockedByDefault>k__BackingField: 0
+    oneStarTime: 0
+    twoStarTime: 0
+    threeStarTime: 0
+    rainbowTime: 0
+  <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: a06252700d6857244abdc2a351f486dc, type: 2}

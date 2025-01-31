@@ -10,7 +10,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1519683710965446983, guid: f3b1d61641e0e004ab636317d0d70ed2, type: 3}
       propertyPath: m_Name
-      value: Background
+      value: 04Background
+      objectReference: {fileID: 0}
+    - target: {fileID: 7629041258502799399, guid: f3b1d61641e0e004ab636317d0d70ed2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: bda5e6ec5bf56124783e41c0d1df9c8d, type: 3}
+    - target: {fileID: 7629041258502799399, guid: f3b1d61641e0e004ab636317d0d70ed2, type: 3}
+      propertyPath: m_Color.b
+      value: 0.3207547
+      objectReference: {fileID: 0}
+    - target: {fileID: 7629041258502799399, guid: f3b1d61641e0e004ab636317d0d70ed2, type: 3}
+      propertyPath: m_Color.g
+      value: 0.3207547
+      objectReference: {fileID: 0}
+    - target: {fileID: 7629041258502799399, guid: f3b1d61641e0e004ab636317d0d70ed2, type: 3}
+      propertyPath: m_Color.r
+      value: 0.3207547
       objectReference: {fileID: 0}
     - target: {fileID: 7891758906524270878, guid: f3b1d61641e0e004ab636317d0d70ed2, type: 3}
       propertyPath: m_LocalPosition.x

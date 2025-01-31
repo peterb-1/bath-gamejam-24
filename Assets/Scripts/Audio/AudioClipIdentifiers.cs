@@ -19,6 +19,7 @@ namespace Audio
         SpringJump, // needs clip
         Toggle,
         ZiplineAttach,
-        ZiplineDetach
+        ZiplineDetach,
+        DashFailed // needs clip
     }
 }

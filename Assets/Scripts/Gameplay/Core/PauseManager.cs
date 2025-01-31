@@ -113,6 +113,8 @@ namespace Gameplay.Core
                 prePauseTimeScale = Time.timeScale;
                 
                 Time.timeScale = 0.0f;
+                
+                AudioManager.Instance.Pause();
             }
             else
             {
@@ -120,6 +122,8 @@ namespace Gameplay.Core
                 gameplayPageGroup.ShowGroupImmediate();
                 
                 Time.timeScale = prePauseTimeScale;
+                
+                AudioManager.Instance.Unpause();
             }
         }
         

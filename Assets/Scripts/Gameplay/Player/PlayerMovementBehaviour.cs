@@ -700,6 +700,8 @@ namespace Gameplay.Player
         
         private void HandleDeathSequenceStart()
         {
+            dashCountdown = 0f;
+            
             TryUnhookPlayer();
             
             rigidBody.linearVelocity = Vector2.zero;

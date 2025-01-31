@@ -217,6 +217,25 @@ namespace Audio
                 playingSfxSources.Remove(item);
             }
         }
+        
+        public void Pause()
+        {
+            foreach (var (_, source) in playingSfxSources)
+            {
+                source.Pause();
+            }
+        }
+
+        public void Unpause()
+        {
+            foreach (var (_, source) in playingSfxSources)
+            {
+                if (!source.isPlaying)
+                {
+                    source.UnPause();
+                }
+            }
+        }
 
         private async UniTask PlayClipAsync(AudioClipData clipData, Action onFinishedCallback = null)
         {
