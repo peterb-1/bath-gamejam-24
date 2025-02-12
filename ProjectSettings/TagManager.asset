@@ -18,7 +18,7 @@ TagManager:
   - Drone
   - CameraBorderZone
   - PlayerDetection
-  - 
+  - PlayerDeath
   - 
   - 
   - 
@@ -52,6 +52,9 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 1932195269
+    locked: 0
+  - name: HeatDistortion
+    uniqueID: 2068874865
     locked: 0
   - name: Clouds
     uniqueID: 2606674321

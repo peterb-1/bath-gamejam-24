@@ -20,6 +20,7 @@ MonoBehaviour:
     maxDesaturated: {r: 0.11894803, g: 0.16274446, b: 0.254717, a: 1}
     <PlayerColour>k__BackingField: {r: 0.23529412, g: 0.3254902, b: 0.90588236, a: 1}
     <DroneColour>k__BackingField: {r: 0.4509804, g: 0.5019608, b: 1, a: 1}
+    <LaserColour>k__BackingField: {r: 0.24705882, g: 0.41960785, b: 0.98039216, a: 1}
     <SpringColour>k__BackingField: {r: 0.4509804, g: 0.5019608, b: 1, a: 1}
     <PlatformColour>k__BackingField: {r: 0.2509804, g: 0.30980393, b: 0.9725491, a: 1}
     <Background>k__BackingField: {r: 0.2659695, g: 0.23028658, b: 0.7075472, a: 1}
@@ -62,6 +63,7 @@ MonoBehaviour:
     maxDesaturated: {r: 0.26415092, g: 0.12086151, b: 0.1356845, a: 1}
     <PlayerColour>k__BackingField: {r: 0.84313726, g: 0.36862746, b: 0.43529412, a: 1}
     <DroneColour>k__BackingField: {r: 1, g: 0.57254905, b: 0.6666667, a: 1}
+    <LaserColour>k__BackingField: {r: 1, g: 0.30588236, b: 0.37254903, a: 1}
     <SpringColour>k__BackingField: {r: 1, g: 0.57254905, b: 0.6666667, a: 1}
     <PlatformColour>k__BackingField: {r: 0.8392157, g: 0.38431373, b: 0.5137255, a: 1}
     <Background>k__BackingField: {r: 0.735849, g: 0.2256141, b: 0.31888276, a: 1}
@@ -104,6 +106,7 @@ MonoBehaviour:
     maxDesaturated: {r: 0.2735849, g: 0.21722007, b: 0.058072276, a: 1}
     <PlayerColour>k__BackingField: {r: 0.8509804, g: 0.5176471, b: 0.11764706, a: 1}
     <DroneColour>k__BackingField: {r: 1, g: 0.78039217, b: 0.39215687, a: 1}
+    <LaserColour>k__BackingField: {r: 1, g: 0.54901963, b: 0, a: 1}
     <SpringColour>k__BackingField: {r: 1, g: 0.78039217, b: 0.39215687, a: 1}
     <PlatformColour>k__BackingField: {r: 0.82745105, g: 0.57254905, b: 0.2392157, a: 1}
     <Background>k__BackingField: {r: 0.8396226, g: 0.64618754, b: 0.122774996, a: 1}
@@ -149,6 +152,7 @@ MonoBehaviour:
       maxDesaturated: {r: 0.11894803, g: 0.16274446, b: 0.254717, a: 1}
       <PlayerColour>k__BackingField: {r: 0.23529412, g: 0.3254902, b: 0.90588236, a: 1}
       <DroneColour>k__BackingField: {r: 0.4509804, g: 0.5019608, b: 1, a: 1}
+      <LaserColour>k__BackingField: {r: 0.24705882, g: 0.41960785, b: 0.98039216, a: 1}
       <SpringColour>k__BackingField: {r: 0.4509804, g: 0.5019608, b: 1, a: 1}
       <PlatformColour>k__BackingField: {r: 0.25490198, g: 0.2901961, b: 0.7176471, a: 1}
       <Background>k__BackingField: {r: 0.2659695, g: 0.23028658, b: 0.7075472, a: 1}
@@ -193,6 +197,7 @@ MonoBehaviour:
       maxDesaturated: {r: 0.26415092, g: 0.12086151, b: 0.1356845, a: 1}
       <PlayerColour>k__BackingField: {r: 0.78431374, g: 0.27058825, b: 0.39607844, a: 1}
       <DroneColour>k__BackingField: {r: 1, g: 0.57254905, b: 0.6666667, a: 1}
+      <LaserColour>k__BackingField: {r: 1, g: 0.30588236, b: 0.37254903, a: 1}
       <SpringColour>k__BackingField: {r: 1, g: 0.57254905, b: 0.6666667, a: 1}
       <PlatformColour>k__BackingField: {r: 0.6415094, g: 0.2269491, b: 0.34410736, a: 1}
       <Background>k__BackingField: {r: 0.735849, g: 0.2256141, b: 0.31888276, a: 1}
@@ -237,6 +242,7 @@ MonoBehaviour:
       maxDesaturated: {r: 0.2735849, g: 0.21722007, b: 0.058072276, a: 1}
       <PlayerColour>k__BackingField: {r: 0.8509804, g: 0.5176471, b: 0.11764706, a: 1}
       <DroneColour>k__BackingField: {r: 1, g: 0.78039217, b: 0.39215687, a: 1}
+      <LaserColour>k__BackingField: {r: 1, g: 0.54901963, b: 0, a: 1}
       <SpringColour>k__BackingField: {r: 1, g: 0.78039217, b: 0.39215687, a: 1}
       <PlatformColour>k__BackingField: {r: 0.7254902, g: 0.5529412, b: 0.23529413, a: 1}
       <Background>k__BackingField: {r: 0.8396226, g: 0.64618754, b: 0.122774996, a: 1}

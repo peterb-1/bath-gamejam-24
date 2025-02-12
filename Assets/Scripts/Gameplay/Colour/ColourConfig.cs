@@ -29,6 +29,9 @@ namespace Gameplay.Colour
         public Color DroneColour { get; private set; }
         
         [field: SerializeField]
+        public Color LaserColour { get; private set; }
+        
+        [field: SerializeField]
         public Color SpringColour { get; private set; }
         
         [field: SerializeField]

@@ -109,6 +109,15 @@ namespace Gameplay.Player
         [SerializeField] 
         private float runAnimationSpeedThreshold;
         
+        [SerializeField] 
+        private float dashDistortionStrength;
+        
+        [SerializeField] 
+        private float dashDistortionSmoothing;
+        
+        [SerializeField] 
+        private Vector3 dashDistortionOffset;
+        
         [SerializeField]
         private LayerMask groundLayers;
 
@@ -124,6 +133,9 @@ namespace Gameplay.Player
 
         [SerializeField] 
         private Transform spriteRendererTransform;
+        
+        [SerializeField] 
+        private SpriteRenderer dashDistortionRenderer;
 
         [SerializeField] 
         private Animator playerAnimator;
@@ -163,6 +175,7 @@ namespace Gameplay.Player
 
         private float dashDirectionMultiplier;
         private float currentFallMultiplier;
+        private float currentDashDistortion;
         
         private float coyoteCountdown;
         private float jumpBufferCountdown;
@@ -194,6 +207,7 @@ namespace Gameplay.Player
         private static readonly int IsHookedHash = Animator.StringToHash("isHooked");
         private static readonly int DoubleJump = Animator.StringToHash("doubleJump");
         private static readonly int CancelDoubleJump = Animator.StringToHash("cancelDoubleJump");
+        private static readonly int Strength = Shader.PropertyToID("_Strength");
 
         public event Action OnPlayerHooked;
         public event Action OnPlayerUnhooked;
@@ -274,6 +288,8 @@ namespace Gameplay.Player
                 HookUpdate();
             }
 
+            DashUpdate();
+
             WallUpdate();
 
             if (jumpBufferCountdown <= 0f)
@@ -329,6 +345,16 @@ namespace Gameplay.Player
                 currentFallMultiplier = fallMultiplier;
                 isClinging = false;
             }
+        }
+        
+        private void DashUpdate()
+        {
+            var targetDistortionStrength = dashCountdown > 0f ? dashDistortionStrength * dashDirectionMultiplier : 0f;
+            var lerpDistortion = Mathf.Lerp(currentDashDistortion, targetDistortionStrength, dashDistortionSmoothing);
+
+            dashDistortionRenderer.color = Color.Lerp(new Color(1f, 1f, 1f, 0f), Color.white, Mathf.Abs(lerpDistortion) / dashDistortionStrength);
+            dashDistortionRenderer.material.SetFloat(Strength, lerpDistortion);
+            currentDashDistortion = lerpDistortion;
         }
 
         private void HookUpdate()
@@ -555,6 +581,8 @@ namespace Gameplay.Player
         {
             dashDirectionMultiplier = Mathf.Sign(spriteRendererTransform.localScale.x);
             dashCountdown = dashDuration;
+
+            dashDistortionRenderer.transform.localPosition = dashDistortionOffset * dashDirectionMultiplier;
         }
 
         public bool TryHookPlayer(HingeJoint2D newHook)
