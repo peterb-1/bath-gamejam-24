@@ -140,9 +140,10 @@ MonoBehaviour:
     <MixerGroup>k__BackingField: {fileID: -7818162125043226211, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
     <Volume>k__BackingField: 0.36
   - <Identifier>k__BackingField: 1
-    <ParallelAudioClips>k__BackingField: []
+    <ParallelAudioClips>k__BackingField:
+    - {fileID: 8300000, guid: b3a4c7c67c7d5cd4d87cadc7501d78a4, type: 3}
     <MixerGroup>k__BackingField: {fileID: -7818162125043226211, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
-    <Volume>k__BackingField: 1
+    <Volume>k__BackingField: 0.36
   - <Identifier>k__BackingField: 2
     <ParallelAudioClips>k__BackingField: []
     <MixerGroup>k__BackingField: {fileID: -7818162125043226211, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
