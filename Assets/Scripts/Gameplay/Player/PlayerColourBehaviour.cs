@@ -16,15 +16,24 @@ namespace Gameplay.Player
         private ParticleSystemRenderer deathParticleRenderer;
 
         [SerializeField] 
+        private PlayerTrailBehaviour playerTrailBehaviour;
+
+        [SerializeField] 
         private ColourDatabase colourDatabase;
 
         [SerializeField] 
         private AnimationCurve flashCurve;
+
+        private ColourConfig currentColourConfig;
+        private TrailRenderer trailRenderer;
+        private Gradient trailGradient;
         
         private void Awake()
         {
             ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
             ColourManager.OnColourChangeInstant += HandleColourChangeInstant;
+
+            playerTrailBehaviour.OnTrailLoaded += HandleTrailLoaded;
         }
 
         private void HandleColourChangeInstant(ColourId colour)
@@ -51,11 +60,29 @@ namespace Gameplay.Player
                 GameLogger.LogError($"Cannot change player colour since the colour config for {colour} could not be found in the colour database!", colourDatabase);
             }
         }
+        
+        private void HandleTrailLoaded(TrailRenderer trail)
+        {
+            trailRenderer = trail;
+            trailGradient = trailRenderer.colorGradient;
+
+            if (currentColourConfig != null)
+            {
+                trailRenderer.colorGradient = trailGradient.WithTint(currentColourConfig.PlayerColour);
+            }
+        }
 
         private void SetColour(ColourConfig colourConfig)
         {
+            currentColourConfig = colourConfig;
+            
             playerSpriteRenderer.color = colourConfig.PlayerColour;
             deathParticleRenderer.material.color = colourConfig.PlayerColour;
+
+            if (trailRenderer != null)
+            {
+                trailRenderer.colorGradient = trailGradient.WithTint(colourConfig.PlayerColour);
+            }
         }
 
         private async UniTask RunFlashAsync(float duration)
@@ -68,8 +95,10 @@ namespace Gameplay.Player
             while (timeElapsed < duration)
             {
                 var lerp = flashCurve.Evaluate(timeElapsed / duration);
+                var colour = (1f - lerp) * startColour + lerp * Color.white;
 
-                playerSpriteRenderer.color = (1f - lerp) * startColour + lerp * Color.white;
+                playerSpriteRenderer.color = colour;
+                trailRenderer.colorGradient = trailGradient.WithTint(colour);
                 
                 await UniTask.Yield();
                 
@@ -77,12 +106,15 @@ namespace Gameplay.Player
             }
 
             playerSpriteRenderer.color = startColour;
+            trailRenderer.colorGradient = trailGradient.WithTint(startColour);
         }
 
         private void OnDestroy()
         {
             ColourManager.OnColourChangeStarted -= HandleColourChangeStarted;
             ColourManager.OnColourChangeInstant -= HandleColourChangeInstant;
+            
+            playerTrailBehaviour.OnTrailLoaded -= HandleTrailLoaded;
         }
     }
 }

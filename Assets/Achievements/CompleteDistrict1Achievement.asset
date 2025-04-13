@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9475bf251b004f928188c0bd4bbd2f36, type: 3}
+  m_Name: CompleteDistrict1Achievement
+  m_EditorClassIdentifier: 
+  <Guid>k__BackingField: 0dd6f2b0-2708-4268-b1f1-b423b43934be
+  <TrailGuid>k__BackingField: cf945410-73c3-45b5-ac45-96084f1965da

@@ -186,6 +186,7 @@ GameObject:
   - component: {fileID: 3914673202431141328}
   - component: {fileID: 5012229811958368346}
   - component: {fileID: 3249549202202213294}
+  - component: {fileID: 1050786829656960430}
   - component: {fileID: 166652011353585149}
   - component: {fileID: 6448495522596364973}
   m_Layer: 9
@@ -237,6 +238,7 @@ MonoBehaviour:
   <PlayerDeathBehaviour>k__BackingField: {fileID: 5012229811958368346}
   <PlayerMovementBehaviour>k__BackingField: {fileID: 7832381044865399546}
   <PlayerVictoryBehaviour>k__BackingField: {fileID: 3249549202202213294}
+  <PlayerTrailBehaviour>k__BackingField: {fileID: 1050786829656960430}
 --- !u!114 &7832381044865399546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -337,6 +339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSpriteRenderer: {fileID: 8491304688917359779}
   deathParticleRenderer: {fileID: 8671948913537418050}
+  playerTrailBehaviour: {fileID: 1050786829656960430}
   colourDatabase: {fileID: 11400000, guid: 9ee9ba719534f7b428301db4856b7bda, type: 2}
   flashCurve:
     serializedVersion: 2
@@ -398,6 +401,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   playerHitbox: {fileID: 6448495522596364973}
+--- !u!114 &1050786829656960430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2745676539903126608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb1b2509a51e48dc8f1db50132d80526, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trailDatabase: {fileID: 11400000, guid: 5f90f395cd6ddc841b45925dae138aab, type: 2}
 --- !u!50 &166652011353585149
 Rigidbody2D:
   serializedVersion: 5

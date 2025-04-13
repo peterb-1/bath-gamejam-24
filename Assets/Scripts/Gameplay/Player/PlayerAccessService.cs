@@ -20,6 +20,9 @@ namespace Gameplay.Player
         [field: SerializeField]
         public PlayerVictoryBehaviour PlayerVictoryBehaviour { get; private set; }
         
+        [field: SerializeField]
+        public PlayerTrailBehaviour PlayerTrailBehaviour { get; private set; }
+
         public static PlayerAccessService Instance { get; private set; }
 
         private void Awake()

@@ -9,12 +9,22 @@ namespace Core.Saving
     {
         [field: SerializeField]
         public CampaignData CampaignData { get; private set; }
+        
+        [field: SerializeField]
+        public AchievementsData AchievementsData { get; private set; }
+        
+        [field: SerializeField]
+        public PreferenceData PreferenceData { get; private set; }
 
         public async UniTask InitialiseAsync()
         {
             CampaignData ??= new CampaignData();
+            AchievementsData ??= new AchievementsData();
+            PreferenceData ??= new PreferenceData();
 
             await CampaignData.InitialiseAsync();
+            await AchievementsData.InitialiseAsync();
+            await PreferenceData.InitialiseAsync();
         }
     }
 }

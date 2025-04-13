@@ -18,9 +18,11 @@ namespace Gameplay.Dash
         [SerializeField] 
         private float fadeDuration;
 
-        private void Awake()
+        private async void Awake()
         {
             SetColour(0f);
+
+            await UniTask.WaitUntil(SceneLoader.IsReady);
 
             if (SceneLoader.Instance.CurrentSceneConfig.LevelConfig.DistrictNumber < DASH_INTRODUCTION_DISTRICT)
             {

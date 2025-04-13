@@ -9,7 +9,7 @@ using UnityEditor;
 
 namespace Core
 {
-    [CreateAssetMenu(fileName = "AudioDatabase", menuName = "Scriptable Objects/SceneConfig")]
+    [CreateAssetMenu(fileName = "SceneConfig", menuName = "Scriptable Objects/SceneConfig")]
     public class SceneConfig : ScriptableObject
     {
 #if UNITY_EDITOR
