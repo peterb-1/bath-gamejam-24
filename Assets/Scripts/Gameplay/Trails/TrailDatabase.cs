@@ -11,6 +11,8 @@ namespace Gameplay.Trails
     {
         [SerializeField] 
         private Trail[] trails;
+        
+        public Trail[] Trails => trails;
 
         [field: SerializeField, Dropdown(nameof(GetTrailDropdown))] 
         public string DefaultTrail { get; private set; }

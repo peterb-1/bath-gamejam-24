@@ -40,13 +40,17 @@ namespace UI
             {
                 ShowGroupImmediate();
             }
+            else
+            {
+                HideGroupImmediate();
+            }
         }
 
-        public async UniTask ShowGroupAsync()
+        public async UniTask ShowGroupAsync(bool isForward = true)
         {
             pageGroupAnimator.SetBool(IsActive, true);
             
-            ActivePage.Show();
+            ActivePage.Show(isForward);
 
             var duration = await pageGroupAnimator.GetCurrentClipDurationAsync();
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
@@ -55,12 +59,12 @@ namespace UI
             canvasGroup.blocksRaycasts = true;
         }
         
-        public async UniTask HideGroupAsync()
+        public async UniTask HideGroupAsync(bool isForward = true)
         {
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
             
-            ActivePage.Hide();
+            ActivePage.Hide(isForward);
             
             pageGroupAnimator.SetBool(IsActive, false);
 
@@ -68,14 +72,14 @@ namespace UI
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
         }
         
-        public void ShowGroup()
+        public void ShowGroup(bool isForward = true)
         {
-            ShowGroupAsync().Forget();
+            ShowGroupAsync(isForward).Forget();
         }
 
-        public void HideGroup()
+        public void HideGroup(bool isForward = true)
         {
-            HideGroupAsync().Forget();
+            HideGroupAsync(isForward).Forget();
         }
 
         public void ShowGroupImmediate()
@@ -119,6 +123,11 @@ namespace UI
         public void SetPage(Page page, bool isForward = true)
         {
             SetPageAsync(page, isForward).Forget();
+        }
+
+        public void SetDefaultPage(bool isForward = true)
+        {
+            SetPageAsync(initialPage, isForward).Forget();
         }
     }
 }

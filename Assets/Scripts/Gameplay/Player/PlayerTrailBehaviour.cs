@@ -11,6 +11,14 @@ namespace Gameplay.Player
     {
         [SerializeField]
         private TrailDatabase trailDatabase;
+        
+        [SerializeField]
+        private PlayerMovementBehaviour playerMovementBehaviour;
+
+        [SerializeField] 
+        private float emissionVelocityThreshold;
+
+        private TrailRenderer trailRenderer;
 
         public event Action<TrailRenderer> OnTrailLoaded;
         
@@ -30,9 +38,14 @@ namespace Gameplay.Player
                 SaveManager.Instance.SaveData.PreferenceData.SetTrail(trail);
             }
 
-            var trailRenderer = Instantiate(trail.TrailRenderer, transform, false);
+            trailRenderer = Instantiate(trail.TrailRenderer, transform, false);
             
             OnTrailLoaded?.Invoke(trailRenderer);
+        }
+
+        private void Update()
+        {
+            trailRenderer.emitting = playerMovementBehaviour.Velocity.magnitude > emissionVelocityThreshold;
         }
     }
 }

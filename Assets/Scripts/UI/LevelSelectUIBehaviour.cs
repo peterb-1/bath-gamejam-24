@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using Core;
-using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Gameplay.Environment;
 using Gameplay.Input;
-using TMPro;
 using UnityEngine;
 
 namespace UI
@@ -14,6 +12,9 @@ namespace UI
     {
         [SerializeField] 
         private PageGroup pageGroup;
+
+        [SerializeField] 
+        private SettingsUIBehaviour settingsBehaviour;
 
         [SerializeField] 
         private LevelSelectInfoDisplayUIBehaviour infoDisplayBehaviour;
@@ -50,6 +51,8 @@ namespace UI
         {
             foreach (var districtPage in districtPages)
             {
+                districtPage.OnSettingsClicked += HandleSettingsClicked;
+                
                 foreach (var levelSelectButton in districtPage.LevelSelectButtons)
                 {
                     levelSelectButtonLookup.Add(levelSelectButton.SceneConfig, (districtPage, levelSelectButton));
@@ -74,6 +77,22 @@ namespace UI
         {
             SetPage();
             SetPageNavigation();
+        }
+        
+        private void HandleSettingsClicked()
+        {
+            pageGroup.HideGroup(isForward: false);
+            
+            settingsBehaviour.OpenSettings(HandleSettingsClosed);
+            
+            AnimateCloudsAsync(isForward: false).Forget();
+        }
+
+        private void HandleSettingsClosed()
+        { 
+            pageGroup.ShowGroup(isForward: true);
+            
+            AnimateCloudsAsync(isForward: true).Forget();
         }
 
         private void SetPage()
@@ -216,18 +235,20 @@ namespace UI
             
             rightmostNavigation.selectOnRight = isForwardActive ? forwardButton : null;
             forwardNavigation.selectOnLeft = rightmostButton;
+            forwardNavigation.selectOnUp = districtPage.SettingsButton;
             rightmostButton.navigation = rightmostNavigation;
             forwardButton.navigation = forwardNavigation;
             forwardButton.interactable = isForwardActive;
             
             leftmostNavigation.selectOnLeft = isBackActive ? backButton : null;
             backNavigation.selectOnRight = leftmostButton;
+            backNavigation.selectOnUp = districtPage.SettingsButton;
             leftmostButton.navigation = leftmostNavigation;
             backButton.navigation = backNavigation;
             backButton.interactable = isBackActive;
         }
 
-        private async UniTask AnimateCloudsAsync(bool isForward)
+        public async UniTask AnimateCloudsAsync(bool isForward)
         {
             var speedScale = isForward ? 1.0f : -1.0f;
             var baseSpeed = cloudGroup.BaseSpeed;
@@ -279,6 +300,8 @@ namespace UI
         {
             foreach (var districtPage in districtPages)
             {
+                districtPage.OnSettingsClicked -= HandleSettingsClicked;
+                
                 foreach (var levelSelectButton in districtPage.LevelSelectButtons)
                 {
                     levelSelectButton.OnHover -= HandleLevelSelectButtonHover;

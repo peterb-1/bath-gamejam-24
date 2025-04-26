@@ -60,8 +60,8 @@ namespace UI
             var duration = await pageAnimator.GetCurrentClipDurationAsync();
             await UniTask.Delay(TimeSpan.FromSeconds(duration));
 
-            // has been destroyed in the meantime
-            if (canvasGroup == null) return;
+            // has been destroyed or hidden in the meantime
+            if (canvasGroup == null || !isActive) return;
             
             canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;

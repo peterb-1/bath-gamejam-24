@@ -1,8 +1,10 @@
-﻿using Core.Saving;
+﻿using System;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -28,11 +30,18 @@ namespace UI
 
         [field: SerializeField]
         public LevelSelectButton[] LevelSelectButtons { get; private set; }
+        
+        [field: SerializeField] 
+        public Button SettingsButton { get; private set; }
+
+        public event Action OnSettingsClicked;
 
         private void Awake()
         {
             CreateButtonLinks();
             SetInfoAsync().Forget();
+            
+            SettingsButton.onClick.AddListener(HandleSettingsClicked);
         }
         
         private void CreateButtonLinks()
@@ -52,6 +61,11 @@ namespace UI
                 
                 rightButton.EnableLink(startAnchor);
             }
+        }
+        
+        private void HandleSettingsClicked()
+        {
+            OnSettingsClicked?.Invoke();
         }
 
         private async UniTask SetInfoAsync()
@@ -109,6 +123,11 @@ namespace UI
             }
 
             return null;
+        }
+
+        private void OnDestroy()
+        {
+            SettingsButton.onClick.RemoveListener(HandleSettingsClicked);
         }
     }
 }

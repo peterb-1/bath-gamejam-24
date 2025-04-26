@@ -1,0 +1,71 @@
+﻿using System.Collections.Generic;
+using Core.Saving;
+using Cysharp.Threading.Tasks;
+using Gameplay.Trails;
+using UnityEngine;
+
+namespace UI
+{
+    public class TrailSelectionUIBehaviour : MonoBehaviour
+    {
+        [SerializeField] 
+        private TrailDatabase trailDatabase;
+        
+        [SerializeField] 
+        private Transform trailGridRoot;
+        
+        [SerializeField] 
+        private TrailDisplayUIBehaviour trailDisplayPrefab;
+
+        [SerializeField] 
+        private SelectedTrailDisplayUIBehaviour selectedTrailDisplay;
+
+        private readonly List<TrailDisplayUIBehaviour> spawnedTrailDisplays = new();
+
+        private async void Awake()
+        {
+            await UniTask.WaitUntil(() => SaveManager.IsReady);
+            
+            foreach (var trail in trailDatabase.Trails)
+            {
+                var trailDisplay = Instantiate(trailDisplayPrefab, trailGridRoot);
+                
+                trailDisplay.DisplayTrailInfo(trail);
+
+                trailDisplay.OnTrailSelected += HandleTrailSelected;
+                trailDisplay.OnTrailHovered += HandleTrailHovered;
+                trailDisplay.OnTrailUnhovered += HandleTrailUnhovered;
+                
+                spawnedTrailDisplays.Add(trailDisplay);
+            }
+        }
+        
+        private void HandleTrailSelected(Trail trail)
+        {
+            SaveManager.Instance.SaveData.PreferenceData.SetTrail(trail);
+            SaveManager.Instance.Save();
+        }
+
+        private void HandleTrailHovered(Trail trail)
+        {
+            selectedTrailDisplay.SetTrailInfo(trail);
+        }
+
+        private void HandleTrailUnhovered(Trail trail)
+        {
+            selectedTrailDisplay.SetNoData();
+        }
+
+        private void OnDestroy()
+        {
+            foreach (var trailDisplay in spawnedTrailDisplays)
+            {
+                trailDisplay.OnTrailSelected -= HandleTrailSelected;
+                trailDisplay.OnTrailHovered -= HandleTrailHovered;
+                trailDisplay.OnTrailUnhovered -= HandleTrailUnhovered;
+            }
+            
+            spawnedTrailDisplays.Clear();
+        }
+    }
+}

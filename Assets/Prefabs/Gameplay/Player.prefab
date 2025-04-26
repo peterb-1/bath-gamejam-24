@@ -414,6 +414,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trailDatabase: {fileID: 11400000, guid: 5f90f395cd6ddc841b45925dae138aab, type: 2}
+  playerMovementBehaviour: {fileID: 7832381044865399546}
+  emissionVelocityThreshold: 0.5
 --- !u!50 &166652011353585149
 Rigidbody2D:
   serializedVersion: 5

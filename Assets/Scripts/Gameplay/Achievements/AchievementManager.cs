@@ -100,8 +100,6 @@ namespace Gameplay.Achievements
 
                 checkedAchievements.Add(achievement);
             }
-            
-            EditorUtility.SetDirty(this);
         }
 #endif
     }
