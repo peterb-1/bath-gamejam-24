@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9475bf251b004f928188c0bd4bbd2f36, type: 3}
   m_Name: CompleteDistrict2Achievement
   m_EditorClassIdentifier: 
+  <Name>k__BackingField: Adrenaline Junk-ie
+  <UnlockDescription>k__BackingField: Complete Scrapyard North
   <Guid>k__BackingField: 3651dc7a-1a52-48c3-af5c-9d501012c885
   <TrailGuid>k__BackingField: 6eba2754-5e05-4900-8dfd-65c00a24ec22

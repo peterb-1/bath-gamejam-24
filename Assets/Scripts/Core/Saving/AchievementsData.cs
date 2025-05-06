@@ -30,6 +30,24 @@ namespace Core.Saving
 
             return false;
         }
+        
+        public bool TryGetAchievementForTrail(Trail trail, out Achievement trailAchievement)
+        {
+            foreach (var achievementData in achievements)
+            {
+                foreach (var achievement in AchievementManager.Instance.Achievements)
+                {
+                    if (achievementData.Guid == achievement.Guid && achievement.TrailGuid == trail.Guid)
+                    {
+                        trailAchievement = achievement;
+                        return true;
+                    }
+                }
+            }
+
+            trailAchievement = null;
+            return false;
+        }
 
         public bool TryUnlockAchievement(Achievement unlockedAchievement)
         {

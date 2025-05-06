@@ -9,6 +9,12 @@ namespace Gameplay.Achievements
     [CreateAssetMenu(fileName = "Achievement", menuName = "Scriptable Objects/Achievement")]
     public class Achievement : ScriptableObject
     {
+        [field: SerializeField] 
+        public string Name { get; private set; }
+        
+        [field: SerializeField] 
+        public string UnlockDescription { get; private set; }
+
         [field: SerializeField, ReadOnly] 
         public string Guid { get; private set; }
         

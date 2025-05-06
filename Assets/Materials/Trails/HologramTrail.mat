@@ -81,9 +81,9 @@ Material:
     - _NoiseScale: 27.58
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _RotationSpeed: 0.5
-    - _ScrollSpeed: 0.1
-    - _Strength: 1
+    - _RotationSpeed: 0.6
+    - _ScrollSpeed: 0.3
+    - _Strength: 1.2
     - _Threshold: 0.5
     - _ZWrite: 0
     m_Colors:
@@ -93,7 +93,7 @@ Material:
     - _EdgeNoiseScale: {r: 30, g: 70, b: 0, a: 0}
     - _EdgeNoiseScale_1: {r: 30, g: 60, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Tiling: {r: 0.2, g: 0.2, b: 0, a: 0}
+    - _Tiling: {r: 0.05, g: 0.05, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &501529525552642303

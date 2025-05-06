@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: TrailDatabase
   m_EditorClassIdentifier: 
   trails:
-  - <Name>k__BackingField: Disabled
+  - <Name>k__BackingField: None
     <Guid>k__BackingField: bbf93455-239a-4608-a5fa-ca67f471bf79
     <IsUnlockedByDefault>k__BackingField: 1
     <TrailRenderer>k__BackingField: {fileID: 0}
-  - <Name>k__BackingField: Default
+  - <Name>k__BackingField: Classic
     <Guid>k__BackingField: c5c69847-76e9-4ec8-86f7-ff52def12970
     <IsUnlockedByDefault>k__BackingField: 1
     <TrailRenderer>k__BackingField: {fileID: 5151173813554207368, guid: bf077c801f5a62643bffa8b9c0fc40c6, type: 3}
@@ -25,7 +25,7 @@ MonoBehaviour:
     <Guid>k__BackingField: 20944845-abe8-49a6-bcd0-9671940a0a4f
     <IsUnlockedByDefault>k__BackingField: 0
     <TrailRenderer>k__BackingField: {fileID: 7348339372924797801, guid: 6d6d341be60ab1f49a0061459b071c18, type: 3}
-  - <Name>k__BackingField: Hologram
+  - <Name>k__BackingField: Whirlwind
     <Guid>k__BackingField: cf945410-73c3-45b5-ac45-96084f1965da
     <IsUnlockedByDefault>k__BackingField: 0
     <TrailRenderer>k__BackingField: {fileID: 7348339372924797801, guid: 87f204de88e4e4549aede28eeaae387f, type: 3}

@@ -99,7 +99,6 @@ namespace UI
                                      SaveManager.Instance.SaveData.AchievementsData.IsAchievementWithTrailUnlocked(trail);
 
             trailNameText.text = trail.Name;
-            button.interactable = isCurrentTrailUnlocked;
 
             UpdateTrailPreview(trail);
         }
