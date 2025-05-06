@@ -416,6 +416,43 @@ MonoBehaviour:
   trailDatabase: {fileID: 11400000, guid: 5f90f395cd6ddc841b45925dae138aab, type: 2}
   playerMovementBehaviour: {fileID: 7832381044865399546}
   emissionVelocityThreshold: 0.5
+  maxTrailWidthVelocity: 10
+  maxEmissionBoost: 2
+  trailWidthResponseTime: 0.25
+  smoothingStrength: 0.6
+  windBaseStrength: 0.3
+  windFrequency: {x: 1.2, y: 0.8}
+  windNoiseScale: {x: 0.08, y: 0.11}
+  windDirection: {x: 0.5, y: 0.2}
+  windFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 1088
+  environmentInteractionDistance: 0.3
+  environmentDeflectionStrength: 0.2
 --- !u!50 &166652011353585149
 Rigidbody2D:
   serializedVersion: 5

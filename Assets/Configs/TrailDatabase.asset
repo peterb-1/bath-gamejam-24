@@ -13,10 +13,14 @@ MonoBehaviour:
   m_Name: TrailDatabase
   m_EditorClassIdentifier: 
   trails:
+  - <Name>k__BackingField: Disabled
+    <Guid>k__BackingField: bbf93455-239a-4608-a5fa-ca67f471bf79
+    <IsUnlockedByDefault>k__BackingField: 1
+    <TrailRenderer>k__BackingField: {fileID: 0}
   - <Name>k__BackingField: Default
     <Guid>k__BackingField: c5c69847-76e9-4ec8-86f7-ff52def12970
     <IsUnlockedByDefault>k__BackingField: 1
-    <TrailRenderer>k__BackingField: {fileID: 2548998473550255963, guid: ea7710ab36ab0c44e9e7ea6befa2b273, type: 3}
+    <TrailRenderer>k__BackingField: {fileID: 5151173813554207368, guid: bf077c801f5a62643bffa8b9c0fc40c6, type: 3}
   - <Name>k__BackingField: Fire
     <Guid>k__BackingField: 20944845-abe8-49a6-bcd0-9671940a0a4f
     <IsUnlockedByDefault>k__BackingField: 0
@@ -25,4 +29,8 @@ MonoBehaviour:
     <Guid>k__BackingField: cf945410-73c3-45b5-ac45-96084f1965da
     <IsUnlockedByDefault>k__BackingField: 0
     <TrailRenderer>k__BackingField: {fileID: 7348339372924797801, guid: 87f204de88e4e4549aede28eeaae387f, type: 3}
+  - <Name>k__BackingField: District2Placeholder
+    <Guid>k__BackingField: 6eba2754-5e05-4900-8dfd-65c00a24ec22
+    <IsUnlockedByDefault>k__BackingField: 0
+    <TrailRenderer>k__BackingField: {fileID: 0}
   <DefaultTrail>k__BackingField: c5c69847-76e9-4ec8-86f7-ff52def12970

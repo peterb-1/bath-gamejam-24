@@ -98,15 +98,23 @@ namespace Gameplay.Player
                 var colour = (1f - lerp) * startColour + lerp * Color.white;
 
                 playerSpriteRenderer.color = colour;
-                trailRenderer.colorGradient = trailGradient.WithTint(colour);
-                
+
+                if (trailRenderer != null)
+                {
+                    trailRenderer.colorGradient = trailGradient.WithTint(colour);
+                }
+
                 await UniTask.Yield();
                 
                 timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
             }
 
             playerSpriteRenderer.color = startColour;
-            trailRenderer.colorGradient = trailGradient.WithTint(startColour);
+
+            if (trailRenderer != null)
+            {
+                trailRenderer.colorGradient = trailGradient.WithTint(startColour);
+            }
         }
 
         private void OnDestroy()

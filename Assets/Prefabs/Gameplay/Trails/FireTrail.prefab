@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2548998473550255963, guid: ea7710ab36ab0c44e9e7ea6befa2b273, type: 3}
+      propertyPath: m_Parameters.textureMode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2548998473550255963, guid: ea7710ab36ab0c44e9e7ea6befa2b273, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 934d6ee640e34cd48a2f9da0d557976f, type: 2}
