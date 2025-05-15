@@ -4,6 +4,7 @@ using Audio;
 using Cysharp.Threading.Tasks;
 using Gameplay.Camera;
 using Gameplay.Input;
+using Hardware;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;

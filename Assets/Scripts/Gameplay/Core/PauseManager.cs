@@ -1,6 +1,7 @@
 ﻿using Audio;
 using Core;
 using Gameplay.Input;
+using Hardware;
 using UI;
 using UnityEngine;
 using Utils;
@@ -115,6 +116,7 @@ namespace Gameplay.Core
                 Time.timeScale = 0.0f;
                 
                 AudioManager.Instance.Pause();
+                RumbleManager.Instance.Pause();
             }
             else
             {
@@ -124,6 +126,7 @@ namespace Gameplay.Core
                 Time.timeScale = prePauseTimeScale;
                 
                 AudioManager.Instance.Unpause();
+                RumbleManager.Instance.Unpause();
             }
         }
         

@@ -1,6 +1,7 @@
 using System;
 using Audio;
 using Cysharp.Threading.Tasks;
+using Hardware;
 using UnityEngine;
 using Utils;
 
@@ -16,6 +17,9 @@ namespace Gameplay.Player
 
         [SerializeField] 
         private Collider2D playerHitbox;
+
+        [SerializeField] 
+        private RumbleConfig victoryRumbleConfig;
         
         public event Action<Vector2, float> OnVictorySequenceStart;
         public event Action OnVictorySequenceFinish;
@@ -35,6 +39,7 @@ namespace Gameplay.Player
             OnVictorySequenceStart?.Invoke(targetPosition, victorySequenceDuration);
             
             AudioManager.Instance.Play(AudioClipIdentifier.Victory);
+            RumbleManager.Instance.Rumble(victoryRumbleConfig);
 
             playerHitbox.enabled = false;
 

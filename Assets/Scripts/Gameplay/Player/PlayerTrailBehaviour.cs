@@ -180,10 +180,10 @@ namespace Gameplay.Player
             for (var i = 1; i < trailPointCount - 1; i++)
             {
                 var prev = trailPoints[i - 1];
-                var curr = trailPoints[i];
+                var current = trailPoints[i];
                 var next = trailPoints[i + 1];
 
-                trailPoints[i] = Vector3.Lerp(curr, (prev + curr + next) / 3f, smoothingStrength);
+                trailPoints[i] = Vector3.Lerp(current, (prev + current + next) / 3f, smoothingStrength);
             }
         }
 

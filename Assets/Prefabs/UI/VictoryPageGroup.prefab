@@ -3316,6 +3316,142 @@ MonoBehaviour:
   firstStar: {fileID: 5675413580156231236}
   secondStar: {fileID: 6622961734179762879}
   thirdStar: {fileID: 8238135685997259131}
+  starRumbleConfig:
+    <Duration>k__BackingField: 0.35
+    <LowFrequencyCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.34959912
+        value: 0.0006478117
+        inSlope: 0.052498277
+        outSlope: -0.019025574
+        tangentMode: 1
+        weightedMode: 0
+        inWeight: 0.17167735
+        outWeight: 0.08670928
+      - serializedVersion: 3
+        time: 0.55577457
+        value: 0.5860096
+        inSlope: 5.140109
+        outSlope: -0.92009467
+        tangentMode: 1
+        weightedMode: 0
+        inWeight: 0.061950196
+        outWeight: 0.08757672
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0.024136236
+        outSlope: 0.024136236
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.07903621
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <HighFrequencyCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.34959912
+        value: 0.0006478117
+        inSlope: 0.052498277
+        outSlope: -0.019025574
+        tangentMode: 1
+        weightedMode: 0
+        inWeight: 0.17167735
+        outWeight: 0.08670928
+      - serializedVersion: 3
+        time: 0.5610236
+        value: 0.48719704
+        inSlope: 5.140109
+        outSlope: -0.92009467
+        tangentMode: 1
+        weightedMode: 0
+        inWeight: 0.061950196
+        outWeight: 0.08757672
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0.024136236
+        outSlope: 0.024136236
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.07903621
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  rainbowRumbleConfig:
+    <Duration>k__BackingField: 0.9
+    <LowFrequencyCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: -1.426974
+        outSlope: -1.426974
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.03470858
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <HighFrequencyCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: -2.6819055
+        outSlope: -2.6819055
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.030779306
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   starAnimationDelay: 0.4
   rainbowAnimationDelay: 0.56
   newRecordDelay: 0.2

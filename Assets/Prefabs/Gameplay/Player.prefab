@@ -312,6 +312,159 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  jumpingRumbleConfig:
+    <Duration>k__BackingField: 0.25
+    <LowFrequencyCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.4
+        inSlope: -1.3412168
+        outSlope: -1.3412168
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.037982974
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <HighFrequencyCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.6
+        inSlope: -1.7286806
+        outSlope: -1.7286806
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.036018338
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  landingRumbleConfig:
+    <Duration>k__BackingField: 0.25
+    <LowFrequencyCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.8
+        inSlope: -2.589589
+        outSlope: -2.589589
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.027504912
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <HighFrequencyCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.5
+        inSlope: -1.6370065
+        outSlope: -1.6370065
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.036018338
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  droneHitRumbleConfig:
+    <Duration>k__BackingField: 0.35
+    <LowFrequencyCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.4
+        inSlope: -0.40360704
+        outSlope: -0.40360704
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.037982974
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <HighFrequencyCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0.7
+        inSlope: -0.06669303
+        outSlope: -0.06669303
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.035363458
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  ziplineRumbleConfig:
+    <LowFrequency>k__BackingField: 0.06
+    <HighFrequency>k__BackingField: 0.08
   rigidBody: {fileID: 166652011353585149}
   boxCollider: {fileID: 6448495522596364973}
   spriteRendererTransform: {fileID: 8015807823079495631}
@@ -384,6 +537,56 @@ MonoBehaviour:
   playerHitbox: {fileID: 6448495522596364973}
   playerSpriteRenderer: {fileID: 8491304688917359779}
   deathParticles: {fileID: 6912738076980054414}
+  deathRumbleConfig:
+    <Duration>k__BackingField: 0.4
+    <LowFrequencyCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: -1.9922711
+        outSlope: -1.9922711
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.030779306
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <HighFrequencyCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: -1.7106694
+        outSlope: -1.7106694
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.026195154
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
 --- !u!114 &3249549202202213294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -401,6 +604,74 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   playerHitbox: {fileID: 6448495522596364973}
+  victoryRumbleConfig:
+    <Duration>k__BackingField: 1
+    <LowFrequencyCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.64512444
+        value: 0.47361487
+        inSlope: 0.7568686
+        outSlope: 0.7568686
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.04377841
+        outWeight: 0.2655434
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -5.625226
+        outSlope: -5.625226
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.08705214
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    <HighFrequencyCurve>k__BackingField:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.8192684
+        value: 0.36211395
+        inSlope: 1.5108974
+        outSlope: 1.5108974
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.04952324
+        outWeight: 0.13861443
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -5.625226
+        outSlope: -5.625226
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.08705214
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
 --- !u!114 &1050786829656960430
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Gameplay.Dash;
 using Gameplay.Input;
+using Hardware;
 using UnityEngine;
 using Utils;
 
@@ -124,6 +125,18 @@ namespace Gameplay.Player
         [SerializeField] 
         private AnimationCurve moveTowardsTargetCurve;
 
+        [SerializeField] 
+        private RumbleConfig jumpingRumbleConfig;
+
+        [SerializeField] 
+        private RumbleConfig landingRumbleConfig;
+        
+        [SerializeField] 
+        private RumbleConfig droneHitRumbleConfig;
+
+        [SerializeField] 
+        private ContinuousRumbleConfig ziplineRumbleConfig;
+
         [Header("References")]
         [SerializeField] 
         private Rigidbody2D rigidBody;
@@ -166,12 +179,11 @@ namespace Gameplay.Player
 
         public Vector2 Velocity => isHooked ? ziplineVelocity : rigidBody.linearVelocity;
         public bool IsDashing => dashCountdown > 0f;
+        public bool IsHooked => isHooked;
 
         private Vector3 ziplineLocalStartOffset;
         private Vector2 lastZiplinePosition;
         private Vector2 ziplineVelocity;
-
-        public bool IsHooked => isHooked;
 
         private float dashDirectionMultiplier;
         private float currentFallMultiplier;
@@ -222,6 +234,7 @@ namespace Gameplay.Player
             playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
 
+            isGrounded = true;
             hasDoubleJumped = true;
             currentFallMultiplier = fallMultiplier;
         }
@@ -281,6 +294,7 @@ namespace Gameplay.Player
             if (isGrounded && !wasGrounded)
             {
                 AudioManager.Instance.Play(AudioClipIdentifier.Land);
+                RumbleManager.Instance.Rumble(landingRumbleConfig);
             }
 
             if (isHooked)
@@ -472,6 +486,8 @@ namespace Gameplay.Player
             TryUnhookPlayer();
             
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
+            RumbleManager.Instance.Rumble(jumpingRumbleConfig);
+            
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, force);
             
             jumpCooldownCountdown = jumpCooldown;
@@ -481,11 +497,12 @@ namespace Gameplay.Player
             dashCountdown = 0f;
         }
 
-        private void PerformWallJump(Vector2 force, bool isAudible = true)
+        private void PerformWallJump(Vector2 force, bool shouldTriggerEffects = true)
         {
-            if (isAudible)
+            if (shouldTriggerEffects)
             {
                 AudioManager.Instance.Play(AudioClipIdentifier.Jump);
+                RumbleManager.Instance.Rumble(jumpingRumbleConfig);
             }
             
             rigidBody.linearVelocity = force;
@@ -500,6 +517,7 @@ namespace Gameplay.Player
         public void PerformHeadJump()
         {
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
+            RumbleManager.Instance.Rumble(droneHitRumbleConfig);
             
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, headJumpForce);
             dashCountdown = 0f;
@@ -565,11 +583,11 @@ namespace Gameplay.Player
         {
             if (isMovingLeft)
             {
-                PerformWallJump(new Vector2(-wallJumpForce.x, wallJumpForce.y), isAudible: false);
+                PerformWallJump(new Vector2(-wallJumpForce.x, wallJumpForce.y), shouldTriggerEffects: false);
             }
             else
             {
-                PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y), isAudible: false);
+                PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y), shouldTriggerEffects: false);
             }
             
             hasDoubleJumped = false;
@@ -593,6 +611,8 @@ namespace Gameplay.Player
             }
             
             AudioManager.Instance.Play(AudioClipIdentifier.ZiplineAttach);
+            
+            RumbleManager.Instance.Rumble(ziplineRumbleConfig);
             
             dashCountdown = 0f;
             
@@ -631,6 +651,8 @@ namespace Gameplay.Player
             
             AudioManager.Instance.Stop(AudioClipIdentifier.ZiplineAttach);
             AudioManager.Instance.Play(AudioClipIdentifier.ZiplineDetach);
+            
+            RumbleManager.Instance.StopRumble();
             
             isHooked = false;
             hookCountdown = hookCooldownDuration;

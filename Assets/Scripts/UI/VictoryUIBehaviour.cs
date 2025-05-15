@@ -5,6 +5,7 @@ using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Gameplay.Player;
+using Hardware;
 using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace UI
 {
     public class VictoryUIBehaviour : MonoBehaviour
     {
+        [Header("References")]
         [SerializeField] 
         private PageGroup victoryPageGroup;
 
@@ -65,6 +67,13 @@ namespace UI
         
         [SerializeField] 
         private RankingStar thirdStar;
+
+        [Header("Config")]
+        [SerializeField] 
+        private RumbleConfig starRumbleConfig;
+        
+        [SerializeField] 
+        private RumbleConfig rainbowRumbleConfig;
 
         [SerializeField] 
         private float starAnimationDelay;
@@ -218,6 +227,7 @@ namespace UI
             {
                 firstStar.SetActive(true);
                 AudioManager.Instance.Play(AudioClipIdentifier.RankingStar);
+                RumbleManager.Instance.Rumble(starRumbleConfig);
             }
 
             if (ranking >= TimeRanking.TwoStar)
@@ -226,6 +236,7 @@ namespace UI
                 
                 secondStar.SetActive(true);
                 AudioManager.Instance.Play(AudioClipIdentifier.RankingStar);
+                RumbleManager.Instance.Rumble(starRumbleConfig);
             }
             
             if (ranking >= TimeRanking.ThreeStar)
@@ -234,6 +245,7 @@ namespace UI
                 
                 thirdStar.SetActive(true);
                 AudioManager.Instance.Play(AudioClipIdentifier.RankingStar);
+                RumbleManager.Instance.Rumble(starRumbleConfig);
             }
 
             if (ranking == TimeRanking.Rainbow)
@@ -245,6 +257,7 @@ namespace UI
                 thirdStar.SetRainbowState(true);
                 
                 AudioManager.Instance.Play(AudioClipIdentifier.RainbowResult);
+                RumbleManager.Instance.Rumble(rainbowRumbleConfig);
             }
 
             if (isNewBest)

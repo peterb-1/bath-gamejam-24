@@ -2,6 +2,7 @@ using System;
 using Audio;
 using Core;
 using Cysharp.Threading.Tasks;
+using Hardware;
 using UnityEngine;
 using Utils;
 
@@ -23,6 +24,9 @@ namespace Gameplay.Player
 
         [SerializeField] 
         private ParticleSystem deathParticles;
+        
+        [SerializeField] 
+        private RumbleConfig deathRumbleConfig;
         
         public bool IsAlive { get; private set; }
 
@@ -58,6 +62,8 @@ namespace Gameplay.Player
             
             AudioManager.Instance.Play(AudioClipIdentifier.Death);
             AudioManager.Instance.Stop(AudioClipIdentifier.ColourSwitch);
+            
+            RumbleManager.Instance.Rumble(deathRumbleConfig);
 
             playerHitbox.enabled = false;
             playerSpriteRenderer.enabled = false;
