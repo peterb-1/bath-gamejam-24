@@ -42,17 +42,17 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
-    - _MainTexStrength: 0.7
-    - _NoiseScale: 51.57
-    - _StarIntensity: 0.28
+    - _MainTexStrength: 0.735
+    - _NoiseScale: 108.13
+    - _StarIntensity: 0.3
     - _StarSpeed: 3.25
     - _SwirlScale: 27.7
     - _SwirlSpeed: 0.19
-    - _SwirlStrength: 0.42
-    - _TwinkleAmount: 1
+    - _SwirlStrength: 0.443
+    - _TwinkleAmount: 0.591
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
+    - _Color: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
     - _GradientBottomColor: {r: 0, g: 0, b: 0, a: 1}
     - _GradientTopColor: {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

@@ -81,6 +81,9 @@ namespace Gameplay.Environment
         private SpriteRenderer backgroundSpriteRenderer;
 
         [SerializeField] 
+        private Material backgroundTileMaterial;
+
+        [SerializeField] 
         private ColourDatabase colourDatabase;
         
         [SerializeField] 
@@ -320,6 +323,11 @@ namespace Gameplay.Environment
                     tile.SetColour(colour);
                     tile.SetOrder(sortingLayer, sortingOrder);
                     tile.SetSprite(districtNumber);
+
+                    if (!isGameplay)
+                    {
+                        tile.SetMaterial(backgroundTileMaterial);
+                    }
 
                     tiles.Add(tile);
                     

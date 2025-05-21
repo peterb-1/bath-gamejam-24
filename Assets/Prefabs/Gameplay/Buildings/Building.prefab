@@ -114,6 +114,7 @@ MonoBehaviour:
   minDeathColliderSize: {x: 0.05, y: 0.05}
   extraPlayerDetectionColliderSize: {x: 1, y: -0.05}
   backgroundSpriteRenderer: {fileID: 3458241876330023620}
+  backgroundTileMaterial: {fileID: 2100000, guid: b8e4064a01eb4fe40b4961464378a9ed, type: 2}
   colourDatabase: {fileID: 11400000, guid: 9ee9ba719534f7b428301db4856b7bda, type: 2}
   tiles: []
 --- !u!1 &2641900100873096654

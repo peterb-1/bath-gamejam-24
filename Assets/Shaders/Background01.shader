@@ -6,11 +6,6 @@
         _MainTexStrength ("Main Texture Strength", Range(0, 1)) = 0.5
         _Color ("Tint", Color) = (1,1,1,1)
 
-        _StarIntensity ("Star Intensity", Range(0, 5)) = 1
-        _StarSpeed ("Star Twinkle Speed", Range(0.1, 10)) = 1
-        _NoiseScale ("Star Noise Scale", Float) = 10
-        _TwinkleAmount ("Twinkle Amount", Range(0, 1)) = 0.5
-
         _SwirlStrength ("Swirl Strength", Range(0, 2)) = 1
         _SwirlScale ("Swirl Scale", Float) = 4
         _SwirlSpeed ("Swirl Speed", Float) = 0.1
@@ -111,48 +106,6 @@
                 return value;
             }
 
-            // Star shape function (radial soft circle with flicker)
-            float starShape(float2 uv, float radius) {
-                float dist = length(uv);
-                float edgeSoftness = 0.15;
-                float brightness = smoothstep(radius, radius - edgeSoftness, dist);
-                return brightness;
-            }
-
-            float starLayer(float2 uv, float noiseScale, float time, float twinkleAmount, float starIntensity)
-            {
-                float brightness = 0;
-                float2 gridUV = uv * noiseScale;
-
-                // Only check nearby cells for stars
-                float2 baseCell = floor(gridUV);
-
-                for (int x = -1; x <= 1; x++) {
-                    for (int y = -1; y <= 1; y++) {
-                        float2 cell = baseCell + float2(x, y);
-
-                        // Use hash for star position inside cell (0-1 range)
-                        float n = hash21(cell);
-
-                        // Jitter star position within cell so stars are not centered
-                        float2 starPos = cell + float2(n, frac(n * 13.1));
-
-                        float2 diff = gridUV - starPos;
-
-                        // Use starShape for smooth circular star with soft edges
-                        float star = starShape(diff, 0.05);
-
-                        // Twinkle flicker, sine wave with star-based offset
-                        float twinkle = sin(time * 6.28 + n * 6.28) * 0.5 + 0.5;
-
-                        // Combine star brightness with twinkle amount and intensity
-                        brightness += star * lerp(1, twinkle, twinkleAmount) * starIntensity;
-                    }
-                }
-
-                return brightness;
-            }
-
             float noise(float2 p)
             {
                 float2 i = floor(p);
@@ -195,13 +148,11 @@
             fixed4 frag (v2f i) : SV_Target
             {
                 float time = _Time.y;
-                float starBrightness = starLayer(i.uv, _NoiseScale, time * _StarSpeed, _TwinkleAmount, _StarIntensity);
                 float swirl = swirlNoise(i.uv, time, _SwirlScale, _SwirlSpeed) * _SwirlStrength;
 
                 float4 gradient = lerp(_GradientBottomColor, _GradientTopColor, i.uv.y);
                 float4 texColor = tex2D(_MainTex, i.uv) * _MainTexStrength;
-
-                float3 finalColor = gradient.rgb + swirl.xxx + starBrightness;
+                float3 finalColor = gradient.rgb + swirl.xxx;
 
                 finalColor = lerp(finalColor, texColor.rgb + finalColor, _MainTexStrength);
 

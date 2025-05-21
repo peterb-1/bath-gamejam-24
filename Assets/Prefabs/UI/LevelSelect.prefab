@@ -74,7 +74,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 1.2
 --- !u!1 &205497764982283456
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,7 +360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageGroup: {fileID: 6287749017493374143}
-  settingsUIBehaviour: {fileID: 0}
+  settingsBehaviour: {fileID: 0}
   infoDisplayBehaviour: {fileID: 2424040405254154607}
   districtPages:
   - {fileID: 5697336432317323764}

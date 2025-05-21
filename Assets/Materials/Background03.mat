@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Background03
-  m_Shader: {fileID: 4800000, guid: 90ce4603483f49f7820baaaaf6b45c02, type: 3}
+  m_Shader: {fileID: 4800000, guid: d53b735d648e4e1083d8ee9b063a0659, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -51,7 +51,7 @@ Material:
     - _DustScale: 64
     - _DustSpeed: 0.505
     - _EnableExternalAlpha: 0
-    - _GradientExponent: 3.71
+    - _GradientExponent: 3.53
     - _HDRMultiplier: 1.1
     - _MainTexStrength: 0.691
     - _NebulaContrast: 1.87
@@ -75,9 +75,9 @@ Material:
     - _StarVisibleTime: 0.425
     - _SwirlDistortion: 0.566
     - _SwirlLayers: 4
-    - _SwirlScale: 6.33
+    - _SwirlScale: 6.42
     - _SwirlSpeed: 0.55
-    - _SwirlStrength: 1.51
+    - _SwirlStrength: 1.697
     - _TwinkleAmount: 1
     - _UVSwirlAmount: 0.5
     - _Vignette: 0.177
@@ -88,10 +88,10 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _CloudsColor: {r: 0.19999996, g: 0.29999998, b: 0.7, a: 1}
-    - _Color: {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 1}
+    - _Color: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
     - _DustColor: {r: 0.39999998, g: 0.29999998, b: 0.6, a: 1}
-    - _GradientBottomColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
-    - _GradientTopColor: {r: 0.8396226, g: 0, b: 0, a: 1}
+    - _GradientBottomColor: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
+    - _GradientTopColor: {r: 1, g: 1, b: 1, a: 1}
     - _NebulaColor: {r: 0.40899786, g: 0.8584906, b: 0.45526654, a: 1}
     - _NebulaColor1: {r: 0.29999998, g: 0.19999996, b: 0.5, a: 1}
     - _NebulaColor2: {r: 0.5, g: 0.19999996, b: 0.29999998, a: 1}

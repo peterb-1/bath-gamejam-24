@@ -91,6 +91,11 @@ namespace Gameplay.Environment
         {
             spriteRenderer.sprite = districtSprites[district - 1].Sprites.RandomChoice();
         }
+
+        public void SetMaterial(Material material)
+        {
+            spriteRenderer.sharedMaterial = material;
+        }
     }
 
     [Serializable]
