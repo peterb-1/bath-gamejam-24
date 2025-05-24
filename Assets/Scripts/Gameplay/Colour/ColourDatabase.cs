@@ -13,7 +13,7 @@ namespace Gameplay.Colour
 
         public bool TryGetColourConfig(ColourId colourId, out ColourConfig colourConfig, int district = -1)
         {
-            if (district != -1)
+            if (district > 0)
             {
                 foreach (var colourOverride in districtColourOverrides)
                 {

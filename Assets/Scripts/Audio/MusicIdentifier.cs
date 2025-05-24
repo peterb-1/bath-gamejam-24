@@ -2,6 +2,7 @@
 {
     public enum MusicIdentifier
     {
+        MainMenu,
         District01,
         District02,
         District03,
@@ -12,6 +13,5 @@
         District08,
         District09,
         District10,
-        MainMenu
     }
 }

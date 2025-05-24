@@ -20,6 +20,7 @@ namespace Audio
         Toggle,
         ZiplineAttach,
         ZiplineDetach,
-        DashFailed // needs clip
+        DashFailed, // needs clip
+        SplashScreen
     }
 }

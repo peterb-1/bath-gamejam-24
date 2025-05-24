@@ -76,8 +76,6 @@ namespace Audio
             
             audioDatabase.Initialise();
             audioSourcePool = new Pool<AudioSource>(audioSourcePrefab, defaultCapacity: 20);
-            
-            PlayMusicAsync().Forget();
 
             ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
             SceneLoader.OnSceneLoadStart += HandleSceneLoadStart;
@@ -135,30 +133,6 @@ namespace Audio
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
             
             RunFilterCurveAsync(endLevelCurve, endLevelDuration).Forget();
-        }
-
-        private async UniTask PlayMusicAsync()
-        {
-            PlayMusic(MusicIdentifier.District02);
-
-            // var selectedTrack = musicTracks.RandomChoice();
-            // var previousTrack = musicTracks.RandomChoice();
-            //
-            // while (true)
-            // {
-            //     while (selectedTrack == previousTrack)
-            //     {
-            //         selectedTrack = musicTracks.RandomChoice();
-            //     }
-            //     
-            //     GameLogger.Log($"Playing music track {selectedTrack}...");
-            //     
-            //     await PlayAsync(selectedTrack);
-            //     
-            //     GameLogger.Log($"Music track {selectedTrack} finished!");
-            //
-            //     previousTrack = selectedTrack;
-            // }
         }
 
         public void Play(AudioClipIdentifier identifier, Action onFinishedCallback = null)
@@ -372,6 +346,8 @@ namespace Audio
             audioMixer.SetFloat(FLANGER_DRY, 1f);
             audioMixer.SetFloat(FLANGER_WET, 0f);
         }
+        
+        public static bool IsReady() => Instance != null;
 
         private void OnDestroy()
         {

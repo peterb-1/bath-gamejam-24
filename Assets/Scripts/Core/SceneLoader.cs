@@ -36,7 +36,11 @@ namespace Core
         
         public int CurrentDistrict => CurrentSceneConfig != null && CurrentSceneConfig.IsLevelScene
             ? CurrentSceneConfig.LevelConfig.DistrictNumber
-            : -1;
+            : 0;
+        
+        public int PreviousDistrict => PreviousSceneConfig != null && PreviousSceneConfig.IsLevelScene
+            ? PreviousSceneConfig.LevelConfig.DistrictNumber
+            : 0;
 
         public static event Action OnSceneLoadStart;
         public static event Action OnSceneLoaded;
@@ -109,6 +113,11 @@ namespace Core
             
             PreviousSceneConfig = CurrentSceneConfig;
             CurrentSceneConfig = sceneConfig;
+
+            if (CurrentDistrict != PreviousDistrict)
+            {
+                AudioManager.Instance.PlayMusic((MusicIdentifier) CurrentDistrict);
+            }
             
             await SceneManager.LoadSceneAsync(sceneConfig.ScenePath);
 

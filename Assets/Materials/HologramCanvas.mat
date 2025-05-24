@@ -105,6 +105,7 @@ Material:
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
+    - _Strength: 0.6
     - _TRANSPARENCY: 0
     - _UIMaskSoftnessX: 1
     - _UIMaskSoftnessY: 1
@@ -115,6 +116,7 @@ Material:
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
     - _EMISSION_COLOR: {r: 0, g: 0, b: 0, a: 0}
     - _REFLECTIONS_COLOR: {r: 1, g: 1, b: 1, a: 1}
+    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &1606074823522003638
