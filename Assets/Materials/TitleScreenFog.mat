@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TitleScreenFog
+  m_Shader: {fileID: 4800000, guid: 90ce4603483f49f7820baaaaf6b45c02, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: _Color _StarLayer1Color
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Brightness: 1.131
+    - _CloudsIntensity: 0
+    - _CloudsScale: 5.47
+    - _CloudsSpeed: 0.047
+    - _Contrast: 0.951
+    - _DeepSpaceStars: 0
+    - _DustIntensity: 1
+    - _DustScale: 64
+    - _DustSpeed: 0.505
+    - _EnableExternalAlpha: 0
+    - _GradientExponent: 2.62
+    - _HDRMultiplier: 1.1
+    - _MainTexStrength: 0.814
+    - _NebulaContrast: 5
+    - _NebulaDistortion: 1
+    - _NebulaIntensity: 2
+    - _NebulaLayers: 5
+    - _NebulaSpeed: 0.432
+    - _NoiseScale: 202.5
+    - _Saturation: 1
+    - _StarColorVariation: 1
+    - _StarCycleLength: 15
+    - _StarDensity: 3
+    - _StarDriftAmount: 0.0089
+    - _StarGlow: 1.99
+    - _StarIntensity: 6.32
+    - _StarLayerSpeed: 1.81
+    - _StarMaxSize: 0.0923
+    - _StarMinSize: 0.005
+    - _StarSizeVariation: 0.491
+    - _StarSpeed: 0.1
+    - _StarVisibleTime: 0.143
+    - _SwirlDistortion: 0
+    - _SwirlLayers: 3.33
+    - _SwirlScale: 17.68
+    - _SwirlSpeed: 0.55
+    - _SwirlStrength: 1.836
+    - _TwinkleAmount: 0.754
+    - _UVSwirlAmount: 0.156
+    - _Vignette: 0.177
+    - _WormholeActive: 0.853
+    - _WormholeRadius: 0.655
+    - _WormholeSpeed: 0.44
+    - _WormholeStrength: 0.35
+    - _ZWrite: 0
+    m_Colors:
+    - _CloudsColor: {r: 0.19999996, g: 0.29999998, b: 0.7, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DustColor: {r: 0.39999998, g: 0.29999998, b: 0.6, a: 1}
+    - _GradientBottomColor: {r: 0.13333333, g: 0.1337461, b: 0.5764706, a: 1}
+    - _GradientTopColor: {r: 0.8025596, g: 0, b: 0.972549, a: 1}
+    - _NebulaColor: {r: 0.40899786, g: 0.8584906, b: 0.45526654, a: 1}
+    - _NebulaColor1: {r: 0.2094426, g: 0.19999999, b: 0.5019608, a: 1}
+    - _NebulaColor2: {r: 0.3523667, g: 0.19999999, b: 0.5019608, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _StarLayer1Color: {r: 0.9, g: 0.9, b: 1, a: 1}
+    - _StarLayer2Color: {r: 0.72969735, g: 0.5768512, b: 0.8207547, a: 1}
+    - _StarLayer3Color: {r: 0.6, g: 0.8, b: 1, a: 1}
+    - _VignetteColor: {r: 0, g: 0, b: 0, a: 1}
+    - _WormholeCenter: {r: 0.5, g: 0.6, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
