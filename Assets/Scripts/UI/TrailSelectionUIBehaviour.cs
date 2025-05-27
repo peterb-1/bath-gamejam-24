@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Trails;
@@ -20,6 +21,9 @@ namespace UI
         [SerializeField] 
         private SelectedTrailDisplayUIBehaviour selectedTrailDisplay;
 
+        [SerializeField] 
+        private Page customisationPage;
+
         private readonly List<TrailDisplayUIBehaviour> spawnedTrailDisplays = new();
 
         private async void Awake()
@@ -38,8 +42,13 @@ namespace UI
                 
                 spawnedTrailDisplays.Add(trailDisplay);
             }
+
+            customisationPage.OnShown += HandlePageShown;
+            customisationPage.OnHidden += HandlePageHidden;
+            
+            HandlePageHidden();
         }
-        
+
         private void HandleTrailSelected(Trail trail)
         {
             SaveManager.Instance.SaveData.PreferenceData.SetTrail(trail);
@@ -55,6 +64,22 @@ namespace UI
         {
             selectedTrailDisplay.SetNoData();
         }
+        
+        private void HandlePageShown()
+        {
+            foreach (var trailDisplay in spawnedTrailDisplays)
+            {
+                trailDisplay.EmitTrail();
+            }
+        }
+
+        private void HandlePageHidden()
+        {
+            foreach (var trailDisplay in spawnedTrailDisplays)
+            {
+                trailDisplay.StopEmitting();
+            }
+        }
 
         private void OnDestroy()
         {
@@ -64,6 +89,9 @@ namespace UI
                 trailDisplay.OnTrailHovered -= HandleTrailHovered;
                 trailDisplay.OnTrailUnhovered -= HandleTrailUnhovered;
             }
+            
+            customisationPage.OnShown -= HandlePageShown;
+            customisationPage.OnHidden -= HandlePageHidden;
             
             spawnedTrailDisplays.Clear();
         }

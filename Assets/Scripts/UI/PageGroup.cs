@@ -82,6 +82,12 @@ namespace UI
             HideGroupAsync(isForward).Forget();
         }
 
+        public void SetInteractable(bool isInteractable)
+        {
+            canvasGroup.interactable = isInteractable;
+            canvasGroup.blocksRaycasts = isInteractable;
+        }
+
         public void ShowGroupImmediate()
         {
             pageGroupAnimator.SetBool(IsActive, true);

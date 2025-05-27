@@ -95,12 +95,27 @@ namespace UI
         public void DisplayTrailInfo(Trail trail)
         {
             currentTrail = trail;
-            isCurrentTrailUnlocked = trail.IsUnlockedByDefault || 
-                                     SaveManager.Instance.SaveData.AchievementsData.IsAchievementWithTrailUnlocked(trail);
-
+            isCurrentTrailUnlocked = trail.IsUnlockedByDefault || SaveManager.Instance.SaveData.AchievementsData.IsAchievementWithTrailUnlocked(trail);
             trailNameText.text = trail.Name;
 
             UpdateTrailPreview(trail);
+        }
+        
+        public void EmitTrail()
+        {
+            if (activePreviewTrail != null)
+            {
+                activePreviewTrail.Clear();
+                activePreviewTrail.emitting = true;
+            }
+        }
+
+        public void StopEmitting()
+        {
+            if (activePreviewTrail != null)
+            {
+                activePreviewTrail.emitting = false;
+            }
         }
 
         private void UpdateTrailPreview(Trail trail)
@@ -121,6 +136,7 @@ namespace UI
         private void OnDestroy()
         {
             button.onClick.RemoveListener(HandleButtonClicked);
+            
             button.OnHover -= HandleHover;
             button.OnUnhover -= HandleUnhover;
         }

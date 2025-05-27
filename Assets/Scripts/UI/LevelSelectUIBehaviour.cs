@@ -127,7 +127,7 @@ namespace UI
         
         private void HandleSceneLoadStart()
         {
-            pageGroup.HideGroup();
+            pageGroup.SetInteractable(false);
         }
         
         private void HandleLevelSelectButtonHover(ExtendedButton button)
@@ -246,6 +246,10 @@ namespace UI
             leftmostButton.navigation = leftmostNavigation;
             backButton.navigation = backNavigation;
             backButton.interactable = isBackActive;
+
+            districtPage.SetSettingsNavigation(
+                isBackActive ? backButton : leftmostButton, 
+                isForwardActive ? forwardButton : rightmostButton);
         }
 
         public async UniTask AnimateCloudsAsync(bool isForward)

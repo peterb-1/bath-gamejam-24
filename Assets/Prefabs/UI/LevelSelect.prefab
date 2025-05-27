@@ -160,6 +160,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1356133568068453933, guid: 05209929063325e4bb40347260164103, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 22100000, guid: 712199c1894f1f341995eea86f73269c, type: 2}
     - target: {fileID: 1440845906237661293, guid: 05209929063325e4bb40347260164103, type: 3}
       propertyPath: m_Name
       value: LevelSelect

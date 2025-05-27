@@ -94,6 +94,16 @@ namespace UI
             totalCompletedText.text = $"{totalCompleted} / {LevelSelectButtons.Length}";
             totalStarsText.text = $"{totalStars} / {3 * LevelSelectButtons.Length}";
         }
+        
+        public void SetSettingsNavigation(Selectable left, Selectable right)
+        {
+            var settingsNavigation = SettingsButton.navigation;
+
+            settingsNavigation.selectOnLeft = left;
+            settingsNavigation.selectOnRight = right;
+
+            SettingsButton.navigation = settingsNavigation;
+        }
 
         public LevelSelectButton GetLeftmostUnlockedLevelButton()
         {

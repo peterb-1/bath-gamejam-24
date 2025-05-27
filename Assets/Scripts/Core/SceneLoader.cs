@@ -4,7 +4,6 @@ using Audio;
 using Cysharp.Threading.Tasks;
 using Gameplay.Camera;
 using Gameplay.Input;
-using Hardware;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -45,7 +44,7 @@ namespace Core
         public static event Action OnSceneLoadStart;
         public static event Action OnSceneLoaded;
         
-        private void Awake()
+        private async void Awake()
         {
             if (Instance != null && Instance != this)
             {
@@ -69,6 +68,21 @@ namespace Core
             PreviousSceneConfig = null;
 
             InputManager.OnRestartPerformed += HandleRestartPerformed;
+
+            // convenience for editor - play music when starting from any scene
+            if (CurrentSceneConfig != null)
+            {
+                await UniTask.WaitUntil(AudioManager.IsReady);
+                
+                if (CurrentSceneConfig.IsLevelScene)
+                {
+                    AudioManager.Instance.PlayMusic((MusicIdentifier) CurrentSceneConfig.LevelConfig.DistrictNumber);
+                }
+                else if (CurrentSceneConfig == levelSelectScene)
+                {
+                    AudioManager.Instance.PlayMusic(MusicIdentifier.MainMenu);
+                }
+            }
         }
         
         public static bool IsReady() => Instance != null;

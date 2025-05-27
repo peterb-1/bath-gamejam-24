@@ -30,6 +30,9 @@ namespace UI
         private static readonly int IsForward = Animator.StringToHash("isForward");
 
         private bool isActive;
+        
+        public event Action OnShown;
+        public event Action OnHidden;
 
         // needs to be Start, not Awake, so that the default selectable is definitely awake when trying to select it
         private void Start()
@@ -70,10 +73,14 @@ namespace UI
             {
                 TrySelectDefaultSelectable();
             }
+            
+            OnShown?.Invoke();
         }
         
         public async UniTask HideAsync(bool isForward = true)
         {
+            OnHidden?.Invoke();
+            
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
             
@@ -116,10 +123,14 @@ namespace UI
             {
                 TrySelectDefaultSelectable();
             }
+            
+            OnShown?.Invoke();
         }
         
         public void HideImmediate()
         {
+            OnHidden?.Invoke();
+            
             if (EventSystem.current.currentSelectedGameObject != null &&
                 EventSystem.current.currentSelectedGameObject.transform.IsChildOf(transform))
             {
