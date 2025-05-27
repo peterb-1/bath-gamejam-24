@@ -30,7 +30,6 @@ namespace Utils
         private float minFps = float.MaxValue;
         private float maxFps = float.MinValue;
 
-        private float elapsedTime;
         private float timeSinceLastUpdate;
         private float deltaTime;
 
@@ -38,7 +37,8 @@ namespace Utils
 
         private void Awake()
         {
-            if (instance != null)
+            // don't display metrics in release builds
+            if (instance != null || !Debug.isDebugBuild)
             {
                 Destroy(gameObject);
                 return;
@@ -51,7 +51,6 @@ namespace Utils
         private void Update()
         {
             deltaTime += (Time.unscaledDeltaTime - deltaTime) * 0.1f;
-            elapsedTime += Time.unscaledDeltaTime;
         
             var currentFps = 1.0f / deltaTime;
             var now = Time.unscaledTime;

@@ -6,17 +6,26 @@ namespace Utils
     {
         public static void Log(object message, Object context = null)
         {
-            Debug.Log($"[GAME] {message}", context);
+            if (Debug.isDebugBuild)
+            {
+                Debug.Log($"[GAME] {message}", context);
+            }
         }
         
         public static void LogWarning(object message, Object context = null)
         {
-            Debug.LogWarning($"[GAME] {message}", context);
+            if (Debug.isDebugBuild)
+            {
+                Debug.LogWarning($"[GAME] {message}", context);
+            }
         }
         
         public static void LogError(object message, Object context = null)
         {
-            Debug.LogError($"[GAME] {message}", context);
+            if (Debug.isDebugBuild)
+            {
+                Debug.LogError($"[GAME] {message}", context);
+            }
         }
     }
 }

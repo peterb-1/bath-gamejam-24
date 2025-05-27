@@ -4,6 +4,7 @@ using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
 using Hardware;
+using TMPro;
 using UnityEngine;
 using Utils;
 
@@ -19,6 +20,9 @@ namespace UI
         
         [SerializeField] 
         private SpriteRenderer logoSpriteRenderer;
+        
+        [SerializeField] 
+        private TMP_Text versionText;
 
         [SerializeField] 
         private PageGroup titlePageGroup;
@@ -59,6 +63,8 @@ namespace UI
         {
             logoSpriteRenderer.material.SetFloat(Threshold, 1f);
             fogSpriteRenderer.material.SetFloat(StarIntensity, 0f);
+
+            versionText.text = $"v{Application.version}";
             
             InputManager.OnControlSchemeChanged += HandleControlSchemeChanged;
             
