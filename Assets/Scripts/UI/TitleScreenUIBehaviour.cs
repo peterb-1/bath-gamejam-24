@@ -64,7 +64,10 @@ namespace UI
             logoSpriteRenderer.material.SetFloat(Threshold, 1f);
             fogSpriteRenderer.material.SetFloat(StarIntensity, 0f);
 
-            versionText.text = $"v{Application.version}";
+            var buildInfo = Resources.Load<TextAsset>(BuildInfoGenerator.BUILD_INFO_PATH);
+            var hash = buildInfo == null ? "unknown" : buildInfo.text;
+
+            versionText.text = $"v{Application.version} ({hash}-{(Debug.isDebugBuild ? "D" : "R")})";
             
             InputManager.OnControlSchemeChanged += HandleControlSchemeChanged;
             

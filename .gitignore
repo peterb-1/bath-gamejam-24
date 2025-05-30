@@ -64,6 +64,14 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# Build number
+/Assets/Resources/BuildInfo.txt
+/Assets/Resources/BuildInfo.txt.meta
+
+# Performance tracking
+Assets/Resources/PerformanceTestRunSettings.json.meta
+Assets/Resources/PerformanceTestRunSettings.json
+
 # Packed Addressables
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 
@@ -104,5 +112,4 @@ ignore.conf
 .vscode/extensions.json
 .vscode/launch.json
 .vscode/settings.json
-Assets/Sprites/Gameplay/enemy/Drone.png.meta
 .gitignore
