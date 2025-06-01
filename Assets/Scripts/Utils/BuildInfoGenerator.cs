@@ -38,12 +38,11 @@ namespace Utils
                 if (string.IsNullOrEmpty(hash)) return;
                 
                 File.WriteAllText($"Assets/Resources/{BUILD_INFO_PATH}.txt", hash);
-                Debug.Log($"Git commit hash injected: {hash}");
                 AssetDatabase.Refresh();
             }
             catch
             {
-                Debug.LogWarning("Failed to generate build info (is Git installed?)");
+                Debug.LogWarning("Failed to generate build info from Git hash!");
             }
         }
 #endif

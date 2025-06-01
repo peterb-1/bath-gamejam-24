@@ -23,7 +23,7 @@ namespace Gameplay.Environment
         [SerializeField] 
         private AnimationCurve fadeCurve;
 
-        [SerializeField] 
+        [SerializeField, Range(0f, 1f)] 
         private float fadedAlpha;
     
         [SerializeField] 
@@ -48,10 +48,16 @@ namespace Gameplay.Environment
         private float endpointOffset;
         
         [SerializeField] 
+        private float coreEndpointOffset;
+        
+        [SerializeField] 
         private float tilingInterval;
 
         [SerializeField] 
         private float particlesPerUnitLength;
+        
+        [SerializeField] 
+        private float particleEmissionWidth;
 
         [SerializeField] 
         private ColourDatabase colourDatabase;
@@ -85,16 +91,16 @@ namespace Gameplay.Environment
                         main.startColor = colourConfig.LaserColour;
                     }
                 }
-                
-                foreach (var coreRenderer in endpointCoreRenderers)
-                {
-                    // might be rotated inside prefab, so ensure that the lightning icon is the right way up
-                    coreRenderer.transform.rotation = Quaternion.identity;
-                }
-                
-                var length = (endpointRenderers[0].transform.position - endpointRenderers[1].transform.position).magnitude;
-                laserRenderer.material.SetFloat(Tiling, length / tilingInterval);
             }
+            
+            foreach (var coreRenderer in endpointCoreRenderers)
+            {
+                // might be rotated inside prefab, so ensure that the lightning icon is the right way up
+                coreRenderer.transform.rotation = Quaternion.identity;
+            }
+                
+            var length = (endpointRenderers[0].transform.position - endpointRenderers[1].transform.position).magnitude;
+            laserRenderer.material.SetFloat(Tiling, length / tilingInterval);
         }
 
         private void HandleColourChangeStarted(ColourId colour, float duration)
@@ -169,28 +175,49 @@ namespace Gameplay.Environment
         {
             var mainTransform = laserRenderer.transform;
             var distortionTransform = distortionParticles.transform;
+            var distortionShape = distortionParticles.shape;
+            var distortionEmission = distortionParticles.emission;
+            
             var startPos = endpointRenderers[0].transform.position;
             var endPos = endpointRenderers[1].transform.position;
             var midPos = (startPos + endPos) / 2;
             var direction = endPos - startPos;
             var angle = Mathf.Rad2Deg * Mathf.Atan2(direction.y, direction.x);
+            var useCoreAsEndpoints = !endpointRenderers[0].enabled;
+            var offset = useCoreAsEndpoints ? coreEndpointOffset : endpointOffset;
+            
             var rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             var currentScale = mainTransform.localScale;
-            var rectScale = new Vector3(direction.magnitude - 2f * endpointOffset, currentScale.y, 1f);
+            var mainScale = new Vector3(direction.magnitude - 2f * offset, currentScale.y, 1f);
+            var distortionScale = new Vector3(mainScale.x, mainScale.y * particleEmissionWidth, 1f);
 
             mainTransform.position = midPos;
             mainTransform.rotation = rotation;
-            mainTransform.localScale = rectScale;
+            mainTransform.localScale = mainScale;
             
             distortionTransform.position = midPos;
             distortionTransform.rotation = rotation;
-            distortionTransform.localScale = rectScale;
+            distortionShape.scale = distortionScale;
+            distortionEmission.rateOverTime = particlesPerUnitLength * direction.magnitude;
 
             endpointRenderers[0].transform.rotation = Quaternion.AngleAxis(angle - 90f, Vector3.forward);
             endpointRenderers[1].transform.rotation = Quaternion.AngleAxis(angle + 90f, Vector3.forward);
+        }
 
-            var emission = distortionParticles.emission;
-            emission.rateOverTime = particlesPerUnitLength * direction.magnitude;
+        public void SetupForLaserBlock(Vector3 start, Vector3 end, bool isLaserBlockColoured, ColourId laserBlockColourId)
+        {
+            endpointCoreRenderers[0].transform.parent.position = start;
+            endpointCoreRenderers[1].transform.parent.position = end;
+
+            endpointRenderers[0].enabled = false;
+            endpointRenderers[1].enabled = false;
+
+            isColoured = isLaserBlockColoured;
+            isStartColoured = isLaserBlockColoured;
+            isEndColoured = isLaserBlockColoured;
+            colourId = laserBlockColourId;
+            
+            SetupLaser();
         }
 #endif
     }

@@ -18,6 +18,9 @@ namespace UI
         private Image buttonPromptImage;
         
         [SerializeField] 
+        private Image backgroundButtonPromptImage;
+        
+        [SerializeField] 
         private Sprite keyboardMouseButtonPrompts;
         
         [SerializeField] 
@@ -72,6 +75,14 @@ namespace UI
         private void HandleControlSchemeChanged(ControlScheme controlScheme)
         {
             buttonPromptImage.sprite = controlScheme switch
+            {
+                ControlScheme.Keyboard => keyboardMouseButtonPrompts,
+                ControlScheme.Gamepad => gamepadButtonPrompts,
+                ControlScheme.Mouse => buttonPromptImage.sprite,
+                _ => throw new ArgumentOutOfRangeException(nameof(controlScheme), controlScheme, null)
+            };
+            
+            backgroundButtonPromptImage.sprite = controlScheme switch
             {
                 ControlScheme.Keyboard => keyboardMouseButtonPrompts,
                 ControlScheme.Gamepad => gamepadButtonPrompts,
