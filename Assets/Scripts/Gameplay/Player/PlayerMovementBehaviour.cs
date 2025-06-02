@@ -95,6 +95,9 @@ namespace Gameplay.Player
         private Vector3 hookOffset;
         
         [SerializeField] 
+        private Vector3 dashDistortionOffset;
+        
+        [SerializeField] 
         private Vector2 ledgeFinishOffset;
         
         [SerializeField]
@@ -106,25 +109,7 @@ namespace Gameplay.Player
         [SerializeField]
         private float wallCheckOffset;
         
-        [Header("Misc")]
-        [SerializeField] 
-        private float runAnimationSpeedThreshold;
-        
-        [SerializeField] 
-        private float dashDistortionStrength;
-        
-        [SerializeField] 
-        private float dashDistortionSmoothing;
-        
-        [SerializeField] 
-        private Vector3 dashDistortionOffset;
-        
-        [SerializeField]
-        private LayerMask groundLayers;
-
-        [SerializeField] 
-        private AnimationCurve moveTowardsTargetCurve;
-
+        [Header("Rumble")]
         [SerializeField] 
         private RumbleConfig jumpingRumbleConfig;
 
@@ -136,6 +121,22 @@ namespace Gameplay.Player
 
         [SerializeField] 
         private ContinuousRumbleConfig ziplineRumbleConfig;
+        
+        [Header("Misc")]
+        [SerializeField] 
+        private float runAnimationSpeedThreshold;
+        
+        [SerializeField] 
+        private float dashDistortionStrength;
+        
+        [SerializeField] 
+        private float dashDistortionSmoothing;
+        
+        [SerializeField]
+        private LayerMask groundLayers;
+
+        [SerializeField] 
+        private AnimationCurve moveTowardsTargetCurve;
 
         [Header("References")]
         [SerializeField] 
@@ -143,6 +144,9 @@ namespace Gameplay.Player
         
         [SerializeField] 
         private BoxCollider2D boxCollider;
+        
+        [SerializeField] 
+        private BoxCollider2D deathCollider;
 
         [SerializeField] 
         private Transform spriteRendererTransform;
@@ -761,6 +765,8 @@ namespace Gameplay.Player
         private void HandleVictorySequenceStart(Vector2 position, float duration)
         {
             dashCountdown = 0f;
+
+            deathCollider.enabled = false;
             
             ShrinkInBlackHoleAsync(position, duration).Forget();
         }

@@ -52,10 +52,10 @@ Material:
     - _DustScale: 64
     - _DustSpeed: 0.505
     - _EnableExternalAlpha: 0
-    - _FogStrength: 0.351
+    - _FogStrength: 1
     - _GradientExponent: 3.71
     - _HDRMultiplier: 1.1
-    - _LayerDepth: 0.669
+    - _LayerDepth: 0
     - _MainTexStrength: 0.691
     - _NebulaContrast: 1.87
     - _NebulaDistortion: 0.311
@@ -107,7 +107,7 @@ Material:
     - _StarLayer2Color: {r: 1, g: 0.8, b: 0.6, a: 1}
     - _StarLayer3Color: {r: 0.6, g: 0.8, b: 1, a: 1}
     - _TileVariationSeed: {r: -9.73, g: 8.32, b: -27.5, a: 4.98}
-    - _Tint: {r: 0.9433962, g: 0.9433962, b: 0.9433962, a: 1}
+    - _Tint: {r: 1, g: 1, b: 1, a: 1}
     - _VignetteColor: {r: 0, g: 0, b: 0, a: 1}
     - _WormholeCenter: {r: 0.5, g: 0.6, b: 0, a: 0}
   m_BuildTextureStacks: []

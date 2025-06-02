@@ -277,41 +277,11 @@ MonoBehaviour:
   springJumpDuration: 0.25
   dashDuration: 0.3
   hookOffset: {x: 0, y: -0.5, z: 0}
+  dashDistortionOffset: {x: -0.9, y: 0, z: 0}
   ledgeFinishOffset: {x: 0, y: 0.5}
   groundCheckDistance: 0.25
   wallCheckDistance: 0.25
   wallCheckOffset: 1
-  runAnimationSpeedThreshold: 0.8
-  dashDistortionStrength: 0.2
-  dashDistortionSmoothing: 0.06
-  dashDistortionOffset: {x: -0.9, y: 0, z: 0}
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 64
-  moveTowardsTargetCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   jumpingRumbleConfig:
     <Duration>k__BackingField: 0.25
     <LowFrequencyCurve>k__BackingField:
@@ -465,8 +435,39 @@ MonoBehaviour:
   ziplineRumbleConfig:
     <LowFrequency>k__BackingField: 0.06
     <HighFrequency>k__BackingField: 0.08
+  runAnimationSpeedThreshold: 0.8
+  dashDistortionStrength: 0.2
+  dashDistortionSmoothing: 0.06
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  moveTowardsTargetCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   rigidBody: {fileID: 166652011353585149}
   boxCollider: {fileID: 6448495522596364973}
+  deathCollider: {fileID: 4809570330612904701}
   spriteRendererTransform: {fileID: 8015807823079495631}
   dashDistortionRenderer: {fileID: 8291284613670420668}
   playerAnimator: {fileID: 7933610506833450488}
@@ -530,10 +531,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 971ce76dd9690b149b878c2e1c695f26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathSequenceDuration: 0.5
-  deathLayers:
-    serializedVersion: 2
-    m_Bits: 128
   playerHitbox: {fileID: 6448495522596364973}
   playerSpriteRenderer: {fileID: 8491304688917359779}
   deathParticles: {fileID: 6912738076980054414}
@@ -587,6 +584,10 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+  deathLayers:
+    serializedVersion: 2
+    m_Bits: 128
+  deathSequenceDuration: 0.5
 --- !u!114 &3249549202202213294
 MonoBehaviour:
   m_ObjectHideFlags: 0

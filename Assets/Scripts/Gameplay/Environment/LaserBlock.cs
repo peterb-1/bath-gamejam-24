@@ -85,9 +85,12 @@ namespace Gameplay.Environment
             deathCollider.enabled = isActive;
             
             var initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
-            var currentColour = powerIconsRenderer.color;
-            var startAlpha = currentColour.a;
-            var targetAlpha = isActive ? 1f : fadedAlpha;
+            var currentIconColour = powerIconsRenderer.color;
+            var startIconAlpha = currentIconColour.a;
+            var targetIconAlpha = isActive ? 1f : fadedAlpha;
+            var currentBackgroundColour = backgroundRenderer.color;
+            var startBackgroundAlpha = currentBackgroundColour.a;
+            var targetBackgroundAlpha = isActive ? backgroundAlpha : fadedAlpha;
             var timeElapsed = 0f;
 
             // run fade independent of timescale, since this happens during the slowdown
@@ -95,18 +98,22 @@ namespace Gameplay.Environment
             {
                 var lerp = fadeCurve.Evaluate(timeElapsed / duration);
 
-                currentColour.a = (1f - lerp) * startAlpha + lerp * targetAlpha;
+                currentIconColour.a = (1f - lerp) * startIconAlpha + lerp * targetIconAlpha;
+                currentBackgroundColour.a = (1f - lerp) * startBackgroundAlpha + lerp * targetBackgroundAlpha;
                 
-                powerIconsRenderer.color = currentColour;
+                powerIconsRenderer.color = currentIconColour;
+                backgroundRenderer.color = currentBackgroundColour;
                 
                 await UniTask.Yield();
                 
                 timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
             }
 
-            currentColour.a = targetAlpha;
+            currentIconColour.a = targetIconAlpha;
+            currentBackgroundColour.a = targetBackgroundAlpha;
             
-            powerIconsRenderer.color = currentColour;
+            powerIconsRenderer.color = currentIconColour;
+            backgroundRenderer.color = currentBackgroundColour;
         }
 
         private void OnDestroy()
@@ -141,7 +148,7 @@ namespace Gameplay.Environment
 
             if (isColoured && colourDatabase.TryGetColourConfig(colourId, out var colourConfig))
             {
-                var backgroundColour = colourConfig.BackgroundDesaturated;
+                var backgroundColour = colourConfig.LaserColour;
                 backgroundColour.a = backgroundAlpha;
 
                 backgroundRenderer.color = backgroundColour;

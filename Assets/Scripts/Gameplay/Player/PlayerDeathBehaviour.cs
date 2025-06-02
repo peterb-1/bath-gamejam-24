@@ -10,12 +10,6 @@ namespace Gameplay.Player
 {
     public class PlayerDeathBehaviour : MonoBehaviour
     {
-        [SerializeField]
-        private float deathSequenceDuration;
-        
-        [SerializeField] 
-        private LayerMask deathLayers;
-
         [SerializeField] 
         private Collider2D playerHitbox;
         
@@ -28,6 +22,12 @@ namespace Gameplay.Player
         [SerializeField] 
         private RumbleConfig deathRumbleConfig;
         
+        [SerializeField] 
+        private LayerMask deathLayers;
+        
+        [SerializeField]
+        private float deathSequenceDuration;
+
         public bool IsAlive { get; private set; }
 
         public event Action OnDeathSequenceStart;
