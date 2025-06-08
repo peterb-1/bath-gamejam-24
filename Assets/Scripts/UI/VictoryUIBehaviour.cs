@@ -4,6 +4,7 @@ using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
+using Gameplay.Ghosts;
 using Gameplay.Player;
 using Hardware;
 using NaughtyAttributes;
@@ -94,6 +95,8 @@ namespace UI
         private SceneConfig nextSceneConfig;
 
         private PlayerVictoryBehaviour playerVictoryBehaviour;
+        private GhostWriter ghostWriter;
+        
         private static readonly int Show = Animator.StringToHash("Show");
 
         private async void Awake()
@@ -102,6 +105,8 @@ namespace UI
 
             playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
             playerVictoryBehaviour.OnVictorySequenceFinish += HandleVictorySequenceFinish;
+
+            ghostWriter = PlayerAccessService.Instance.GhostWriter;
             
             retryButton.onClick.AddListener(HandleRetryClicked);
             nextButton.onClick.AddListener(HandleNextClicked);
@@ -215,6 +220,7 @@ namespace UI
 
             if (shouldSave)
             {
+                ghostWriter.SaveGhostData();
                 SaveManager.Instance.Save();
             }
 

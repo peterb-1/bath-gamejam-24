@@ -1,3 +1,4 @@
+using Gameplay.Ghosts;
 using UnityEngine;
 using Utils;
 
@@ -22,6 +23,9 @@ namespace Gameplay.Player
         
         [field: SerializeField]
         public PlayerTrailBehaviour PlayerTrailBehaviour { get; private set; }
+        
+        [field: SerializeField]
+        public GhostWriter GhostWriter { get; private set; }
 
         public static PlayerAccessService Instance { get; private set; }
 

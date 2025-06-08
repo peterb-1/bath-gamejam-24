@@ -16,12 +16,16 @@ namespace Core.Saving
         
         [field: SerializeField]
         public bool IsUnlocked { get; private set; }
+        
+        [field: SerializeField]
+        public byte[] GhostData { get; private set; }
 
         public LevelData(LevelConfig levelConfig)
         {
             LevelConfigGuid = levelConfig.Guid;
             BestTime = float.MaxValue;
             IsUnlocked = false;
+            GhostData = null;
         }
 
         public bool TrySetTime(float time)
@@ -46,6 +50,11 @@ namespace Core.Saving
             }
 
             return false;
+        }
+        
+        public void SetGhostData(byte[] data)
+        {
+            GhostData = data;
         }
 
         public bool IsComplete()
