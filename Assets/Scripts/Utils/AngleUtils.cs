@@ -14,7 +14,7 @@ namespace Utils
             var delta = Mathf.DeltaAngle(a, b);
             var result = a + delta * t;
 
-            return Mathf.Repeat(result, FULL_CIRCLE);
+            return MathsUtils.Modulo(result, FULL_CIRCLE);
         }
     }
 }

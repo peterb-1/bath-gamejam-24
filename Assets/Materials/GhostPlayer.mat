@@ -73,16 +73,16 @@ Material:
     - _AlphaMult: 0.053
     - _ColourSpeed: 1.62
     - _ColourStrength: 0.99
-    - _DesatAmount: 0.476
+    - _DesatAmount: 0.163
     - _Desaturate: 0
     - _DissolveAmount: 0.268
-    - _EdgeGlow: 0.99
+    - _EdgeGlow: 0.5
     - _EdgeWidth: 0.1
     - _EnableExternalAlpha: 0
     - _FlickerAmount: 0.097
     - _FlickerSpeed: 1.3
-    - _GhostAlpha: 0.155
-    - _LightenAmount: 0.135
+    - _GhostAlpha: 0.21
+    - _LightenAmount: 0.156
     - _NoiseScale: 52.2
     - _OutlineThickness: 5.3
     - _RotationSpeed: 0

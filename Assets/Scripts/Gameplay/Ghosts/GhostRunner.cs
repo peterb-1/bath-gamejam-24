@@ -39,7 +39,7 @@ namespace Gameplay.Ghosts
         private bool hasLoadedData;
         private bool isFinishing;
         
-        private void Start()
+        private void Awake()
         {
             if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(SceneLoader.Instance.CurrentSceneConfig.LevelConfig, out var levelData) &&
                 levelData is { GhostData: not null })
