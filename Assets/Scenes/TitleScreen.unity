@@ -599,6 +599,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: TitleScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 6954360931917596841, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c0aba45c5b11d74f871c56e65db6ead, type: 2}
+    - target: {fileID: 6954360931917596841, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 1173008733563402642, guid: 6c0aba45c5b11d74f871c56e65db6ead, type: 2}
+    - target: {fileID: 6954360931917596841, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

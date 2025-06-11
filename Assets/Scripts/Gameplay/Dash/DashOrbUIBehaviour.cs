@@ -26,7 +26,7 @@ namespace Gameplay.Dash
 
             if (SceneLoader.Instance.CurrentSceneConfig.LevelConfig.DistrictNumber < DASH_INTRODUCTION_DISTRICT)
             {
-                image.enabled = false;
+                gameObject.SetActive(false);
             }
         }
 

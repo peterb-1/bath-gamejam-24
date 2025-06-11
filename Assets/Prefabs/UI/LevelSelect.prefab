@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 16ef4dd4a17bfb4429e2aa5cbc545f28, type: 2}
+  m_Material: {fileID: 2100000, guid: 76e638ff043538b40b68d59f710299dd, type: 2}
   m_Color: {r: 0.4719206, g: 0.6467859, b: 0.990566, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -889,7 +889,7 @@ PrefabInstance:
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3588945364955165872, guid: c9209faa75b702a4cb516cf69913b581, type: 2}
+      objectReference: {fileID: 7207238760451034012, guid: 80f315fc502c0ee4fb369a4612d420b2, type: 2}
     - target: {fileID: 2689640665904474361, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_Name
       value: Time
@@ -1466,7 +1466,7 @@ PrefabInstance:
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3588945364955165872, guid: c9209faa75b702a4cb516cf69913b581, type: 2}
+      objectReference: {fileID: 7207238760451034012, guid: 80f315fc502c0ee4fb369a4612d420b2, type: 2}
     - target: {fileID: 2689640665904474361, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_Name
       value: Ranking
@@ -1844,7 +1844,7 @@ PrefabInstance:
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3588945364955165872, guid: c9209faa75b702a4cb516cf69913b581, type: 2}
+      objectReference: {fileID: 7207238760451034012, guid: 80f315fc502c0ee4fb369a4612d420b2, type: 2}
     - target: {fileID: 2689640665904474361, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_Name
       value: NavigateTo
@@ -1962,7 +1962,7 @@ PrefabInstance:
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3588945364955165872, guid: c9209faa75b702a4cb516cf69913b581, type: 2}
+      objectReference: {fileID: 7207238760451034012, guid: 80f315fc502c0ee4fb369a4612d420b2, type: 2}
     - target: {fileID: 2689640665904474361, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_Name
       value: LevelName
@@ -3744,7 +3744,7 @@ PrefabInstance:
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3588945364955165872, guid: c9209faa75b702a4cb516cf69913b581, type: 2}
+      objectReference: {fileID: 7207238760451034012, guid: 80f315fc502c0ee4fb369a4612d420b2, type: 2}
     - target: {fileID: 2689640665904474361, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_Name
       value: BestTime
@@ -3878,7 +3878,7 @@ PrefabInstance:
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3588945364955165872, guid: c9209faa75b702a4cb516cf69913b581, type: 2}
+      objectReference: {fileID: 7207238760451034012, guid: 80f315fc502c0ee4fb369a4612d420b2, type: 2}
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4283058888
@@ -4000,7 +4000,7 @@ PrefabInstance:
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 3588945364955165872, guid: c9209faa75b702a4cb516cf69913b581, type: 2}
+      objectReference: {fileID: 7207238760451034012, guid: 80f315fc502c0ee4fb369a4612d420b2, type: 2}
     - target: {fileID: 2689640665904474361, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_Name
       value: LevelName

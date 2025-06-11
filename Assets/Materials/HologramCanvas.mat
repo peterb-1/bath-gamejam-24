@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: HologramCanvas
-  m_Shader: {fileID: -6465566751694194690, guid: 33eeb354faaadca49abf394f918bb37a, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: a13c2ecfc62367043b62a7b655f56ca5, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -109,6 +109,7 @@ Material:
     - _TRANSPARENCY: 0
     - _UIMaskSoftnessX: 1
     - _UIMaskSoftnessY: 1
+    - _UnscaledTime: 34.74776
     m_Colors:
     - Color_7C878D04: {r: 2.670157, g: 2.670157, b: 2.670157, a: 1}
     - Vector2_C409DFC2: {r: 30, g: 30, b: 0, a: 0}
