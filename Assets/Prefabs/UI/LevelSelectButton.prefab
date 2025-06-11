@@ -79,7 +79,7 @@ LineRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 733945675
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Positions:
   - {x: 100, y: 0, z: 0}
@@ -583,7 +583,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7130116921082980960, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
-    m_RemovedGameObjects: []
+    - {fileID: 96452430823773784, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 6615111559440384446, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2675032993298230125, guid: 176789a65607b794f8c5fd3e6b487a2c, type: 3}
       insertIndex: 0
