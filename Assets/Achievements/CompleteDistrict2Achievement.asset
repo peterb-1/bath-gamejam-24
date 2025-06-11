@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: CompleteDistrict2Achievement
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Adrenaline Junk-ie
+  <SteamName>k__BackingField: DISTRICT_2_COMPLETE
   <UnlockDescription>k__BackingField: Complete Scrapyard North
   <Guid>k__BackingField: 3651dc7a-1a52-48c3-af5c-9d501012c885
   <TrailGuid>k__BackingField: 6eba2754-5e05-4900-8dfd-65c00a24ec22

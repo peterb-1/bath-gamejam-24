@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: CompleteDistrict1Achievement
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Off the Blocks
-  <UnlockDescription>k__BackingField: Complete The Outskirts
+  <SteamName>k__BackingField: DISTRICT_1_COMPLETE
+  <UnlockDescription>k__BackingField: Complete the Outskirts
   <Guid>k__BackingField: 0dd6f2b0-2708-4268-b1f1-b423b43934be
   <TrailGuid>k__BackingField: cf945410-73c3-45b5-ac45-96084f1965da

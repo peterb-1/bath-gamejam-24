@@ -12,6 +12,9 @@ namespace Core.Saving
         [field: SerializeField]
         public bool IsUnlocked { get; private set; }
         
+        [field: SerializeField]
+        public bool IsPosted { get; private set; }
+
         public AchievementData(string guid)
         {
             Guid = guid;
@@ -26,5 +29,20 @@ namespace Core.Saving
 
             return true;
         }
+        
+        public void MarkAsPosted()
+        {
+            if (!IsUnlocked) return;
+            
+            IsPosted = true;
+        }
+        
+#if UNITY_EDITOR
+        public void Reset()
+        {
+            IsUnlocked = false;
+            IsPosted = false;
+        }
+#endif
     }
 }

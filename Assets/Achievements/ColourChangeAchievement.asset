@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ColourChangeAchievement
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Chameleon
-  <UnlockDescription>k__BackingField: Switch colour five times in one level
+  <SteamName>k__BackingField: SWITCH_COLOUR
+  <UnlockDescription>k__BackingField: Switch colour five times in one mission
   <Guid>k__BackingField: f76e81ed-3917-4299-9b04-ec877a78c085
   <TrailGuid>k__BackingField: 20944845-abe8-49a6-bcd0-9671940a0a4f

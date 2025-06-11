@@ -61,6 +61,30 @@ namespace Core.Saving
 
             return false;
         }
+        
+        public void MarkAchievementAsPosted(Achievement unlockedAchievement)
+        {
+            foreach (var achievement in achievements)
+            {
+                if (achievement.Guid == unlockedAchievement.Guid)
+                {
+                    achievement.TryUnlock();
+                }
+            }
+        }
+        
+        public bool DoesAchievementNeedPosting(Achievement achievementToCheck)
+        {
+            foreach (var achievement in achievements)
+            {
+                if (achievement.Guid == achievementToCheck.Guid)
+                {
+                    return achievement.IsUnlocked && !achievement.IsPosted;
+                }
+            }
+
+            return false;
+        }
 
         public async UniTask InitialiseAsync()
         {
@@ -84,5 +108,15 @@ namespace Core.Saving
                 }
             }
         }
+
+#if UNITY_EDITOR
+        public void ResetAllAchievements()
+        {
+            foreach (var achievementData in achievements)
+            {
+                achievementData.Reset();
+            }
+        }
+#endif
     }
 }

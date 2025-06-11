@@ -9,15 +9,18 @@ namespace Gameplay.Achievements
     [CreateAssetMenu(fileName = "Achievement", menuName = "Scriptable Objects/Achievement")]
     public class Achievement : ScriptableObject
     {
+        [field: SerializeField, ReadOnly] 
+        public string Guid { get; private set; }
+        
         [field: SerializeField] 
         public string Name { get; private set; }
         
         [field: SerializeField] 
+        public string SteamName { get; private set; }
+
+        [field: SerializeField] 
         public string UnlockDescription { get; private set; }
 
-        [field: SerializeField, ReadOnly] 
-        public string Guid { get; private set; }
-        
         [field: SerializeField, Dropdown(nameof(GetTrailGuids)), OnValueChanged(nameof(OnTrailChanged))]
         public string TrailGuid { get; private set; }
 
