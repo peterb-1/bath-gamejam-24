@@ -98,11 +98,11 @@ namespace UI
             
             AudioManager.Instance.Play(AudioClipIdentifier.SplashScreen);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(preLogoDuration));
+            await AsyncUtils.DelayWhileFocused(TimeSpan.FromSeconds(preLogoDuration));
 
             await ShowLogoAsync();
             
-            await UniTask.Delay(TimeSpan.FromSeconds(postLogoDuration));
+            await AsyncUtils.DelayWhileFocused(TimeSpan.FromSeconds(postLogoDuration));
             
             titlePageGroup.ShowGroupImmediate();
             titleScreenAnimator.SetTrigger(ShowTitle);
@@ -116,18 +116,9 @@ namespace UI
 
         private async UniTask ShowLogoAsync()
         {
-            var timeElapsed = 0f;
+            void SetLogoThreshold(float v) => logoSpriteRenderer.material.SetFloat(Threshold, v);
 
-            while (timeElapsed < logoDuration)
-            {
-                var lerp = logoDisplayCurve.Evaluate(timeElapsed / logoDuration);
-
-                logoSpriteRenderer.material.SetFloat(Threshold, lerp);
-                
-                await UniTask.Yield();
-
-                timeElapsed += Time.unscaledDeltaTime;
-            }
+            await AsyncUtils.AnimateWhileFocused(TimeSpan.FromSeconds(logoDuration), logoDisplayCurve, SetLogoThreshold);
         }
 
         private void HandleStartPerformed()
