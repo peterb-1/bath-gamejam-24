@@ -1,5 +1,4 @@
 ﻿using System;
-using Audio;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -63,6 +62,11 @@ namespace Gameplay.Core
         public string GetLevelText()
         {
             return $"{GetDistrictName(districtNumber)}  —  Mission {missionNumber}";
+        }
+
+        public string GetSteamName()
+        {
+            return $"{districtNumber}-{missionNumber}";
         }
 
         public static string GetRomanNumeral(int i)

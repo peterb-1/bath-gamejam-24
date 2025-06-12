@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49e0ef1fb32541ca97a3662a5c22c625, type: 3}
+  m_Name: TitleScreen
+  m_EditorClassIdentifier: 
+  sceneAsset: {fileID: 102900000, guid: 45a0c2768b3be734bbeab0d38d78e0d4, type: 3}
+  scenePath: Assets/Scenes/TitleScreen.unity
+  <IsLevelScene>k__BackingField: 0
+  <LevelConfig>k__BackingField:
+    <Guid>k__BackingField: f1b7822c-0a9f-48d9-879d-c0eaa83c82c1
+    districtNumber: 0
+    missionNumber: 0
+    <IsUnlockedByDefault>k__BackingField: 0
+    oneStarTime: 0
+    twoStarTime: 0
+    threeStarTime: 0
+    rainbowTime: 0
+  <NextSceneConfig>k__BackingField: {fileID: 0}

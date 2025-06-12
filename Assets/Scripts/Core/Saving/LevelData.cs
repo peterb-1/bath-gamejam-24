@@ -18,6 +18,9 @@ namespace Core.Saving
         public bool IsUnlocked { get; private set; }
         
         [field: SerializeField]
+        public bool IsBestTimePosted { get; private set; }
+
+        [field: SerializeField]
         public byte[] GhostData { get; private set; }
 
         public LevelData(LevelConfig levelConfig)
@@ -25,6 +28,7 @@ namespace Core.Saving
             LevelConfigGuid = levelConfig.Guid;
             BestTime = float.MaxValue;
             IsUnlocked = false;
+            IsBestTimePosted = true;
             GhostData = null;
         }
 
@@ -33,6 +37,7 @@ namespace Core.Saving
             if (time < BestTime)
             {
                 BestTime = time;
+                IsBestTimePosted = false;
                 return true;
             }
 
@@ -50,6 +55,13 @@ namespace Core.Saving
             }
 
             return false;
+        }
+        
+        public void MarkAsPosted()
+        {
+            if (!IsComplete()) return;
+            
+            IsBestTimePosted = true;
         }
         
         public void SetGhostData(byte[] data)

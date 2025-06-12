@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Gameplay.Camera;
 using Gameplay.Input;
 using NaughtyAttributes;
+using Steam;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
@@ -122,6 +123,12 @@ namespace Core
             IsLoading = true;
             
             OnSceneLoadStart?.Invoke();
+
+            // if we're done with the current scene, upload any high scores to Steam
+            if (CurrentSceneConfig.IsLevelScene && sceneConfig != CurrentSceneConfig)
+            {
+                SteamLeaderboards.Instance.QueueScoreUpload(CurrentSceneConfig.LevelConfig);
+            }
 
             await loadingScreen.ShowAsync();
             

@@ -8,6 +8,7 @@ using Gameplay.Ghosts;
 using Gameplay.Player;
 using Hardware;
 using NaughtyAttributes;
+using Steam;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

@@ -68,7 +68,7 @@ namespace Core.Saving
             {
                 if (achievement.Guid == unlockedAchievement.Guid)
                 {
-                    achievement.TryUnlock();
+                    achievement.MarkAsPosted();
                 }
             }
         }

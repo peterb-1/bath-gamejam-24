@@ -16,6 +16,9 @@ namespace Gameplay.Achievements
         [SerializeField] 
         private AchievementTriggerData[] achievementTriggers;
 
+        [SerializeField] 
+        private bool tryPostOnAwake;
+
         private List<Achievement> achievements;
 
         public List<Achievement> Achievements => achievements;
@@ -31,8 +34,17 @@ namespace Gameplay.Achievements
                 return;
             }
 
+            GatherAchievements();
+            
             Instance = this;
 
+            InitialiseSteamAchievementsAsync().Forget();
+        }
+        
+        public static bool IsReady() => Instance != null;
+
+        private void GatherAchievements()
+        {
             achievements = new List<Achievement>();
 
             foreach (var achievementTrigger in achievementTriggers)
@@ -44,26 +56,31 @@ namespace Gameplay.Achievements
                 achievementTrigger.Trigger.SetAchievement(achievementTrigger.Achievement);
                 achievementTrigger.Trigger.OnAchievementUnlocked += HandleAchievementUnlocked;
             }
-
-            InitialiseSteamAchievementsAsync().Forget();
         }
-        
-        public static bool IsReady() => Instance != null;
         
         private async UniTask InitialiseSteamAchievementsAsync()
         {
             await UniTask.WaitUntil(() => SteamManager.Initialized && SaveManager.IsReady);
             
             SteamUserStats.RequestCurrentStats();
+
+            if (!tryPostOnAwake) return;
+
+            var haveAnyAchievementsBeenPosted = false;
             
             foreach (var achievement in achievements)
             {
                 if (SaveManager.Instance.SaveData.AchievementsData.DoesAchievementNeedPosting(achievement))
                 {
-                    GameLogger.Log($"Identified unposted achievement {achievement.Name} ({achievement.Guid})!", this);
+                    GameLogger.Log($"Identified unposted achievement {achievement.Name} ({achievement.Guid})", this);
                     
-                    TryPostAchievementToSteam(achievement);
+                    haveAnyAchievementsBeenPosted |= TryPostAchievementToSteam(achievement);
                 }
+            }
+
+            if (haveAnyAchievementsBeenPosted)
+            {
+                SaveManager.Instance.Save();
             }
         }
 
@@ -71,11 +88,12 @@ namespace Gameplay.Achievements
         {
             if (SaveManager.Instance.SaveData.AchievementsData.TryUnlockAchievement(achievement))
             {
-                GameLogger.Log($"Unlocked achievement {achievement.Name} ({achievement.Guid})!", this);
+                GameLogger.Log($"Unlocked achievement {achievement.Name} ({achievement.Guid})", this);
                 
-                TryPostAchievementToSteam(achievement);
-
-                SaveManager.Instance.Save();
+                if (TryPostAchievementToSteam(achievement))
+                {
+                    SaveManager.Instance.Save();
+                }
             }
             else
             {
@@ -83,28 +101,33 @@ namespace Gameplay.Achievements
             }
         }
 
-        private void TryPostAchievementToSteam(Achievement achievement)
+        private bool TryPostAchievementToSteam(Achievement achievement)
         {
             if (SteamManager.Initialized)
             {
-                GameLogger.Log($"Trying to post achievement {achievement.SteamName} ({achievement.Guid}) to Steam", this);
+                GameLogger.Log($"Trying to post achievement {achievement.SteamName} ({achievement.Guid}) to Steam...", this);
                 
                 var hasSetAchievement = SteamUserStats.SetAchievement(achievement.SteamName);
                 var hasStoredStats = SteamUserStats.StoreStats();
 
                 if (hasSetAchievement && hasStoredStats)
                 {
+                    GameLogger.Log($"Posted achievement {achievement.SteamName} ({achievement.Guid}) successfully", this);
                     SaveManager.Instance.SaveData.AchievementsData.MarkAchievementAsPosted(achievement);
+                    
+                    return true;
                 }
                 else
                 {
-                    GameLogger.LogWarning($"Failed to post achievement {achievement.SteamName} ({achievement.Guid}) to Steam (set {hasSetAchievement}; store {hasStoredStats})", this);
+                    GameLogger.LogError($"Failed to post achievement {achievement.SteamName} ({achievement.Guid}) to Steam (set {hasSetAchievement}; store {hasStoredStats})", this);
                 }
             }
             else
             {
-                GameLogger.LogWarning($"Failed to post achievement {achievement.SteamName} ({achievement.Guid}) to Steam as SteamManager is not initialised!", this);
+                GameLogger.LogError($"Failed to post achievement {achievement.SteamName} ({achievement.Guid}) to Steam as SteamManager is not initialised!", this);
             }
+
+            return false;
         }
 
         private void OnDestroy()
@@ -140,7 +163,7 @@ namespace Gameplay.Achievements
                     achievement.SetGuid(Guid.NewGuid());
                     guids.Add(newGuid.ToString());
                     
-                    GameLogger.Log($"Assigned new GUID {newGuid} for achievement {achievement.Name}.", this);
+                    GameLogger.Log($"Assigned new GUID {newGuid} for achievement {achievement.Name}", this);
 
                     EditorUtility.SetDirty(achievement);
                 }
