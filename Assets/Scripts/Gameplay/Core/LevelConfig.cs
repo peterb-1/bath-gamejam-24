@@ -68,6 +68,11 @@ namespace Gameplay.Core
         {
             return $"{districtNumber}-{missionNumber}";
         }
+        
+        public string GetSteamGhostFileName()
+        {
+            return $"{districtNumber}_{missionNumber}_ghost";
+        }
 
         public static string GetRomanNumeral(int i)
         {

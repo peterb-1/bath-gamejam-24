@@ -21,7 +21,7 @@ namespace Core.Saving
         public bool IsBestTimePosted { get; private set; }
 
         [field: SerializeField]
-        public byte[] GhostData { get; private set; }
+        public string GhostData { get; private set; }
 
         public LevelData(LevelConfig levelConfig)
         {
@@ -64,7 +64,7 @@ namespace Core.Saving
             IsBestTimePosted = true;
         }
         
-        public void SetGhostData(byte[] data)
+        public void SetGhostData(string data)
         {
             GhostData = data;
         }

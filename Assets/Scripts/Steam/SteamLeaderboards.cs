@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
@@ -142,6 +143,8 @@ namespace Steam
                 var (levelConfig, levelData) = uploadQueue.Dequeue();
                 var timeSincePreviousUpload = (DateTime.UtcNow - lastUploadTime).TotalSeconds;
                 
+                GameLogger.Log($"Processing score upload for {levelConfig.GetSteamName()}...", this);
+                
                 if (timeSincePreviousUpload < UPLOAD_COOLDOWN)
                 {
                     await UniTask.Delay(TimeSpan.FromSeconds(UPLOAD_COOLDOWN - timeSincePreviousUpload));
@@ -155,7 +158,16 @@ namespace Steam
                     continue;
                 }
 
-                var success = await TryPostScoreAsync(leaderboard, levelData.BestTime);
+                var ghostFileId = await UploadGhostDataAsync(levelConfig, levelData.GhostData);
+
+                if (!ghostFileId.HasValue)
+                {
+                    GameLogger.LogError($"Failed to upload ghost data as UGC for {levelConfig.GetSteamName()}!", this);
+                    continue;
+                }
+                
+                var details = new [] { (int) ghostFileId.Value.m_PublishedFileId };
+                var success = await TryPostScoreAsync(leaderboard, levelData.BestTime, details);
 
                 if (success)
                 {
@@ -169,15 +181,15 @@ namespace Steam
             isUploading = false;
         }
 
-        private async UniTask<bool> TryPostScoreAsync(SteamLeaderboard_t leaderboard, float timeSeconds)
+        private async UniTask<bool> TryPostScoreAsync(SteamLeaderboard_t leaderboard, float timeSeconds, int[] details)
         {
             var tcs = new UniTaskCompletionSource<bool>();
             var handle = SteamUserStats.UploadLeaderboardScore(
                 leaderboard,
                 ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodKeepBest,
                 timeSeconds.ToMilliseconds(),
-                null,
-                0
+                details,
+                details.Length
             );
 
             var uploadResult = new CallResult<LeaderboardScoreUploaded_t>();
@@ -197,6 +209,78 @@ namespace Steam
             });
 
             return await tcs.Task;
+        }
+        
+        private async UniTask<PublishedFileId_t?> UploadGhostDataAsync(LevelConfig levelConfig, string ghostData)
+        {
+            try
+            {
+                var tempDirectory = Path.Combine(Path.GetTempPath(), levelConfig.GetSteamGhostFileName()).Replace('\\', '/');
+                var tempPath = Path.Combine(tempDirectory, levelConfig.GetSteamGhostFileName());
+                
+                Directory.CreateDirectory(tempDirectory);
+
+                await File.WriteAllTextAsync(tempPath, ghostData);
+
+                var tcs = new UniTaskCompletionSource<PublishedFileId_t?>();
+                var createHandle = SteamUGC.CreateItem(SteamUtils.GetAppID(), EWorkshopFileType.k_EWorkshopFileTypeGameManagedItem);
+                var createCallResult = new CallResult<CreateItemResult_t>();
+                
+                createCallResult.Set(createHandle, (createResult, bIOFailure) =>
+                {
+                    if (bIOFailure || createResult.m_eResult != EResult.k_EResultOK)
+                    {
+                        GameLogger.LogError($"Failed to create UGC item for {levelConfig.GetSteamName()}: {createResult.m_eResult}", this);
+                        tcs.TrySetResult(null);
+                        return;
+                    }
+
+                    var updateHandle = SteamUGC.StartItemUpdate(SteamUtils.GetAppID(), createResult.m_nPublishedFileId);
+                    
+                    SteamUGC.SetItemTitle(updateHandle, levelConfig.GetSteamGhostFileName());
+                    SteamUGC.SetItemDescription(updateHandle, $"Ghost data for {levelConfig.GetSteamName()}");
+                    SteamUGC.SetItemContent(updateHandle, tempDirectory);
+                    SteamUGC.SetItemVisibility(updateHandle, ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityUnlisted);
+                    SteamUGC.SetItemPreview(updateHandle, string.Empty);
+                    SteamUGC.SetItemTags(updateHandle, new List<string>());
+
+                    var submitHandle = SteamUGC.SubmitItemUpdate(updateHandle, $"Ghost data for {levelConfig.GetSteamName()}");
+                    var submitCallResult = new CallResult<SubmitItemUpdateResult_t>();
+                    
+                    submitCallResult.Set(submitHandle, (submitResult, bIOFailure2) =>
+                    {
+                        try
+                        {
+                            if (Directory.Exists(tempDirectory))
+                            {
+                                Directory.Delete(tempDirectory, true);
+                            }
+                        }
+                        catch
+                        {
+                            // doesn't matter
+                        }
+
+                        if (bIOFailure2 || submitResult.m_eResult != EResult.k_EResultOK)
+                        {
+                            GameLogger.LogError($"Failed to upload ghost data for {levelConfig.GetSteamName()}: {submitResult.m_eResult}", this);
+                            tcs.TrySetResult(null);
+                        }
+                        else
+                        {
+                            GameLogger.Log($"Successfully uploaded ghost data for {levelConfig.GetSteamName()} with file ID {createResult.m_nPublishedFileId}", this);
+                            tcs.TrySetResult(createResult.m_nPublishedFileId);
+                        }
+                    });
+                });
+
+                return await tcs.Task;
+            }
+            catch (Exception e)
+            {
+                GameLogger.LogError($"Failed to upload ghost data due to exception: {e}", this);
+                return null;
+            }
         }
 
         public async UniTask<(bool success, List<float> scores)> TryGetGlobalScoresAsync(LevelConfig levelConfig, int maxEntries = 10)
@@ -242,12 +326,7 @@ namespace Steam
 
                 for (var i = 0; i < result.m_cEntryCount; i++)
                 {
-                    if (SteamUserStats.GetDownloadedLeaderboardEntry(
-                            result.m_hSteamLeaderboardEntries, 
-                            i,
-                            out var entry, 
-                            null, 
-                            0))
+                    if (SteamUserStats.GetDownloadedLeaderboardEntry(result.m_hSteamLeaderboardEntries, i, out var entry, null, 0))
                     {
                         entries.Add(entry.m_nScore.ToSeconds());
                     }
