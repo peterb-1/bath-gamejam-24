@@ -26,6 +26,8 @@ namespace Utils
 
         public void StartSpinner()
         {
+            if (isSpinning) return;
+            
             isSpinning = true;
             currentCycleTime = 0.25f;
 

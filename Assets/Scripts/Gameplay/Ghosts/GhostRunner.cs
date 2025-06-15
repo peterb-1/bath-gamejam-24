@@ -9,8 +9,10 @@ using Utils;
 
 namespace Gameplay.Ghosts
 {
-    public class GhostRunner : MonoBehaviour 
+    public class GhostRunner : MonoBehaviour
     {
+        public const string GHOST_DATA_KEY = "GhostData";
+        
         [SerializeField]
         private SpriteRenderer spriteRenderer;
         
@@ -41,10 +43,23 @@ namespace Gameplay.Ghosts
         
         private void Awake()
         {
-            if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(SceneLoader.Instance.CurrentSceneConfig.LevelConfig, out var levelData) &&
+            var ghostData = string.Empty;
+
+            if (SceneLoader.Instance.SceneLoadContext != null)
+            {
+                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GHOST_DATA_KEY, out ghostData);
+            }
+
+            if (string.IsNullOrEmpty(ghostData) &&
+                SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(SceneLoader.Instance.CurrentSceneConfig.LevelConfig, out var levelData) &&
                 levelData is { GhostData: not null })
             {
-                var ghostRun = GhostCompressor.Deserialize(levelData.GhostData);
+                ghostData = levelData.GhostData;
+            }
+
+            if (!string.IsNullOrEmpty(ghostData))
+            {
+                var ghostRun = GhostCompressor.Deserialize(ghostData);
 
                 if (ghostRun != null)
                 {

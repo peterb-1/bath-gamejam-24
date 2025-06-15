@@ -1,6 +1,6 @@
 ﻿namespace Steam
 {
-    public enum LeaderboardQueryResult
+    public enum LeaderboardResultStatus
     {
         Failure,
         NoEntries,

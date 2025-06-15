@@ -31,6 +31,7 @@ namespace Core
         
         public SceneConfig CurrentSceneConfig { get; private set; }
         public SceneConfig PreviousSceneConfig { get; private set; }
+        public CustomDataContainer SceneLoadContext { get; private set; }
 
         public bool IsLoading { get; private set; }
         
@@ -101,26 +102,27 @@ namespace Core
         
         public void ReloadCurrentScene()
         {
-            LoadScene(CurrentSceneConfig);
+            LoadScene(CurrentSceneConfig, SceneLoadContext);
         }
 
-        public void LoadLevelSelect()
+        public void LoadLevelSelect(CustomDataContainer context = null)
         {
-            LoadScene(levelSelectScene);
+            LoadScene(levelSelectScene, context);
         }
 
-        public void LoadScene(SceneConfig sceneConfig)
+        public void LoadScene(SceneConfig sceneConfig, CustomDataContainer context = null)
         {
             if (IsLoading) return;
 
-            LoadSceneAsync(sceneConfig).Forget();
+            LoadSceneAsync(sceneConfig, context).Forget();
         }
 
-        private async UniTask LoadSceneAsync(SceneConfig sceneConfig)
+        private async UniTask LoadSceneAsync(SceneConfig sceneConfig, CustomDataContainer context)
         {
             GameLogger.Log($"Loading scene {sceneConfig.name}...", this);
             
             IsLoading = true;
+            SceneLoadContext = context;
             
             OnSceneLoadStart?.Invoke();
 

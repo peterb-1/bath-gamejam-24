@@ -51,12 +51,8 @@ namespace UI
 
         private readonly Dictionary<SceneConfig, (DistrictPageUIBehaviour, LevelSelectButton)> levelSelectButtonLookup = new();
 
-        private async void Awake()
+        private void Awake()
         {
-            await UniTask.WaitUntil(() => SaveManager.IsReady);
-            
-            var orderedLevelConfigs = new List<LevelConfig>();
-            
             foreach (var districtPage in districtPages)
             {
                 districtPage.OnSettingsClicked += HandleSettingsClicked;
@@ -68,14 +64,6 @@ namespace UI
 
                     levelSelectButton.OnHover += HandleLevelSelectButtonHover;
                     levelSelectButton.OnUnhover += HandleButtonUnhover;
-
-                    var levelConfig = levelSelectButton.SceneConfig.LevelConfig;
-
-                    if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(levelConfig, out var levelData) &&
-                        levelData.IsUnlocked)
-                    {
-                        orderedLevelConfigs.Add(levelConfig);
-                    }
                 }
             }
 
@@ -89,7 +77,29 @@ namespace UI
             forwardButton.OnHover += HandleForwardHover;
             forwardButton.OnUnhover += HandleButtonUnhover;
 
-            leaderboardBehaviour.SetLevelConfigs(orderedLevelConfigs);
+            InitialiseDataForLeaderboardsAsync().Forget();
+        }
+
+        private async UniTask InitialiseDataForLeaderboardsAsync()
+        {
+            await UniTask.WaitUntil(() => SaveManager.IsReady);
+            
+            var orderedSceneConfigs = new List<SceneConfig>();
+            
+            foreach (var districtPage in districtPages)
+            {
+                foreach (var levelSelectButton in districtPage.LevelSelectButtons)
+                {
+                    var sceneConfig = levelSelectButton.SceneConfig;
+
+                    if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(sceneConfig.LevelConfig, out var levelData) && levelData.IsUnlocked)
+                    {
+                        orderedSceneConfigs.Add(sceneConfig);
+                    }
+                }
+            }
+            
+            leaderboardBehaviour.SetLevelConfigs(orderedSceneConfigs);
         }
 
         private void Start()

@@ -20,6 +20,10 @@ namespace Steam
         private readonly Dictionary<LevelConfig, SteamLeaderboard_t> leaderboardLookup = new();
         private readonly Queue<(LevelConfig, LevelData)> uploadQueue = new();
         
+        private Callback<DownloadItemResult_t> downloadCallback;
+        private UniTaskCompletionSource<string> ghostDownloadTcs;
+        private PublishedFileId_t pendingDownloadFileId;
+        private LevelConfig pendingDownloadLevelConfig;
         private DateTime lastUploadTime = DateTime.MinValue;
         private bool isUploading;
 
@@ -166,7 +170,11 @@ namespace Steam
                     continue;
                 }
                 
-                var details = new [] { (int) ghostFileId.Value.m_PublishedFileId };
+                var fileId = ghostFileId.Value.m_PublishedFileId;
+                var lowerBits = (int) (fileId & 0xFFFFFFFF);
+                var upperBits = (int) ((fileId >> 32) & 0xFFFFFFFF);
+                var details = new[] { lowerBits, upperBits };
+                
                 var success = await TryPostScoreAsync(leaderboard, levelData.BestTime, details);
 
                 if (success)
@@ -283,12 +291,12 @@ namespace Steam
             }
         }
 
-        public async UniTask<(LeaderboardQueryResult, List<LeaderboardEntry_t>)> TryGetGlobalScoresAsync(LevelConfig levelConfig, int maxEntries = 10)
+        public async UniTask<(LeaderboardResultStatus, List<LeaderboardResult>)> TryGetGlobalScoresAsync(LevelConfig levelConfig, int maxEntries = 10)
         {
             if (!SteamManager.Initialized)
             {
                 GameLogger.LogError($"Failed to get leaderboard scores for {levelConfig.GetSteamName()} as SteamManager is not initialised!", this);
-                return (LeaderboardQueryResult.Failure, null);
+                return (LeaderboardResultStatus.Failure, null);
             }
 
             if (!leaderboardLookup.TryGetValue(levelConfig, out var leaderboard))
@@ -299,11 +307,11 @@ namespace Steam
 
                 if (!leaderboardLookup.TryGetValue(levelConfig, out leaderboard))
                 {
-                    return (LeaderboardQueryResult.Failure, null);
+                    return (LeaderboardResultStatus.Failure, null);
                 }
             }
 
-            var tcs = new UniTaskCompletionSource<(LeaderboardQueryResult, List<LeaderboardEntry_t>)>();
+            var tcs = new UniTaskCompletionSource<(LeaderboardResultStatus, List<LeaderboardResult>)>();
             var callResult = new CallResult<LeaderboardScoresDownloaded_t>();
 
             var handle = SteamUserStats.DownloadLeaderboardEntries(
@@ -318,31 +326,108 @@ namespace Steam
                 if (bIOFailure || result.m_cEntryCount < 0)
                 {
                     GameLogger.LogError("Failed to download global leaderboard scores!");
-                    tcs.TrySetResult((LeaderboardQueryResult.Failure, null));
+                    tcs.TrySetResult((LeaderboardResultStatus.Failure, null));
                     return;
                 }
 
                 if (result.m_cEntryCount <= 0)
                 {
                     GameLogger.Log("Downloaded global leaderboard scores, but found no entries");
-                    tcs.TrySetResult((LeaderboardQueryResult.NoEntries, null));
+                    tcs.TrySetResult((LeaderboardResultStatus.NoEntries, null));
                     return;
                 }
 
-                var entries = new List<LeaderboardEntry_t>();
+                var entries = new List<LeaderboardResult>();
 
                 for (var i = 0; i < result.m_cEntryCount; i++)
                 {
-                    if (SteamUserStats.GetDownloadedLeaderboardEntry(result.m_hSteamLeaderboardEntries, i, out var entry, null, 0))
+                    var detailsBuffer = new int[2];
+                    
+                    if (SteamUserStats.GetDownloadedLeaderboardEntry(result.m_hSteamLeaderboardEntries, i, out var entry, detailsBuffer, 2))
                     {
-                        entries.Add(entry);
+                        entries.Add(new LeaderboardResult(entry, detailsBuffer));
                     }
                 }
 
-                tcs.TrySetResult((LeaderboardQueryResult.FoundEntries, entries));
+                tcs.TrySetResult((LeaderboardResultStatus.FoundEntries, entries));
             });
 
             return await tcs.Task;
+        }
+
+        public async UniTask<string> TryGetGhostDataAsync(LevelConfig levelConfig, int[] details)
+        {
+            var fileId = new PublishedFileId_t(((ulong)details[1] << 32) | (uint)details[0]);
+
+            ghostDownloadTcs = new UniTaskCompletionSource<string>();
+            pendingDownloadFileId = fileId;
+            pendingDownloadLevelConfig = levelConfig;
+            downloadCallback ??= Callback<DownloadItemResult_t>.Create(OnGhostDownloadCompleted);
+
+            if (!SteamUGC.DownloadItem(fileId, true))
+            {
+                GameLogger.LogError("Failed to start downloading ghost data!");
+                return null;
+            }
+
+            return await ghostDownloadTcs.Task;
+        }
+
+        private void OnGhostDownloadCompleted(DownloadItemResult_t result)
+        {
+            GameLogger.Log($"Got download complete callback with result {result.m_eResult}");
+            
+            if (result.m_nPublishedFileId != pendingDownloadFileId) return;
+
+            if (result.m_eResult != EResult.k_EResultOK)
+            {
+                GameLogger.LogError($"DownloadItemResult failed: {result.m_eResult}");
+                ghostDownloadTcs?.TrySetResult(null);
+                return;
+            }
+
+            if (!SteamUGC.GetItemInstallInfo(result.m_nPublishedFileId, out _, out var folderPath, 1024, out _))
+            {
+                GameLogger.LogError("Failed to get install info after ghost download.");
+                ghostDownloadTcs?.TrySetResult(null);
+                return;
+            }
+
+            try
+            {
+                var ghostFilePath = Path.Combine(folderPath, pendingDownloadLevelConfig.GetSteamGhostFileName());
+                
+                if (!File.Exists(ghostFilePath))
+                {
+                    GameLogger.Log($"Fallback to first file in {folderPath} for ghost data...");
+                    
+                    ghostFilePath = null;
+                    
+                    foreach (var file in Directory.EnumerateFiles(folderPath))
+                    {
+                        ghostFilePath = file;
+                        break;
+                    }
+                }
+
+                if (ghostFilePath == null || !File.Exists(ghostFilePath))
+                {
+                    GameLogger.LogError("Ghost file not found in installed UGC directory.");
+                    ghostDownloadTcs?.TrySetResult(null);
+                    return;
+                }
+
+                var ghostData = File.ReadAllText(ghostFilePath);
+                
+                GameLogger.Log($"Got ghost data from path {ghostFilePath}!");
+                
+                ghostDownloadTcs?.TrySetResult(ghostData);
+            }
+            catch (Exception ex)
+            {
+                GameLogger.LogError($"Exception reading ghost file: {ex}", this);
+                ghostDownloadTcs?.TrySetResult(null);
+            }
         }
 
         private void OnDestroy()
