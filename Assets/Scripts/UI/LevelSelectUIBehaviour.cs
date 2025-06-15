@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Core;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Gameplay.Environment;
@@ -15,6 +16,9 @@ namespace UI
 
         [SerializeField] 
         private SettingsUIBehaviour settingsBehaviour;
+        
+        [SerializeField] 
+        private LeaderboardUIBehaviour leaderboardBehaviour;
 
         [SerializeField] 
         private LevelSelectInfoDisplayUIBehaviour infoDisplayBehaviour;
@@ -47,11 +51,16 @@ namespace UI
 
         private readonly Dictionary<SceneConfig, (DistrictPageUIBehaviour, LevelSelectButton)> levelSelectButtonLookup = new();
 
-        private void Awake()
+        private async void Awake()
         {
+            await UniTask.WaitUntil(() => SaveManager.IsReady);
+            
+            var orderedLevelConfigs = new List<LevelConfig>();
+            
             foreach (var districtPage in districtPages)
             {
                 districtPage.OnSettingsClicked += HandleSettingsClicked;
+                districtPage.OnLeaderboardClicked += HandleLeaderboardClicked;
                 
                 foreach (var levelSelectButton in districtPage.LevelSelectButtons)
                 {
@@ -59,6 +68,14 @@ namespace UI
 
                     levelSelectButton.OnHover += HandleLevelSelectButtonHover;
                     levelSelectButton.OnUnhover += HandleButtonUnhover;
+
+                    var levelConfig = levelSelectButton.SceneConfig.LevelConfig;
+
+                    if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(levelConfig, out var levelData) &&
+                        levelData.IsUnlocked)
+                    {
+                        orderedLevelConfigs.Add(levelConfig);
+                    }
                 }
             }
 
@@ -71,6 +88,8 @@ namespace UI
             forwardButton.onClick.AddListener(HandleForwardClicked);
             forwardButton.OnHover += HandleForwardHover;
             forwardButton.OnUnhover += HandleButtonUnhover;
+
+            leaderboardBehaviour.SetLevelConfigs(orderedLevelConfigs);
         }
 
         private void Start()
@@ -83,12 +102,21 @@ namespace UI
         {
             pageGroup.HideGroup(isForward: false);
             
-            settingsBehaviour.OpenSettings(HandleSettingsClosed);
+            settingsBehaviour.OpenSettings(HandleMenuClosed);
             
             AnimateCloudsAsync(isForward: false).Forget();
         }
 
-        private void HandleSettingsClosed()
+        private void HandleLeaderboardClicked()
+        {
+            pageGroup.HideGroup(isForward: false);
+            
+            leaderboardBehaviour.OpenLeaderboard(districtPages[currentPageIndex].LevelSelectButtons[0].SceneConfig.LevelConfig, HandleMenuClosed);
+            
+            AnimateCloudsAsync(isForward: false).Forget();
+        }
+
+        private void HandleMenuClosed()
         { 
             pageGroup.ShowGroup(isForward: true);
             
@@ -252,7 +280,7 @@ namespace UI
                 isForwardActive ? forwardButton : rightmostButton);
         }
 
-        public async UniTask AnimateCloudsAsync(bool isForward)
+        private async UniTask AnimateCloudsAsync(bool isForward)
         {
             var speedScale = isForward ? 1.0f : -1.0f;
             var baseSpeed = cloudGroup.BaseSpeed;
@@ -305,6 +333,7 @@ namespace UI
             foreach (var districtPage in districtPages)
             {
                 districtPage.OnSettingsClicked -= HandleSettingsClicked;
+                districtPage.OnLeaderboardClicked -= HandleLeaderboardClicked;
                 
                 foreach (var levelSelectButton in districtPage.LevelSelectButtons)
                 {

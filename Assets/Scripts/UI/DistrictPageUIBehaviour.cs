@@ -27,14 +27,18 @@ namespace UI
         
         [field: SerializeField]
         public Page Page { get; private set; }
-
-        [field: SerializeField]
-        public LevelSelectButton[] LevelSelectButtons { get; private set; }
         
         [field: SerializeField] 
         public Button SettingsButton { get; private set; }
+        
+        [field: SerializeField] 
+        public Button LeaderboardButton { get; private set; }
+
+        [field: SerializeField]
+        public LevelSelectButton[] LevelSelectButtons { get; private set; }
 
         public event Action OnSettingsClicked;
+        public event Action OnLeaderboardClicked;
 
         private void Awake()
         {
@@ -42,6 +46,7 @@ namespace UI
             SetInfoAsync().Forget();
             
             SettingsButton.onClick.AddListener(HandleSettingsClicked);
+            LeaderboardButton.onClick.AddListener(HandleLeaderboardClicked);
         }
         
         private void CreateButtonLinks()
@@ -66,6 +71,11 @@ namespace UI
         private void HandleSettingsClicked()
         {
             OnSettingsClicked?.Invoke();
+        }
+        
+        private void HandleLeaderboardClicked()
+        {
+            OnLeaderboardClicked?.Invoke();
         }
 
         private async UniTask SetInfoAsync()
@@ -138,6 +148,7 @@ namespace UI
         private void OnDestroy()
         {
             SettingsButton.onClick.RemoveListener(HandleSettingsClicked);
+            LeaderboardButton.onClick.RemoveListener(HandleLeaderboardClicked);
         }
     }
 }

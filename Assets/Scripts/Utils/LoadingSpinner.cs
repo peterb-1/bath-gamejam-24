@@ -27,7 +27,7 @@ namespace Utils
         public void StartSpinner()
         {
             isSpinning = true;
-            currentCycleTime = 0f;
+            currentCycleTime = 0.25f;
 
             SpinAsync().Forget();
         }

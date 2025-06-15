@@ -31,13 +31,7 @@ namespace UI
         private TMP_Text nextDistrictText;
         
         [SerializeField] 
-        private RankingStar firstStar;
-        
-        [SerializeField] 
-        private RankingStar secondStar;
-        
-        [SerializeField] 
-        private RankingStar thirdStar;
+        private RankingStarUIBehaviour rankingStarUIBehaviour;
 
         public void SetNoData()
         {
@@ -61,16 +55,7 @@ namespace UI
                     bestTimeText.text = TimerBehaviour.GetFormattedTime(levelData.BestTime);
                 }
                 
-                var ranking = sceneConfig.LevelConfig.GetTimeRanking(levelData.BestTime);
-                var isRainbow = ranking == TimeRanking.Rainbow;
-                
-                firstStar.SetActive(ranking >= TimeRanking.OneStar, shouldAnimate: false);
-                secondStar.SetActive(ranking >= TimeRanking.TwoStar, shouldAnimate: false);
-                thirdStar.SetActive(ranking >= TimeRanking.ThreeStar, shouldAnimate: false);
-                
-                firstStar.SetRainbowState(isRainbow, shouldAnimate: false);
-                secondStar.SetRainbowState(isRainbow, shouldAnimate: false);
-                thirdStar.SetRainbowState(isRainbow, shouldAnimate: false);
+                rankingStarUIBehaviour.SetRanking(sceneConfig.LevelConfig.GetTimeRanking(levelData.BestTime));
             }
             
             pageGroup.SetPage(levelInfoPage);

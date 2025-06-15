@@ -283,12 +283,12 @@ namespace Steam
             }
         }
 
-        public async UniTask<(bool success, List<float> scores)> TryGetGlobalScoresAsync(LevelConfig levelConfig, int maxEntries = 10)
+        public async UniTask<(LeaderboardQueryResult, List<LeaderboardEntry_t>)> TryGetGlobalScoresAsync(LevelConfig levelConfig, int maxEntries = 10)
         {
             if (!SteamManager.Initialized)
             {
                 GameLogger.LogError($"Failed to get leaderboard scores for {levelConfig.GetSteamName()} as SteamManager is not initialised!", this);
-                return (false, null);
+                return (LeaderboardQueryResult.Failure, null);
             }
 
             if (!leaderboardLookup.TryGetValue(levelConfig, out var leaderboard))
@@ -299,11 +299,11 @@ namespace Steam
 
                 if (!leaderboardLookup.TryGetValue(levelConfig, out leaderboard))
                 {
-                    return (false, null);
+                    return (LeaderboardQueryResult.Failure, null);
                 }
             }
 
-            var tcs = new UniTaskCompletionSource<(bool, List<float>)>();
+            var tcs = new UniTaskCompletionSource<(LeaderboardQueryResult, List<LeaderboardEntry_t>)>();
             var callResult = new CallResult<LeaderboardScoresDownloaded_t>();
 
             var handle = SteamUserStats.DownloadLeaderboardEntries(
@@ -315,24 +315,31 @@ namespace Steam
 
             callResult.Set(handle, (result, bIOFailure) =>
             {
-                if (bIOFailure || result.m_cEntryCount <= 0)
+                if (bIOFailure || result.m_cEntryCount < 0)
                 {
                     GameLogger.LogError("Failed to download global leaderboard scores!");
-                    tcs.TrySetResult((false, null));
+                    tcs.TrySetResult((LeaderboardQueryResult.Failure, null));
                     return;
                 }
 
-                var entries = new List<float>();
+                if (result.m_cEntryCount <= 0)
+                {
+                    GameLogger.Log("Downloaded global leaderboard scores, but found no entries");
+                    tcs.TrySetResult((LeaderboardQueryResult.NoEntries, null));
+                    return;
+                }
+
+                var entries = new List<LeaderboardEntry_t>();
 
                 for (var i = 0; i < result.m_cEntryCount; i++)
                 {
                     if (SteamUserStats.GetDownloadedLeaderboardEntry(result.m_hSteamLeaderboardEntries, i, out var entry, null, 0))
                     {
-                        entries.Add(entry.m_nScore.ToSeconds());
+                        entries.Add(entry);
                     }
                 }
 
-                tcs.TrySetResult((true, entries));
+                tcs.TrySetResult((LeaderboardQueryResult.FoundEntries, entries));
             });
 
             return await tcs.Task;
