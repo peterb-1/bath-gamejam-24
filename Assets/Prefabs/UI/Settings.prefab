@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 0.32941177, g: 0.32941177, b: 0.32941177, a: 0.8784314}
+  m_Color: {r: 0.3019608, g: 0.3019608, b: 0.3019608, a: 0.8784314}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -199,7 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: a79baaeb15624a34ba8f7b3efd30f5ba, type: 2}
-  m_Color: {r: 0.4719206, g: 0.6467859, b: 0.990566, a: 1}
+  m_Color: {r: 0.11764706, g: 0.41568628, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -484,6 +484,18 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 7207238760451034012, guid: 80f315fc502c0ee4fb369a4612d420b2, type: 2}
+    - target: {fileID: 4937670985013605502, guid: 052ec7bbf8ca9624db48703155bed312, type: 3}
+      propertyPath: m_Color.b
+      value: 0.8396226
+      objectReference: {fileID: 0}
+    - target: {fileID: 4937670985013605502, guid: 052ec7bbf8ca9624db48703155bed312, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8396226
+      objectReference: {fileID: 0}
+    - target: {fileID: 4937670985013605502, guid: 052ec7bbf8ca9624db48703155bed312, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8396226
+      objectReference: {fileID: 0}
     - target: {fileID: 5173900167373503886, guid: 052ec7bbf8ca9624db48703155bed312, type: 3}
       propertyPath: m_sharedMaterial
       value: 
@@ -1387,18 +1399,6 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 4e5f849406a362b4f9252801ad30f559, type: 3}
-    - target: {fileID: 4937670985013605502, guid: 052ec7bbf8ca9624db48703155bed312, type: 3}
-      propertyPath: m_Color.b
-      value: 0.8301887
-      objectReference: {fileID: 0}
-    - target: {fileID: 4937670985013605502, guid: 052ec7bbf8ca9624db48703155bed312, type: 3}
-      propertyPath: m_Color.g
-      value: 0.8301887
-      objectReference: {fileID: 0}
-    - target: {fileID: 4937670985013605502, guid: 052ec7bbf8ca9624db48703155bed312, type: 3}
-      propertyPath: m_Color.r
-      value: 0.8301887
-      objectReference: {fileID: 0}
     - target: {fileID: 4937670985013605502, guid: 052ec7bbf8ca9624db48703155bed312, type: 3}
       propertyPath: m_Material
       value: 

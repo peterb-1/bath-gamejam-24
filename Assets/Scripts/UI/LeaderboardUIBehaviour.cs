@@ -19,6 +19,9 @@ namespace UI
 
         [SerializeField] 
         private TMP_Text leaderboardTitleText;
+        
+        [SerializeField] 
+        private TMP_Text uploadInfoText;
 
         [SerializeField] 
         private GameObject errorMessage;
@@ -51,6 +54,27 @@ namespace UI
             previousButton.onClick.AddListener(HandlePreviousSelected);
             nextButton.onClick.AddListener(HandleNextSelected);
             backButton.onClick.AddListener(HandleBackSelected);
+
+            foreach (var row in leaderboardRows)
+            {
+                row.OnDownloadStarted += HandleDownloadStarted;
+                row.OnDownloadFinished += HandleDownloadFinished;
+            }
+        }
+        
+        private void Update()
+        {
+            if (!SteamLeaderboards.IsReady()) return;
+            
+            var queueSize = SteamLeaderboards.Instance.UploadsQueued;
+
+            uploadInfoText.text = queueSize switch
+            {
+                0 => "All scores uploaded!",
+                1 => "1 score pending upload...",
+                > 1 => $"{queueSize} scores pending upload...",
+                _ => ""
+            };
         }
 
         public void SetLevelConfigs(List<SceneConfig> sceneConfigs)
@@ -124,9 +148,10 @@ namespace UI
                 var row = leaderboardRows[i];
                 var entry = entries[i].Entry;
                 var details = entries[i].Details;
+                var fileId = details.Length >= 2 ? ((ulong) details[1] << 32) | (uint) details[0] : 0;
                 
                 row.gameObject.SetActive(true);
-                row.SetDetails(entry.m_nGlobalRank, entry.m_steamIDUser.GetUsername(), entry.m_nScore.ToSeconds(), details, sceneConfig);
+                row.SetDetails(entry.m_nGlobalRank, entry.m_steamIDUser, entry.m_nScore.ToSeconds(), fileId, sceneConfig);
             }
         }
 
@@ -148,14 +173,43 @@ namespace UI
             pageGroup.HideGroup(isForward: true);
             settingsClosedCallback?.Invoke();
         }
+        
+        private void HandleDownloadStarted()
+        {
+            previousButton.interactable = false;
+            nextButton.interactable = false;
+
+            foreach (var row in leaderboardRows)
+            {
+                row.DisableDownloads();
+            }
+        }
+        
+        private void HandleDownloadFinished()
+        {
+            previousButton.interactable = true;
+            nextButton.interactable = true;
+            
+            foreach (var row in leaderboardRows)
+            {
+                row.EnableDownloads();
+            }
+        }
 
         private void OnDestroy()
         {
             previousButton.onClick.RemoveListener(HandlePreviousSelected);
             nextButton.onClick.RemoveListener(HandleNextSelected);
             backButton.onClick.RemoveListener(HandleBackSelected);
+            
             leaderboardCancellationTokenSource?.Cancel();
             leaderboardCancellationTokenSource?.Dispose();
+            
+            foreach (var row in leaderboardRows)
+            {
+                row.OnDownloadStarted -= HandleDownloadStarted;
+                row.OnDownloadFinished -= HandleDownloadFinished;
+            }
         }
     }
 }

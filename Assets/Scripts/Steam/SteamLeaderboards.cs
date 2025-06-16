@@ -5,6 +5,7 @@ using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
+using Gameplay.Ghosts;
 using Steamworks;
 using UnityEngine;
 using Utils;
@@ -15,13 +16,14 @@ namespace Steam
     {
         private const float UPLOAD_COOLDOWN = 60f;
         
+        public int UploadsQueued => isUploading ? uploadQueue.Count + 1 : 0;
         public static SteamLeaderboards Instance { get; private set; }
         
         private readonly Dictionary<LevelConfig, SteamLeaderboard_t> leaderboardLookup = new();
         private readonly Queue<(LevelConfig, LevelData)> uploadQueue = new();
         
         private Callback<DownloadItemResult_t> downloadCallback;
-        private UniTaskCompletionSource<string> ghostDownloadTcs;
+        private UniTaskCompletionSource<GhostRun> ghostDownloadTcs;
         private PublishedFileId_t pendingDownloadFileId;
         private LevelConfig pendingDownloadLevelConfig;
         private DateTime lastUploadTime = DateTime.MinValue;
@@ -147,12 +149,12 @@ namespace Steam
                 var (levelConfig, levelData) = uploadQueue.Dequeue();
                 var timeSincePreviousUpload = (DateTime.UtcNow - lastUploadTime).TotalSeconds;
                 
-                GameLogger.Log($"Processing score upload for {levelConfig.GetSteamName()}...", this);
-                
                 if (timeSincePreviousUpload < UPLOAD_COOLDOWN)
                 {
                     await UniTask.Delay(TimeSpan.FromSeconds(UPLOAD_COOLDOWN - timeSincePreviousUpload));
                 }
+                
+                GameLogger.Log($"Processing score upload for {levelConfig.GetSteamName()}...", this);
 
                 var (foundLeaderboard, leaderboard) = await TryGetLeaderboardAsync(levelConfig);
 
@@ -355,16 +357,28 @@ namespace Steam
             return await tcs.Task;
         }
 
-        public async UniTask<string> TryGetGhostDataAsync(LevelConfig levelConfig, int[] details)
+        public async UniTask<GhostRun> TryGetGhostDataAsync(LevelConfig levelConfig, ulong fileId)
         {
-            var fileId = new PublishedFileId_t(((ulong)details[1] << 32) | (uint)details[0]);
+            var ghostFileId = new PublishedFileId_t(fileId);
+            var alreadyDownloadedData = TryGetDownloadedGhostData(levelConfig, ghostFileId);
 
-            ghostDownloadTcs = new UniTaskCompletionSource<string>();
-            pendingDownloadFileId = fileId;
+            if (alreadyDownloadedData != null)
+            {
+                return alreadyDownloadedData;
+            }
+            
+            if (ghostDownloadTcs != null)
+            {
+                GameLogger.LogError("Another ghost download is already in progress!");
+                return null;
+            }
+
+            ghostDownloadTcs = new UniTaskCompletionSource<GhostRun>();
+            pendingDownloadFileId = ghostFileId;
             pendingDownloadLevelConfig = levelConfig;
             downloadCallback ??= Callback<DownloadItemResult_t>.Create(OnGhostDownloadCompleted);
 
-            if (!SteamUGC.DownloadItem(fileId, true))
+            if (!SteamUGC.DownloadItem(ghostFileId, true))
             {
                 GameLogger.LogError("Failed to start downloading ghost data!");
                 return null;
@@ -373,29 +387,23 @@ namespace Steam
             return await ghostDownloadTcs.Task;
         }
 
-        private void OnGhostDownloadCompleted(DownloadItemResult_t result)
+        public GhostRun TryGetOfflineGhostData(LevelConfig levelConfig, ulong fileId)
         {
-            GameLogger.Log($"Got download complete callback with result {result.m_eResult}");
-            
-            if (result.m_nPublishedFileId != pendingDownloadFileId) return;
+            var ghostFileId = new PublishedFileId_t(fileId);
+            return TryGetDownloadedGhostData(levelConfig, ghostFileId);
+        }
 
-            if (result.m_eResult != EResult.k_EResultOK)
-            {
-                GameLogger.LogError($"DownloadItemResult failed: {result.m_eResult}");
-                ghostDownloadTcs?.TrySetResult(null);
-                return;
-            }
-
-            if (!SteamUGC.GetItemInstallInfo(result.m_nPublishedFileId, out _, out var folderPath, 1024, out _))
+        private GhostRun TryGetDownloadedGhostData(LevelConfig levelConfig, PublishedFileId_t fileId)
+        {
+            if (!SteamUGC.GetItemInstallInfo(fileId, out _, out var folderPath, 1024, out _))
             {
                 GameLogger.LogError("Failed to get install info after ghost download.");
-                ghostDownloadTcs?.TrySetResult(null);
-                return;
+                return null;
             }
-
+            
             try
             {
-                var ghostFilePath = Path.Combine(folderPath, pendingDownloadLevelConfig.GetSteamGhostFileName());
+                var ghostFilePath = Path.Combine(folderPath, levelConfig.GetSteamGhostFileName());
                 
                 if (!File.Exists(ghostFilePath))
                 {
@@ -413,21 +421,42 @@ namespace Steam
                 if (ghostFilePath == null || !File.Exists(ghostFilePath))
                 {
                     GameLogger.LogError("Ghost file not found in installed UGC directory.");
-                    ghostDownloadTcs?.TrySetResult(null);
-                    return;
+                    return null;
                 }
 
                 var ghostData = File.ReadAllText(ghostFilePath);
                 
                 GameLogger.Log($"Got ghost data from path {ghostFilePath}!");
-                
-                ghostDownloadTcs?.TrySetResult(ghostData);
+
+                return GhostCompressor.Deserialize(ghostData);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                GameLogger.LogError($"Exception reading ghost file: {ex}", this);
-                ghostDownloadTcs?.TrySetResult(null);
+                GameLogger.LogError($"Exception reading ghost file: {e}", this);
+                return null;
             }
+        }
+
+        private void OnGhostDownloadCompleted(DownloadItemResult_t result)
+        {
+            GameLogger.Log($"Got download complete callback with result {result.m_eResult}");
+            
+            if (result.m_nPublishedFileId != pendingDownloadFileId) return;
+
+            if (result.m_eResult != EResult.k_EResultOK)
+            {
+                GameLogger.LogError($"DownloadItemResult failed: {result.m_eResult}");
+                ghostDownloadTcs?.TrySetResult(null);
+                return;
+            }
+
+            var ghostResult = TryGetDownloadedGhostData(pendingDownloadLevelConfig, result.m_nPublishedFileId);
+
+            ghostDownloadTcs?.TrySetResult(ghostResult);
+
+            pendingDownloadFileId = default;
+            pendingDownloadLevelConfig = null;
+            ghostDownloadTcs = null;
         }
 
         private void OnDestroy()

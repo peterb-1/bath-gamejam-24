@@ -38,46 +38,37 @@ namespace Gameplay.Ghosts
         private float victoryTime;
         private int currentAnimatorStateHash;
         private int currentIndex;
-        private bool hasLoadedData;
         private bool isFinishing;
         
         private void Awake()
         {
-            var ghostData = string.Empty;
+            GhostRun ghostRun = null;
 
             if (SceneLoader.Instance.SceneLoadContext != null)
             {
-                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GHOST_DATA_KEY, out ghostData);
+                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GHOST_DATA_KEY, out ghostRun);
             }
 
-            if (string.IsNullOrEmpty(ghostData) &&
+            if (ghostRun == null &&
                 SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(SceneLoader.Instance.CurrentSceneConfig.LevelConfig, out var levelData) &&
                 levelData is { GhostData: not null })
             {
-                ghostData = levelData.GhostData;
+                ghostRun = GhostCompressor.Deserialize(levelData.GhostData);
             }
 
-            if (!string.IsNullOrEmpty(ghostData))
-            {
-                var ghostRun = GhostCompressor.Deserialize(ghostData);
-
-                if (ghostRun != null)
-                {
-                    frames = ghostRun.frames;
-                    victoryTime = ghostRun.victoryTime;
-                
-                    hasLoadedData = true;
-                    
-                    if (frames is { Count: > 0 } && colourDatabase.TryGetColourConfig(frames[0].colourId, out var colourConfig))
-                    {
-                        spriteRenderer.color = colourConfig.PlayerColour;
-                    }
-                }
-            }
-            
-            if (!hasLoadedData)
+            if (ghostRun == null)
             {
                 Destroy(gameObject);
+            }
+            else
+            {
+                frames = ghostRun.frames;
+                victoryTime = ghostRun.victoryTime;
+                
+                if (frames is { Count: > 0 } && colourDatabase.TryGetColourConfig(frames[0].colourId, out var colourConfig))
+                {
+                    spriteRenderer.color = colourConfig.PlayerColour;
+                }
             }
         }
 

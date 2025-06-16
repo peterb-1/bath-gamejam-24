@@ -632,6 +632,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 420348064759848473, guid: d1ef056696b030a47899d55ac8c04799, type: 3}
+      propertyPath: sharedProfile
+      value: 
+      objectReference: {fileID: 11400000, guid: 2bc0652d753b24b4cb278210208b9341, type: 2}
     - target: {fileID: 2156916594220221010, guid: d1ef056696b030a47899d55ac8c04799, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1

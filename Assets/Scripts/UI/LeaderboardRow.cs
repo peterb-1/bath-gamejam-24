@@ -1,9 +1,9 @@
 ﻿using System;
 using Core;
 using Cysharp.Threading.Tasks;
-using Gameplay.Core;
 using Gameplay.Ghosts;
 using Steam;
+using Steamworks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,9 +27,26 @@ namespace UI
 
         [SerializeField] 
         private Button ghostButton;
+        
+        [SerializeField] 
+        private Image ghostButtonImage;
+
+        [SerializeField] 
+        private Sprite downloadSprite;
+        
+        [SerializeField] 
+        private Sprite playSprite;
+
+        [SerializeField] 
+        private LoadingSpinner downloadSpinner;
 
         private SceneConfig currentSceneConfig;
-        private int[] entryDetails;
+        private GhostRun downloadedGhostData;
+        private ulong ghostFileId;
+        private bool rowBelongsToCurrentUser;
+
+        public event Action OnDownloadStarted;
+        public event Action OnDownloadFinished;
 
         private void Awake()
         {
@@ -38,28 +55,77 @@ namespace UI
 
         private void HandleGhostButtonClicked()
         {
-            GetGhostDataAsync().Forget();
+            if (rowBelongsToCurrentUser || downloadedGhostData != null)
+            {
+                LoadSceneWithGhostData();
+            }
+            else
+            {
+                GetGhostDataAsync().Forget();
+            }
         }
 
         private async UniTask GetGhostDataAsync()
         {
-            var ghostData = await SteamLeaderboards.Instance.TryGetGhostDataAsync(currentSceneConfig.LevelConfig, entryDetails);
+            OnDownloadStarted?.Invoke();
+            
+            downloadSpinner.gameObject.SetActive(true);
+            downloadSpinner.StartSpinner();
+
+            ghostButtonImage.enabled = false;
+
+            downloadedGhostData = await SteamLeaderboards.Instance.TryGetGhostDataAsync(currentSceneConfig.LevelConfig, ghostFileId);
+
+            downloadSpinner.StopSpinner();
+            downloadSpinner.gameObject.SetActive(false);
+
+            ghostButtonImage.enabled = true;
+            ghostButtonImage.sprite = downloadedGhostData == null ? downloadSprite : playSprite;
+            
+            OnDownloadFinished?.Invoke();
+        }
+
+        private void LoadSceneWithGhostData()
+        {
             var sceneLoadContext = new CustomDataContainer();
             
-            sceneLoadContext.SetCustomData(GhostRunner.GHOST_DATA_KEY, ghostData);
+            sceneLoadContext.SetCustomData(GhostRunner.GHOST_DATA_KEY, downloadedGhostData);
             
             SceneLoader.Instance.LoadScene(currentSceneConfig, sceneLoadContext);
         }
 
-        public void SetDetails(int position, string username, float time, int[] details, SceneConfig sceneConfig)
+        public void SetDetails(int position, CSteamID steamID, float time, ulong fileId, SceneConfig sceneConfig)
         {
+            rowBelongsToCurrentUser = SteamUser.GetSteamID().m_SteamID == steamID.m_SteamID;
+            
             positionText.text = $"{position}";
-            usernameText.text = username;
+            usernameText.text = steamID.GetUsername();
             timeText.text = TimerBehaviour.GetFormattedTime(time);
             rankingStarUIBehaviour.SetRanking(sceneConfig.LevelConfig.GetTimeRanking(time));
+            downloadSpinner.gameObject.SetActive(false);
 
-            entryDetails = details;
+            ghostFileId = fileId;
             currentSceneConfig = sceneConfig;
+
+            if (rowBelongsToCurrentUser)
+            {
+                ghostButtonImage.sprite = playSprite;
+            }
+            else
+            {
+                downloadedGhostData = SteamLeaderboards.Instance.TryGetOfflineGhostData(sceneConfig.LevelConfig, fileId);
+                ghostButtonImage.sprite = downloadedGhostData != null ? playSprite : downloadSprite;
+            }
+        }
+        
+        public void EnableDownloads()
+        {
+            ghostButton.interactable = true;
+        }
+        
+        public void DisableDownloads()
+        {
+            ghostButton.interactable = false;
         }
 
         private void OnDestroy()
