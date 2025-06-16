@@ -54,6 +54,7 @@ MonoBehaviour:
     <Trigger>k__BackingField: {fileID: 6683605738314428196}
   - <Achievement>k__BackingField: {fileID: 11400000, guid: 53b40d902c6d6134ab953041a30ffb76, type: 2}
     <Trigger>k__BackingField: {fileID: 6546117460707456881}
+  tryPostOnAwake: 0
 --- !u!1 &5579816127377267907
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96ca00b6e3de47b2923db5dd157dc156, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneConfig: {fileID: 11400000, guid: 880d10cc8e320c04f9d54210e724c978, type: 2}
+  sceneConfig: {fileID: 11400000, guid: dea8bddfea06e854596e2fce3a85d3d7, type: 2}
 --- !u!1 &7185229492790614502
 GameObject:
   m_ObjectHideFlags: 0

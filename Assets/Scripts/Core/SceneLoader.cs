@@ -127,7 +127,7 @@ namespace Core
             OnSceneLoadStart?.Invoke();
 
             // if we're done with the current scene, upload any high scores to Steam
-            if (CurrentSceneConfig.IsLevelScene && sceneConfig != CurrentSceneConfig)
+            if (SteamLeaderboards.IsReady() && CurrentSceneConfig.IsLevelScene && sceneConfig != CurrentSceneConfig)
             {
                 SteamLeaderboards.Instance.QueueScoreUpload(CurrentSceneConfig.LevelConfig);
             }
