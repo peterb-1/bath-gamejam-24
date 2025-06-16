@@ -29,6 +29,9 @@ namespace UI
         private Button ghostButton;
         
         [SerializeField] 
+        private Image currentPlayerBackground;
+
+        [SerializeField] 
         private Image ghostButtonImage;
 
         [SerializeField] 
@@ -97,6 +100,7 @@ namespace UI
         public void SetDetails(int position, CSteamID steamID, float time, ulong fileId, SceneConfig sceneConfig)
         {
             rowBelongsToCurrentUser = SteamUser.GetSteamID().m_SteamID == steamID.m_SteamID;
+            currentPlayerBackground.enabled = rowBelongsToCurrentUser;
             
             positionText.text = $"{position}";
             usernameText.text = steamID.GetUsername();

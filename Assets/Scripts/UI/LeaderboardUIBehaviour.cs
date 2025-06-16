@@ -5,6 +5,7 @@ using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Steam;
+using Steamworks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,6 +38,15 @@ namespace UI
 
         [SerializeField] 
         private Button nextButton;
+        
+        [SerializeField] 
+        private Button globalButton;
+        
+        [SerializeField] 
+        private Button friendsButton;
+        
+        [SerializeField] 
+        private Button refreshButton;
 
         [SerializeField] 
         private Button backButton;
@@ -46,13 +56,19 @@ namespace UI
 
         private CancellationTokenSource leaderboardCancellationTokenSource;
         private List<SceneConfig> orderedSceneConfigs;
+        private ELeaderboardDataRequest currentRequestType;
         private Action settingsClosedCallback;
         private int currentConfigIndex;
 
         private void Awake()
         {
+            currentRequestType = ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal;
+            
             previousButton.onClick.AddListener(HandlePreviousSelected);
             nextButton.onClick.AddListener(HandleNextSelected);
+            globalButton.onClick.AddListener(HandleGlobalSelected);
+            friendsButton.onClick.AddListener(HandleFriendsSelected);
+            refreshButton.onClick.AddListener(HandleRefreshSelected);
             backButton.onClick.AddListener(HandleBackSelected);
 
             foreach (var row in leaderboardRows)
@@ -97,19 +113,21 @@ namespace UI
 
             settingsClosedCallback = onClosedCallback;
 
-            PopulateLeaderboard();
+            PopulateLeaderboard(currentRequestType);
         }
 
-        private void PopulateLeaderboard()
+        private void PopulateLeaderboard(ELeaderboardDataRequest requestType)
         {
+            currentRequestType = requestType;
+            
             leaderboardCancellationTokenSource?.Cancel();
             leaderboardCancellationTokenSource?.Dispose();
             leaderboardCancellationTokenSource = new CancellationTokenSource();
             
-            PopulateLeaderboardAsync(leaderboardCancellationTokenSource.Token).Forget();
+            PopulateLeaderboardAsync(leaderboardCancellationTokenSource.Token, requestType).Forget();
         }
 
-        private async UniTask PopulateLeaderboardAsync(CancellationToken token)
+        private async UniTask PopulateLeaderboardAsync(CancellationToken token, ELeaderboardDataRequest requestType)
         {
             foreach (var row in leaderboardRows)
             {
@@ -129,7 +147,11 @@ namespace UI
 
             await UniTask.WaitUntil(SteamLeaderboards.IsReady, cancellationToken: token);
 
-            var (wasCancelled, (result, entries)) = await SteamLeaderboards.Instance.TryGetGlobalScoresAsync(levelConfig, leaderboardRows.Length)
+            var (wasCancelled, (result, entries)) = await SteamLeaderboards.Instance.TryGetLeaderboardScoresAsync(
+                    levelConfig, 
+                    requestType, 
+                    1, 
+                    leaderboardRows.Length)
                 .AttachExternalCancellation(token)
                 .SuppressCancellationThrow();
 
@@ -158,13 +180,30 @@ namespace UI
         private void HandlePreviousSelected()
         {
             currentConfigIndex = MathsUtils.Modulo(currentConfigIndex - 1, orderedSceneConfigs.Count);
-            PopulateLeaderboard();
+            PopulateLeaderboard(currentRequestType);
         }
 
         private void HandleNextSelected()
         {
             currentConfigIndex = MathsUtils.Modulo(currentConfigIndex + 1, orderedSceneConfigs.Count);
-            PopulateLeaderboard();
+            PopulateLeaderboard(currentRequestType);
+        }
+        
+        private void HandleGlobalSelected()
+        {
+            if (currentRequestType == ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal) return;
+            PopulateLeaderboard(ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal);
+        }
+        
+        private void HandleFriendsSelected()
+        {
+            if (currentRequestType == ELeaderboardDataRequest.k_ELeaderboardDataRequestFriends) return;
+            PopulateLeaderboard(ELeaderboardDataRequest.k_ELeaderboardDataRequestFriends);
+        }
+
+        private void HandleRefreshSelected()
+        {
+            PopulateLeaderboard(currentRequestType);
         }
 
         private void HandleBackSelected()
@@ -178,6 +217,9 @@ namespace UI
         {
             previousButton.interactable = false;
             nextButton.interactable = false;
+            globalButton.interactable = false;
+            friendsButton.interactable = false;
+            refreshButton.interactable = false;
 
             foreach (var row in leaderboardRows)
             {
@@ -189,6 +231,9 @@ namespace UI
         {
             previousButton.interactable = true;
             nextButton.interactable = true;
+            globalButton.interactable = true;
+            friendsButton.interactable = true;
+            refreshButton.interactable = true;
             
             foreach (var row in leaderboardRows)
             {
@@ -200,6 +245,9 @@ namespace UI
         {
             previousButton.onClick.RemoveListener(HandlePreviousSelected);
             nextButton.onClick.RemoveListener(HandleNextSelected);
+            globalButton.onClick.RemoveListener(HandleGlobalSelected);
+            friendsButton.onClick.RemoveListener(HandleFriendsSelected);
+            refreshButton.onClick.RemoveListener(HandleRefreshSelected);
             backButton.onClick.RemoveListener(HandleBackSelected);
             
             leaderboardCancellationTokenSource?.Cancel();

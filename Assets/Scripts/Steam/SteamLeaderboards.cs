@@ -293,7 +293,11 @@ namespace Steam
             }
         }
 
-        public async UniTask<(LeaderboardResultStatus, List<LeaderboardResult>)> TryGetGlobalScoresAsync(LevelConfig levelConfig, int maxEntries = 10)
+        public async UniTask<(LeaderboardResultStatus, List<LeaderboardResult>)> TryGetLeaderboardScoresAsync(
+            LevelConfig levelConfig, 
+            ELeaderboardDataRequest requestType, 
+            int start,
+            int end)
         {
             if (!SteamManager.Initialized)
             {
@@ -319,8 +323,8 @@ namespace Steam
             var handle = SteamUserStats.DownloadLeaderboardEntries(
                 leaderboard,
                 ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal,
-                1,
-                maxEntries
+                start,
+                end
             );
 
             callResult.Set(handle, (result, bIOFailure) =>
@@ -397,7 +401,7 @@ namespace Steam
         {
             if (!SteamUGC.GetItemInstallInfo(fileId, out _, out var folderPath, 1024, out _))
             {
-                GameLogger.LogError("Failed to get install info after ghost download.");
+                GameLogger.LogError($"Failed to get install info for item {fileId}!");
                 return null;
             }
             
@@ -407,8 +411,6 @@ namespace Steam
                 
                 if (!File.Exists(ghostFilePath))
                 {
-                    GameLogger.Log($"Fallback to first file in {folderPath} for ghost data...");
-                    
                     ghostFilePath = null;
                     
                     foreach (var file in Directory.EnumerateFiles(folderPath))
@@ -439,13 +441,11 @@ namespace Steam
 
         private void OnGhostDownloadCompleted(DownloadItemResult_t result)
         {
-            GameLogger.Log($"Got download complete callback with result {result.m_eResult}");
-            
             if (result.m_nPublishedFileId != pendingDownloadFileId) return;
 
             if (result.m_eResult != EResult.k_EResultOK)
             {
-                GameLogger.LogError($"DownloadItemResult failed: {result.m_eResult}");
+                GameLogger.LogError($"Failed download with result {result.m_eResult}");
                 ghostDownloadTcs?.TrySetResult(null);
                 return;
             }
