@@ -322,7 +322,7 @@ namespace Steam
 
             var handle = SteamUserStats.DownloadLeaderboardEntries(
                 leaderboard,
-                ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal,
+                requestType,
                 start,
                 end
             );
