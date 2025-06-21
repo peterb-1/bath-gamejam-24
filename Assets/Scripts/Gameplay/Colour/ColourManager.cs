@@ -1,5 +1,6 @@
 using System;
 using Audio;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
 using UnityEngine;
@@ -52,6 +53,7 @@ namespace Gameplay.Colour
             canChangeColour = false;
             
             AudioManager.Instance.Play(AudioClipIdentifier.ColourSwitch);
+            SaveManager.Instance.SaveData.StatsData.AddToStat(StatType.ColourChanges, 1);
             
             OnColourChangeStarted?.Invoke(currentColour, colourChangeDuration);
 

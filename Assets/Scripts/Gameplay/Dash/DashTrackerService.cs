@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Audio;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
 using Gameplay.Player;
@@ -58,6 +59,8 @@ namespace Gameplay.Dash
                 AudioManager.Instance.Play(AudioClipIdentifier.Dash);
                 
                 OnDashUsed?.Invoke(currentOrbs);
+                
+                SaveManager.Instance.SaveData.StatsData.AddToStat(StatType.DashesMade, 1);
             }
         }
 

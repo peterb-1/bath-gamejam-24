@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3310026325933620988, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
       propertyPath: m_Name
-      value: AchievementManager Variant
+      value: AchievementManagerInactive
       objectReference: {fileID: 0}
     - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
       propertyPath: achievementTriggers.Array.data[0].<Trigger>k__BackingField
@@ -22,6 +22,42 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
       propertyPath: achievementTriggers.Array.data[2].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[3].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[4].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[5].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[6].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[7].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[8].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[9].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[10].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[11].<Trigger>k__BackingField
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3683669094739402300, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
@@ -65,7 +101,19 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9203755685226529087, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 4875036711547809732, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 8597690811503968926, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 7185229492790614502, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 6916632272472478753, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 8295025590644926611, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 1494568412015552332, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 3708431666599905972, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 7282305738313370113, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 4719070504275822199, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 255468110790583957, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 5579816127377267907, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}

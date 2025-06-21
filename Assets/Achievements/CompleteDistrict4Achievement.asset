@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9475bf251b004f928188c0bd4bbd2f36, type: 3}
-  m_Name: ColourChangeAchievement
+  m_Name: CompleteDistrict4Achievement
   m_EditorClassIdentifier: 
-  <Guid>k__BackingField: f76e81ed-3917-4299-9b04-ec877a78c085
-  <Name>k__BackingField: Chameleon
-  <SteamName>k__BackingField: SWITCH_COLOUR
-  <UnlockDescription>k__BackingField: Switch colour 500 times
-  <TrailGuid>k__BackingField: 20944845-abe8-49a6-bcd0-9671940a0a4f
+  <Guid>k__BackingField: 41b27879-f8e0-482a-ba55-9633346a187d
+  <Name>k__BackingField: Dash and Burn
+  <SteamName>k__BackingField: DISTRICT_4_COMPLETE
+  <UnlockDescription>k__BackingField: Complete Power Station
+  <TrailGuid>k__BackingField: 6eba2754-5e05-4900-8dfd-65c00a24ec22

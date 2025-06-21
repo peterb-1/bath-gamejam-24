@@ -6,7 +6,7 @@ using Utils;
 
 namespace Gameplay.Achievements
 {
-    public class CompleteLevelAchievement : AbstractAchievementTrigger
+    public class CompleteLevelAchievementTrigger : AbstractAchievementTrigger
     {
         [SerializeField]
         private SceneConfig sceneConfig;
@@ -19,9 +19,12 @@ namespace Gameplay.Achievements
             {
                 GameLogger.LogError($"{name} has a non-level SceneConfig set - it will not work", this);
             }
+
+            if (!SceneLoader.Instance.CurrentSceneConfig.IsLevelScene ||
+                SceneLoader.Instance.CurrentSceneConfig.LevelConfig.Guid != sceneConfig.LevelConfig.Guid) return;
             
             await UniTask.WaitUntil(PlayerAccessService.IsReady);
-
+            
             playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
 
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
@@ -29,11 +32,7 @@ namespace Gameplay.Achievements
 
         private void HandleVictorySequenceStart(Vector2 _1, float _2)
         {
-            if (SceneLoader.Instance.CurrentSceneConfig.IsLevelScene &&
-                SceneLoader.Instance.CurrentSceneConfig.LevelConfig.Guid == sceneConfig.LevelConfig.Guid)
-            {
-                TriggerAchievement();
-            }
+            TriggerAchievement();
         }
         
         private void OnDestroy()

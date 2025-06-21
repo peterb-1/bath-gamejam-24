@@ -1,5 +1,6 @@
 using System;
 using Audio;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Player;
 using UnityEngine;
@@ -82,6 +83,7 @@ namespace Gameplay.Drone
             playerMovementBehaviour.PerformHeadJump();
             
             AudioManager.Instance.Play(AudioClipIdentifier.DroneDeath);
+            SaveManager.Instance.SaveData.StatsData.AddToStat(StatType.DronesKilled, 1);
 
             direction.Normalize();
             
@@ -98,7 +100,7 @@ namespace Gameplay.Drone
         
         private void HandleDroneKilledPlayer()
         {
-            playerDeathBehaviour.KillPlayer();
+            playerDeathBehaviour.KillPlayer(PlayerDeathSource.Drone);
         }
 
         private async UniTask RunDissolveAsync()

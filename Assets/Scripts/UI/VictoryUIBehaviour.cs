@@ -168,8 +168,6 @@ namespace UI
         {
             var campaignData = SaveManager.Instance.SaveData.CampaignData;
             var currentSceneConfig = SceneLoader.Instance.CurrentSceneConfig;
-            var shouldSave = false;
-
             var ranking = TimeRanking.Unranked;
             var isNewBest = false;
             
@@ -190,11 +188,11 @@ namespace UI
 
                 ranking = levelConfig.GetTimeRanking(time);
                 isNewBest = levelData.TrySetTime(time) && !doFormattedTimesMatch;
-                shouldSave |= isNewBest;
 
                 if (isNewBest)
                 {
                     oldBestAnimator.gameObject.SetActive(false);
+                    ghostWriter.SaveGhostData();
                 }
                 else
                 {
@@ -216,13 +214,7 @@ namespace UI
                 currentSceneConfig.NextSceneConfig.IsLevelScene &&
                 campaignData.TryGetLevelData(currentSceneConfig.NextSceneConfig.LevelConfig, out var nextLevelData))
             {
-                shouldSave |= nextLevelData.TryUnlock();
-            }
-
-            if (shouldSave)
-            {
-                ghostWriter.SaveGhostData();
-                SaveManager.Instance.Save();
+                nextLevelData.TryUnlock();
             }
 
             return (ranking, isNewBest);

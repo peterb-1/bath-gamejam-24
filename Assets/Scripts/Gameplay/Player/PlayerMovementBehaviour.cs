@@ -1,6 +1,7 @@
 using System;
 using Audio;
 using Core;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Gameplay.Dash;
@@ -188,6 +189,7 @@ namespace Gameplay.Player
         private Vector3 ziplineLocalStartOffset;
         private Vector2 lastZiplinePosition;
         private Vector2 ziplineVelocity;
+        private Vector2 lastPosition;
 
         private float dashDirectionMultiplier;
         private float currentFallMultiplier;
@@ -328,6 +330,10 @@ namespace Gameplay.Player
                     }
                 }
             }
+            
+            var position = transform.position.xy();
+            SaveManager.Instance.SaveData.StatsData.AddToStat(StatType.DistanceCovered, (position - lastPosition).magnitude);
+            lastPosition = position;
         }
 
         private void WallUpdate()
@@ -393,6 +399,8 @@ namespace Gameplay.Player
                     
                 transform.localPosition = Vector3.Lerp(ziplineLocalStartOffset, hookOffset,  Mathf.Clamp(lerp, 0f, 1f));
             }
+            
+            SaveManager.Instance.SaveData.StatsData.AddToStat(StatType.ZiplineTime, Time.deltaTime);
         }
         
         private void FixedUpdate()
@@ -491,6 +499,7 @@ namespace Gameplay.Player
             
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
             RumbleManager.Instance.Rumble(jumpingRumbleConfig);
+            SaveManager.Instance.SaveData.StatsData.AddToStat(StatType.JumpsMade, 1);
             
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, force);
             
@@ -507,6 +516,7 @@ namespace Gameplay.Player
             {
                 AudioManager.Instance.Play(AudioClipIdentifier.Jump);
                 RumbleManager.Instance.Rumble(jumpingRumbleConfig);
+                SaveManager.Instance.SaveData.StatsData.AddToStat(StatType.JumpsMade, 1);
             }
             
             rigidBody.linearVelocity = force;

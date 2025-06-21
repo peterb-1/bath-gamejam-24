@@ -1,7 +1,9 @@
 using System;
 using Audio;
 using Core;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
+using Gameplay.Environment;
 using Hardware;
 using UnityEngine;
 using Utils;
@@ -41,15 +43,37 @@ namespace Gameplay.Player
         {
             if ((deathLayers.value & (1 << other.gameObject.layer)) != 0)
             {
-                KillPlayer();
+                if (other.GetComponentInParent<Laser>() != null)
+                {
+                    KillPlayer(PlayerDeathSource.Laser);
+                }
+                else if (other.GetComponentInParent<Building>() != null)
+                {
+                    KillPlayer(PlayerDeathSource.Building);
+                }
+                else
+                {
+                    KillPlayer(PlayerDeathSource.Cloud);
+                }
             }
         }
 
-        public void KillPlayer()
+        public void KillPlayer(PlayerDeathSource source)
         {
             if (!IsAlive || SceneLoader.Instance.IsLoading) return;
             
             IsAlive = false;
+
+            var statType = source switch
+            {
+                PlayerDeathSource.Building => StatType.BuildingDeaths,
+                PlayerDeathSource.Cloud => StatType.CloudDeaths,
+                PlayerDeathSource.Drone => StatType.DroneDeaths,
+                PlayerDeathSource.Laser => StatType.LaserDeaths,
+                _ => throw new ArgumentOutOfRangeException(nameof(source), source, null)
+            };
+            
+            SaveManager.Instance.SaveData.StatsData.AddToStat(statType, 1);
             
             GameLogger.Log("Player died - running death sequence", this);
             

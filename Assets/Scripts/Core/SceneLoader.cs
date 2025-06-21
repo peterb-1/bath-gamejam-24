@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Audio;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Camera;
 using Gameplay.Input;
@@ -133,6 +134,8 @@ namespace Core
             }
 
             await loadingScreen.ShowAsync();
+            
+            SaveManager.Instance.Save();
             
             PreviousSceneConfig = CurrentSceneConfig;
             CurrentSceneConfig = sceneConfig;

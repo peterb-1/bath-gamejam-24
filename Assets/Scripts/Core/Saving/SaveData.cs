@@ -14,17 +14,23 @@ namespace Core.Saving
         public AchievementsData AchievementsData { get; private set; }
         
         [field: SerializeField]
+        public StatsData StatsData { get; private set; }
+        
+        [field: SerializeField]
         public PreferenceData PreferenceData { get; private set; }
 
         public async UniTask InitialiseAsync()
         {
             CampaignData ??= new CampaignData();
             AchievementsData ??= new AchievementsData();
+            StatsData ??= new StatsData();
             PreferenceData ??= new PreferenceData();
 
             await CampaignData.InitialiseAsync();
             await AchievementsData.InitialiseAsync();
             await PreferenceData.InitialiseAsync();
+            
+            StatsData.Initialise();
         }
     }
 }
