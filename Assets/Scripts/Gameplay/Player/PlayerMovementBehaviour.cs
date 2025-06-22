@@ -217,6 +217,7 @@ namespace Gameplay.Player
         private bool isSpringJumping;
         private bool wasEjectedLeft;
         private bool hasLandedAtStart;
+        private bool hasMovedLeft;
 
         private HingeJoint2D hook;
         
@@ -230,6 +231,7 @@ namespace Gameplay.Player
         public event Action OnPlayerHooked;
         public event Action OnPlayerUnhooked;
         public event Action OnPlayerDashedIntoLaser;
+        public event Action OnMissionCompleteWithoutMovingLeft;
 
         private void Awake()
         {
@@ -410,6 +412,11 @@ namespace Gameplay.Player
             
             var moveAmount = InputManager.MoveAmount;
             var desiredVelocity = moveAmount * moveSpeed;
+
+            if (moveAmount < 0f)
+            {
+                hasMovedLeft = true;
+            }
 
             if (dashCountdown > 0f)
             {
@@ -780,6 +787,11 @@ namespace Gameplay.Player
 
         private void HandleVictorySequenceStart(Vector2 position, float duration)
         {
+            if (!hasMovedLeft)
+            {
+                OnMissionCompleteWithoutMovingLeft?.Invoke();
+            }
+            
             dashCountdown = 0f;
 
             deathCollider.enabled = false;

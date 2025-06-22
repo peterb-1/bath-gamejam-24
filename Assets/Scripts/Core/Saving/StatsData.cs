@@ -67,9 +67,9 @@ namespace Core.Saving
         
         public void AddToStat(StatType statType, object value)
         {
-            if (stats.TryGetValue(statType, out var handler))
+            if (stats.TryGetValue(statType, out var stat))
             {
-                handler.Add(value);
+                stat.Add(value);
             }
             else
             {
