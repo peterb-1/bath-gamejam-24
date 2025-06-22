@@ -229,6 +229,7 @@ namespace Gameplay.Player
 
         public event Action OnPlayerHooked;
         public event Action OnPlayerUnhooked;
+        public event Action OnPlayerDashedIntoLaser;
 
         private void Awake()
         {
@@ -762,8 +763,13 @@ namespace Gameplay.Player
             rigidBody.gravityScale = 0f;
         }
         
-        private void HandleDeathSequenceStart()
+        private void HandleDeathSequenceStart(PlayerDeathSource source)
         {
+            if (dashCountdown > 0f && source is PlayerDeathSource.Laser)
+            {
+                OnPlayerDashedIntoLaser?.Invoke();
+            }
+            
             dashCountdown = 0f;
             
             TryUnhookPlayer();

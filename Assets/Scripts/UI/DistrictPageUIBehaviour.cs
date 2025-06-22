@@ -82,27 +82,11 @@ namespace UI
         {
             await UniTask.WaitUntil(() => SaveManager.IsReady);
             
-            var totalCompleted = 0;
-            var totalStars = 0;
-            
-            foreach (var button in LevelSelectButtons)
-            {
-                var levelConfig = button.SceneConfig.LevelConfig;
-
-                if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(levelConfig, out var levelData))
-                {
-                    totalStars += levelConfig.GetStars(levelData.BestTime);
-
-                    if (levelData.IsComplete())
-                    {
-                        totalCompleted++;
-                    }
-                }
-            }
+            var (completed, stars, totalMissions) = SaveManager.Instance.SaveData.CampaignData.GetDistrictProgress(districtNumber);
 
             districtNameText.text = $"{LevelConfig.GetRomanNumeral(districtNumber)}. {LevelConfig.GetDistrictName(districtNumber)}";
-            totalCompletedText.text = $"{totalCompleted} / {LevelSelectButtons.Length}";
-            totalStarsText.text = $"{totalStars} / {3 * LevelSelectButtons.Length}";
+            totalCompletedText.text = $"{completed} / {totalMissions}";
+            totalStarsText.text = $"{stars} / {3 * totalMissions}";
         }
         
         public void SetSettingsNavigation(Selectable left, Selectable right)

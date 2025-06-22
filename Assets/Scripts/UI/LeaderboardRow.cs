@@ -46,6 +46,7 @@ namespace UI
         private SceneConfig currentSceneConfig;
         private GhostRun downloadedGhostData;
         private ulong ghostFileId;
+        private float ghostTime;
         private bool rowBelongsToCurrentUser;
 
         public event Action OnDownloadStarted;
@@ -91,8 +92,9 @@ namespace UI
         private void LoadSceneWithGhostData()
         {
             var sceneLoadContext = new CustomDataContainer();
+            var ghostContext = new GhostContext(downloadedGhostData, ghostTime);
             
-            sceneLoadContext.SetCustomData(GhostRunner.GHOST_DATA_KEY, downloadedGhostData);
+            sceneLoadContext.SetCustomData(GhostRunner.GHOST_DATA_KEY, ghostContext);
             
             SceneLoader.Instance.LoadScene(currentSceneConfig, sceneLoadContext);
         }
@@ -101,6 +103,7 @@ namespace UI
         {
             rowBelongsToCurrentUser = SteamUser.GetSteamID().m_SteamID == steamID.m_SteamID;
             currentPlayerBackground.enabled = rowBelongsToCurrentUser;
+            ghostTime = time;
             
             positionText.text = $"{position}";
             usernameText.text = steamID.GetUsername();

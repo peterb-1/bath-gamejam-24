@@ -60,6 +60,46 @@ PrefabInstance:
       propertyPath: achievementTriggers.Array.data[11].<Trigger>k__BackingField
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[12].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[13].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[14].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[15].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[16].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[17].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[18].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[19].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[20].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[21].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3683669094739402300, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -114,6 +154,16 @@ PrefabInstance:
     - {fileID: 4719070504275822199, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
     - {fileID: 255468110790583957, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
     - {fileID: 5579816127377267907, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 1190662518734999551, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 5969015089149083095, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 2013504075098942315, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 8444410562004535447, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 1071174076176157345, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 2643778954087294040, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 1783213567760161417, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 6829591666931229931, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 2732203889453966895, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 5608413261238540104, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}

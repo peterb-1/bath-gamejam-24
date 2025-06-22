@@ -129,7 +129,7 @@ namespace Gameplay.Input
             }
         }
 
-        private void HandleDeathSequenceStart()
+        private void HandleDeathSequenceStart(PlayerDeathSource _)
         {
             DisableInputs();
             

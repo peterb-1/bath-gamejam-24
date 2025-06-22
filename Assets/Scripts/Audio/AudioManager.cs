@@ -119,7 +119,7 @@ namespace Audio
             }
         }
 
-        private void HandleDeathSequenceStart()
+        private void HandleDeathSequenceStart(PlayerDeathSource _)
         {
             playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;

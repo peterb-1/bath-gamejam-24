@@ -83,7 +83,7 @@ namespace Gameplay.Camera
             shouldUseLookahead = false;
         }
 
-        private void HandleDeathSequenceStart()
+        private void HandleDeathSequenceStart(PlayerDeathSource _)
         {
             positionOverride = transform.position;
             shouldOverridePosition = true;

@@ -187,6 +187,7 @@ GameObject:
   - component: {fileID: 5012229811958368346}
   - component: {fileID: 3249549202202213294}
   - component: {fileID: 1050786829656960430}
+  - component: {fileID: 9133762580951777853}
   - component: {fileID: 6632960748887102794}
   - component: {fileID: 166652011353585149}
   - component: {fileID: 6448495522596364973}
@@ -240,6 +241,7 @@ MonoBehaviour:
   <PlayerMovementBehaviour>k__BackingField: {fileID: 7832381044865399546}
   <PlayerVictoryBehaviour>k__BackingField: {fileID: 3249549202202213294}
   <PlayerTrailBehaviour>k__BackingField: {fileID: 1050786829656960430}
+  <TimerBehaviour>k__BackingField: {fileID: 9133762580951777853}
   <GhostWriter>k__BackingField: {fileID: 6632960748887102794}
 --- !u!114 &7832381044865399546
 MonoBehaviour:
@@ -602,6 +604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a06057005fecfe4795fcd26ad3587ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timerBehaviour: {fileID: 9133762580951777853}
   victorySequenceDuration: 0.6
   victoryLayers:
     serializedVersion: 2
@@ -727,6 +730,18 @@ MonoBehaviour:
     m_Bits: 1088
   environmentInteractionDistance: 0.3
   environmentDeflectionStrength: 0.2
+--- !u!114 &9133762580951777853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2745676539903126608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4e20d7e0ed14944af2317a2e480609a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6632960748887102794
 MonoBehaviour:
   m_ObjectHideFlags: 0

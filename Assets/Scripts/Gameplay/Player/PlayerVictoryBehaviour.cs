@@ -1,7 +1,11 @@
 using System;
 using Audio;
+using Core;
 using Cysharp.Threading.Tasks;
+using Gameplay.Core;
+using Gameplay.Ghosts;
 using Hardware;
+using UI;
 using UnityEngine;
 using Utils;
 
@@ -9,6 +13,9 @@ namespace Gameplay.Player
 {
     public class PlayerVictoryBehaviour : MonoBehaviour
     {
+        [SerializeField]
+        private TimerBehaviour timerBehaviour;
+        
         [SerializeField]
         private float victorySequenceDuration;
         
@@ -20,9 +27,22 @@ namespace Gameplay.Player
 
         [SerializeField] 
         private RumbleConfig victoryRumbleConfig;
+
+        private float ghostDisplayTime;
         
         public event Action<Vector2, float> OnVictorySequenceStart;
-        public event Action OnVictorySequenceFinish;
+        public event Action<float> OnVictorySequenceFinish;
+        public event Action OnBeatRainbowLeaderboardGhost;
+
+        private void Awake()
+        {
+            if (SceneLoader.Instance.SceneLoadContext != null && 
+                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GhostRunner.GHOST_DATA_KEY, out GhostContext ghostContext) &&
+                ghostContext.GhostRun != null)
+            {
+                ghostDisplayTime = ghostContext.DisplayTime;
+            }
+        }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
@@ -45,7 +65,17 @@ namespace Gameplay.Player
 
             await UniTask.Delay(TimeSpan.FromSeconds(victorySequenceDuration));
 
-            OnVictorySequenceFinish?.Invoke();
+            var finalTime = timerBehaviour.TimeElapsed;
+            
+            GameLogger.Log($"Unpaused realtime for completion was {timerBehaviour.RealtimeElapsed}s.", this);
+
+            if (finalTime < ghostDisplayTime && 
+                SceneLoader.Instance.CurrentSceneConfig.LevelConfig.GetTimeRanking(ghostDisplayTime) is TimeRanking.Rainbow)
+            {
+                OnBeatRainbowLeaderboardGhost?.Invoke();
+            }
+
+            OnVictorySequenceFinish?.Invoke(finalTime);
         }
     }
 }

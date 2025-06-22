@@ -23,6 +23,8 @@ namespace Core.Saving
         [field: SerializeField]
         public string GhostData { get; private set; }
 
+        public event Action OnNewBestAchieved;
+
         public LevelData(LevelConfig levelConfig)
         {
             LevelConfigGuid = levelConfig.Guid;
@@ -38,6 +40,9 @@ namespace Core.Saving
             {
                 BestTime = time;
                 IsBestTimePosted = false;
+                
+                OnNewBestAchieved?.Invoke();
+                
                 return true;
             }
 

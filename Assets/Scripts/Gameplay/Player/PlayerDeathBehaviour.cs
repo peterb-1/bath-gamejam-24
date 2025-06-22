@@ -32,7 +32,7 @@ namespace Gameplay.Player
 
         public bool IsAlive { get; private set; }
 
-        public event Action OnDeathSequenceStart;
+        public event Action<PlayerDeathSource> OnDeathSequenceStart;
 
         private void Awake()
         {
@@ -43,11 +43,11 @@ namespace Gameplay.Player
         {
             if ((deathLayers.value & (1 << other.gameObject.layer)) != 0)
             {
-                if (other.GetComponentInParent<Laser>() != null)
+                if (other.gameObject.CompareTag("Laser"))
                 {
                     KillPlayer(PlayerDeathSource.Laser);
                 }
-                else if (other.GetComponentInParent<Building>() != null)
+                else if (other.gameObject.CompareTag("Building"))
                 {
                     KillPlayer(PlayerDeathSource.Building);
                 }
@@ -77,12 +77,12 @@ namespace Gameplay.Player
             
             GameLogger.Log("Player died - running death sequence", this);
             
-            RunDeathSequenceAsync().Forget();
+            RunDeathSequenceAsync(source).Forget();
         }
 
-        private async UniTask RunDeathSequenceAsync()
+        private async UniTask RunDeathSequenceAsync(PlayerDeathSource source)
         {
-            OnDeathSequenceStart?.Invoke();
+            OnDeathSequenceStart?.Invoke(source);
             
             AudioManager.Instance.Play(AudioClipIdentifier.Death);
             AudioManager.Instance.Stop(AudioClipIdentifier.ColourSwitch);

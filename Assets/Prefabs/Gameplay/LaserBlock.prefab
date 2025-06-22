@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 6299355303723063101}
   m_Layer: 7
   m_Name: DeathCollider
-  m_TagString: Untagged
+  m_TagString: Laser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

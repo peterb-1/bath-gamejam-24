@@ -1178,9 +1178,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1440845906237661293, guid: 05209929063325e4bb40347260164103, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4392737411264897037}
-    - targetCorrespondingSourceObject: {fileID: 1440845906237661293, guid: 05209929063325e4bb40347260164103, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 311755908757809674}
   m_SourcePrefab: {fileID: 100100000, guid: 05209929063325e4bb40347260164103, type: 3}
 --- !u!224 &2029338949012022613 stripped
 RectTransform:
@@ -1209,7 +1206,6 @@ MonoBehaviour:
   backgroundButtonPromptImage: {fileID: 7618133171384750265}
   keyboardMouseButtonPrompts: {fileID: 21300000, guid: 9b35808833b86824fac25ff192c27905, type: 3}
   gamepadButtonPrompts: {fileID: 21300000, guid: a027593170bb19e47b0eb4566369a897, type: 3}
-  timerBehaviour: {fileID: 311755908757809674}
   timerText: {fileID: 1565486233250511084}
   timerBonusText: {fileID: 44631361586851291}
   timerTextAnimator: {fileID: 6678537921650658062}
@@ -1217,18 +1213,6 @@ MonoBehaviour:
   - {fileID: 8021665542053362213}
   - {fileID: 5176121521502560476}
   - {fileID: 6957178132967543210}
---- !u!114 &311755908757809674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3010531157178421561}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4e20d7e0ed14944af2317a2e480609a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7882166268838635626 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6294470839730690366, guid: 05209929063325e4bb40347260164103, type: 3}

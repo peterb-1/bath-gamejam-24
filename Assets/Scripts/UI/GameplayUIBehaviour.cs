@@ -25,9 +25,6 @@ namespace UI
         
         [SerializeField] 
         private Sprite gamepadButtonPrompts;
-        
-        [SerializeField] 
-        private TimerBehaviour timerBehaviour;
 
         [SerializeField] 
         private TMP_Text timerText;
@@ -42,6 +39,7 @@ namespace UI
         private DashOrbUIBehaviour[] dashOrbs;
 
         private PlayerVictoryBehaviour playerVictoryBehaviour;
+        private TimerBehaviour timerBehaviour;
         
         private static readonly int Pulse = Animator.StringToHash("Pulse");
 
@@ -50,13 +48,15 @@ namespace UI
             InputManager.OnControlSchemeChanged += HandleControlSchemeChanged;
             DashTrackerService.OnDashGained += HandleDashGained;
             DashTrackerService.OnDashUsed += HandleDashUsed;
-            timerBehaviour.OnTimeBonusApplied += HandleTimeBonusApplied;
             
             await UniTask.WaitUntil(PlayerAccessService.IsReady);
 
             playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
             
+            timerBehaviour = PlayerAccessService.Instance.TimerBehaviour;
+            timerBehaviour.OnTimeBonusApplied += HandleTimeBonusApplied;
+
             HandleControlSchemeChanged(InputManager.CurrentNonMouseControlScheme);
         }
 

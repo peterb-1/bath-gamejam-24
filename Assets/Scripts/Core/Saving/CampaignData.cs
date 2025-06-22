@@ -12,6 +12,35 @@ namespace Core.Saving
         [SerializeField] 
         private List<LevelData> levelDataEntries = new();
 
+        public event Action OnNewBestAchieved;
+        public event Action<int> OnRainbowRanksAchieved;
+        
+        public async UniTask InitialiseAsync()
+        {
+            await UniTask.WaitUntil(SceneLoader.IsReady);
+
+            foreach (var sceneConfig in SceneLoader.Instance.SceneConfigs)
+            {
+                if (!sceneConfig.IsLevelScene) continue;
+
+                var levelConfig = sceneConfig.LevelConfig;
+                
+                if (!TryGetLevelData(levelConfig, out var levelData))
+                {
+                    levelData = new LevelData(levelConfig);
+
+                    if (levelConfig.IsUnlockedByDefault)
+                    {
+                        levelData.TryUnlock();
+                    }
+                    
+                    levelDataEntries.Add(levelData);
+                }
+                
+                levelData.OnNewBestAchieved += HandleNewBestAchieved;
+            }
+        }
+
         public bool TryGetLevelData(LevelConfig levelConfig, out LevelData levelData)
         {
             foreach (var data in levelDataEntries)
@@ -27,28 +56,57 @@ namespace Core.Saving
             return false;
         }
 
-        public async UniTask InitialiseAsync()
+        public (int completed, int stars, int totalMissions) GetDistrictProgress(int district)
         {
-            await UniTask.WaitUntil(SceneLoader.IsReady);
-
+            var completed = 0;
+            var stars = 0;
+            var totalMissions = 0;
+            
             foreach (var sceneConfig in SceneLoader.Instance.SceneConfigs)
             {
                 if (!sceneConfig.IsLevelScene) continue;
 
                 var levelConfig = sceneConfig.LevelConfig;
                 
-                if (!TryGetLevelData(levelConfig, out _))
-                {
-                    var newLevelData = new LevelData(levelConfig);
+                if (levelConfig.DistrictNumber != district) continue;
 
-                    if (levelConfig.IsUnlockedByDefault)
+                if (TryGetLevelData(levelConfig, out var levelData))
+                {
+                    totalMissions++;
+                    stars += levelConfig.GetStars(levelData.BestTime);
+
+                    if (levelData.IsComplete())
                     {
-                        newLevelData.TryUnlock();
+                        completed++;
                     }
-                    
-                    levelDataEntries.Add(newLevelData);
                 }
             }
+
+            return (completed, stars, totalMissions);
+        }
+
+        private void HandleNewBestAchieved()
+        {
+            var rainbowRanksAchieved = 0;
+            var allStarDistricts = new List<int>();
+            
+            foreach (var sceneConfig in SceneLoader.Instance.SceneConfigs)
+            {
+                if (!sceneConfig.IsLevelScene) continue;
+
+                var levelConfig = sceneConfig.LevelConfig;
+                
+                if (TryGetLevelData(levelConfig, out var levelData) && levelConfig.Guid == levelData.LevelConfigGuid)
+                {
+                    if (levelConfig.GetTimeRanking(levelData.BestTime) is TimeRanking.Rainbow)
+                    {
+                        rainbowRanksAchieved++;
+                    }
+                }
+            }
+            
+            OnNewBestAchieved?.Invoke();
+            OnRainbowRanksAchieved?.Invoke(rainbowRanksAchieved);
         }
     }
 }

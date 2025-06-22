@@ -44,9 +44,10 @@ namespace Gameplay.Ghosts
         {
             GhostRun ghostRun = null;
 
-            if (SceneLoader.Instance.SceneLoadContext != null)
+            if (SceneLoader.Instance.SceneLoadContext != null &&
+                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GHOST_DATA_KEY, out GhostContext ghostContext))
             {
-                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GHOST_DATA_KEY, out ghostRun);
+                ghostRun = ghostContext.GhostRun;
             }
 
             if (ghostRun == null &&

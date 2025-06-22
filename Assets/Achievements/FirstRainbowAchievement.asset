@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9475bf251b004f928188c0bd4bbd2f36, type: 3}
-  m_Name: CompleteDistrict3Achievement
+  m_Name: FirstRainbowAchievement
   m_EditorClassIdentifier: 
-  <Guid>k__BackingField: 3651dc7a-1a52-48c3-af5c-9d501012c885
-  <Name>k__BackingField: Ticket to Ride
-  <SteamName>k__BackingField: DISTRICT_3_COMPLETE
-  <UnlockDescription>k__BackingField: Complete Transit Hub
+  <Guid>k__BackingField: fe99fc86-8b11-46dd-babd-d85735ba09bc
+  <Name>k__BackingField: Lightspeed
+  <SteamName>k__BackingField: FIRST_RAINBOW
+  <UnlockDescription>k__BackingField: Achieve a rainbow ranking on any mission
   <TrailGuid>k__BackingField: 6eba2754-5e05-4900-8dfd-65c00a24ec22

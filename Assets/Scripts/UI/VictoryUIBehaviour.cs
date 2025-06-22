@@ -30,9 +30,6 @@ namespace UI
 
         [SerializeField] 
         private Button quitButton;
-        
-        [SerializeField] 
-        private TimerBehaviour timerBehaviour;
 
         [SerializeField] 
         private TMP_Text timerText;
@@ -137,13 +134,13 @@ namespace UI
             SceneLoader.Instance.LoadLevelSelect();
         }
 
-        private async void HandleVictorySequenceFinish()
+        private async void HandleVictorySequenceFinish(float finalTime)
         {
             SetLevelInfoText();
             
-            timerText.text = timerBehaviour.GetFormattedTimeElapsed();
+            timerText.text = TimerBehaviour.GetFormattedTime(finalTime);
             
-            var (ranking, isNewBest) = ProcessLevelCompletion();
+            var (ranking, isNewBest) = ProcessLevelCompletion(finalTime);
 
             await victoryPageGroup.ShowGroupAsync();
             await DisplayRankingAsync(ranking, isNewBest);
@@ -164,7 +161,7 @@ namespace UI
             }
         }
 
-        private (TimeRanking, bool) ProcessLevelCompletion()
+        private (TimeRanking, bool) ProcessLevelCompletion(float time)
         {
             var campaignData = SaveManager.Instance.SaveData.CampaignData;
             var currentSceneConfig = SceneLoader.Instance.CurrentSceneConfig;
@@ -178,7 +175,6 @@ namespace UI
                 var oldTime = levelData.BestTime;
                 var oldFormattedTime = TimerBehaviour.GetFormattedTime(oldTime);
                 var oldRanking = levelConfig.GetTimeRanking(oldTime);
-                var time = timerBehaviour.TimeElapsed;
                 var doFormattedTimesMatch = oldFormattedTime == TimerBehaviour.GetFormattedTime(time);
 
                 oneStarText.text = TimerBehaviour.GetFormattedTime(levelConfig.OneStarTime, round: false);
@@ -207,8 +203,7 @@ namespace UI
                 }
             }
             
-            GameLogger.Log($"{currentSceneConfig.name} was completed in {timerBehaviour.TimeElapsed}s - awarding ranking of {ranking}!", this);
-            GameLogger.Log($"Unpaused realtime for completion was {timerBehaviour.RealtimeElapsed}s.", this);
+            GameLogger.Log($"{currentSceneConfig.name} was completed in {time}s - awarding ranking of {ranking}!", this);
 
             if (currentSceneConfig.NextSceneConfig != null && 
                 currentSceneConfig.NextSceneConfig.IsLevelScene &&
