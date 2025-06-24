@@ -19,7 +19,7 @@ namespace Gameplay.Achievements
         [SerializeField] 
         private bool tryPostOnAwake;
 
-        private List<Achievement> achievements;
+        private List<Achievement> achievements = new();
 
         public List<Achievement> Achievements => achievements;
 
@@ -45,8 +45,6 @@ namespace Gameplay.Achievements
 
         private void GatherAchievements()
         {
-            achievements = new List<Achievement>();
-
             foreach (var achievementTrigger in achievementTriggers)
             {
                 achievements.Add(achievementTrigger.Achievement);
@@ -90,10 +88,9 @@ namespace Gameplay.Achievements
             {
                 GameLogger.Log($"Unlocked achievement {achievement.Name} ({achievement.Guid})", this);
                 
-                if (TryPostAchievementToSteam(achievement))
-                {
-                    SaveManager.Instance.Save();
-                }
+                TryPostAchievementToSteam(achievement);
+                
+                SaveManager.Instance.Save();
             }
             else
             {

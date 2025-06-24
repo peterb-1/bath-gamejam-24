@@ -1,25 +1,15 @@
 ﻿using Core;
 using Cysharp.Threading.Tasks;
-using Gameplay.Core;
-using Gameplay.Ghosts;
 using Gameplay.Player;
 
 namespace Gameplay.Achievements
 {
-    public class BeatRainbowGhostAchievementTrigger : AbstractAchievementTrigger
+    public class CompleteLevelInHalfRainbowTimeAchievementTrigger : AbstractAchievementTrigger
     {
         private PlayerVictoryBehaviour playerVictoryBehaviour;
-        private float ghostDisplayTime;
         
         private async void Awake()
         {
-            if (SceneLoader.Instance.SceneLoadContext != null && 
-                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GhostRunner.GHOST_DATA_KEY, out GhostContext ghostContext) &&
-                ghostContext.GhostRun != null)
-            {
-                ghostDisplayTime = ghostContext.DisplayTime;
-            }
-            
             await UniTask.WaitUntil(PlayerAccessService.IsReady);
 
             playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
@@ -29,8 +19,7 @@ namespace Gameplay.Achievements
 
         private void HandleVictorySequenceFinish(float time)
         {
-            if (time < ghostDisplayTime && 
-                SceneLoader.Instance.CurrentSceneConfig.LevelConfig.GetTimeRanking(ghostDisplayTime) is TimeRanking.Rainbow)
+            if (2f * time <= SceneLoader.Instance.CurrentSceneConfig.LevelConfig.RainbowTime)
             {
                 TriggerAchievement();
             }

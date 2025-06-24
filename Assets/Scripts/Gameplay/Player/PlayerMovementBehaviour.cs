@@ -228,6 +228,8 @@ namespace Gameplay.Player
         private static readonly int CancelDoubleJump = Animator.StringToHash("cancelDoubleJump");
         private static readonly int Strength = Shader.PropertyToID("_Strength");
 
+        public event Action OnLanded;
+        public event Action OnWallJump;
         public event Action OnPlayerHooked;
         public event Action OnPlayerUnhooked;
         public event Action OnPlayerDashedIntoLaser;
@@ -304,6 +306,8 @@ namespace Gameplay.Player
             {
                 AudioManager.Instance.Play(AudioClipIdentifier.Land);
                 RumbleManager.Instance.Rumble(landingRumbleConfig);
+                
+                OnLanded?.Invoke();
             }
 
             if (isHooked)
@@ -534,6 +538,8 @@ namespace Gameplay.Player
             coyoteCountdown = 0f;
             wallEjectionCountdown = 0f;
             dashCountdown = 0f;
+            
+            OnWallJump?.Invoke();
         }
 
         public void PerformHeadJump()

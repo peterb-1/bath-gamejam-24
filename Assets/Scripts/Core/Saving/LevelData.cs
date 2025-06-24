@@ -15,6 +15,9 @@ namespace Core.Saving
         public float BestTime { get; private set; }
         
         [field: SerializeField]
+        public int DronesKilled { get; private set; }
+
+        [field: SerializeField]
         public bool IsUnlocked { get; private set; }
         
         [field: SerializeField]
@@ -29,6 +32,7 @@ namespace Core.Saving
         {
             LevelConfigGuid = levelConfig.Guid;
             BestTime = float.MaxValue;
+            DronesKilled = 0;
             IsUnlocked = false;
             IsBestTimePosted = true;
             GhostData = null;
@@ -43,6 +47,17 @@ namespace Core.Saving
                 
                 OnNewBestAchieved?.Invoke();
                 
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool TrySetDronesKilled(int drones)
+        {
+            if (drones > DronesKilled)
+            {
+                DronesKilled = drones;
                 return true;
             }
 

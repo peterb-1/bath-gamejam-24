@@ -15,11 +15,11 @@ namespace Gameplay.Dash
         [SerializeField] 
         private int maxOrbCapacity;
 
+        private readonly HashSet<DashOrb> collectedOrbs = new();
         private PlayerMovementBehaviour playerMovementBehaviour;
         private int currentOrbs;
         
-        private static readonly HashSet<DashOrb> CollectedOrbs = new();
-        
+        public bool HasFullOrbCapacity => currentOrbs == maxOrbCapacity;
         public static DashTrackerService Instance { get; private set; }
         
         public static event Action<int> OnDashGained;
@@ -66,14 +66,14 @@ namespace Gameplay.Dash
 
         public bool TryCollect(DashOrb dashOrb)
         {
-            if (currentOrbs >= maxOrbCapacity || CollectedOrbs.Contains(dashOrb))
+            if (currentOrbs >= maxOrbCapacity || collectedOrbs.Contains(dashOrb))
             {
                 return false;
             }
             
             AudioManager.Instance.Play(AudioClipIdentifier.DashCollected);
             
-            CollectedOrbs.Add(dashOrb);
+            collectedOrbs.Add(dashOrb);
             currentOrbs++;
 
             OnDashGained?.Invoke(currentOrbs);

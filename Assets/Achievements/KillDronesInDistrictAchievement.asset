@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9475bf251b004f928188c0bd4bbd2f36, type: 3}
+  m_Name: KillDronesInDistrictAchievement
+  m_EditorClassIdentifier: 
+  <Guid>k__BackingField: 9e2fc51d-121d-45fe-83f7-02aff5876d57
+  <Name>k__BackingField: See it, Say it, Sorted
+  <SteamName>k__BackingField: TRANSIT_DRONES
+  <UnlockDescription>k__BackingField: Destroy all the drones in Transit Hub
+  <TrailGuid>k__BackingField: 6eba2754-5e05-4900-8dfd-65c00a24ec22

@@ -48,6 +48,50 @@ MonoBehaviour:
   isInteger: 1
   intValue: 1
   floatValue: 0
+--- !u!1 &679395509589104110
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2952407184045318282}
+  - component: {fileID: 1821878568382077061}
+  m_Layer: 0
+  m_Name: CompleteLevelAirborneTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2952407184045318282
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 679395509589104110}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3683669094739402300}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1821878568382077061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 679395509589104110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1952901a1b044a99ae70b3459e035970, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1071174076176157345
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,6 +137,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   district: 5
+--- !u!1 &1187675261559959867
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1795252625721900884}
+  - component: {fileID: 1535636661956039635}
+  m_Layer: 0
+  m_Name: KillDistrictDronesTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1795252625721900884
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187675261559959867}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3683669094739402300}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1535636661956039635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187675261559959867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d26aa9224e94962a97052088c313708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  validDistrict: 3
+  dronesRequired: 5
 --- !u!1 &1190662518734999551
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,6 +228,94 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rainbowRanksRequired: 44
+--- !u!1 &1327687109168000166
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4731414774414443530}
+  - component: {fileID: 2826156008427678327}
+  m_Layer: 0
+  m_Name: NoColourSwitchTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4731414774414443530
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327687109168000166}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3683669094739402300}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2826156008427678327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327687109168000166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a70a0c8dbb5e40778e88354742918cce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1351122350039350741
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5998710695685372191}
+  - component: {fileID: 5606577477802024443}
+  m_Layer: 0
+  m_Name: HalfRainbowTimeTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5998710695685372191
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1351122350039350741}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3683669094739402300}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5606577477802024443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1351122350039350741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96360d17fb6247f29d26ff81b68d790a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1494568412015552332
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,6 +453,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64f32007c40047e7a4d2a89d88a43f5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2065935819070967942
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5099552647511833253}
+  - component: {fileID: 423172739717183040}
+  m_Layer: 0
+  m_Name: WallJumpQuicklyTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5099552647511833253
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065935819070967942}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3683669094739402300}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &423172739717183040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065935819070967942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ad7d6ac42e34f3581256f19dcd4ccf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  countRequired: 6
+  timeWindow: 1
 --- !u!1 &2643778954087294040
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,19 +619,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1113163017218425268}
-  - {fileID: 5238923154829245085}
-  - {fileID: 5442480239440027936}
-  - {fileID: 6146504438218820531}
-  - {fileID: 2386521176210887394}
-  - {fileID: 463589401351208099}
-  - {fileID: 7019378439678571500}
-  - {fileID: 8794068731538543077}
-  - {fileID: 17962147496952768}
-  - {fileID: 5320184057560097478}
-  - {fileID: 2133410216746658047}
-  - {fileID: 2366769817748032935}
-  - {fileID: 4538397439053240986}
   - {fileID: 1826157000745450302}
   - {fileID: 1639722325701391644}
   - {fileID: 4443933324708097625}
@@ -418,6 +629,27 @@ Transform:
   - {fileID: 1069521955109194694}
   - {fileID: 7255325237415013085}
   - {fileID: 1612267053367149667}
+  - {fileID: 2133410216746658047}
+  - {fileID: 2366769817748032935}
+  - {fileID: 4538397439053240986}
+  - {fileID: 1113163017218425268}
+  - {fileID: 5238923154829245085}
+  - {fileID: 5442480239440027936}
+  - {fileID: 6146504438218820531}
+  - {fileID: 2386521176210887394}
+  - {fileID: 463589401351208099}
+  - {fileID: 7019378439678571500}
+  - {fileID: 8794068731538543077}
+  - {fileID: 17962147496952768}
+  - {fileID: 5320184057560097478}
+  - {fileID: 5099552647511833253}
+  - {fileID: 1795252625721900884}
+  - {fileID: 8784402149175490050}
+  - {fileID: 6597874458088590363}
+  - {fileID: 4731414774414443530}
+  - {fileID: 2952407184045318282}
+  - {fileID: 5998710695685372191}
+  - {fileID: 4443279250005432623}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3406973462303484092
@@ -479,6 +711,22 @@ MonoBehaviour:
     <Trigger>k__BackingField: {fileID: 2712612958169146954}
   - <Achievement>k__BackingField: {fileID: 11400000, guid: ff7ba8066c6e5fa478ac68a6acdae3a6, type: 2}
     <Trigger>k__BackingField: {fileID: 4017040595714195211}
+  - <Achievement>k__BackingField: {fileID: 11400000, guid: 8d524dc6257cd3e458680430f5447fc4, type: 2}
+    <Trigger>k__BackingField: {fileID: 423172739717183040}
+  - <Achievement>k__BackingField: {fileID: 11400000, guid: 3caaba495c1e20947acfd1404f5e5a8d, type: 2}
+    <Trigger>k__BackingField: {fileID: 1535636661956039635}
+  - <Achievement>k__BackingField: {fileID: 11400000, guid: 467537313b4af92498067370d51765d8, type: 2}
+    <Trigger>k__BackingField: {fileID: 8186709642711089240}
+  - <Achievement>k__BackingField: {fileID: 11400000, guid: e86c3592736a32b479473b70230c3b18, type: 2}
+    <Trigger>k__BackingField: {fileID: 918724333016909948}
+  - <Achievement>k__BackingField: {fileID: 11400000, guid: d3472e8c4ea04ac41a906167ce7a13db, type: 2}
+    <Trigger>k__BackingField: {fileID: 2826156008427678327}
+  - <Achievement>k__BackingField: {fileID: 11400000, guid: 3e1b4b3389ccc5440a84c0e6650b60e8, type: 2}
+    <Trigger>k__BackingField: {fileID: 1821878568382077061}
+  - <Achievement>k__BackingField: {fileID: 11400000, guid: e30b865758577ad4fb41612a8f1f42ff, type: 2}
+    <Trigger>k__BackingField: {fileID: 5606577477802024443}
+  - <Achievement>k__BackingField: {fileID: 11400000, guid: 8c140f0be92817647bbf090f643ff5ef, type: 2}
+    <Trigger>k__BackingField: {fileID: 3874423691378807470}
   tryPostOnAwake: 0
 --- !u!1 &3708431666599905972
 GameObject:
@@ -621,6 +869,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneConfig: {fileID: 11400000, guid: 3c2b9ebbe76d32c498e47b17a38e1751, type: 2}
+--- !u!1 &4969329088518437329
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8784402149175490050}
+  - component: {fileID: 8186709642711089240}
+  m_Layer: 0
+  m_Name: AvoidDronesTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8784402149175490050
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4969329088518437329}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3683669094739402300}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8186709642711089240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4969329088518437329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 730e9435b89142b19362ce9a69059988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  validDistrict: 2
 --- !u!1 &5261405792952648110
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,6 +1052,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rainbowRanksRequired: 25
+--- !u!1 &5803582735753035377
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4443279250005432623}
+  - component: {fileID: 3874423691378807470}
+  m_Layer: 0
+  m_Name: ChangeTrailTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4443279250005432623
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5803582735753035377}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3683669094739402300}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3874423691378807470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5803582735753035377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 802830b65af04a59b73dde93c55dfa5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5969015089149083095
 GameObject:
   m_ObjectHideFlags: 0
@@ -987,6 +1324,50 @@ MonoBehaviour:
   isInteger: 0
   intValue: 9
   floatValue: 42195
+--- !u!1 &7450975864539618542
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6597874458088590363}
+  - component: {fileID: 918724333016909948}
+  m_Layer: 0
+  m_Name: FullDashOrbsTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6597874458088590363
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7450975864539618542}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3683669094739402300}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &918724333016909948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7450975864539618542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e4364931b7349c9a3e0b853ee13739e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8295025590644926611
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3310026325933620988, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
       propertyPath: m_Name
-      value: AchievementManagerInactive
+      value: AchievementManagerMenu
       objectReference: {fileID: 0}
     - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
       propertyPath: achievementTriggers.Array.data[0].<Trigger>k__BackingField
@@ -104,6 +104,34 @@ PrefabInstance:
       propertyPath: achievementTriggers.Array.data[22].<Trigger>k__BackingField
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[23].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[24].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[25].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[26].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[27].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[28].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[29].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3683669094739402300, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -169,6 +197,13 @@ PrefabInstance:
     - {fileID: 2732203889453966895, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
     - {fileID: 5608413261238540104, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
     - {fileID: 5261405792952648110, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 679395509589104110, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 1327687109168000166, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 7450975864539618542, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 4969329088518437329, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 1187675261559959867, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 2065935819070967942, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+    - {fileID: 1351122350039350741, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}

@@ -167,6 +167,7 @@ namespace UI
             var currentSceneConfig = SceneLoader.Instance.CurrentSceneConfig;
             var ranking = TimeRanking.Unranked;
             var isNewBest = false;
+            var shouldSave = false;
             
             if (currentSceneConfig.IsLevelScene &&
                 campaignData.TryGetLevelData(currentSceneConfig.LevelConfig, out var levelData))
@@ -184,6 +185,7 @@ namespace UI
 
                 ranking = levelConfig.GetTimeRanking(time);
                 isNewBest = levelData.TrySetTime(time) && !doFormattedTimesMatch;
+                shouldSave |= isNewBest;
 
                 if (isNewBest)
                 {
@@ -209,7 +211,12 @@ namespace UI
                 currentSceneConfig.NextSceneConfig.IsLevelScene &&
                 campaignData.TryGetLevelData(currentSceneConfig.NextSceneConfig.LevelConfig, out var nextLevelData))
             {
-                nextLevelData.TryUnlock();
+                shouldSave |= nextLevelData.TryUnlock();
+            }
+
+            if (shouldSave)
+            {
+                SaveManager.Instance.Save();
             }
 
             return (ranking, isNewBest);

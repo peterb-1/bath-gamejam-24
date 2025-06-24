@@ -11,9 +11,13 @@ namespace Core.Saving
         [field: SerializeField] 
         public string TrailGuid { get; private set; }
 
+        public event Action<Trail> OnTrailSet;
+
         public void SetTrail(Trail trail)
         {
             TrailGuid = trail.Guid;
+            
+            OnTrailSet?.Invoke(trail);
         }
 
         public async UniTask InitialiseAsync()
