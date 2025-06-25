@@ -8,6 +8,7 @@ using Gameplay.Input;
 using NaughtyAttributes;
 using Steam;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Utils;
 
@@ -132,6 +133,8 @@ namespace Core
             IsLoading = true;
             SceneLoadContext = context;
             
+            EventSystem.current.enabled = false;
+            
             OnSceneLoadStart?.Invoke();
 
             // if we're done with the current scene, upload any high scores to Steam
@@ -168,6 +171,8 @@ namespace Core
             }
 
             GameLogger.Log($"Loaded scene {sceneConfig.name} successfully!", this);
+            
+            EventSystem.current.enabled = true;
             
             OnSceneLoaded?.Invoke();
             

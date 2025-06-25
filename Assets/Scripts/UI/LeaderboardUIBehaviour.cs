@@ -8,6 +8,7 @@ using Steam;
 using Steamworks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Utils;
 
@@ -57,7 +58,7 @@ namespace UI
         private CancellationTokenSource leaderboardCancellationTokenSource;
         private List<SceneConfig> orderedSceneConfigs;
         private ELeaderboardDataRequest currentRequestType;
-        private Action settingsClosedCallback;
+        private Action<SceneConfig> settingsClosedCallback;
         private int currentConfigIndex;
 
         private void Awake()
@@ -98,7 +99,7 @@ namespace UI
             orderedSceneConfigs = sceneConfigs;
         }
 
-        public void OpenLeaderboard(LevelConfig levelConfig, Action onClosedCallback)
+        public void OpenLeaderboard(LevelConfig levelConfig, Action<SceneConfig> onClosedCallback)
         {
             for (var i = 0; i < orderedSceneConfigs.Count; i++)
             {
@@ -208,9 +209,12 @@ namespace UI
 
         private void HandleBackSelected()
         {
+            // UI system doesn't do this automatically because the back button isn't on the page, it's in the shared elements
+            EventSystem.current.SetSelectedGameObject(null);
+            
             leaderboardCancellationTokenSource?.Cancel();
             pageGroup.HideGroup(isForward: true);
-            settingsClosedCallback?.Invoke();
+            settingsClosedCallback?.Invoke(orderedSceneConfigs[currentConfigIndex]);
         }
         
         private void HandleDownloadStarted()
@@ -220,6 +224,11 @@ namespace UI
             globalButton.interactable = false;
             friendsButton.interactable = false;
             refreshButton.interactable = false;
+
+            var backNavigation = backButton.navigation;
+            backNavigation.selectOnRight = null;
+            backNavigation.selectOnDown = null;
+            backButton.navigation = backNavigation;
 
             foreach (var row in leaderboardRows)
             {
@@ -234,6 +243,11 @@ namespace UI
             globalButton.interactable = true;
             friendsButton.interactable = true;
             refreshButton.interactable = true;
+            
+            var backNavigation = backButton.navigation;
+            backNavigation.selectOnRight = previousButton;
+            backNavigation.selectOnDown = leaderboardRows[0].GhostButton;
+            backButton.navigation = backNavigation;
             
             foreach (var row in leaderboardRows)
             {

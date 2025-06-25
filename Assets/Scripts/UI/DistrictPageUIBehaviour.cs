@@ -95,13 +95,25 @@ namespace UI
             totalStarsText.text = $"{stars} / {3 * totalMissions}";
         }
         
-        public void SetTopNavigation(Selectable left, Selectable right)
+        public void SetTopLeftRightNavigation(Selectable left, Selectable right)
         {
             var leaderboardNavigation = LeaderboardButton.navigation;
             var settingsNavigation = SettingsButton.navigation;
 
             leaderboardNavigation.selectOnLeft = left;
             settingsNavigation.selectOnRight = right;
+
+            LeaderboardButton.navigation = leaderboardNavigation;
+            SettingsButton.navigation = settingsNavigation;
+        }
+        
+        public void SetTopDownNavigation(Selectable down)
+        {
+            var leaderboardNavigation = LeaderboardButton.navigation;
+            var settingsNavigation = SettingsButton.navigation;
+
+            leaderboardNavigation.selectOnDown = down;
+            settingsNavigation.selectOnDown = down;
 
             LeaderboardButton.navigation = leaderboardNavigation;
             SettingsButton.navigation = settingsNavigation;

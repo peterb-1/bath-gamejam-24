@@ -2,10 +2,12 @@
 using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Ghosts;
+using Gameplay.Input;
 using Steam;
 using Steamworks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Utils;
 
@@ -49,6 +51,8 @@ namespace UI
         private float ghostTime;
         private bool rowBelongsToCurrentUser;
 
+        public Button GhostButton => ghostButton;
+
         public event Action OnDownloadStarted;
         public event Action OnDownloadFinished;
 
@@ -85,6 +89,11 @@ namespace UI
 
             ghostButtonImage.enabled = true;
             ghostButtonImage.sprite = downloadedGhostData == null ? downloadSprite : playSprite;
+
+            if (InputManager.CurrentControlScheme is not ControlScheme.Mouse && EventSystem.current.currentSelectedGameObject == null)
+            {
+                ghostButton.Select();
+            }
             
             OnDownloadFinished?.Invoke();
         }

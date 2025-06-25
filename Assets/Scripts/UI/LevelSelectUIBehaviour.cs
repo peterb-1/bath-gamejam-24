@@ -6,6 +6,7 @@ using Gameplay.Core;
 using Gameplay.Environment;
 using Gameplay.Input;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -47,6 +48,7 @@ namespace UI
         [SerializeField]
         private float cloudAnimationStrength;
 
+        private LevelConfig lastViewedLevelConfig;
         private int currentPageIndex;
 
         private readonly Dictionary<SceneConfig, (DistrictPageUIBehaviour, LevelSelectButton)> levelSelectButtonLookup = new();
@@ -119,7 +121,7 @@ namespace UI
 
         private void Start()
         {
-            SetPage();
+            SetView(SceneLoader.Instance.PreviousSceneConfig);
             SetPageNavigation();
         }
         
@@ -127,7 +129,7 @@ namespace UI
         {
             pageGroup.HideGroup(isForward: false);
             
-            settingsBehaviour.OpenSettings(HandleMenuClosed);
+            settingsBehaviour.OpenSettings(HandleSettingsClosed);
             
             AnimateCloudsAsync(isForward: false).Forget();
         }
@@ -136,34 +138,43 @@ namespace UI
         {
             pageGroup.HideGroup(isForward: false);
             
-            leaderboardBehaviour.OpenLeaderboard(districtPages[currentPageIndex].LevelSelectButtons[0].SceneConfig.LevelConfig, HandleMenuClosed);
+            leaderboardBehaviour.OpenLeaderboard(lastViewedLevelConfig, HandleLeaderboardClosed);
             
             AnimateCloudsAsync(isForward: false).Forget();
         }
 
-        private void HandleMenuClosed()
+        private async void HandleSettingsClosed()
         { 
-            pageGroup.ShowGroup(isForward: true);
-            
             AnimateCloudsAsync(isForward: true).Forget();
+
+            await pageGroup.ShowGroupAsync(isForward: true);
+
+            if (InputManager.CurrentControlScheme is not ControlScheme.Mouse)
+            {
+                districtPages[currentPageIndex].SettingsButton.Select();
+            }
         }
 
-        private void SetPage()
-        {
-            var previousSceneConfig = SceneLoader.Instance.PreviousSceneConfig;
+        private async void HandleLeaderboardClosed(SceneConfig viewedConfig)
+        { 
+            AnimateCloudsAsync(isForward: true).Forget();
 
-            if (previousSceneConfig != null &&
-                levelSelectButtonLookup.TryGetValue(previousSceneConfig, out var previousSceneConfigButtonData))
+            lastViewedLevelConfig = viewedConfig.LevelConfig;
+            
+            SetView(viewedConfig, districtPages[viewedConfig.LevelConfig.DistrictNumber - 1].LeaderboardButton);
+            SetPageNavigation();
+
+            await pageGroup.ShowGroupAsync(isForward: true);
+        }
+
+        private void SetView(SceneConfig sceneConfig, Selectable selectableOverride = null)
+        {
+            if (sceneConfig != null && levelSelectButtonLookup.TryGetValue(sceneConfig, out var sceneConfigButtonData))
             {
-                var (districtPage, levelSelectButton) = previousSceneConfigButtonData;
+                var (districtPage, levelSelectButton) = sceneConfigButtonData;
                 
                 pageGroup.SetPage(districtPage.Page);
-
-                if (InputManager.CurrentControlScheme is not ControlScheme.Mouse)
-                {
-                    levelSelectButton.Select();
-                }
-
+                
                 for (var i = 0; i < districtPages.Length; i++)
                 {
                     if (districtPage == districtPages[i])
@@ -171,10 +182,24 @@ namespace UI
                         currentPageIndex = i;
                     }
                 }
+
+                if (selectableOverride != null)
+                {
+                    SetSelectableForTopNavigation(levelSelectButton);
+                }
+                else if (InputManager.CurrentControlScheme is not ControlScheme.Mouse)
+                {
+                    levelSelectButton.Select();
+                }
             }
-            else if (InputManager.CurrentControlScheme is not ControlScheme.Mouse)
+            else if (InputManager.CurrentControlScheme is not ControlScheme.Mouse && selectableOverride == null)
             {
                 defaultButton.Select();
+            }
+            
+            if (selectableOverride != null && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
+            {
+                selectableOverride.Select();
             }
         }
         
@@ -187,23 +212,35 @@ namespace UI
         {
             if (button is LevelSelectButton levelSelectButton)
             {
-                infoDisplayBehaviour.SetLevelInfoAsync(levelSelectButton.SceneConfig.LevelConfig).Forget();
+                lastViewedLevelConfig = levelSelectButton.SceneConfig.LevelConfig;
+                infoDisplayBehaviour.SetLevelInfoAsync(lastViewedLevelConfig).Forget();
             }
+            
+            SetSelectableForTopNavigation(button);
         }
 
-        private void HandleBackHover(ExtendedButton _)
+        private void HandleBackHover(ExtendedButton button)
         {
             infoDisplayBehaviour.SetNextDistrict(currentPageIndex);
+            
+            SetSelectableForTopNavigation(button);
         }
 
-        private void HandleForwardHover(ExtendedButton _)
+        private void HandleForwardHover(ExtendedButton button)
         {
             infoDisplayBehaviour.SetNextDistrict(currentPageIndex + 2);
+            
+            SetSelectableForTopNavigation(button);
         }
         
         private void HandleButtonUnhover(ExtendedButton _)
         {
             infoDisplayBehaviour.SetNoData();
+        }
+
+        private void SetSelectableForTopNavigation(Selectable selectable)
+        {
+            districtPages[currentPageIndex].SetTopDownNavigation(selectable);
         }
 
         private async void HandleBackClicked()
@@ -212,6 +249,8 @@ namespace UI
             
             var newDistrictPage = districtPages[currentPageIndex];
             var leftmostButton = newDistrictPage.LevelSelectButtons[0];
+
+            lastViewedLevelConfig = leftmostButton.SceneConfig.LevelConfig;
             
             SetPageNavigation();
             
@@ -245,6 +284,8 @@ namespace UI
             var rightmostButton = newDistrictPage.GetRightmostUnlockedLevelButton() ?? backButton;
             var isForwardActive = currentPageIndex < districtPages.Length - 1 && 
                                   districtPages[currentPageIndex + 1].GetLeftmostUnlockedLevelButton() != null;
+            
+            lastViewedLevelConfig = newDistrictPage.LevelSelectButtons[0].SceneConfig.LevelConfig;
 
             SetPageNavigation();
             
@@ -295,12 +336,12 @@ namespace UI
             
             leftmostNavigation.selectOnLeft = isBackActive ? backButton : null;
             backNavigation.selectOnRight = leftmostButton;
-            backNavigation.selectOnUp = districtPage.SettingsButton;
+            backNavigation.selectOnUp = districtPage.LeaderboardButton;
             leftmostButton.navigation = leftmostNavigation;
             backButton.navigation = backNavigation;
             backButton.interactable = isBackActive;
 
-            districtPage.SetTopNavigation(
+            districtPage.SetTopLeftRightNavigation(
                 isBackActive ? backButton : leftmostButton, 
                 isForwardActive ? forwardButton : rightmostButton);
         }
