@@ -76,23 +76,29 @@ namespace UI
         private async UniTask GetGhostDataAsync()
         {
             OnDownloadStarted?.Invoke();
+
+            var fileToDownload = ghostFileId;
             
             downloadSpinner.gameObject.SetActive(true);
             downloadSpinner.StartSpinner();
 
             ghostButtonImage.enabled = false;
 
-            downloadedGhostData = await SteamLeaderboards.Instance.TryGetGhostDataAsync(currentSceneConfig.LevelConfig, ghostFileId);
+            downloadedGhostData = await SteamLeaderboards.Instance.TryGetGhostDataAsync(currentSceneConfig.LevelConfig, fileToDownload);
 
             downloadSpinner.StopSpinner();
             downloadSpinner.gameObject.SetActive(false);
 
-            ghostButtonImage.enabled = true;
-            ghostButtonImage.sprite = downloadedGhostData == null ? downloadSprite : playSprite;
-
-            if (InputManager.CurrentControlScheme is not ControlScheme.Mouse && EventSystem.current.currentSelectedGameObject == null)
+            // might have left mid-download, and come back on a different level - if so, don't bother with the cleanup
+            if (fileToDownload == ghostFileId)
             {
-                ghostButton.Select();
+                ghostButtonImage.enabled = true;
+                ghostButtonImage.sprite = downloadedGhostData == null ? downloadSprite : playSprite;
+
+                if (InputManager.CurrentControlScheme is not ControlScheme.Mouse && EventSystem.current.currentSelectedGameObject == null)
+                {
+                    ghostButton.Select();
+                }
             }
             
             OnDownloadFinished?.Invoke();
@@ -118,7 +124,13 @@ namespace UI
             usernameText.text = steamID.GetUsername();
             timeText.text = TimerBehaviour.GetFormattedTime(time);
             rankingStarUIBehaviour.SetRanking(sceneConfig.LevelConfig.GetTimeRanking(time));
-            downloadSpinner.gameObject.SetActive(false);
+
+            // might go back mid-download, then come back - it will still be downloading!
+            if (fileId != ghostFileId)
+            {
+                downloadSpinner.gameObject.SetActive(false);
+                ghostButtonImage.enabled = true;
+            }
 
             ghostFileId = fileId;
             currentSceneConfig = sceneConfig;

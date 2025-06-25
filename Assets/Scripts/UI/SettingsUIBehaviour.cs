@@ -1,4 +1,6 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
+using Gameplay.Input;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,16 +29,20 @@ namespace UI
             }
         }
 
-        public void OpenSettings(Action onClosedCallback)
+        public async UniTask OpenSettingsAsync(Action onClosedCallback)
         {
-            pageGroup.SetDefaultPage();
-            pageGroup.ShowGroup(isForward: false);
-
             settingsClosedCallback = onClosedCallback;
+            pageGroup.SetDefaultPage();
+
+            await pageGroup.ShowGroupAsync(isForward: false);
+
+            InputManager.OnBackPerformed += HandleBackSelected;
         }
 
         private void HandleBackSelected()
         {
+            InputManager.OnBackPerformed -= HandleBackSelected;
+            
             pageGroup.HideGroup(isForward: true);
             
             settingsClosedCallback?.Invoke();
@@ -49,6 +55,8 @@ namespace UI
         
         private void OnDestroy()
         {
+            InputManager.OnBackPerformed -= HandleBackSelected;
+            
             backButton.onClick.RemoveListener(HandleBackSelected);
             
             foreach (var tab in tabs)

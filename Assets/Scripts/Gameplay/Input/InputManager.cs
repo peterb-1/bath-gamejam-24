@@ -22,6 +22,9 @@ namespace Gameplay.Input
         private InputActionReference startAction;
         
         [SerializeField] 
+        private InputActionReference backAction;
+
+        [SerializeField] 
         private InputActionReference moveAction;
 
         [SerializeField] 
@@ -69,6 +72,7 @@ namespace Gameplay.Input
         public static float MoveAmount { get; private set; }
         public static event Action<ColourId> OnColourChanged;
         public static event Action OnStartPerformed;
+        public static event Action OnBackPerformed;
         public static event Action OnJumpPerformed;
         public static event Action OnDropPerformed;
         public static event Action OnDashPerformed;
@@ -230,6 +234,7 @@ namespace Gameplay.Input
             AreInputsEnabled = true;
             
             startAction.action.Enable();
+            backAction.action.Enable();
             moveAction.action.Enable();
             jumpAction.action.Enable();
             dropAction.action.Enable();
@@ -246,6 +251,7 @@ namespace Gameplay.Input
             AreInputsEnabled = false;
             
             startAction.action.Disable();
+            backAction.action.Disable();
             moveAction.action.Disable();
             jumpAction.action.Disable();
             dropAction.action.Disable();
@@ -260,6 +266,7 @@ namespace Gameplay.Input
         private void SubscribeToInputCallbacks()
         {
             startAction.action.performed += HandleStartPerformed;
+            backAction.action.performed += HandleBackPerformed;
             jumpAction.action.performed += HandleJumpPerformed;
             dropAction.action.performed += HandleDropPerformed;
             dashAction.action.performed += HandleDashPerformed;
@@ -273,6 +280,7 @@ namespace Gameplay.Input
         private void UnsubscribeFromInputCallbacks()
         {
             startAction.action.performed -= HandleStartPerformed;
+            backAction.action.performed -= HandleBackPerformed;
             jumpAction.action.performed -= HandleJumpPerformed;
             dropAction.action.performed -= HandleDropPerformed;
             dashAction.action.performed -= HandleDashPerformed;
@@ -286,6 +294,11 @@ namespace Gameplay.Input
         private void HandleStartPerformed(InputAction.CallbackContext _)
         {
             OnStartPerformed?.Invoke();
+        }
+        
+        private void HandleBackPerformed(InputAction.CallbackContext _)
+        {
+            OnBackPerformed?.Invoke();
         }
 
         private static void HandleJumpPerformed(InputAction.CallbackContext _)

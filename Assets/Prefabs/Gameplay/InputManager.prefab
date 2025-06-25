@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInput: {fileID: 5322766936052464416}
   startAction: {fileID: -4818856325375851884, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
+  backAction: {fileID: 264574141650909662, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   moveAction: {fileID: -1680190386980627800, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   jumpAction: {fileID: -2099379676528639254, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   dropAction: {fileID: 6402580411870947842, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}

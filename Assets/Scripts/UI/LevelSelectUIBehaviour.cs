@@ -128,8 +128,7 @@ namespace UI
         private void HandleSettingsClicked()
         {
             pageGroup.HideGroup(isForward: false);
-            
-            settingsBehaviour.OpenSettings(HandleSettingsClosed);
+            settingsBehaviour.OpenSettingsAsync(HandleSettingsClosed).Forget();
             
             AnimateCloudsAsync(isForward: false).Forget();
         }
@@ -137,8 +136,7 @@ namespace UI
         private void HandleLeaderboardClicked()
         {
             pageGroup.HideGroup(isForward: false);
-            
-            leaderboardBehaviour.OpenLeaderboard(lastViewedLevelConfig, HandleLeaderboardClosed);
+            leaderboardBehaviour.OpenLeaderboardAsync(lastViewedLevelConfig, HandleLeaderboardClosed).Forget();
             
             AnimateCloudsAsync(isForward: false).Forget();
         }
@@ -169,6 +167,11 @@ namespace UI
 
         private void SetView(SceneConfig sceneConfig, Selectable selectableOverride = null)
         {
+            if (sceneConfig.IsLevelScene)
+            {
+                lastViewedLevelConfig = sceneConfig.LevelConfig;
+            }
+
             if (sceneConfig != null && levelSelectButtonLookup.TryGetValue(sceneConfig, out var sceneConfigButtonData))
             {
                 var (districtPage, levelSelectButton) = sceneConfigButtonData;

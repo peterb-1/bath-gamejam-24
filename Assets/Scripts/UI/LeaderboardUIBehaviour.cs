@@ -4,6 +4,7 @@ using System.Threading;
 using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
+using Gameplay.Input;
 using Steam;
 using Steamworks;
 using TMPro;
@@ -99,7 +100,7 @@ namespace UI
             orderedSceneConfigs = sceneConfigs;
         }
 
-        public void OpenLeaderboard(LevelConfig levelConfig, Action<SceneConfig> onClosedCallback)
+        public async UniTask OpenLeaderboardAsync(LevelConfig levelConfig, Action<SceneConfig> onClosedCallback)
         {
             for (var i = 0; i < orderedSceneConfigs.Count; i++)
             {
@@ -109,12 +110,14 @@ namespace UI
                 }
             }
 
-            pageGroup.SetDefaultPage();
-            pageGroup.ShowGroup(isForward: false);
+            PopulateLeaderboard(currentRequestType);
 
             settingsClosedCallback = onClosedCallback;
+            pageGroup.SetDefaultPage();
 
-            PopulateLeaderboard(currentRequestType);
+            await pageGroup.ShowGroupAsync(isForward: false);
+
+            InputManager.OnBackPerformed += HandleBackSelected;
         }
 
         private void PopulateLeaderboard(ELeaderboardDataRequest requestType)
@@ -209,6 +212,8 @@ namespace UI
 
         private void HandleBackSelected()
         {
+            InputManager.OnBackPerformed -= HandleBackSelected;
+            
             // UI system doesn't do this automatically because the back button isn't on the page, it's in the shared elements
             EventSystem.current.SetSelectedGameObject(null);
             
@@ -257,6 +262,8 @@ namespace UI
 
         private void OnDestroy()
         {
+            InputManager.OnBackPerformed -= HandleBackSelected;
+            
             previousButton.onClick.RemoveListener(HandlePreviousSelected);
             nextButton.onClick.RemoveListener(HandleNextSelected);
             globalButton.onClick.RemoveListener(HandleGlobalSelected);
