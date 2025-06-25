@@ -2,6 +2,7 @@ using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
+using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -16,6 +17,9 @@ namespace UI
 
         [SerializeField] 
         private SceneConfig sceneConfig;
+        
+        [SerializeField, ShowIf(nameof(IsHidden))] 
+        private LevelSelectButton connectedButton;
 
         [SerializeField] 
         private Animator borderAnimator;
@@ -28,16 +32,22 @@ namespace UI
         
         [SerializeField] 
         private Transform rightConnectionAnchor;
+        
+        [SerializeField] 
+        private Transform hiddenConnectionAnchor;
 
         public SceneConfig SceneConfig => sceneConfig;
         public Transform LeftConnectionAnchor => leftConnectionAnchor;
         public Transform RightConnectionAnchor => rightConnectionAnchor;
+        public Transform HiddenConnectionAnchor => hiddenConnectionAnchor;
 
         private Transform previousConnectionAnchor;
         private bool wasSelectedThisFrame;
         private bool enableLinkUpdates;
 
         private static readonly int Selected = Animator.StringToHash("Selected");
+        
+        public bool IsHidden() => SceneConfig.LevelConfig.IsHidden;
 
         protected override void Awake()
         {
@@ -64,8 +74,9 @@ namespace UI
         {
             await UniTask.WaitUntil(() => SaveManager.IsReady);
 
-            interactable = SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(sceneConfig.LevelConfig, out var levelData) &&
-                           levelData.IsUnlocked;
+            var campaignData = SaveManager.Instance.SaveData.CampaignData;
+
+            interactable = campaignData.TryGetLevelData(sceneConfig.LevelConfig, out var levelData) && levelData.IsUnlocked;
 
             if (!interactable)
             {

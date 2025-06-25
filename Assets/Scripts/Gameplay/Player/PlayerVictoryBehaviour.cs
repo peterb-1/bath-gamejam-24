@@ -25,8 +25,15 @@ namespace Gameplay.Player
         [SerializeField] 
         private RumbleConfig victoryRumbleConfig;
 
+        private bool hasFoundCollectible;
+
         public event Action<Vector2, float> OnVictorySequenceStart;
-        public event Action<float> OnVictorySequenceFinish;
+        public event Action<float, bool> OnVictorySequenceFinish;
+
+        public void NotifyFoundCollectible()
+        {
+            hasFoundCollectible = true;
+        }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
@@ -51,7 +58,7 @@ namespace Gameplay.Player
 
             GameLogger.Log($"Unpaused realtime for completion was {timerBehaviour.RealtimeElapsed}s.", this);
 
-            OnVictorySequenceFinish?.Invoke(timerBehaviour.TimeElapsed);
+            OnVictorySequenceFinish?.Invoke(timerBehaviour.TimeElapsed, hasFoundCollectible);
         }
     }
 }

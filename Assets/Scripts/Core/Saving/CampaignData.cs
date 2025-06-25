@@ -55,6 +55,47 @@ namespace Core.Saving
             levelData = null;
             return false;
         }
+        
+        public bool TryMarkCollectibleAsFound(LevelConfig collectibleLevelConfig)
+        {
+            if (TryGetLevelData(collectibleLevelConfig, out var collectibleLevelData))
+            {
+                if (!collectibleLevelData.TryMarkCollectibleAsFound())
+                {
+                    return false;
+                }
+            }
+
+            var areAllDistrictCollectiblesUnlocked = true;
+            LevelConfig hiddenLevelConfig = null;
+
+            foreach (var sceneConfig in SceneLoader.Instance.SceneConfigs)
+            {
+                if (!sceneConfig.IsLevelScene) continue;
+
+                var levelConfig = sceneConfig.LevelConfig;
+                
+                if (levelConfig.DistrictNumber != collectibleLevelConfig.DistrictNumber) continue;
+
+                if (levelConfig.IsHidden)
+                {
+                    hiddenLevelConfig = levelConfig;
+                    continue;
+                }
+
+                if (levelConfig.HasCollectible && TryGetLevelData(levelConfig, out var levelData))
+                {
+                    areAllDistrictCollectiblesUnlocked &= levelData.HasFoundCollectible;
+                }
+            }
+
+            if (areAllDistrictCollectiblesUnlocked && hiddenLevelConfig != null && TryGetLevelData(hiddenLevelConfig, out var hiddenLevelData))
+            {
+                return hiddenLevelData.TryUnlock();
+            }
+            
+            return false;
+        }
 
         public (int completed, int stars, int totalMissions) GetDistrictProgress(int district)
         {

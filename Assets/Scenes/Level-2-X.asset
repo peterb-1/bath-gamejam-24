@@ -10,18 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49e0ef1fb32541ca97a3662a5c22c625, type: 3}
-  m_Name: Level-1-8
+  m_Name: Level-2-X
   m_EditorClassIdentifier: 
-  sceneAsset: {fileID: 102900000, guid: 29bf33c3212549941b92924c70d889d0, type: 3}
-  scenePath: Assets/Scenes/Level-1-8.unity
+  sceneAsset: {fileID: 102900000, guid: 68a5fb85892e7f442bd2bfa8fbbbfd76, type: 3}
+  scenePath: Assets/Scenes/Level-2-X.unity
   <IsLevelScene>k__BackingField: 1
   <LevelConfig>k__BackingField:
-    <Guid>k__BackingField: 037f67ab-63ca-4781-a709-53578b0af8ca
-    districtNumber: 1
-    missionNumber: 8
+    <Guid>k__BackingField: 2ca18821-d62a-4be2-8e3a-d14472667022
+    districtNumber: 2
+    <IsHidden>k__BackingField: 1
+    missionNumber: 9
     <IsUnlockedByDefault>k__BackingField: 0
-    oneStarTime: 26.5
-    twoStarTime: 20.4
-    threeStarTime: 16.6
-    rainbowTime: 14.5
-  <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: 6f35fea0ee83a7f4bab57c58c7fba0c4, type: 2}
+    <HasCollectible>k__BackingField: 0
+    oneStarTime: 0
+    twoStarTime: 0
+    threeStarTime: 0
+    rainbowTime: 0
+  <NextSceneConfig>k__BackingField: {fileID: 0}

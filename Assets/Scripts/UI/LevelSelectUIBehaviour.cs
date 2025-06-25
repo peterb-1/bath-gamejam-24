@@ -88,14 +88,29 @@ namespace UI
             
             foreach (var districtPage in districtPages)
             {
+                SceneConfig hiddenSceneConfig = null;
+                
                 foreach (var levelSelectButton in districtPage.LevelSelectButtons)
                 {
                     var sceneConfig = levelSelectButton.SceneConfig;
+                    var levelConfig = sceneConfig.LevelConfig;
 
-                    if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(sceneConfig.LevelConfig, out var levelData) && levelData.IsUnlocked)
+                    if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(levelConfig, out var levelData) && levelData.IsUnlocked)
                     {
-                        orderedSceneConfigs.Add(sceneConfig);
+                        if (levelConfig.IsHidden)
+                        {
+                            hiddenSceneConfig = sceneConfig;
+                        }
+                        else
+                        {
+                            orderedSceneConfigs.Add(sceneConfig);
+                        }
                     }
+                }
+
+                if (hiddenSceneConfig != null)
+                {
+                    orderedSceneConfigs.Add(hiddenSceneConfig);
                 }
             }
             
@@ -172,7 +187,7 @@ namespace UI
         {
             if (button is LevelSelectButton levelSelectButton)
             {
-                infoDisplayBehaviour.SetLevelInfoAsync(levelSelectButton.SceneConfig).Forget();
+                infoDisplayBehaviour.SetLevelInfoAsync(levelSelectButton.SceneConfig.LevelConfig).Forget();
             }
         }
 
@@ -228,8 +243,8 @@ namespace UI
             
             var newDistrictPage = districtPages[currentPageIndex];
             var rightmostButton = newDistrictPage.GetRightmostUnlockedLevelButton() ?? backButton;
-            var areAllLevelsUnlocked = rightmostButton == newDistrictPage.LevelSelectButtons[^1];
-            var isForwardActive = currentPageIndex < districtPages.Length - 1 && areAllLevelsUnlocked;
+            var isForwardActive = currentPageIndex < districtPages.Length - 1 && 
+                                  districtPages[currentPageIndex + 1].GetLeftmostUnlockedLevelButton() != null;
 
             SetPageNavigation();
             
@@ -285,7 +300,7 @@ namespace UI
             backButton.navigation = backNavigation;
             backButton.interactable = isBackActive;
 
-            districtPage.SetSettingsNavigation(
+            districtPage.SetTopNavigation(
                 isBackActive ? backButton : leftmostButton, 
                 isForwardActive ? forwardButton : rightmostButton);
         }

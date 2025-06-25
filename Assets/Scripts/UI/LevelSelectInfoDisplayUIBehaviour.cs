@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -31,6 +32,15 @@ namespace UI
         private TMP_Text nextDistrictText;
         
         [SerializeField] 
+        private TMP_Text noCollectibleText;
+        
+        [SerializeField] 
+        private Image collectibleImage;
+        
+        [SerializeField] 
+        private CollectibleUIBehaviour collectibleUIBehaviour;
+
+        [SerializeField] 
         private RankingStarUIBehaviour rankingStarUIBehaviour;
 
         public void SetNoData()
@@ -38,7 +48,7 @@ namespace UI
             pageGroup.SetPage(noDataPage);
         }
         
-        public async UniTask SetLevelInfoAsync(SceneConfig sceneConfig)
+        public async UniTask SetLevelInfoAsync(LevelConfig levelConfig)
         {
             // weird quirk where the await creates some delay even when the condition is already true
             if (!SaveManager.IsReady)
@@ -46,18 +56,23 @@ namespace UI
                 await UniTask.WaitUntil(() => SaveManager.IsReady);
             }
 
-            if (sceneConfig.IsLevelScene)
+            levelCodeText.text = levelConfig.GetLevelCode();
+            
+            if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(levelConfig, out var levelData))
             {
-                levelCodeText.text = sceneConfig.LevelConfig.GetLevelCode();
-                
-                if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(sceneConfig.LevelConfig, out var levelData))
+                bestTimeText.text = TimerBehaviour.GetFormattedTime(levelData.BestTime);
+
+                if (levelConfig.HasCollectible)
                 {
-                    bestTimeText.text = TimerBehaviour.GetFormattedTime(levelData.BestTime);
+                    collectibleUIBehaviour.SetCollected(levelData.HasFoundCollectible);
                 }
                 
-                rankingStarUIBehaviour.SetRanking(sceneConfig.LevelConfig.GetTimeRanking(levelData.BestTime));
+                rankingStarUIBehaviour.SetRanking(levelConfig.GetTimeRanking(levelData.BestTime));
             }
             
+            collectibleImage.enabled = levelConfig.HasCollectible;
+            noCollectibleText.enabled = !levelConfig.HasCollectible;
+
             pageGroup.SetPage(levelInfoPage);
         }
 

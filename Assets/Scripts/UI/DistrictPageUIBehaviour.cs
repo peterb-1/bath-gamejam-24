@@ -55,9 +55,15 @@ namespace UI
             {
                 var leftButton = LevelSelectButtons[i - 1];
                 var rightButton = LevelSelectButtons[i];
+
+                if (leftButton.IsHidden())
+                {
+                    leftButton = LevelSelectButtons[i - 2];
+                }
+
                 var startTarget = leftButton.transform.position;
                 var endTarget = rightButton.transform.position;
-                var startAnchor = leftButton.RightConnectionAnchor;
+                var startAnchor = rightButton.IsHidden() ? leftButton.HiddenConnectionAnchor : leftButton.RightConnectionAnchor;
                 var endAnchor = rightButton.LeftConnectionAnchor;
                 var offset = (endTarget - startTarget).normalized * linkOffset;
 
@@ -89,13 +95,15 @@ namespace UI
             totalStarsText.text = $"{stars} / {3 * totalMissions}";
         }
         
-        public void SetSettingsNavigation(Selectable left, Selectable right)
+        public void SetTopNavigation(Selectable left, Selectable right)
         {
+            var leaderboardNavigation = LeaderboardButton.navigation;
             var settingsNavigation = SettingsButton.navigation;
 
-            settingsNavigation.selectOnLeft = left;
+            leaderboardNavigation.selectOnLeft = left;
             settingsNavigation.selectOnRight = right;
 
+            LeaderboardButton.navigation = leaderboardNavigation;
             SettingsButton.navigation = settingsNavigation;
         }
 

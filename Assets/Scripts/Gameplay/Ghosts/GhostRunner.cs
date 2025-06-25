@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Core;
-using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
 using Gameplay.Core;
@@ -50,11 +49,9 @@ namespace Gameplay.Ghosts
                 ghostRun = ghostContext.GhostRun;
             }
 
-            if (ghostRun == null &&
-                SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(SceneLoader.Instance.CurrentSceneConfig.LevelConfig, out var levelData) &&
-                levelData is { GhostData: not null })
+            if (ghostRun == null && SceneLoader.Instance.CurrentLevelData is { GhostData: not null })
             {
-                ghostRun = GhostCompressor.Deserialize(levelData.GhostData);
+                ghostRun = GhostCompressor.Deserialize(SceneLoader.Instance.CurrentLevelData.GhostData);
             }
 
             if (ghostRun == null)

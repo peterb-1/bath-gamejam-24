@@ -18,8 +18,10 @@ MonoBehaviour:
   <LevelConfig>k__BackingField:
     <Guid>k__BackingField: 922bfbca-ea9b-4a3e-aff2-03fd2ce7e768
     districtNumber: 1
+    <IsHidden>k__BackingField: 0
     missionNumber: 5
     <IsUnlockedByDefault>k__BackingField: 0
+    <HasCollectible>k__BackingField: 1
     oneStarTime: 18.6
     twoStarTime: 14.9
     threeStarTime: 11.7

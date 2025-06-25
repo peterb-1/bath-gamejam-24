@@ -17,6 +17,7 @@ namespace Editor
         private SerializedProperty lineRendererProperty;
         private SerializedProperty leftConnectionProperty;
         private SerializedProperty rightConnectionProperty;
+        private SerializedProperty hiddenConnectionProperty;
         
         protected override void OnEnable()
         {
@@ -28,6 +29,7 @@ namespace Editor
             lineRendererProperty = serializedObject.FindProperty("lineRenderer");
             leftConnectionProperty = serializedObject.FindProperty("leftConnectionAnchor");
             rightConnectionProperty = serializedObject.FindProperty("rightConnectionAnchor");
+            hiddenConnectionProperty = serializedObject.FindProperty("hiddenConnectionAnchor");
         }
 
         public override void OnInspectorGUI()
@@ -49,6 +51,7 @@ namespace Editor
             EditorGUILayout.PropertyField(lineRendererProperty);
             EditorGUILayout.PropertyField(leftConnectionProperty);
             EditorGUILayout.PropertyField(rightConnectionProperty);
+            EditorGUILayout.PropertyField(hiddenConnectionProperty);
             
             serializedObject.ApplyModifiedProperties();
             

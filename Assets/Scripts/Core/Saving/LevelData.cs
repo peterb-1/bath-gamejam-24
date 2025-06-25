@@ -16,6 +16,9 @@ namespace Core.Saving
         
         [field: SerializeField]
         public int DronesKilled { get; private set; }
+        
+        [field: SerializeField]
+        public bool HasFoundCollectible { get; private set; }
 
         [field: SerializeField]
         public bool IsUnlocked { get; private set; }
@@ -33,6 +36,7 @@ namespace Core.Saving
             LevelConfigGuid = levelConfig.Guid;
             BestTime = float.MaxValue;
             DronesKilled = 0;
+            HasFoundCollectible = false;
             IsUnlocked = false;
             IsBestTimePosted = true;
             GhostData = null;
@@ -58,6 +62,17 @@ namespace Core.Saving
             if (drones > DronesKilled)
             {
                 DronesKilled = drones;
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool TryMarkCollectibleAsFound()
+        {
+            if (!HasFoundCollectible)
+            {
+                HasFoundCollectible = true;
                 return true;
             }
 

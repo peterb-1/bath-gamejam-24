@@ -13,12 +13,18 @@ namespace Gameplay.Core
         [SerializeField] 
         private int districtNumber;
         
-        [SerializeField] 
+        [field: SerializeField]
+        public bool IsHidden { get; private set; }
+
+        [SerializeField, HideIf(nameof(IsHidden)), AllowNesting] 
         private int missionNumber;
 
-        [field: SerializeField]
+        [field: SerializeField, HideIf(nameof(IsHidden)), AllowNesting]
         public bool IsUnlockedByDefault { get; private set; }
         
+        [field: SerializeField, HideIf(nameof(IsHidden)), AllowNesting]
+        public bool HasCollectible { get; private set; }
+
         [SerializeField] 
         private float oneStarTime;
         
@@ -39,6 +45,8 @@ namespace Gameplay.Core
         public float ThreeStarTime => threeStarTime;
         public float RainbowTime => rainbowTime;
 
+        private string MissionCode => IsHidden ? "X" : missionNumber.ToString();
+
         public TimeRanking GetTimeRanking(float time)
         {
             if (time <= rainbowTime) return TimeRanking.Rainbow;
@@ -56,22 +64,22 @@ namespace Gameplay.Core
         
         public string GetLevelCode()
         {
-            return $"{GetRomanNumeral(districtNumber)}-{missionNumber}";
+            return $"{GetRomanNumeral(districtNumber)}-{MissionCode}";
         }
         
         public string GetLevelText()
         {
-            return $"{GetDistrictName(districtNumber)}  —  Mission {missionNumber}";
+            return $"{GetDistrictName(districtNumber)}  —  Mission {MissionCode}";
         }
 
         public string GetSteamName()
         {
-            return $"{districtNumber}-{missionNumber}";
+            return $"{districtNumber}-{MissionCode}";
         }
         
         public string GetSteamGhostFileName()
         {
-            return $"{districtNumber}_{missionNumber}_ghost";
+            return $"{districtNumber}_{MissionCode}_ghost";
         }
 
         public static string GetRomanNumeral(int i)

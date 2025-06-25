@@ -33,6 +33,7 @@ namespace Core
         public SceneConfig CurrentSceneConfig { get; private set; }
         public SceneConfig PreviousSceneConfig { get; private set; }
         public CustomDataContainer SceneLoadContext { get; private set; }
+        public LevelData CurrentLevelData { get; private set; }
 
         public bool IsLoading { get; private set; }
         
@@ -65,6 +66,12 @@ namespace Core
                 if (config.ScenePath == SceneManager.GetActiveScene().path)
                 {
                     CurrentSceneConfig = config;
+
+                    await UniTask.WaitUntil(() => SaveManager.IsReady);
+                    
+                    SetLevelData();
+
+                    break;
                 }
             }
 
@@ -140,6 +147,8 @@ namespace Core
             PreviousSceneConfig = CurrentSceneConfig;
             CurrentSceneConfig = sceneConfig;
 
+            SetLevelData();
+
             if (CurrentDistrict != PreviousDistrict)
             {
                 AudioManager.Instance.PlayMusic((MusicIdentifier) CurrentDistrict);
@@ -165,6 +174,20 @@ namespace Core
             await loadingScreen.HideAsync();
             
             IsLoading = false;
+        }
+
+        private void SetLevelData()
+        {
+            if (CurrentSceneConfig.IsLevelScene && 
+                SaveManager.Instance != null && 
+                SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(CurrentSceneConfig.LevelConfig, out var levelData))
+            {
+                CurrentLevelData = levelData;
+            }
+            else
+            {
+                CurrentLevelData = null;
+            }
         }
         
         private void OnDestroy()

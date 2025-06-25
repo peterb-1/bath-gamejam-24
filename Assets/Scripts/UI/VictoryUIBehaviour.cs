@@ -8,7 +8,6 @@ using Gameplay.Ghosts;
 using Gameplay.Player;
 using Hardware;
 using NaughtyAttributes;
-using Steam;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -53,6 +52,9 @@ namespace UI
         private TMP_Text oldBestText;
         
         [SerializeField] 
+        private TMP_Text collectibleStatusText;
+
+        [SerializeField] 
         private Animator oldBestAnimator;
         
         [SerializeField] 
@@ -66,6 +68,12 @@ namespace UI
         
         [SerializeField] 
         private RankingStar thirdStar;
+
+        [SerializeField] 
+        private GameObject[] collectibleGameObjects;
+
+        [SerializeField]
+        private CollectibleUIBehaviour collectibleUIBehaviour;
 
         [Header("Config")]
         [SerializeField] 
@@ -134,13 +142,13 @@ namespace UI
             SceneLoader.Instance.LoadLevelSelect();
         }
 
-        private async void HandleVictorySequenceFinish(float finalTime)
+        private async void HandleVictorySequenceFinish(float finalTime, bool hasCollectible)
         {
             SetLevelInfoText();
             
             timerText.text = TimerBehaviour.GetFormattedTime(finalTime);
             
-            var (ranking, isNewBest) = ProcessLevelCompletion(finalTime);
+            var (ranking, isNewBest) = ProcessLevelCompletion(finalTime, hasCollectible);
 
             await victoryPageGroup.ShowGroupAsync();
             await DisplayRankingAsync(ranking, isNewBest);
@@ -161,47 +169,58 @@ namespace UI
             }
         }
 
-        private (TimeRanking, bool) ProcessLevelCompletion(float time)
+        private (TimeRanking, bool) ProcessLevelCompletion(float time, bool hasFoundCollectible)
         {
             var campaignData = SaveManager.Instance.SaveData.CampaignData;
             var currentSceneConfig = SceneLoader.Instance.CurrentSceneConfig;
-            var ranking = TimeRanking.Unranked;
-            var isNewBest = false;
-            var shouldSave = false;
-            
-            if (currentSceneConfig.IsLevelScene &&
-                campaignData.TryGetLevelData(currentSceneConfig.LevelConfig, out var levelData))
+            var currentLevelData = SceneLoader.Instance.CurrentLevelData;
+            var levelConfig = currentSceneConfig.LevelConfig;
+            var oldTime = currentLevelData.BestTime;
+            var oldFormattedTime = TimerBehaviour.GetFormattedTime(oldTime);
+            var oldRanking = levelConfig.GetTimeRanking(oldTime);
+            var doFormattedTimesMatch = oldFormattedTime == TimerBehaviour.GetFormattedTime(time);
+
+            oneStarText.text = TimerBehaviour.GetFormattedTime(levelConfig.OneStarTime, round: false);
+            twoStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.TwoStarTime, round: false);
+            threeStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.ThreeStarTime, round: false);
+            rainbowText.text = TimerBehaviour.GetFormattedTime(levelConfig.RainbowTime, round: false);
+
+            var ranking = levelConfig.GetTimeRanking(time);
+            var isNewBest = currentLevelData.TrySetTime(time) && !doFormattedTimesMatch;
+            var shouldSave = isNewBest;
+
+            if (isNewBest)
             {
-                var levelConfig = currentSceneConfig.LevelConfig;
-                var oldTime = levelData.BestTime;
-                var oldFormattedTime = TimerBehaviour.GetFormattedTime(oldTime);
-                var oldRanking = levelConfig.GetTimeRanking(oldTime);
-                var doFormattedTimesMatch = oldFormattedTime == TimerBehaviour.GetFormattedTime(time);
+                oldBestAnimator.gameObject.SetActive(false);
+                ghostWriter.SaveGhostData();
+            }
+            else
+            {
+                oldBestText.text = $"BEST — {oldFormattedTime}";
+                newBestAnimator.gameObject.SetActive(false);
+            }
+            
+            var bestRanking = ranking > oldRanking ? ranking : oldRanking;
+            if (bestRanking < TimeRanking.ThreeStar)
+            {
+                rainbowVisibilitySetter.SetInverseState();
+            }
 
-                oneStarText.text = TimerBehaviour.GetFormattedTime(levelConfig.OneStarTime, round: false);
-                twoStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.TwoStarTime, round: false);
-                threeStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.ThreeStarTime, round: false);
-                rainbowText.text = TimerBehaviour.GetFormattedTime(levelConfig.RainbowTime, round: false);
-
-                ranking = levelConfig.GetTimeRanking(time);
-                isNewBest = levelData.TrySetTime(time) && !doFormattedTimesMatch;
-                shouldSave |= isNewBest;
-
-                if (isNewBest)
+            if (levelConfig.HasCollectible)
+            {
+                if (hasFoundCollectible)
                 {
-                    oldBestAnimator.gameObject.SetActive(false);
-                    ghostWriter.SaveGhostData();
+                    shouldSave |= campaignData.TryMarkCollectibleAsFound(levelConfig);
                 }
-                else
+
+                collectibleStatusText.text = currentLevelData.HasFoundCollectible ? "Comms panel retrieved!" : "Not yet found";
+                collectibleUIBehaviour.SetCollected(currentLevelData.HasFoundCollectible);
+            }
+            else
+            {
+                foreach (var obj in collectibleGameObjects)
                 {
-                    oldBestText.text = $"BEST — {oldFormattedTime}";
-                    newBestAnimator.gameObject.SetActive(false);
-                }
-                
-                var bestRanking = ranking > oldRanking ? ranking : oldRanking;
-                if (bestRanking < TimeRanking.ThreeStar)
-                {
-                    rainbowVisibilitySetter.SetInverseState();
+                    obj.SetActive(false);
                 }
             }
             

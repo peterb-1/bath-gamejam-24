@@ -25,7 +25,7 @@ namespace Gameplay.Achievements
             ColourManager.OnColourChangeStarted -= HandleColourChangeStarted;
         }
 
-        private void HandleVictorySequenceFinish(float _)
+        private void HandleVictorySequenceFinish(float _1, bool _2)
         {
             TriggerAchievement();
         }

@@ -70,10 +70,6 @@ namespace Audio
                 return;
             }
 
-            Instance = this;
-            transform.parent = null;
-            DontDestroyOnLoad(this);
-            
             audioDatabase.Initialise();
             audioSourcePool = new Pool<AudioSource>(audioSourcePrefab, defaultCapacity: 20);
 
@@ -82,6 +78,10 @@ namespace Audio
             SceneLoader.OnSceneLoaded += HandleSceneLoaded;
             
             HandleSceneLoaded();
+            
+            Instance = this;
+            transform.parent = null;
+            DontDestroyOnLoad(this);
         }
 
         private void HandleSceneLoadStart()

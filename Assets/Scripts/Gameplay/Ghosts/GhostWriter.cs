@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Core;
-using Core.Saving;
 using Gameplay.Colour;
 using Gameplay.Player;
 using UnityEngine;
@@ -89,10 +88,7 @@ namespace Gameplay.Ghosts
             
             var bytes = GhostCompressor.Serialize(ghostRun);
 
-            if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(SceneLoader.Instance.CurrentSceneConfig.LevelConfig, out var levelData))
-            {
-                levelData.SetGhostData(bytes);
-            }
+            SceneLoader.Instance.CurrentLevelData.SetGhostData(bytes);
         }
         
         private void OnDestroy()

@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Saving;
+using Cysharp.Threading.Tasks;
 using Gameplay.Drone;
 using UnityEngine;
 
@@ -27,10 +28,8 @@ namespace Gameplay.Achievements
             dronesKilled++;
             
             var sceneLoader = SceneLoader.Instance;
-            var campaignData = SaveManager.Instance.SaveData.CampaignData;
 
-            if (campaignData.TryGetLevelData(sceneLoader.CurrentSceneConfig.LevelConfig, out var currentLevelData) && 
-                currentLevelData.TrySetDronesKilled(dronesKilled))
+            if (sceneLoader.CurrentLevelData.TrySetDronesKilled(dronesKilled))
             {
                 var districtDronesKilled = 0;
                 
@@ -38,7 +37,7 @@ namespace Gameplay.Achievements
                 {
                     if (sceneConfig.IsLevelScene &&
                         sceneConfig.LevelConfig.DistrictNumber == validDistrict &&
-                        campaignData.TryGetLevelData(sceneConfig.LevelConfig, out var levelData))
+                        SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(sceneConfig.LevelConfig, out var levelData))
                     {
                         districtDronesKilled += levelData.DronesKilled;
                     }
