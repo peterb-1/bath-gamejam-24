@@ -29,10 +29,10 @@ namespace UI
         public Page Page { get; private set; }
         
         [field: SerializeField] 
-        public Button SettingsButton { get; private set; }
+        public ExtendedButton SettingsButton { get; private set; }
         
         [field: SerializeField] 
-        public Button LeaderboardButton { get; private set; }
+        public ExtendedButton LeaderboardButton { get; private set; }
 
         [field: SerializeField]
         public LevelSelectButton[] LevelSelectButtons { get; private set; }

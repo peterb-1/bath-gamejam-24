@@ -49,6 +49,7 @@ namespace UI
         private float cloudAnimationStrength;
 
         private LevelConfig lastViewedLevelConfig;
+        private Selectable lastSelectedItem;
         private int currentPageIndex;
 
         private readonly Dictionary<SceneConfig, (DistrictPageUIBehaviour, LevelSelectButton)> levelSelectButtonLookup = new();
@@ -59,6 +60,9 @@ namespace UI
             {
                 districtPage.OnSettingsClicked += HandleSettingsClicked;
                 districtPage.OnLeaderboardClicked += HandleLeaderboardClicked;
+
+                districtPage.LeaderboardButton.OnHover += HandleHover;
+                districtPage.SettingsButton.OnHover += HandleHover;
                 
                 foreach (var levelSelectButton in districtPage.LevelSelectButtons)
                 {
@@ -123,6 +127,11 @@ namespace UI
         {
             SetView(SceneLoader.Instance.PreviousSceneConfig);
             SetPageNavigation();
+        }
+
+        public void SelectLastSelectedItem()
+        {
+            lastSelectedItem.Select();
         }
         
         private void HandleSettingsClicked()
@@ -211,6 +220,11 @@ namespace UI
             pageGroup.SetInteractable(false);
         }
         
+        private void HandleHover(ExtendedButton button)
+        {
+            lastSelectedItem = button;
+        }
+        
         private void HandleLevelSelectButtonHover(ExtendedButton button)
         {
             if (button is LevelSelectButton levelSelectButton)
@@ -220,6 +234,7 @@ namespace UI
             }
             
             SetSelectableForTopNavigation(button);
+            HandleHover(button);
         }
 
         private void HandleBackHover(ExtendedButton button)
@@ -227,6 +242,7 @@ namespace UI
             infoDisplayBehaviour.SetNextDistrict(currentPageIndex);
             
             SetSelectableForTopNavigation(button);
+            HandleHover(button);
         }
 
         private void HandleForwardHover(ExtendedButton button)
@@ -234,6 +250,7 @@ namespace UI
             infoDisplayBehaviour.SetNextDistrict(currentPageIndex + 2);
             
             SetSelectableForTopNavigation(button);
+            HandleHover(button);
         }
         
         private void HandleButtonUnhover(ExtendedButton _)
@@ -403,6 +420,9 @@ namespace UI
             {
                 districtPage.OnSettingsClicked -= HandleSettingsClicked;
                 districtPage.OnLeaderboardClicked -= HandleLeaderboardClicked;
+                
+                districtPage.LeaderboardButton.OnHover -= HandleHover;
+                districtPage.SettingsButton.OnHover -= HandleHover;
                 
                 foreach (var levelSelectButton in districtPage.LevelSelectButtons)
                 {

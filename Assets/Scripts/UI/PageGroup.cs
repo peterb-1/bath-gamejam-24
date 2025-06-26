@@ -25,6 +25,9 @@ namespace UI
         
         public Page ActivePage { get; private set; }
         
+        public bool IsShowing { get; private set; }
+        public bool IsInteractable => canvasGroup.interactable;
+        
         private static readonly int IsActive = Animator.StringToHash("isActive");
 
         private void Awake()
@@ -57,10 +60,14 @@ namespace UI
 
             canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
+            
+            IsShowing = true;
         }
         
         public async UniTask HideGroupAsync(bool isForward = true)
         {
+            IsShowing = false;
+            
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
             
@@ -97,10 +104,14 @@ namespace UI
             
             canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
+
+            IsShowing = true;
         }
         
         public void HideGroupImmediate()
         {
+            IsShowing = false;
+            
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
             

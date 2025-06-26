@@ -53,6 +53,7 @@ namespace UI
 
         public Button GhostButton => ghostButton;
 
+        public event Action OnClickedPlay;
         public event Action OnDownloadStarted;
         public event Action OnDownloadFinished;
 
@@ -106,6 +107,8 @@ namespace UI
 
         private void LoadSceneWithGhostData()
         {
+            OnClickedPlay?.Invoke();
+            
             var sceneLoadContext = new CustomDataContainer();
             var ghostContext = new GhostContext(downloadedGhostData, ghostTime);
             

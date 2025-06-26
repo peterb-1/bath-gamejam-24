@@ -75,6 +75,7 @@ namespace UI
 
             foreach (var row in leaderboardRows)
             {
+                row.OnClickedPlay += HandleClickedPlay;
                 row.OnDownloadStarted += HandleDownloadStarted;
                 row.OnDownloadFinished += HandleDownloadFinished;
             }
@@ -222,6 +223,11 @@ namespace UI
             settingsClosedCallback?.Invoke(orderedSceneConfigs[currentConfigIndex]);
         }
         
+        private void HandleClickedPlay()
+        {
+            pageGroup.SetInteractable(false);
+        }
+        
         private void HandleDownloadStarted()
         {
             previousButton.interactable = false;
@@ -276,6 +282,7 @@ namespace UI
             
             foreach (var row in leaderboardRows)
             {
+                row.OnClickedPlay -= HandleClickedPlay;
                 row.OnDownloadStarted -= HandleDownloadStarted;
                 row.OnDownloadFinished -= HandleDownloadFinished;
             }
