@@ -393,6 +393,14 @@ PrefabInstance:
       propertyPath: tryPostOnAwake
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8654009331122275702, guid: d7efe81fee2e1ba4eae325ff4965467e, type: 3}
+      propertyPath: achievementTriggers.Array.data[30].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8654009331122275702, guid: d7efe81fee2e1ba4eae325ff4965467e, type: 3}
+      propertyPath: achievementTriggers.Array.data[31].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8844687678492070710, guid: d7efe81fee2e1ba4eae325ff4965467e, type: 3}
       propertyPath: m_Name
       value: AchievementManagerInactive

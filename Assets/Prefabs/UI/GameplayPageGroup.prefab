@@ -85,6 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5327597782452174585}
   - component: {fileID: 602111045163559100}
+  - component: {fileID: 3374791232208276813}
   m_Layer: 5
   m_Name: DashOrbIndicator
   m_TagString: Untagged
@@ -140,6 +141,28 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!95 &3374791232208276813
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4550978681775472336}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a3864e39d2d320449ac81ebd1cd555ae, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4582891032255899293
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,6 +459,10 @@ PrefabInstance:
     - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_HorizontalAlignment
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2689640665904474361, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
       propertyPath: m_Name
@@ -1209,6 +1236,7 @@ MonoBehaviour:
   timerText: {fileID: 1565486233250511084}
   timerBonusText: {fileID: 44631361586851291}
   timerTextAnimator: {fileID: 6678537921650658062}
+  dashOrbAnimator: {fileID: 3374791232208276813}
   dashOrbs:
   - {fileID: 8021665542053362213}
   - {fileID: 5176121521502560476}

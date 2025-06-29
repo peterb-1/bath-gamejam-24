@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Audio;
+using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Player;
 using UnityEngine;
@@ -37,11 +38,15 @@ namespace Gameplay.Collectibles
         private static readonly int Threshold = Shader.PropertyToID("_Threshold");
         private static readonly int AlphaMult = Shader.PropertyToID("_AlphaMult");
 
+        private bool hasAlreadyBeenFound;
+
         private async void Awake()
         {
             await UniTask.WaitUntil(SceneLoader.IsReady);
             
-            if (SceneLoader.Instance.CurrentLevelData.HasFoundCollectible)
+            hasAlreadyBeenFound = SceneLoader.Instance.CurrentLevelData.HasFoundCollectible;
+            
+            if (hasAlreadyBeenFound)
             {
                 spriteRenderer.material.SetFloat(AlphaMult, alreadyFoundAlpha);
                 backgroundRenderer.enabled = false;
@@ -61,6 +66,8 @@ namespace Gameplay.Collectibles
                 collectionCollider.enabled = false;
                 
                 PlayerAccessService.Instance.PlayerVictoryBehaviour.NotifyFoundCollectible();
+                
+                AudioManager.Instance.Play(hasAlreadyBeenFound ? AudioClipIdentifier.CollectibleAlreadyFound : AudioClipIdentifier.CollectibleFound);
                 
                 RunDissolveAsync().Forget();
             }

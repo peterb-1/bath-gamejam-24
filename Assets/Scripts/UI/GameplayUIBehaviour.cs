@@ -34,6 +34,9 @@ namespace UI
 
         [SerializeField] 
         private Animator timerTextAnimator;
+        
+        [SerializeField] 
+        private Animator dashOrbAnimator;
 
         [SerializeField]
         private DashOrbUIBehaviour[] dashOrbs;
@@ -42,12 +45,14 @@ namespace UI
         private TimerBehaviour timerBehaviour;
         
         private static readonly int Pulse = Animator.StringToHash("Pulse");
+        private static readonly int Shake = Animator.StringToHash("Shake");
 
         private async void Awake()
         {
             InputManager.OnControlSchemeChanged += HandleControlSchemeChanged;
             DashTrackerService.OnDashGained += HandleDashGained;
             DashTrackerService.OnDashUsed += HandleDashUsed;
+            DashTrackerService.OnDashFailed += HandleDashFailed;
             
             await UniTask.WaitUntil(PlayerAccessService.IsReady);
 
@@ -100,6 +105,11 @@ namespace UI
         {
             dashOrbs[orbs].Hide();
         }
+        
+        private void HandleDashFailed()
+        {
+            dashOrbAnimator.SetTrigger(Shake);
+        }
 
         private void Update()
         {
@@ -111,6 +121,9 @@ namespace UI
             InputManager.OnControlSchemeChanged -= HandleControlSchemeChanged;
             DashTrackerService.OnDashGained -= HandleDashGained;
             DashTrackerService.OnDashUsed -= HandleDashUsed;
+            DashTrackerService.OnDashFailed -= HandleDashFailed;
+            
+            playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
             timerBehaviour.OnTimeBonusApplied -= HandleTimeBonusApplied;
         }
     }

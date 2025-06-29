@@ -1,4 +1,5 @@
 ﻿using System;
+using Audio;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
@@ -126,6 +127,8 @@ namespace UI
                         }
                         else
                         {
+                            AudioManager.Instance.Play(AudioClipIdentifier.SatelliteComplete);
+                            
                             hiddenLevelData.MarkUnlockAnimationAsShown();
                             button.AnimateIn();
                             satelliteBehaviour.AnimateOut();

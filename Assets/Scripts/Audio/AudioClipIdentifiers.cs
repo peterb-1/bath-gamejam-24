@@ -10,8 +10,8 @@ namespace Audio
         DroneDeath,
         Jump,
         Victory,
-        Dash, // needs clip
-        DashCollected, // needs clip
+        Dash,
+        DashCollected,
         Land,
         NewRecord,
         RainbowResult,
@@ -20,7 +20,10 @@ namespace Audio
         Toggle,
         ZiplineAttach,
         ZiplineDetach,
-        DashFailed, // needs clip
-        SplashScreen
+        DashFailed,
+        SplashScreen,
+        CollectibleFound,
+        CollectibleAlreadyFound,
+        SatelliteComplete
     }
 }
