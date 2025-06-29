@@ -164,7 +164,7 @@ LineRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: -1
+      m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
@@ -662,7 +662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 4
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -695,7 +695,6 @@ MonoBehaviour:
       m_Calls: []
   levelNumberText: {fileID: 5869106258140984265}
   sceneConfig: {fileID: 0}
-  connectedButton: {fileID: 0}
   borderAnimator: {fileID: 1850020002725849393}
   lineRenderer: {fileID: 8155220745593977285}
   leftConnectionAnchor: {fileID: 8907142326303122974}

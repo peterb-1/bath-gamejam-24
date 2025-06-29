@@ -24,6 +24,9 @@ namespace UI
 
         [SerializeField] 
         private float linkOffset;
+
+        [SerializeField]
+        private SatelliteBehaviour satelliteBehaviour;
         
         [field: SerializeField]
         public Page Page { get; private set; }
@@ -93,6 +96,49 @@ namespace UI
             districtNameText.text = $"{LevelConfig.GetRomanNumeral(districtNumber)}. {LevelConfig.GetDistrictName(districtNumber)}";
             totalCompletedText.text = $"{completed} / {totalMissions}";
             totalStarsText.text = $"{stars} / {3 * totalMissions}";
+        }
+
+        public void SetSatelliteState()
+        {
+            var panelCount = 0;
+            
+            foreach (var button in LevelSelectButtons)
+            {
+                var levelConfig = button.SceneConfig.LevelConfig;
+                
+                if (levelConfig.HasCollectible && 
+                    SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(levelConfig, out var levelData) &&
+                    levelData.HasFoundCollectible)
+                {
+                    panelCount++;
+                }
+
+                if (levelConfig.IsHidden)
+                {
+                    satelliteBehaviour.transform.position = button.transform.position;
+                    
+                    if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(levelConfig, out var hiddenLevelData) && hiddenLevelData.IsUnlocked)
+                    {
+                        if (hiddenLevelData.HasShownUnlockAnimation)
+                        {
+                            satelliteBehaviour.Disable();
+                            return;
+                        }
+                        else
+                        {
+                            hiddenLevelData.MarkUnlockAnimationAsShown();
+                            button.AnimateIn();
+                            satelliteBehaviour.AnimateOut();
+                            
+                            return;
+                        }
+                    }
+                    
+                    button.gameObject.SetActive(false);
+                }
+            }
+            
+            satelliteBehaviour.SetPanelProgress(panelCount);
         }
         
         public void SetTopLeftRightNavigation(Selectable left, Selectable right)

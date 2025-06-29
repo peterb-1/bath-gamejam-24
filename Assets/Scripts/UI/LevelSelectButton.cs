@@ -2,7 +2,6 @@ using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
-using NaughtyAttributes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,9 +16,6 @@ namespace UI
 
         [SerializeField] 
         private SceneConfig sceneConfig;
-        
-        [SerializeField, ShowIf(nameof(IsHidden))] 
-        private LevelSelectButton connectedButton;
 
         [SerializeField] 
         private Animator borderAnimator;
@@ -46,7 +42,8 @@ namespace UI
         private bool enableLinkUpdates;
 
         private static readonly int Selected = Animator.StringToHash("Selected");
-        
+        private static readonly int FullFadeIn = Animator.StringToHash("FullFadeIn");
+
         public bool IsHidden() => SceneConfig.LevelConfig.IsHidden;
 
         protected override void Awake()
@@ -82,6 +79,11 @@ namespace UI
             {
                 gameObject.SetActive(false);
             }
+        }
+
+        public void AnimateIn()
+        {
+            borderAnimator.SetTrigger(FullFadeIn);
         }
         
         public void EnableLink(Transform previousAnchor)

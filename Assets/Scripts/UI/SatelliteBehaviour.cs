@@ -1,5 +1,4 @@
-﻿using Core.Saving;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
@@ -7,48 +6,38 @@ namespace UI
     public class SatelliteBehaviour : MonoBehaviour
     {
         [SerializeField] 
+        private Animator animator;
+        
+        [SerializeField] 
         private Image image;
 
         [SerializeField]
         private Sprite[] panelSprites;
         
-        [SerializeField] 
-        private DistrictPageUIBehaviour districtPageUIBehaviour;
+        [SerializeField]
+        private Sprite unlockedSprite;
 
-        private void Awake()
+        private static readonly int Disappear = Animator.StringToHash("Disappear");
+
+        public void Disable()
         {
-            var panelCount = 0;
-            
-            foreach (var button in districtPageUIBehaviour.LevelSelectButtons)
-            {
-                var levelConfig = button.SceneConfig.LevelConfig;
-                
-                if (levelConfig.HasCollectible && 
-                    SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(levelConfig, out var levelData) &&
-                    levelData.HasFoundCollectible)
-                {
-                    panelCount++;
-                }
+            gameObject.SetActive(false);
+        }
 
-                if (levelConfig.IsHidden)
-                {
-                    if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(levelConfig, out var hiddenLevelData) && hiddenLevelData.IsUnlocked)
-                    {
-                        gameObject.SetActive(false);
-                        return;
-                    }
-                    
-                    transform.position = button.transform.position;
-                }
-            }
-            
-            if (panelCount < panelSprites.Length)
+        public void AnimateOut()
+        {
+            image.sprite = unlockedSprite;
+            animator.SetTrigger(Disappear);
+        }
+
+        public void SetPanelProgress(int panels)
+        {
+            if (panels < panelSprites.Length)
             {
-                image.sprite = panelSprites[panelCount];
+                image.sprite = panelSprites[panels];
             }
             else
             {
-                // in theory we'll never get here, since the hidden level should be unlocked by this point, but just for safety
                 gameObject.SetActive(false);
             }
         }

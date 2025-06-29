@@ -19,6 +19,9 @@ namespace Core.Saving
         
         [field: SerializeField]
         public bool HasFoundCollectible { get; private set; }
+        
+        [field: SerializeField]
+        public bool HasShownUnlockAnimation { get; private set; }
 
         [field: SerializeField]
         public bool IsUnlocked { get; private set; }
@@ -37,6 +40,7 @@ namespace Core.Saving
             BestTime = float.MaxValue;
             DronesKilled = 0;
             HasFoundCollectible = false;
+            HasShownUnlockAnimation = false;
             IsUnlocked = false;
             IsBestTimePosted = true;
             GhostData = null;
@@ -77,6 +81,11 @@ namespace Core.Saving
             }
 
             return false;
+        }
+        
+        public void MarkUnlockAnimationAsShown()
+        {
+            HasShownUnlockAnimation = true;
         }
 
         public bool TryUnlock()
