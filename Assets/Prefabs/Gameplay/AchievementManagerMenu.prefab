@@ -1,5 +1,49 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2865937160894754540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4002922375684189972}
+  - component: {fileID: 1166097348737885673}
+  m_Layer: 0
+  m_Name: UnlockHiddenLevelTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4002922375684189972
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2865937160894754540}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7227769928822780918}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1166097348737885673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2865937160894754540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fb008fe639e6f34982bd920784ef579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6291871670755765706
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11,6 +55,10 @@ PrefabInstance:
     - target: {fileID: 3310026325933620988, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
       propertyPath: m_Name
       value: AchievementManagerMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.size
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
       propertyPath: achievementTriggers.Array.data[0].<Trigger>k__BackingField
@@ -132,6 +180,14 @@ PrefabInstance:
       propertyPath: achievementTriggers.Array.data[29].<Trigger>k__BackingField
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[31].<Trigger>k__BackingField
+      value: 
+      objectReference: {fileID: 1166097348737885673}
+    - target: {fileID: 3406973462303484092, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      propertyPath: achievementTriggers.Array.data[31].<Achievement>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: d1197f8443039c048bd3de505f89d005, type: 2}
     - target: {fileID: 3683669094739402300, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -204,6 +260,14 @@ PrefabInstance:
     - {fileID: 1187675261559959867, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
     - {fileID: 2065935819070967942, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
     - {fileID: 1351122350039350741, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3683669094739402300, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 4002922375684189972}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+--- !u!4 &7227769928822780918 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3683669094739402300, guid: be9637aa4f2ea7c40be8d2f48eefc145, type: 3}
+  m_PrefabInstance: {fileID: 6291871670755765706}
+  m_PrefabAsset: {fileID: 0}
