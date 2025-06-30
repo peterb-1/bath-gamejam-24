@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Audio;
+using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
@@ -12,6 +13,8 @@ namespace Gameplay.Dash
 {
     public class DashTrackerService : MonoBehaviour
     {
+        public const int DASH_INTRODUCTION_DISTRICT = 4;
+        
         [SerializeField] 
         private int maxOrbCapacity;
 
@@ -36,6 +39,10 @@ namespace Gameplay.Dash
             }
 
             Instance = this;
+
+            await UniTask.WaitUntil(SceneLoader.IsReady);
+            
+            if (SceneLoader.Instance.CurrentSceneConfig.LevelConfig.DistrictNumber < DASH_INTRODUCTION_DISTRICT) return;
 
             await UniTask.WaitUntil(PlayerAccessService.IsReady);
 

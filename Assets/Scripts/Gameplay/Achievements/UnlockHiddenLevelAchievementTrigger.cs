@@ -1,7 +1,6 @@
 using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 namespace Gameplay.Achievements
 {

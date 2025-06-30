@@ -7,8 +7,6 @@ namespace Gameplay.Dash
 {
     public class DashOrbUIBehaviour : MonoBehaviour
     {
-        private const int DASH_INTRODUCTION_DISTRICT = 4;
-        
         [SerializeField] 
         private Image image;
 
@@ -24,7 +22,7 @@ namespace Gameplay.Dash
 
             await UniTask.WaitUntil(SceneLoader.IsReady);
 
-            if (SceneLoader.Instance.CurrentSceneConfig.LevelConfig.DistrictNumber < DASH_INTRODUCTION_DISTRICT)
+            if (SceneLoader.Instance.CurrentSceneConfig.LevelConfig.DistrictNumber < DashTrackerService.DASH_INTRODUCTION_DISTRICT)
             {
                 gameObject.SetActive(false);
             }
