@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Core;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -104,6 +105,11 @@ namespace Hardware
         private async UniTask OneShotRumbleAsync(RumbleConfig config, CancellationToken token)
         {
             if (Gamepad.current == null) return;
+            
+            if (!SaveManager.Instance.SaveData.PreferenceData.TryGetValue(SettingId.RumbleStrength, out float rumbleMultiplier))
+            {
+                rumbleMultiplier = 1f;
+            }
 
             var timeElapsed = 0f;
 
@@ -116,7 +122,7 @@ namespace Hardware
                 var lowFrequency = config.LowFrequencyCurve.Evaluate(lerp);
                 var highFrequency = config.HighFrequencyCurve.Evaluate(lerp);
 
-                SetMotor(lowFrequency, highFrequency);
+                SetMotor(lowFrequency * rumbleMultiplier, highFrequency * rumbleMultiplier);
 
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
                 timeElapsed += Time.deltaTime;
@@ -132,7 +138,12 @@ namespace Hardware
         {
             if (Gamepad.current == null) return;
 
-            SetMotor(rumbleConfig.LowFrequency, rumbleConfig.HighFrequency);
+            if (!SaveManager.Instance.SaveData.PreferenceData.TryGetValue(SettingId.RumbleStrength, out float rumbleMultiplier))
+            {
+                rumbleMultiplier = 1f;
+            }
+
+            SetMotor(rumbleConfig.LowFrequency * rumbleMultiplier, rumbleConfig.HighFrequency * rumbleMultiplier);
 
             try
             {
@@ -147,7 +158,7 @@ namespace Hardware
                         await UniTask.WaitUntil(() => !isPaused || token.IsCancellationRequested, cancellationToken: token);
                         if (token.IsCancellationRequested) break;
                         
-                        SetMotor(rumbleConfig.LowFrequency, rumbleConfig.HighFrequency);
+                        SetMotor(rumbleConfig.LowFrequency * rumbleMultiplier, rumbleConfig.HighFrequency * rumbleMultiplier);
                     }
 
                     await UniTask.Yield(PlayerLoopTiming.Update, token);

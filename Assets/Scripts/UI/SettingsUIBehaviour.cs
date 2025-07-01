@@ -20,6 +20,7 @@ namespace UI
         private Button backButton;
 
         private Action settingsClosedCallback;
+        private int currentTabIndex;
 
         private void Awake()
         {
@@ -35,6 +36,7 @@ namespace UI
         {
             settingsClosedCallback = onClosedCallback;
             pageGroup.SetDefaultPage();
+            currentTabIndex = 0;
 
             await pageGroup.ShowGroupAsync(isForward: false);
 
@@ -61,7 +63,21 @@ namespace UI
 
         private void HandleTabSelected(SettingsTabBehaviour tab)
         {
-            pageGroup.SetPage(tab.Page);
+            var oldTabIndex = currentTabIndex;
+            
+            for (var i = 0; i < tabs.Length; i++)
+            {
+                var tabBehaviour = tabs[i];
+                
+                if (tabBehaviour == tab)
+                {
+                    currentTabIndex = i;
+                }
+            }
+
+            if (currentTabIndex == oldTabIndex) return;
+
+            pageGroup.SetPage(tab.Page, isForward: currentTabIndex > oldTabIndex);
 
             foreach (var tabBehaviour in tabs)
             {

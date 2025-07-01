@@ -40,7 +40,7 @@ namespace UI
 
         public Selectable FirstSelectable => overrideSettingDisplay 
             ? trailSelectionBehaviour.FirstSelectable 
-            : settingDisplays[0].GetSelectable();
+            : settingDisplays[0].GetSelectables()[0];
 
         public event Action<SettingsTabBehaviour> OnTabSelected;
 
@@ -79,21 +79,27 @@ namespace UI
         {
             for (var i = 0; i < settingDisplays.Length - 1; i++)
             {
-                var currentSelectable = settingDisplays[i].GetSelectable();
-                var nextSelectable = settingDisplays[i + 1].GetSelectable();
-                var currentNavigation = currentSelectable.navigation;
-                var nextNavigation = nextSelectable.navigation;
+                var currentSelectables = settingDisplays[i].GetSelectables();
+                var nextSelectables = settingDisplays[i + 1].GetSelectables();
 
-                currentNavigation.selectOnDown = nextSelectable;
-                nextNavigation.selectOnUp = currentSelectable;
-                
-                if (i == 0)
+                for (var j = Mathf.Max(currentSelectables.Length, nextSelectables.Length) - 1; j >= 0; j--)
                 {
-                    currentNavigation.selectOnUp = tabButton;
-                }
+                    var currentSelectable = currentSelectables[Mathf.Min(j, currentSelectables.Length - 1)];
+                    var nextSelectable = nextSelectables[Mathf.Min(j, nextSelectables.Length - 1)];
+                    var currentNavigation = currentSelectable.navigation;
+                    var nextNavigation = nextSelectable.navigation;
+
+                    currentNavigation.selectOnDown = nextSelectable;
+                    nextNavigation.selectOnUp = currentSelectable;
                 
-                currentSelectable.navigation = currentNavigation;
-                nextSelectable.navigation = nextNavigation;
+                    if (i == 0)
+                    {
+                        currentNavigation.selectOnUp = tabButton;
+                    }
+                
+                    currentSelectable.navigation = currentNavigation;
+                    nextSelectable.navigation = nextNavigation;
+                }
             }
         }
 

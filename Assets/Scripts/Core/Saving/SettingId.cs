@@ -5,6 +5,19 @@
         Trail,
         MasterVolume,
         MusicVolume,
-        SfxVolume
+        SfxVolume,
+        CameraShake,
+        LaserDistortion,
+        LocalGhost,
+        LeaderboardPriority,
+        RumbleStrength,
+        MotionBlur,
+        FogQuality,
+        Gamma,
+        RenderScale,
+        AntiAliasing,
+        VSync,
+        Resolution,
+        Windowed
     }
 }

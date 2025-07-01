@@ -42,7 +42,7 @@ namespace UI
 
         protected abstract void SetDisplay(object value);
         
-        public abstract Selectable GetSelectable();
+        public abstract Selectable[] GetSelectables();
 
         protected void FireHoverEvent()
         {

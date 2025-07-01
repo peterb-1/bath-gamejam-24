@@ -1,4 +1,5 @@
 ﻿using Core.Saving;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,14 +10,23 @@ namespace UI
         [SerializeField]
         private ExtendedSlider slider;
 
-        protected override void Awake()
+        protected override async void Awake()
         {
+            base.Awake();
+
             slider.onValueChanged.AddListener(HandleValueChanged);
             
             slider.OnHover += HandleHover;
             slider.OnUnhover += HandleUnhover;
             
-            base.Awake();
+            // can't await base method for some reason
+            await UniTask.WaitUntil(() => Setting != null);
+
+            if (Setting is FloatSetting floatSetting)
+            {
+                slider.minValue = floatSetting.Min;
+                slider.maxValue = floatSetting.Max;
+            }
         }
 
         protected override void SetDisplay(object value)
@@ -27,19 +37,14 @@ namespace UI
             }
         }
 
-        public override Selectable GetSelectable()
+        public override Selectable[] GetSelectables()
         {
-            return slider;
+            return new Selectable[] { slider };
         }
 
-        private void HandleValueChanged(float t)
+        private void HandleValueChanged(float value)
         {
-            if (Setting is FloatSetting floatSetting)
-            {
-                var value = Mathf.Lerp(floatSetting.Min, floatSetting.Max, t);
-                
-                SaveManager.Instance.SaveData.PreferenceData.SetValue(Setting.SettingId, value);
-            }
+            SaveManager.Instance.SaveData.PreferenceData.SetValue(Setting.SettingId, value);
         }
 
         private void HandleHover(ExtendedSlider _)

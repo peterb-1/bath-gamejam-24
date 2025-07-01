@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8176894495211664109}
   - component: {fileID: 689181713115648687}
   - component: {fileID: 5366401592391419492}
+  - component: {fileID: -1381987222783847546}
   - component: {fileID: 6438292713810105194}
   - component: {fileID: 2018094478582857337}
   - component: {fileID: 420348064759848473}
@@ -141,6 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   volume: {fileID: 420348064759848473}
+  defaultProfile: {fileID: 11400000, guid: 0e95a5c67331eeb40a34f1f8aac234b5, type: 2}
   districtVolumeProfiles:
   - {fileID: 11400000, guid: 8f2e9d00f83366644b889c926b4814a5, type: 2}
   - {fileID: 11400000, guid: 659f19db50fd1564e816a356b4a62d50, type: 2}
@@ -152,6 +154,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 32567ce18859a5343be1d061480c8197, type: 2}
   - {fileID: 11400000, guid: 7ae72235689dd274391036a92776aeb2, type: 2}
   - {fileID: 11400000, guid: 0361a25b63d494b4c9676762b2fd2202, type: 2}
+--- !u!114 &-1381987222783847546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179401097378549164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5664cf1c238a442189b8502d5fcf9855, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  urpAsset: {fileID: 11400000, guid: be62a91dfb150804a8e09f7fb459bb89, type: 2}
 --- !u!81 &6438292713810105194
 AudioListener:
   m_ObjectHideFlags: 0
