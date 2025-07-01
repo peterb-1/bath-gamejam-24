@@ -51,9 +51,11 @@ namespace UI
             var isUnlocked = trail.IsUnlockedByDefault ||
                              SaveManager.Instance.SaveData.AchievementsData.IsAchievementWithTrailUnlocked(trail);
 
-            var nameText = trail.IsUnlockedByDefault ? unlockedByDefaultTrailNameText : unlockedTrailNameText;
-            
-            nameText.text = trail.Name;
+            if (isUnlocked)
+            {
+                var nameText = trail.IsUnlockedByDefault ? unlockedByDefaultTrailNameText : unlockedTrailNameText;
+                nameText.text = trail.Name;
+            }
 
             var hasAchievement = SaveManager.Instance.SaveData.AchievementsData.TryGetAchievementForTrail(trail, out var achievement);
 

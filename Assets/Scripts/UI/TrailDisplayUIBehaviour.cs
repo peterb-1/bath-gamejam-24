@@ -3,6 +3,7 @@ using Core.Saving;
 using Gameplay.Trails;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Utils;
 
 namespace UI
@@ -33,6 +34,8 @@ namespace UI
         private bool isCurrentTrailUnlocked;
 
         private Vector3[] trailPositionsBuffer = new Vector3[64];
+
+        public ExtendedButton Button => button;
 
         public event Action<Trail> OnTrailSelected;
         public event Action<Trail> OnTrailHovered;

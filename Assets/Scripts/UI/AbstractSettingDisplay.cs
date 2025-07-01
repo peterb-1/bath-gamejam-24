@@ -3,6 +3,7 @@ using Core.Saving;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -40,6 +41,8 @@ namespace UI
         }
 
         protected abstract void SetDisplay(object value);
+        
+        public abstract Selectable GetSelectable();
 
         protected void FireHoverEvent()
         {

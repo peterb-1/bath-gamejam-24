@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Audio;
 using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
@@ -118,7 +119,7 @@ namespace UI
 
             await pageGroup.ShowGroupAsync(isForward: false);
 
-            InputManager.OnBackPerformed += HandleBackSelected;
+            InputManager.OnBackPerformed += HandleBackPerformed;
         }
 
         private void PopulateLeaderboard(ELeaderboardDataRequest requestType)
@@ -210,10 +211,17 @@ namespace UI
         {
             PopulateLeaderboard(currentRequestType);
         }
+        
+        private void HandleBackPerformed()
+        {
+            AudioManager.Instance.Play(AudioClipIdentifier.ButtonClick);
+            
+            HandleBackSelected();
+        }
 
         private void HandleBackSelected()
         {
-            InputManager.OnBackPerformed -= HandleBackSelected;
+            InputManager.OnBackPerformed -= HandleBackPerformed;
             
             // UI system doesn't do this automatically because the back button isn't on the page, it's in the shared elements
             EventSystem.current.SetSelectedGameObject(null);
@@ -268,7 +276,7 @@ namespace UI
 
         private void OnDestroy()
         {
-            InputManager.OnBackPerformed -= HandleBackSelected;
+            InputManager.OnBackPerformed -= HandleBackPerformed;
             
             previousButton.onClick.RemoveListener(HandlePreviousSelected);
             nextButton.onClick.RemoveListener(HandleNextSelected);

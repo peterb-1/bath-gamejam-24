@@ -4,6 +4,7 @@ using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Trails;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -25,6 +26,8 @@ namespace UI
         private Page customisationPage;
 
         private readonly List<TrailDisplayUIBehaviour> spawnedTrailDisplays = new();
+
+        public Selectable FirstSelectable => spawnedTrailDisplays[0].Button;
 
         private async void Awake()
         {

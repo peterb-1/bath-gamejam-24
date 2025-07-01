@@ -39,10 +39,12 @@ namespace UI
         {
             if (levelSelectPageGroup.IsInteractable)
             {
+                AudioManager.Instance.Play(AudioClipIdentifier.ButtonClick);
                 ShowPopup();
             }
             else if (popupPageGroup.IsShowing)
             {
+                AudioManager.Instance.Play(AudioClipIdentifier.ButtonClick);
                 HidePopup();
             }
         }

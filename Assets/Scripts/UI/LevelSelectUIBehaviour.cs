@@ -127,8 +127,6 @@ namespace UI
         {
             SetView(SceneLoader.Instance.PreviousSceneConfig);
             SetPageNavigation();
-            
-            districtPages[currentPageIndex].SetSatelliteState();
         }
 
         public void SelectLastSelectedItem()
@@ -275,9 +273,6 @@ namespace UI
             lastViewedLevelConfig = leftmostButton.SceneConfig.LevelConfig;
             
             SetPageNavigation();
-            
-            newDistrictPage.SetSatelliteState();
-            
             AnimateCloudsAsync(isForward: false).Forget();
 
             if (currentPageIndex > 0)
@@ -312,9 +307,6 @@ namespace UI
             lastViewedLevelConfig = newDistrictPage.LevelSelectButtons[0].SceneConfig.LevelConfig;
 
             SetPageNavigation();
-            
-            newDistrictPage.SetSatelliteState();
-            
             AnimateCloudsAsync(isForward: true).Forget();
             
             if (isForwardActive)
@@ -370,6 +362,8 @@ namespace UI
             districtPage.SetTopLeftRightNavigation(
                 isBackActive ? backButton : leftmostButton, 
                 isForwardActive ? forwardButton : rightmostButton);
+            
+            districtPage.SetSatelliteState();
         }
 
         private async UniTask AnimateCloudsAsync(bool isForward)

@@ -1,4 +1,5 @@
 ﻿using System;
+using Audio;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
@@ -37,12 +38,19 @@ namespace UI
 
             await pageGroup.ShowGroupAsync(isForward: false);
 
-            InputManager.OnBackPerformed += HandleBackSelected;
+            InputManager.OnBackPerformed += HandleBackPerformed;
+        }
+
+        private void HandleBackPerformed()
+        {
+            AudioManager.Instance.Play(AudioClipIdentifier.ButtonClick);
+            
+            HandleBackSelected();
         }
 
         private void HandleBackSelected()
         {
-            InputManager.OnBackPerformed -= HandleBackSelected;
+            InputManager.OnBackPerformed -= HandleBackPerformed;
 
             SaveManager.Instance.Save();
             
@@ -54,11 +62,16 @@ namespace UI
         private void HandleTabSelected(SettingsTabBehaviour tab)
         {
             pageGroup.SetPage(tab.Page);
+
+            foreach (var tabBehaviour in tabs)
+            {
+                tabBehaviour.SetTabDownNavigation(tab.FirstSelectable);
+            }
         }
         
         private void OnDestroy()
         {
-            InputManager.OnBackPerformed -= HandleBackSelected;
+            InputManager.OnBackPerformed -= HandleBackPerformed;
             
             backButton.onClick.RemoveListener(HandleBackSelected);
             

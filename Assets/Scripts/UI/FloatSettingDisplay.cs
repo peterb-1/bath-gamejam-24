@@ -1,5 +1,6 @@
 ﻿using Core.Saving;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
@@ -24,6 +25,11 @@ namespace UI
             {
                 slider.SetValueWithoutNotify(f);
             }
+        }
+
+        public override Selectable GetSelectable()
+        {
+            return slider;
         }
 
         private void HandleValueChanged(float t)
