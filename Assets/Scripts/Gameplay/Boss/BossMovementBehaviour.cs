@@ -9,14 +9,6 @@ namespace Gameplay.Boss
 {
     public class BossMovementBehaviour : MonoBehaviour
     {
-        [System.Serializable]
-        private struct WaitPoint
-        {
-            public float time;
-            public float curveProgress;
-            public Transform playerThreshold;
-        }
-        
         [SerializeField] 
         private BezierCurve bezierCurve;
         
@@ -24,28 +16,20 @@ namespace Gameplay.Boss
         private int curveSegmentCount;
         
         [SerializeField] 
-        private List<WaitPoint> waitPoints;
+        private List<BossWaitPoint> waitPoints;
         
-        [SerializeField] 
-        private bool smoothEnds;
-       
         [SerializeField]
-        private float playerProgressOffset;
+        private float damageProgressThreshold;
+        
+        [SerializeField]
+        private AnimationCurve movementCurve;
+        
+        [SerializeField]
+        private AnimationCurve recoilCurve;
 
-        [SerializeField]
-        private float dampingFactor;
-        
-        [SerializeField]
-        private float bossRecoil;
-        
-        [SerializeField]
-        private Rigidbody2D rigidBody;
-        
         private PlayerMovementBehaviour playerMovementBehaviour;
         
         private float progress;
-        private float prevProgress;
-        private float prevProgressDelta;
         private int nextPointIndex;
         private bool isAlive = true;
 
@@ -56,64 +40,64 @@ namespace Gameplay.Boss
             playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
             
             progress = 0f;
-            prevProgress = 0f;
-            prevProgressDelta = 0f;
-            nextPointIndex = 1;
+            nextPointIndex = 0;
+            transform.position = bezierCurve.GetPoint(0f);
         }
 
         public void IncrementProgress()
         {
             nextPointIndex++;
             progress = 0f;
-            prevProgress = 0f;
-            prevProgressDelta = bossRecoil;
         }
         
         private void Update()
         {
             if (!isAlive) return;
+
+            if (!waitPoints[nextPointIndex].IsDamagePoint)
+            {
+                if (playerMovementBehaviour.transform.position.x >
+                    waitPoints[nextPointIndex].PlayerThreshold.position.x)
+                {
+                    IncrementProgress();
+                }
+            }
+
+            if (nextPointIndex == 0) {return;}
             
-            progress += Time.deltaTime / waitPoints[nextPointIndex].time;
-            // naturally move along path over time
-            // proportion of distance between the 2 player thresholds covered so far
-            var playerProgress = (playerMovementBehaviour.transform.position.x -
-                                     waitPoints[nextPointIndex - 1].playerThreshold.position.x) /
-                                    (waitPoints[nextPointIndex].playerThreshold.position.x -
-                                     waitPoints[nextPointIndex - 1].playerThreshold.position.x);
-            playerProgress += playerProgressOffset;
-
-            if (progress < playerProgress)
+            if (progress < 1f)
             {
-                progress = playerProgress;
+                progress += Time.deltaTime / waitPoints[nextPointIndex].Time;
             }
-            if (progress < prevProgress)
-            {
-                progress = prevProgress;
-            }
-
-            progress = (1 - dampingFactor) * progress + dampingFactor * (prevProgress + prevProgressDelta);
             
             progress = Mathf.Min(progress, 1);
             
-            prevProgressDelta = progress - prevProgress;
-            prevProgress = progress;
-            
-            var smoothedProgress = smoothEnds ? Mathf.SmoothStep(0f, 1f, progress) : progress;
+            var smoothedProgress = (waitPoints[nextPointIndex - 1].IsDamagePoint ?
+                recoilCurve : movementCurve).Evaluate(progress);
             
             // scale progress to between the 2 current endpoints
-            var t = waitPoints[nextPointIndex - 1].curveProgress + 
-                    (smoothedProgress * (waitPoints[nextPointIndex].curveProgress - waitPoints[nextPointIndex - 1].curveProgress));
+            var t = waitPoints[nextPointIndex - 1].CurveProgress + 
+                    (smoothedProgress * (waitPoints[nextPointIndex].CurveProgress - waitPoints[nextPointIndex - 1].CurveProgress));
             transform.position = bezierCurve.GetPoint(t);
         }
 
         public int GetMaxHealth()
         {
-            return waitPoints.Count - 1;
+            var health = 0;
+            foreach (var waitPoint in waitPoints)
+            {
+                if (waitPoint.IsDamagePoint)
+                {
+                    health++;
+                }
+            }
+
+            return health;
         }
 
-        public float GetProgress()
+        public bool IsDamageable()
         {
-            return progress;
+            return waitPoints[nextPointIndex].IsDamagePoint && progress >= damageProgressThreshold;
         }
         
 
@@ -178,16 +162,19 @@ namespace Gameplay.Boss
 
             foreach (var waitPoint in waitPoints)
             {
-                Gizmos.DrawSphere(bezierCurve.GetPoint(waitPoint.curveProgress), 0.15f);
+                Gizmos.DrawSphere(bezierCurve.GetPoint(waitPoint.CurveProgress), 0.15f);
             }
             
             Gizmos.color = Color.yellow;
 
             foreach (var waitPoint in waitPoints)
             {
-                Vector2 bottom = new Vector2(waitPoint.playerThreshold.position.x, -50f);
-                Vector2 top = new Vector2(waitPoint.playerThreshold.position.x, 50f);
-                Gizmos.DrawLine(bottom, top);
+                if (!waitPoint.IsDamagePoint)
+                {
+                    Vector2 bottom = new Vector2(waitPoint.PlayerThreshold.position.x, -50f);
+                    Vector2 top = new Vector2(waitPoint.PlayerThreshold.position.x, 50f);
+                    Gizmos.DrawLine(bottom, top);
+                }
             }
         }
 #endif

@@ -28,9 +28,6 @@ namespace Gameplay.Boss
 
         [SerializeField]
         private float hitboxDisableTime;
-        
-        [SerializeField]
-        private float damageProgressThreshold;
 
         [SerializeField]
         private float timeSlowDuration;
@@ -63,7 +60,7 @@ namespace Gameplay.Boss
             if ((playerLayers.value & (1 << other.gameObject.layer)) != 0)
             {
                 
-                if (bossMovementBehaviour.GetProgress() >= damageProgressThreshold && playerMovementBehaviour.IsDashing
+                if (bossMovementBehaviour.IsDamageable() && playerMovementBehaviour.IsDashing
                     && playerMovementBehaviour.Velocity.x > 0f)
                 {
                     HandleBossTakeDamage();
