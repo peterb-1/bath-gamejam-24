@@ -53,9 +53,9 @@ Material:
     - _EnableExternalAlpha: 0
     - _GradientExponent: 2.62
     - _HDRMultiplier: 1.1
-    - _MainTexStrength: 0.814
+    - _MainTexStrength: 0.781
     - _NebulaContrast: 5
-    - _NebulaDistortion: 0.721
+    - _NebulaDistortion: 1
     - _NebulaIntensity: 2
     - _NebulaLayers: 4.44
     - _NebulaSpeed: 0.299
@@ -77,7 +77,7 @@ Material:
     - _SwirlLayers: 3.33
     - _SwirlScale: 6.33
     - _SwirlSpeed: 0.55
-    - _SwirlStrength: 1.836
+    - _SwirlStrength: 2
     - _TwinkleAmount: 0.754
     - _UVSwirlAmount: 0.156
     - _Vignette: 0.177

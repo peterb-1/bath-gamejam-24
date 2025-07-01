@@ -41,7 +41,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BlurAmount: 4
+    - _BlurAmount: 3.9
     - _Brightness: 1.212
     - _CloudsIntensity: 0.775
     - _CloudsScale: 5.47
@@ -52,10 +52,10 @@ Material:
     - _DustScale: 64
     - _DustSpeed: 0.505
     - _EnableExternalAlpha: 0
-    - _FogStrength: 0.351
+    - _FogStrength: 0.41
     - _GradientExponent: 3.71
     - _HDRMultiplier: 1.1
-    - _LayerDepth: 0.669
+    - _LayerDepth: 1
     - _MainTexStrength: 0.691
     - _NebulaContrast: 1.87
     - _NebulaDistortion: 0.311
@@ -64,7 +64,7 @@ Material:
     - _NebulaSpeed: 0.061
     - _NoiseScale: 171.1
     - _Saturation: 2
-    - _ShimmerAmp: 0.046
+    - _ShimmerAmp: 0
     - _ShimmerFreq: 9
     - _ShimmerSpeed: 0.25
     - _StarColorVariation: 0.779
@@ -96,7 +96,7 @@ Material:
     - _CloudsColor: {r: 0.19999996, g: 0.29999998, b: 0.7, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DustColor: {r: 0.39999998, g: 0.29999998, b: 0.6, a: 1}
-    - _FogColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
+    - _FogColor: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 1}
     - _GradientBottomColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
     - _GradientTopColor: {r: 0.8396226, g: 0, b: 0, a: 1}
     - _NebulaColor: {r: 0.40899786, g: 0.8584906, b: 0.45526654, a: 1}
@@ -107,7 +107,7 @@ Material:
     - _StarLayer2Color: {r: 1, g: 0.8, b: 0.6, a: 1}
     - _StarLayer3Color: {r: 0.6, g: 0.8, b: 1, a: 1}
     - _TileVariationSeed: {r: -9.73, g: 8.32, b: -27.5, a: 4.98}
-    - _Tint: {r: 0.9433962, g: 0.9433962, b: 0.9433962, a: 1}
+    - _Tint: {r: 1, g: 1, b: 1, a: 1}
     - _VignetteColor: {r: 0, g: 0, b: 0, a: 1}
     - _WormholeCenter: {r: 0.5, g: 0.6, b: 0, a: 0}
   m_BuildTextureStacks: []

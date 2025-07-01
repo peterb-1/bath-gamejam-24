@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
 using Gameplay.Core;
@@ -45,7 +46,7 @@ namespace Gameplay.Environment
         private Vector2 hologramStrengthRange;
 
         [SerializeField] 
-        private float flashChancePerTile;
+        private float flashDelayPerTile;
         
         [SerializeField, Range(0f, 1f)] 
         private float largeTileChance;
@@ -82,6 +83,9 @@ namespace Gameplay.Environment
 
         [SerializeField] 
         private Material backgroundTileMaterial;
+        
+        [SerializeField] 
+        private Material lowQualityBackgroundMaterial;
 
         [SerializeField] 
         private ColourDatabase colourDatabase;
@@ -93,7 +97,9 @@ namespace Gameplay.Environment
 
         private bool containsPlayer;
         private bool isActive;
-        private float flashChance;
+        private float maxFlashDelay;
+        private float flashTimer;
+        private float nextFlashTime;
         
         private static readonly int ScrollSpeed = Shader.PropertyToID("_ScrollSpeed");
         private static readonly int Tiling = Shader.PropertyToID("_Tiling");
@@ -106,7 +112,7 @@ namespace Gameplay.Environment
 
             InitialiseHologramSettings();
 
-            flashChance = flashChancePerTile * tiles.Count;
+            maxFlashDelay = flashDelayPerTile / tiles.Count;
 
             if (isGameplay)
             {
@@ -125,6 +131,15 @@ namespace Gameplay.Environment
                 mainCollider.enabled = false;
                 deathCollider.enabled = false;
                 playerDetectionCollider.enabled = false;
+                
+                if (SaveManager.Instance.SaveData.PreferenceData.TryGetValue(SettingId.FogQuality, out FogQuality fogQuality) &&
+                    fogQuality is FogQuality.Low)
+                {
+                    foreach (var tile in tiles)
+                    {
+                        tile.SetMaterial(lowQualityBackgroundMaterial);
+                    }
+                }
             }
         }
         
@@ -176,12 +191,19 @@ namespace Gameplay.Environment
 
         private void Update()
         {
-            if (isActive && !PauseManager.Instance.IsPaused && Random.Range(0f, 1f) < flashChance)
+            if (isActive && !PauseManager.Instance.IsPaused)
             {
-                var tile = tiles.RandomChoice();
-                var flashColour = isGameplay ? Color.white : Color.grey;
-            
-                tile.FlashAsync(flashColour).Forget();
+                flashTimer += Time.deltaTime;
+                
+                if (flashTimer >= nextFlashTime)
+                {
+                    var tile = tiles.RandomChoice();
+                    var flashColour = isGameplay ? Color.white : Color.grey;
+                    
+                    tile.FlashAsync(flashColour).Forget();
+                    
+                    nextFlashTime = flashTimer + Random.Range(0f, maxFlashDelay);
+                }
             }
         }
 
@@ -192,41 +214,51 @@ namespace Gameplay.Environment
                 ToggleCollidersAsync().Forget();
             }
 
-            var shuffledTiles = new List<Tile>();
+            var totalTiles = tiles.Count;
+            
+            if (totalTiles == 0) return;
 
-            while (tiles.Count > 0)
+            var shuffledIndices = new int[totalTiles];
+            
+            for (var i = 0; i < totalTiles; i++)
             {
-                var randomTile = tiles.RandomChoice();
-                shuffledTiles.Add(randomTile);
-                tiles.Remove(randomTile);
+                shuffledIndices[i] = i;
             }
 
-            tiles = shuffledTiles;
+            // O(n) shuffle
+            for (var i = totalTiles - 1; i > 0; i--)
+            {
+                var randomIndex = Random.Range(0, i + 1);
+                (shuffledIndices[i], shuffledIndices[randomIndex]) = (shuffledIndices[randomIndex], shuffledIndices[i]);
+            }
 
-            var totalTiles = tiles.Count;
-            var currentTile = 1;
             var tilesPerCycle = duration == 0f 
-                ? totalTiles + 1 
-                : Mathf.Max(1, Mathf.Ceil(totalTiles * DELAY / duration));
+                ? totalTiles
+                : Mathf.Max(1, (int) Mathf.Ceil(totalTiles * DELAY / duration));
 
             try
             {
-                foreach (var tile in tiles)
+                for (var startIndex = 0; startIndex < totalTiles; startIndex += tilesPerCycle)
                 {
-                    if (!isActive)
+                    var endIndex = Mathf.Min(startIndex + tilesPerCycle, totalTiles);
+                    
+                    for (var i = startIndex; i < endIndex; i++)
                     {
-                        tile.CancelFlash();
+                        var tile = tiles[shuffledIndices[i]];
+                        
+                        if (!isActive)
+                        {
+                            tile.CancelFlash();
+                        }
+
+                        tile.Toggle(isActive);
                     }
 
-                    tile.Toggle(isActive);
-
-                    if (currentTile % tilesPerCycle == 0)
+                    if (endIndex < totalTiles)
                     {
                         await UniTask.WaitUntil(() => !PauseManager.Instance.IsPaused);
                         await UniTask.Delay(TimeSpan.FromSeconds(DELAY), ignoreTimeScale: true);
                     }
-
-                    currentTile++;
                 }
             }
             catch (InvalidOperationException)
