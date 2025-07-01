@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Core;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
 using Gameplay.Core;
@@ -61,7 +62,7 @@ namespace Audio
         private PlayerDeathBehaviour playerDeathBehaviour;
         private PlayerVictoryBehaviour playerVictoryBehaviour;
 
-        private void Awake()
+        private async void Awake()
         {
             if (Instance != null && Instance != this)
             {
@@ -79,6 +80,8 @@ namespace Audio
             
             HandleSceneLoaded();
             
+            await InitialiseSettingsAsync();
+
             Instance = this;
             transform.parent = null;
             DontDestroyOnLoad(this);
@@ -100,6 +103,50 @@ namespace Audio
         private void HandleSceneLoaded()
         {
             GetPlayerBehavioursAsync().Forget();
+        }
+        
+        private async UniTask InitialiseSettingsAsync()
+        {
+            await UniTask.WaitUntil(() => SaveManager.IsReady);
+
+            var preferenceData = SaveManager.Instance.SaveData.PreferenceData;
+            
+            preferenceData.OnSettingChanged += HandleSettingChanged;
+            
+            InitialiseSetting(SettingId.MasterVolume);
+            InitialiseSetting(SettingId.MusicVolume);
+            InitialiseSetting(SettingId.SfxVolume);
+        }
+
+        private void InitialiseSetting(SettingId settingId)
+        {
+            if (SaveManager.Instance.SaveData.PreferenceData.TryGetValue(settingId, out object value))
+            {
+                HandleSettingChanged(settingId, value);
+            }
+        }
+
+        private void HandleSettingChanged(SettingId settingId, object value)
+        {
+            if (value is not float sliderVolume) return;
+            
+            var floatNames = settingId switch
+            {
+                SettingId.MasterVolume => new[] {"MasterVolume"},
+                SettingId.MusicVolume => new[] {"MusicVolume"},
+                SettingId.SfxVolume => new[] {"SfxVolume", "GameplayUnfilteredVolume", "UIVolume"},
+                _ => null
+            };
+
+            if (floatNames == null) return;
+
+            var t = Mathf.Pow(sliderVolume, 0.18f);
+            var volume = Mathf.Lerp(-80f, 3f, t);
+
+            foreach (var floatName in floatNames)
+            {
+                audioMixer.SetFloat(floatName, volume);
+            }
         }
 
         private async UniTask GetPlayerBehavioursAsync()
@@ -357,6 +404,8 @@ namespace Audio
             ColourManager.OnColourChangeStarted -= HandleColourChangeStarted;
             SceneLoader.OnSceneLoadStart -= HandleSceneLoadStart;
             SceneLoader.OnSceneLoaded -= HandleSceneLoaded;
+
+            SaveManager.Instance.SaveData.PreferenceData.OnSettingChanged -= HandleSettingChanged;
         }
     }
 }

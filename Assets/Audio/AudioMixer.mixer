@@ -205,6 +205,16 @@ AudioMixerController:
     name: FlangerWet
   - guid: 6900bbd95a88a1244a1247f6a3e1504b
     name: LowPassCutoff
+  - guid: f93976e2453a16a43920887b16fca57c
+    name: GameplayUnfilteredVolume
+  - guid: c943fb4c860731c499ec10a6a44f1db2
+    name: MasterVolume
+  - guid: eba3c796287b18d41a86ac7dce76941c
+    name: MusicVolume
+  - guid: 284cab0fb619778448662b06c2b587e2
+    name: SfxVolume
+  - guid: cf0a316385cf92744a063ba300b7d331
+    name: UIVolume
   m_AudioMixerGroupViews:
   - guids:
     - dcd039c8f03a1bc4a8496c4fc622b53b

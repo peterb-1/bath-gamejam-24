@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -19,7 +20,7 @@ namespace Core.Saving
         [field: SerializeField]
         public PreferenceData PreferenceData { get; private set; }
 
-        public async UniTask InitialiseAsync()
+        public async UniTask InitialiseAsync(AbstractSettingBase[] settings)
         {
             CampaignData ??= new CampaignData();
             AchievementsData ??= new AchievementsData();
@@ -28,8 +29,8 @@ namespace Core.Saving
 
             await CampaignData.InitialiseAsync();
             await AchievementsData.InitialiseAsync();
-            await PreferenceData.InitialiseAsync();
             
+            PreferenceData.Initialise(settings);
             StatsData.Initialise();
         }
     }

@@ -80,16 +80,17 @@ namespace Gameplay.Player
         {
             await UniTask.WaitUntil(() => SaveManager.IsReady);
 
-            var preferredTrailGuid = SaveManager.Instance.SaveData.PreferenceData.TrailGuid;
+            SaveManager.Instance.SaveData.PreferenceData.TryGetValue(SettingId.Trail, out string preferredTrailGuid);
 
             if (!trailDatabase.TryGetTrail(preferredTrailGuid, out var trail))
             {
                 if (!trailDatabase.TryGetTrail(trailDatabase.DefaultTrail, out trail))
                 {
                     GameLogger.LogError("Cannot get player trail!", this);
+                    return;
                 }
                 
-                SaveManager.Instance.SaveData.PreferenceData.SetTrail(trail);
+                SaveManager.Instance.SaveData.PreferenceData.SetValue(SettingId.Trail, trail.Guid);
             }
 
             if (trail.TrailRenderer == null) return;

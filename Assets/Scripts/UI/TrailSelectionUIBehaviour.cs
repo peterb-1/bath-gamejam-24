@@ -51,7 +51,7 @@ namespace UI
 
         private void HandleTrailSelected(Trail trail)
         {
-            SaveManager.Instance.SaveData.PreferenceData.SetTrail(trail);
+            SaveManager.Instance.SaveData.PreferenceData.SetValue(SettingId.Trail, trail.Guid);
             SaveManager.Instance.Save();
         }
 

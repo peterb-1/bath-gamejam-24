@@ -8,6 +8,9 @@ namespace Core.Saving
     {
         private const string SAVE_PATH = "data.json";
         
+        [SerializeField] 
+        private AbstractSettingBase[] settings;
+        
         public SaveData SaveData { get; private set; }
         
         public static bool IsReady { get; private set; }
@@ -29,13 +32,15 @@ namespace Core.Saving
 
             SaveData = SaveUtils.Load<SaveData>(SAVE_PATH);
             
-            await SaveData.InitialiseAsync();
+            await SaveData.InitialiseAsync(settings);
 
             IsReady = true;
         }
 
         public void Save()
         {
+            SaveData.PreferenceData.PrepareForSerialization();
+            
             SaveUtils.Save(SaveData, SAVE_PATH);
         }
         

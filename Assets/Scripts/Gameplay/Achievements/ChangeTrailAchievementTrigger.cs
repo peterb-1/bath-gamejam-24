@@ -1,6 +1,5 @@
 ﻿using Core.Saving;
 using Cysharp.Threading.Tasks;
-using Gameplay.Trails;
 
 namespace Gameplay.Achievements
 {
@@ -10,22 +9,25 @@ namespace Gameplay.Achievements
         {
             await UniTask.WaitUntil(() => SaveManager.IsReady);
 
-            SaveManager.Instance.SaveData.PreferenceData.OnTrailSet += HandleTrailSet;
+            SaveManager.Instance.SaveData.PreferenceData.OnSettingChanged += HandleSettingChanged;
         }
 
-        private void HandleTrailSet(Trail trail)
+        private void HandleSettingChanged(SettingId settingId, object trailObject)
         {
-            if (SaveManager.Instance.SaveData.AchievementsData.TryGetAchievementForTrail(trail, out _))
+            if (settingId is SettingId.Trail && trailObject is string trailGuid)
             {
-                TriggerAchievement();
+                if (SaveManager.Instance.SaveData.AchievementsData.TryGetAchievementForTrail(trailGuid, out _))
+                {
+                    TriggerAchievement();
                 
-                SaveManager.Instance.SaveData.PreferenceData.OnTrailSet -= HandleTrailSet;
+                    SaveManager.Instance.SaveData.PreferenceData.OnSettingChanged -= HandleSettingChanged;
+                }
             }
         }
         
         private void OnDestroy()
         {
-            SaveManager.Instance.SaveData.PreferenceData.OnTrailSet -= HandleTrailSet;
+            SaveManager.Instance.SaveData.PreferenceData.OnSettingChanged -= HandleSettingChanged;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Input;
 using UnityEngine;
@@ -42,6 +43,8 @@ namespace UI
         private void HandleBackSelected()
         {
             InputManager.OnBackPerformed -= HandleBackSelected;
+
+            SaveManager.Instance.Save();
             
             pageGroup.HideGroup(isForward: true);
             

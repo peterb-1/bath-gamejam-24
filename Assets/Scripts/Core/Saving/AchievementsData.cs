@@ -31,13 +31,13 @@ namespace Core.Saving
             return false;
         }
         
-        public bool TryGetAchievementForTrail(Trail trail, out Achievement trailAchievement)
+        public bool TryGetAchievementForTrail(string trailGuid, out Achievement trailAchievement)
         {
             foreach (var achievementData in achievements)
             {
                 foreach (var achievement in AchievementManager.Instance.Achievements)
                 {
-                    if (achievementData.Guid == achievement.Guid && achievement.TrailGuid == trail.Guid)
+                    if (achievementData.Guid == achievement.Guid && achievement.TrailGuid == trailGuid)
                     {
                         trailAchievement = achievement;
                         return true;
@@ -47,6 +47,11 @@ namespace Core.Saving
 
             trailAchievement = null;
             return false;
+        }
+        
+        public bool TryGetAchievementForTrail(Trail trail, out Achievement trailAchievement)
+        {
+            return TryGetAchievementForTrail(trail.Guid, out trailAchievement);
         }
 
         public bool TryUnlockAchievement(Achievement unlockedAchievement)
