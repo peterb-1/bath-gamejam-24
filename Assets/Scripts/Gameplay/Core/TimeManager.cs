@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Gameplay.Boss;
 using Gameplay.Colour;
 using Gameplay.Spring;
 using UnityEngine;
@@ -31,6 +32,7 @@ namespace Gameplay.Core
             
             ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
             SpringPhysicsBehaviour.OnBounce += HandleSpringBounce;
+            BossHitboxBehaviour.OnBossHit += HandleBossHit;
         }
         
         private void Update()
@@ -47,6 +49,11 @@ namespace Gameplay.Core
         }
 
         private void HandleSpringBounce(float duration)
+        {
+            RunSlowdownAsync(duration).Forget();
+        }
+
+        private void HandleBossHit(float duration)
         {
             RunSlowdownAsync(duration).Forget();
         }
@@ -81,6 +88,8 @@ namespace Gameplay.Core
         private void OnDestroy()
         {
             ColourManager.OnColourChangeStarted -= HandleColourChangeStarted;
+            SpringPhysicsBehaviour.OnBounce -= HandleSpringBounce;
+            BossHitboxBehaviour.OnBossHit -= HandleBossHit;
         }
     }
 }

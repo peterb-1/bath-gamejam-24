@@ -631,6 +631,14 @@ namespace Gameplay.Player
             dashDistortionRenderer.transform.localPosition = dashDistortionOffset * dashDirectionMultiplier;
         }
 
+        public void HandleBossHit(Vector2 force)
+        {
+            rigidBody.linearVelocity = force;
+            
+            dashCountdown = 0f;
+            hasDoubleJumped = false;
+        }
+
         public bool TryHookPlayer(HingeJoint2D newHook)
         {
             if (isHooked || (hookCountdown > 0f && hook == newHook) || !playerDeathBehaviour.IsAlive)
