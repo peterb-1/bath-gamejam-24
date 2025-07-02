@@ -25,6 +25,7 @@ namespace Gameplay.Drone
         private DroneHitboxBehaviour droneHitboxBehaviour;
 
         private float currentCycleTime;
+        private bool isActive;
         private bool isAlive = true;
 
         private void Awake()
@@ -32,6 +33,8 @@ namespace Gameplay.Drone
             droneHitboxBehaviour.OnDroneKilled += HandleDroneKilled;
             
             currentCycleTime = cycleTime * cycleOffset;
+
+            isActive = droneHitboxBehaviour.GetStartState();
         }
 
         private void HandleDroneKilled(DroneHitboxBehaviour _)
@@ -41,7 +44,7 @@ namespace Gameplay.Drone
 
         private void Update()
         {
-            if (!isAlive) return;
+            if (!isAlive || !isActive) return;
             
             currentCycleTime += Time.deltaTime;
             currentCycleTime %= cycleTime;
@@ -57,6 +60,12 @@ namespace Gameplay.Drone
             transform.position = lerp * patrolPoint1.position + (1f - lerp) * patrolPoint2.position;
         }
 
+        public async void Activate()
+        {
+            isActive = true;
+            await droneHitboxBehaviour.RunFadeInAsync();
+        }
+        
         private void OnDestroy()
         {
             droneHitboxBehaviour.OnDroneKilled -= HandleDroneKilled;

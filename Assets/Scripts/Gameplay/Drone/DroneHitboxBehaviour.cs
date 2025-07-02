@@ -36,6 +36,9 @@ namespace Gameplay.Drone
 
         [SerializeField] 
         private float fadeDuration;
+
+        [SerializeField]
+        private bool startActive;
         
         [field: SerializeField] 
         public float TimeBonusOnKilled { get; private set; }
@@ -54,6 +57,12 @@ namespace Gameplay.Drone
 
             playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
             playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
+
+            if (!startActive)
+            {
+                spriteRenderer.material.SetFloat(Threshold, 1f);
+                rigidBody.simulated = false;
+            }
             
             DroneTrackerService.RegisterDrone(this);
         }
@@ -103,6 +112,37 @@ namespace Gameplay.Drone
             playerDeathBehaviour.KillPlayer(PlayerDeathSource.Drone);
         }
 
+        public bool GetStartState()
+        {
+            return startActive;
+        }
+
+        public void ActivateHitbox()
+        {
+            spriteRenderer.material.SetFloat(Threshold, 0f);
+            rigidBody.simulated = true;
+        }
+        
+        public async UniTask RunFadeInAsync()
+        {
+            var timeElapsed = 0f;
+
+            while (timeElapsed < fadeDuration)
+            {
+                var lerp = fadeCurve.Evaluate(timeElapsed / fadeDuration);
+
+                spriteRenderer.material.SetFloat(Threshold, 1f - lerp);
+                
+                await UniTask.Yield();
+
+                timeElapsed += Time.deltaTime;
+            }
+            
+            spriteRenderer.material.SetFloat(Threshold, 0f);
+
+            rigidBody.simulated = true;
+        }
+        
         private async UniTask RunDissolveAsync()
         {
             var timeElapsed = 0f;
