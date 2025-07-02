@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Gameplay.Player;
@@ -26,12 +27,22 @@ namespace Gameplay.Boss
         
         [SerializeField]
         private AnimationCurve recoilCurve;
+        
+        [SerializeField]
+        private float cycleDuration;
+        
+        [SerializeField]
+        private float cycleAmplitude;
 
         private PlayerMovementBehaviour playerMovementBehaviour;
         
         private float progress;
         private int nextPointIndex;
         private bool isAlive = true;
+
+        private float currentCycleTime;
+
+        public event Action<BossMovementBehaviour> onBossProgress;
 
         private async void Awake()
         {
@@ -41,19 +52,21 @@ namespace Gameplay.Boss
             
             progress = 0f;
             nextPointIndex = 0;
-            transform.position = bezierCurve.GetPoint(0f);
         }
 
         public void IncrementProgress()
         {
             nextPointIndex++;
             progress = 0f;
+            onBossProgress?.Invoke(this);
         }
         
         private void Update()
         {
             if (!isAlive) return;
 
+            currentCycleTime += Time.deltaTime;
+            
             if (!waitPoints[nextPointIndex].IsDamagePoint)
             {
                 if (playerMovementBehaviour.transform.position.x >
@@ -63,7 +76,13 @@ namespace Gameplay.Boss
                 }
             }
 
-            if (nextPointIndex == 0) {return;}
+            var cycleOffset = cycleAmplitude * Mathf.Sin(currentCycleTime * Mathf.PI * 2 / cycleDuration) * Vector3.up;
+            
+            if (nextPointIndex == 0)
+            {
+                transform.position = bezierCurve.GetPoint(0f) + cycleOffset;
+                return;
+            }
             
             if (progress < 1f)
             {
@@ -79,6 +98,8 @@ namespace Gameplay.Boss
             var t = waitPoints[nextPointIndex - 1].CurveProgress + 
                     (smoothedProgress * (waitPoints[nextPointIndex].CurveProgress - waitPoints[nextPointIndex - 1].CurveProgress));
             transform.position = bezierCurve.GetPoint(t);
+            
+            transform.position += cycleOffset;
         }
 
         public int GetMaxHealth()
@@ -93,6 +114,11 @@ namespace Gameplay.Boss
             }
 
             return health;
+        }
+
+        public int GetNextPointIndex()
+        {
+            return nextPointIndex;
         }
 
         public bool IsDamageable()

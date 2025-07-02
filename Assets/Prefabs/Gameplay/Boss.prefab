@@ -917,6 +917,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  cycleDuration: 8
+  cycleAmplitude: 0.4
 --- !u!114 &4427290317010668884
 MonoBehaviour:
   m_ObjectHideFlags: 0
