@@ -61,7 +61,6 @@ namespace Gameplay.Drone
             if (!startActive)
             {
                 spriteRenderer.material.SetFloat(Threshold, 1f);
-                rigidBody.simulated = false;
             }
             
             DroneTrackerService.RegisterDrone(this);
@@ -120,7 +119,6 @@ namespace Gameplay.Drone
         public void ActivateHitbox()
         {
             spriteRenderer.material.SetFloat(Threshold, 0f);
-            rigidBody.simulated = true;
         }
         
         public async UniTask RunFadeInAsync()
@@ -139,8 +137,6 @@ namespace Gameplay.Drone
             }
             
             spriteRenderer.material.SetFloat(Threshold, 0f);
-
-            rigidBody.simulated = true;
         }
         
         private async UniTask RunDissolveAsync()
