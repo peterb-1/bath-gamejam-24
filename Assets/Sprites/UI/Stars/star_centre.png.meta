@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0ca4a6658b554154baf9e78b421cc014
+guid: 846601b4196c0594fba3935d1f467795
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3049587460516168127
-    second: rainbow_star_0
+      213: 32659021772764481
+    second: star_centre_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -72,10 +72,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: rainbow_star_0
+      name: star_centre_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 680
-        height: 680
+        width: 520
+        height: 519
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fb14d8f43af425a20800000000000000
-      internalID: 3049587460516168127
+      spriteID: 1453a7f0537047000800000000000000
+      internalID: 32659021772764481
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      rainbow_star_0: 3049587460516168127
+      star_centre_0: 32659021772764481
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

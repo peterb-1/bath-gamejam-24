@@ -1,3 +1,4 @@
+using Core.Saving;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -5,6 +6,9 @@ namespace Gameplay.Environment
 {
     public class Cloud : MonoBehaviour
     {
+        [SerializeField] 
+        private Material cheapMaterial;
+        
         [SerializeField, ReadOnly]
         private float horizontalSpeed;
         
@@ -13,6 +17,18 @@ namespace Gameplay.Environment
         
         [SerializeField, ReadOnly]
         private float rightEnd;
+
+        private void Awake()
+        {
+            if (SaveManager.Instance.SaveData.PreferenceData.TryGetValue(SettingId.FancyClouds, out bool areFancyCloudsEnabled) &&
+                !areFancyCloudsEnabled)
+            {
+                foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
+                {
+                    spriteRenderer.material = cheapMaterial;
+                }
+            }
+        }
 
         public void Configure(float speed, float left, float right)
         {

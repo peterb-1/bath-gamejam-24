@@ -57,6 +57,13 @@ namespace Gameplay.Camera
                 liftGammaGain.gamma.overrideState = true;
                 liftGammaGain.gamma.value = new Vector4(gamma, gamma, gamma, gamma);
             }
+            
+            if (SaveManager.Instance.SaveData.PreferenceData.TryGetValue(SettingId.MotionBlur, out bool isMotionBlurEnabled) &&
+                volume.profile != null &&
+                volume.profile.TryGet<MotionBlur>(out var motionBlur))
+            {
+                motionBlur.active = isMotionBlurEnabled;
+            }
         }
 
         private void OnDestroy()

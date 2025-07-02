@@ -6,10 +6,10 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class ExtendedSlider : Slider
+    public class ExtendedToggle : Toggle
     {
-        public event Action<ExtendedSlider> OnHover;
-        public event Action<ExtendedSlider> OnUnhover;
+        public event Action<ExtendedToggle> OnHover;
+        public event Action<ExtendedToggle> OnUnhover;
 
         protected override void Awake()
         {
@@ -32,6 +32,32 @@ namespace UI
             var tempNavigation = navigation;
             tempNavigation.mode = navigationMode;
             navigation = tempNavigation;
+        }
+        
+        public override void OnSubmit(BaseEventData eventData)
+        {
+            // play sfx before calling base method in case clicking the button deactivates it
+            if (interactable)
+            {
+                AudioManager.Instance.Play(AudioClipIdentifier.ButtonClick);
+            }
+            
+            base.OnSubmit(eventData);
+        }
+
+        public override void OnPointerClick(PointerEventData eventData)
+        {
+            // play sfx before calling base method in case clicking the button deactivates it
+            if (interactable)
+            {
+                AudioManager.Instance.Play(AudioClipIdentifier.ButtonClick);
+            }
+            else
+            {
+                AudioManager.Instance.Play(AudioClipIdentifier.ButtonDenied);
+            }
+            
+            base.OnPointerClick(eventData);
         }
 
         public override void OnSelect(BaseEventData eventData)

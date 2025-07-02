@@ -227,9 +227,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 725729f5a8ab3f64db86e50f1cd46568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cheapMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   horizontalSpeed: -1
-  despawnPosition: -100
-  respawnPosition: 150
+  leftEnd: 0
+  rightEnd: 0
 --- !u!1001 &117445538240575030
 PrefabInstance:
   m_ObjectHideFlags: 0
