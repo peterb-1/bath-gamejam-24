@@ -59,7 +59,6 @@ namespace Gameplay.Boss
         {
             if ((playerLayers.value & (1 << other.gameObject.layer)) != 0)
             {
-                
                 if (bossMovementBehaviour.IsDamageable() && playerMovementBehaviour.IsDashing
                     && playerMovementBehaviour.Velocity.x > 0f)
                 {

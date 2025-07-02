@@ -11,38 +11,34 @@ namespace Gameplay.Boss
     public class BossMovementBehaviour : MonoBehaviour
     {
         [SerializeField] 
-        private BezierCurve bezierCurve;
-        
-        [SerializeField] 
-        private int curveSegmentCount;
-        
-        [SerializeField] 
         private List<BossWaitPoint> waitPoints;
         
         [SerializeField]
         private float damageProgressThreshold;
-        
-        [SerializeField]
-        private AnimationCurve movementCurve;
-        
-        [SerializeField]
-        private AnimationCurve recoilCurve;
-        
+
         [SerializeField]
         private float cycleDuration;
         
         [SerializeField]
         private float cycleAmplitude;
 
+        [SerializeField]
+        private float progressTimeBuffer;
+
+        [SerializeField]
+        private GameObject movementCurves;
+
         private PlayerMovementBehaviour playerMovementBehaviour;
         
         private float progress;
+        private float progressTimer;
+        private bool progressTimerActive;
         private int nextPointIndex;
         private bool isAlive = true;
 
         private float currentCycleTime;
 
-        public event Action<BossMovementBehaviour> onBossProgress;
+        public event Action<BossMovementBehaviour> OnBossProgress;
 
         private async void Awake()
         {
@@ -51,54 +47,57 @@ namespace Gameplay.Boss
             playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
             
             progress = 0f;
+            progressTimer = -progressTimeBuffer;
             nextPointIndex = 0;
         }
 
         public void IncrementProgress()
         {
-            nextPointIndex++;
             progress = 0f;
-            onBossProgress?.Invoke(this);
+            progressTimer = -progressTimeBuffer;
+            progressTimerActive = false;
+            OnBossProgress?.Invoke(this);
+            nextPointIndex++;    
         }
         
         private void Update()
         {
             if (!isAlive) return;
 
-            currentCycleTime += Time.deltaTime;
-            
-            if (!waitPoints[nextPointIndex].IsDamagePoint)
+            if (waitPoints[nextPointIndex].ProgressType == BossWaitPoint.BossProgressType.Timed)
             {
-                if (playerMovementBehaviour.transform.position.x >
-                    waitPoints[nextPointIndex].PlayerThreshold.position.x)
+                if (progressTimer >= waitPoints[nextPointIndex].TimeToProgress)
                 {
                     IncrementProgress();
                 }
             }
+            
+            if (progressTimerActive)
+            {
+                progressTimer += Time.deltaTime;
+            }
+            currentCycleTime += Time.deltaTime;
 
             var cycleOffset = cycleAmplitude * Mathf.Sin(currentCycleTime * Mathf.PI * 2 / cycleDuration) * Vector3.up;
             
             if (nextPointIndex == 0)
             {
-                transform.position = bezierCurve.GetPoint(0f) + cycleOffset;
+                transform.position = waitPoints[0].Curve.GetPoint(0f) + cycleOffset;
                 return;
             }
             
             if (progress < 1f)
             {
-                progress += Time.deltaTime / waitPoints[nextPointIndex].Time;
+                progress += Time.deltaTime / waitPoints[nextPointIndex - 1].Time;
+            }
+            else
+            {
+                progressTimerActive = true;
             }
             
-            progress = Mathf.Min(progress, 1);
-            
-            var smoothedProgress = (waitPoints[nextPointIndex - 1].IsDamagePoint ?
-                recoilCurve : movementCurve).Evaluate(progress);
-            
-            // scale progress to between the 2 current endpoints
-            var t = waitPoints[nextPointIndex - 1].CurveProgress + 
-                    (smoothedProgress * (waitPoints[nextPointIndex].CurveProgress - waitPoints[nextPointIndex - 1].CurveProgress));
-            transform.position = bezierCurve.GetPoint(t);
-            
+            progress = Mathf.Min(progress, 1f);
+ 
+            transform.position = waitPoints[nextPointIndex - 1].Curve.GetPoint(progress);
             transform.position += cycleOffset;
         }
 
@@ -107,7 +106,7 @@ namespace Gameplay.Boss
             var health = 0;
             foreach (var waitPoint in waitPoints)
             {
-                if (waitPoint.IsDamagePoint)
+                if (waitPoint.ProgressType == BossWaitPoint.BossProgressType.Damage)
                 {
                     health++;
                 }
@@ -123,85 +122,38 @@ namespace Gameplay.Boss
 
         public bool IsDamageable()
         {
-            return waitPoints[nextPointIndex].IsDamagePoint && progress >= damageProgressThreshold;
+            return waitPoints[nextPointIndex].ProgressType == BossWaitPoint.BossProgressType.Damage
+                   && progress >= damageProgressThreshold;
         }
         
 
 #if UNITY_EDITOR
-
-        [Button("Add Control Point")]
-        private void AddControlPoint()
-        {
-            var newPoint = new GameObject("ControlPoint");
-            newPoint.transform.parent = transform;
-            
-            bezierCurve.AddPoint(newPoint.transform);
-        }
-
-        [Button("Clear Points")]
-        private void ClearPoints()
-        {
-            for (var i = transform.childCount - 1; i >= 0; i--)
-            {
-                var child = transform.GetChild(i);
-
-                if (child.name == "ControlPoint")
-                {
-                    DestroyImmediate(transform.GetChild(i).gameObject);
-                }
-            }
-            
-            bezierCurve.Clear();
-        }
         
-        private void OnDrawGizmos()
+        [Button("Add Curve")]
+        private void AddCurve()
         {
-            Gizmos.color = Color.green;
+            var newCurve = new GameObject("MovementCurve");
+            newCurve.AddComponent<BossMovementCurve>();
+            newCurve.transform.parent = movementCurves.transform;
 
-            Transform previousPoint = null;
+            var waitPoint = new BossWaitPoint(newCurve.GetComponent<BossMovementCurve>());
+            waitPoints.Add(waitPoint);
+        }
 
-            foreach (var point in bezierCurve.GetPoints())
+        [Button("Clear Curves")]
+        private void ClearCurves()
+        {
+            for (var i = movementCurves.transform.childCount - 1; i >= 0; i--)
             {
-                Gizmos.DrawSphere(point.position, 0.15f);
+                var child = movementCurves.transform.GetChild(i);
 
-                if (previousPoint != null)
+                if (child.name == "MovementCurve")
                 {
-                    Gizmos.DrawLine(previousPoint.position, point.position);
-                }
-                
-                previousPoint = point;
-            }
-            
-            Gizmos.color = Color.magenta;
-            
-            Vector3 previousPosition = Vector3.negativeInfinity;
-
-            foreach (var position in bezierCurve.GenerateCurvePoints(curveSegmentCount).ToArray())
-            {
-                if (previousPosition != Vector3.negativeInfinity)
-                {
-                    Gizmos.DrawLine(previousPosition, position);
-                }
-                
-                previousPosition = position;
-            }
-
-            foreach (var waitPoint in waitPoints)
-            {
-                Gizmos.DrawSphere(bezierCurve.GetPoint(waitPoint.CurveProgress), 0.15f);
-            }
-            
-            Gizmos.color = Color.yellow;
-
-            foreach (var waitPoint in waitPoints)
-            {
-                if (!waitPoint.IsDamagePoint)
-                {
-                    Vector2 bottom = new Vector2(waitPoint.PlayerThreshold.position.x, -50f);
-                    Vector2 top = new Vector2(waitPoint.PlayerThreshold.position.x, 50f);
-                    Gizmos.DrawLine(bottom, top);
+                    DestroyImmediate(movementCurves.transform.GetChild(i).gameObject);
                 }
             }
+            
+            waitPoints.Clear();
         }
 #endif
     }

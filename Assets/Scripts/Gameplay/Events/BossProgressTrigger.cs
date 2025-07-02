@@ -13,7 +13,7 @@ namespace Gameplay.Events
         
         private void Awake()
         {
-            bossMovementBehaviour.onBossProgress += TryTriggerEvent;
+            bossMovementBehaviour.OnBossProgress += TryTriggerEvent;
         }
 
         private void TryTriggerEvent(BossMovementBehaviour boss)

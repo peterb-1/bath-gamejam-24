@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using Gameplay.Player;
+using UnityEngine;
 
 namespace Gameplay.Events
 {

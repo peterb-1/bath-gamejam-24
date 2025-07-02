@@ -185,6 +185,7 @@ namespace Gameplay.Player
         public Vector2 Velocity => isHooked ? ziplineVelocity : rigidBody.linearVelocity;
         public bool IsDashing => dashCountdown > 0f;
         public bool IsHooked => isHooked;
+        public bool IsOnGround => isGrounded;
 
         private Vector3 ziplineLocalStartOffset;
         private Vector2 lastZiplinePosition;
