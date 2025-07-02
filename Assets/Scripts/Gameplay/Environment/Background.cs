@@ -14,7 +14,7 @@ namespace Gameplay.Environment
         private void Awake()
         {
             if (SaveManager.Instance.SaveData.PreferenceData.TryGetValue(SettingId.FogQuality, out FogQuality fogQuality) &&
-                fogQuality is FogQuality.Low)
+                fogQuality is not FogQuality.High)
             {
                 spriteRenderer.material = lowQualityMaterial;
             }

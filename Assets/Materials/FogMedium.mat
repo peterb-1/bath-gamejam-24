@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Background02
+  m_Name: FogMedium
   m_Shader: {fileID: 4800000, guid: d53b735d648e4e1083d8ee9b063a0659, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -42,19 +42,19 @@ Material:
     m_Ints: []
     m_Floats:
     - _EnableExternalAlpha: 0
-    - _MainTexStrength: 0.735
-    - _NoiseScale: 108.13
-    - _StarIntensity: 0.3
-    - _StarSpeed: 3.25
-    - _SwirlScale: 5.09
-    - _SwirlSpeed: 0.3
-    - _SwirlStrength: 1.77
-    - _TwinkleAmount: 0.591
+    - _MainTexStrength: 0.773
+    - _NoiseScale: 120.8
+    - _StarIntensity: 4.89
+    - _StarSpeed: 0.74
+    - _SwirlScale: 9.95
+    - _SwirlSpeed: 0.2
+    - _SwirlStrength: 2
+    - _TwinkleAmount: 1
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
+    - _Color: {r: 0.23765622, g: 0.20278569, b: 0.2924528, a: 0.6117647}
     - _GradientBottomColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GradientTopColor: {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 1}
+    - _GradientTopColor: {r: 0.7696011, g: 0.44139376, b: 0.8584906, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

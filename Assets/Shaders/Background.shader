@@ -1,4 +1,4 @@
-﻿Shader "Custom/Background01"
+﻿Shader "Custom/Background"
 {
     Properties
     {

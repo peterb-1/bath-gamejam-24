@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Fog
+  m_Name: FogHigh
   m_Shader: {fileID: 4800000, guid: 90ce4603483f49f7820baaaaf6b45c02, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -68,9 +68,9 @@ Material:
     - _StarGlow: 4.74
     - _StarIntensity: 3.2
     - _StarLayerSpeed: 1.81
-    - _StarMaxSize: 0.0555
+    - _StarMaxSize: 0.05
     - _StarMinSize: 0.005
-    - _StarSizeVariation: 0.389
+    - _StarSizeVariation: 0.27
     - _StarSpeed: 0.1
     - _StarVisibleTime: 0.283
     - _SwirlDistortion: 0

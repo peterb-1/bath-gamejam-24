@@ -76,8 +76,8 @@ Material:
     - _SwirlDistortion: 0.566
     - _SwirlLayers: 4
     - _SwirlScale: 6.42
-    - _SwirlSpeed: 0.55
-    - _SwirlStrength: 1.697
+    - _SwirlSpeed: 0.4
+    - _SwirlStrength: 2
     - _TwinkleAmount: 1
     - _UVSwirlAmount: 0.5
     - _Vignette: 0.177
@@ -88,7 +88,7 @@ Material:
     - _ZWrite: 0
     m_Colors:
     - _CloudsColor: {r: 0.19999996, g: 0.29999998, b: 0.7, a: 1}
-    - _Color: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
+    - _Color: {r: 0.23584908, g: 0.23584908, b: 0.23584908, a: 1}
     - _DustColor: {r: 0.39999998, g: 0.29999998, b: 0.6, a: 1}
     - _GradientBottomColor: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
     - _GradientTopColor: {r: 1, g: 1, b: 1, a: 1}
