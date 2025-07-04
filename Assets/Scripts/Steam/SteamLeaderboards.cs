@@ -20,7 +20,7 @@ namespace Steam
         public static SteamLeaderboards Instance { get; private set; }
         
         private readonly Dictionary<LevelConfig, SteamLeaderboard_t> leaderboardLookup = new();
-        private readonly Queue<(LevelConfig, LevelData)> uploadQueue = new();
+        private readonly List<(LevelConfig, LevelData)> uploadQueue = new();
         
         private Callback<DownloadItemResult_t> downloadCallback;
         private UniTaskCompletionSource<GhostRun> ghostDownloadTcs;
@@ -132,7 +132,7 @@ namespace Steam
             
             GameLogger.Log($"Queueing score upload for {levelConfig.GetSteamName()}...", this);
             
-            uploadQueue.Enqueue((levelConfig, levelData));
+            uploadQueue.Add((levelConfig, levelData));
                 
             if (!isUploading)
             {
@@ -146,7 +146,14 @@ namespace Steam
 
             while (uploadQueue.Count > 0)
             {
-                var (levelConfig, levelData) = uploadQueue.Dequeue();
+                // if this fails, it will return default value (most recent)
+                SaveManager.Instance.SaveData.PreferenceData.TryGetValue(SettingId.LeaderboardPriority, out LeaderboardPriority priority);
+                
+                var index = priority is LeaderboardPriority.Newest ? uploadQueue.Count - 1 : 0;
+                var (levelConfig, levelData) = uploadQueue[index];
+                
+                uploadQueue.RemoveAt(index);
+                
                 var timeSincePreviousUpload = (DateTime.UtcNow - lastUploadTime).TotalSeconds;
                 
                 if (timeSincePreviousUpload < UPLOAD_COOLDOWN)

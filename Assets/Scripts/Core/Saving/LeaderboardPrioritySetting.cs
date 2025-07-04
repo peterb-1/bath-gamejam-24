@@ -7,7 +7,7 @@ namespace Core.Saving
     
     public enum LeaderboardPriority
     {
-        MostRecent,
+        Newest,
         Oldest
     }
 }

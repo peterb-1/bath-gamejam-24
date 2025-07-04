@@ -20,4 +20,4 @@ MonoBehaviour:
 
     Higher settings may significantly impact performance on systems
     without a dedicated graphics card.'
-  <DefaultValue>k__BackingField: 1
+  <DefaultValue>k__BackingField: 0

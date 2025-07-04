@@ -16,9 +16,6 @@ namespace UI
         private Animator titleScreenAnimator;
 
         [SerializeField] 
-        private SpriteRenderer fogSpriteRenderer;
-        
-        [SerializeField] 
         private SpriteRenderer logoSpriteRenderer;
         
         [SerializeField] 
@@ -51,18 +48,13 @@ namespace UI
         [SerializeField] 
         private float sceneSwitchWaitDuration;
         
-        [SerializeField] 
-        private float activeStarIntensity;
-        
         private static readonly int ShowTitle = Animator.StringToHash("ShowTitle");
         private static readonly int SwitchScene = Animator.StringToHash("SwitchScene");
-        private static readonly int StarIntensity = Shader.PropertyToID("_StarIntensity");
         private static readonly int Threshold = Shader.PropertyToID("_Threshold");
 
         private async void Awake()
         {
             logoSpriteRenderer.material.SetFloat(Threshold, 1f);
-            fogSpriteRenderer.material.SetFloat(StarIntensity, 0f);
 
             var buildInfo = Resources.Load<TextAsset>(BuildInfoGenerator.BUILD_INFO_PATH);
             var hash = buildInfo == null ? "unknown" : buildInfo.text;
@@ -106,7 +98,6 @@ namespace UI
             
             titlePageGroup.ShowGroupImmediate();
             titleScreenAnimator.SetTrigger(ShowTitle);
-            fogSpriteRenderer.material.SetFloat(StarIntensity, activeStarIntensity);
             
             RumbleManager.Instance.Rumble(titleDisplayRumbleConfig);
             AudioManager.Instance.PlayMusic(MusicIdentifier.MainMenu);

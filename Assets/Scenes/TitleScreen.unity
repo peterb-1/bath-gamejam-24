@@ -560,8 +560,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 533412334440249633, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 7207238760451034012, guid: 80f315fc502c0ee4fb369a4612d420b2, type: 2}
+    - target: {fileID: 533412334440249633, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 1703051906
+      objectReference: {fileID: 0}
+    - target: {fileID: 533412334440249633, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1893996033785309299, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 7207238760451034012, guid: 80f315fc502c0ee4fb369a4612d420b2, type: 2}
+    - target: {fileID: 1893996033785309299, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2487934293046943400, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -607,21 +623,25 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 976931766}
+    - target: {fileID: 2994236985940488420, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 7207238760451034012, guid: 80f315fc502c0ee4fb369a4612d420b2, type: 2}
+    - target: {fileID: 2994236985940488420, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3111422457890281092, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6630497869256619502, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
       propertyPath: m_Name
       value: TitleScreen
       objectReference: {fileID: 0}
     - target: {fileID: 6954360931917596841, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 6c0aba45c5b11d74f871c56e65db6ead, type: 2}
-    - target: {fileID: 6954360931917596841, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 1173008733563402642, guid: 6c0aba45c5b11d74f871c56e65db6ead, type: 2}
-    - target: {fileID: 6954360931917596841, guid: 020d3d370e58bb644ad49272b126355b, type: 3}
-      propertyPath: m_hasFontAssetChanged
-      value: 0
+      propertyPath: m_fontColor32.rgba
+      value: 4294950853
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -768,6 +788,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5152675351177274907, guid: b8bd5a5f7c0ded94a9ddd3cf77b65a12, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7926868921363108865, guid: b8bd5a5f7c0ded94a9ddd3cf77b65a12, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 7207238760451034012, guid: 80f315fc502c0ee4fb369a4612d420b2, type: 2}
+    - target: {fileID: 7926868921363108865, guid: b8bd5a5f7c0ded94a9ddd3cf77b65a12, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8381887941778345989, guid: b8bd5a5f7c0ded94a9ddd3cf77b65a12, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 7207238760451034012, guid: 80f315fc502c0ee4fb369a4612d420b2, type: 2}
+    - target: {fileID: 8381887941778345989, guid: b8bd5a5f7c0ded94a9ddd3cf77b65a12, type: 3}
+      propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9006504438788008211, guid: b8bd5a5f7c0ded94a9ddd3cf77b65a12, type: 3}

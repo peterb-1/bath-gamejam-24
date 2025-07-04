@@ -15,6 +15,6 @@ MonoBehaviour:
   <SettingId>k__BackingField: 11
   <DisplayName>k__BackingField: Gamma
   <Description>k__BackingField: Adjusts the brightness of dark areas of the screen.
-  <DefaultValue>k__BackingField: -0.15
+  <DefaultValue>k__BackingField: -0.2
   <Min>k__BackingField: -0.4
-  <Max>k__BackingField: 0.1
+  <Max>k__BackingField: 0

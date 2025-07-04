@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf11e0fcc2fc4de296490aa982090605, type: 3}
+  m_Name: LeaderboardPriority
+  m_EditorClassIdentifier: 
+  <SettingId>k__BackingField: 7
+  <DisplayName>k__BackingField: Leaderboard Upload
+  <Description>k__BackingField: Leaderboard uploads are rate-limited by Steam. When
+    you have multiple scores awaiting upload, this setting determines whether to
+    prioritise posting recent scores or older ones.
+  <DefaultValue>k__BackingField: 0
