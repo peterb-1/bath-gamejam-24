@@ -113,6 +113,7 @@ namespace UI
             var ghostContext = new GhostContext(downloadedGhostData, ghostTime);
             
             sceneLoadContext.SetCustomData(GhostRunner.GHOST_DATA_KEY, ghostContext);
+            sceneLoadContext.SetCustomData(GhostRunner.LOAD_FROM_LEADERBOARD_KEY, true);
             
             SceneLoader.Instance.LoadScene(currentSceneConfig, sceneLoadContext);
         }

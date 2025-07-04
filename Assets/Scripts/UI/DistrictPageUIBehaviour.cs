@@ -114,7 +114,7 @@ namespace UI
                     panelCount++;
                 }
 
-                if (levelConfig.IsHidden)
+                if (levelConfig.LevelType is LevelType.Hidden)
                 {
                     satelliteBehaviour.transform.position = button.transform.position;
                     

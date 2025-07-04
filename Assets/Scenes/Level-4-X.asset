@@ -18,7 +18,7 @@ MonoBehaviour:
   <LevelConfig>k__BackingField:
     <Guid>k__BackingField: 4c6755ee-24dc-46f1-ae07-8ee52bf4b52e
     districtNumber: 4
-    <IsHidden>k__BackingField: 1
+    <LevelType>k__BackingField: 1
     missionNumber: 9
     <IsUnlockedByDefault>k__BackingField: 0
     <HasCollectible>k__BackingField: 0

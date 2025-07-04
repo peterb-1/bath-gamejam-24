@@ -18,7 +18,7 @@
         AntiAliasing,
         VSync,
         Resolution,
-        Windowed,
+        Fullscreen,
         FancyClouds
     }
 }

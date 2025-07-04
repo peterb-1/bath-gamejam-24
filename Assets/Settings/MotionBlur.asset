@@ -14,10 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <SettingId>k__BackingField: 9
   <DisplayName>k__BackingField: Motion Blur
-  <Description>k__BackingField: 'Determines whether or not to apply a blurring effect
-    to the image when moving at high speeds.
+  <Description>k__BackingField: 'Applies a blurring effect to the image when moving
+    at high speeds.
 
 
-    This setting has a small impact
-    on performance.'
+    This setting has a small impact on performance.'
   <DefaultValue>k__BackingField: 1

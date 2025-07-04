@@ -1,6 +1,7 @@
 using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
+using Gameplay.Core;
 
 namespace Gameplay.Achievements
 {
@@ -16,7 +17,7 @@ namespace Gameplay.Achievements
                 
                 if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(sceneConfig.LevelConfig, out var levelData) && 
                     levelData.IsUnlocked && 
-                    sceneConfig.LevelConfig.IsHidden)
+                    sceneConfig.LevelConfig.LevelType is LevelType.Hidden)
                 {
                     TriggerAchievement();
                 }

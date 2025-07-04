@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Core;
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
 using Gameplay.Core;
@@ -11,6 +12,7 @@ namespace Gameplay.Ghosts
     public class GhostRunner : MonoBehaviour
     {
         public const string GHOST_DATA_KEY = "GhostData";
+        public const string LOAD_FROM_LEADERBOARD_KEY = "LocalViaLeaderboard";
         
         [SerializeField]
         private SpriteRenderer spriteRenderer;
@@ -49,7 +51,19 @@ namespace Gameplay.Ghosts
                 ghostRun = ghostContext.GhostRun;
             }
 
-            if (ghostRun == null && SceneLoader.Instance.CurrentLevelData is { GhostData: not null })
+            var shouldLoadLocalGhost = false;
+
+            if (SceneLoader.Instance.SceneLoadContext != null)
+            {
+                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(LOAD_FROM_LEADERBOARD_KEY, out shouldLoadLocalGhost);
+            }
+
+            if (SaveManager.Instance.SaveData.PreferenceData.TryGetValue(SettingId.LocalGhost, out bool areLocalGhostsEnabled))
+            {
+                shouldLoadLocalGhost |= areLocalGhostsEnabled;
+            }
+
+            if (shouldLoadLocalGhost && ghostRun == null && SceneLoader.Instance.CurrentLevelData is { GhostData: not null })
             {
                 ghostRun = GhostCompressor.Deserialize(SceneLoader.Instance.CurrentLevelData.GhostData);
             }

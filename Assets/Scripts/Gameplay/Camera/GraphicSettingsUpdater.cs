@@ -18,6 +18,8 @@ namespace Gameplay.Camera
             SaveManager.Instance.SaveData.PreferenceData.OnSettingChanged += HandleSettingChanged;
             
             InitialiseSetting(SettingId.RenderScale);
+            InitialiseSetting(SettingId.Fullscreen);
+            InitialiseSetting(SettingId.VSync);
         }
         
         private void InitialiseSetting(SettingId settingId)
@@ -43,6 +45,18 @@ namespace Gameplay.Camera
                             RenderScale.Ultra => 1.5f,
                             _ => throw new ArgumentOutOfRangeException()
                         };
+                    }
+                    break;
+                case SettingId.Fullscreen:
+                    if (value is bool isFullscreen)
+                    {
+                        Screen.fullScreenMode = isFullscreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
+                    }
+                    break;
+                case SettingId.VSync:
+                    if (value is bool isVSyncEnabled)
+                    {
+                        QualitySettings.vSyncCount = isVSyncEnabled ? 1 : 0;
                     }
                     break;
             }

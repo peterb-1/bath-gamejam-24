@@ -14,15 +14,15 @@ namespace Gameplay.Core
         private int districtNumber;
         
         [field: SerializeField]
-        public bool IsHidden { get; private set; }
+        public LevelType LevelType { get; private set; }
 
-        [SerializeField, HideIf(nameof(IsHidden)), AllowNesting] 
+        [SerializeField, HideIf(nameof(ShouldHideFields)), AllowNesting] 
         private int missionNumber;
 
-        [field: SerializeField, HideIf(nameof(IsHidden)), AllowNesting]
+        [field: SerializeField, HideIf(nameof(ShouldHideFields)), AllowNesting]
         public bool IsUnlockedByDefault { get; private set; }
         
-        [field: SerializeField, HideIf(nameof(IsHidden)), AllowNesting]
+        [field: SerializeField, HideIf(nameof(ShouldHideFields)), AllowNesting]
         public bool HasCollectible { get; private set; }
 
         [SerializeField] 
@@ -45,7 +45,7 @@ namespace Gameplay.Core
         public float ThreeStarTime => threeStarTime;
         public float RainbowTime => rainbowTime;
 
-        private string MissionCode => IsHidden ? "X" : missionNumber.ToString();
+        private bool ShouldHideFields => LevelType is LevelType.Hidden or LevelType.Boss;
 
         public TimeRanking GetTimeRanking(float time)
         {
@@ -64,22 +64,33 @@ namespace Gameplay.Core
         
         public string GetLevelCode()
         {
-            return $"{GetRomanNumeral(districtNumber)}-{MissionCode}";
+            return $"{GetRomanNumeral(districtNumber)}-{GetMissionCode()}";
         }
         
         public string GetLevelText()
         {
-            return $"{GetDistrictName(districtNumber)}  —  Mission {MissionCode}";
+            return $"{GetDistrictName(districtNumber)}  —  Mission {GetMissionCode()}";
         }
 
         public string GetSteamName()
         {
-            return $"{districtNumber}-{MissionCode}";
+            return $"{districtNumber}-{GetMissionCode()}";
         }
         
         public string GetSteamGhostFileName()
         {
-            return $"{districtNumber}_{MissionCode}_ghost";
+            return $"{districtNumber}_{GetMissionCode()}_ghost";
+        }
+        
+        private string GetMissionCode()
+        {
+            return LevelType switch
+            {
+                LevelType.Standard => missionNumber.ToString(),
+                LevelType.Hidden => "X",
+                LevelType.Boss => "B",
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
 
         public static string GetRomanNumeral(int i)

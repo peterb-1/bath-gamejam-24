@@ -103,7 +103,7 @@ namespace UI
 
                     if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(levelConfig, out var levelData) && levelData.IsUnlocked)
                     {
-                        if (levelConfig.IsHidden)
+                        if (levelConfig.LevelType is LevelType.Hidden)
                         {
                             hiddenSceneConfig = sceneConfig;
                         }

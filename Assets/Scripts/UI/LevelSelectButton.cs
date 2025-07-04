@@ -1,6 +1,7 @@
 using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
+using Gameplay.Core;
 using Gameplay.Input;
 using TMPro;
 using UnityEngine;
@@ -44,7 +45,7 @@ namespace UI
         private static readonly int Selected = Animator.StringToHash("Selected");
         private static readonly int FullFadeIn = Animator.StringToHash("FullFadeIn");
 
-        public bool IsHidden() => SceneConfig.LevelConfig.IsHidden;
+        public bool IsHidden() => SceneConfig.LevelConfig.LevelType is LevelType.Hidden;
 
         protected override void Awake()
         {

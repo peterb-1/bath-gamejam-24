@@ -1,3 +1,4 @@
+using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Player;
 using UnityEngine;
@@ -54,6 +55,7 @@ namespace Gameplay.Camera
         private Vector2 currentLookahead;
         private Vector2 lookaheadVelocity;
         
+        private bool isCameraShakeEnabled;
         private bool shouldOverridePosition;
         private bool shouldUseLookahead;
 
@@ -76,6 +78,8 @@ namespace Gameplay.Camera
 
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
             playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
+
+            SaveManager.Instance.SaveData.PreferenceData.TryGetValue(SettingId.CameraShake, out isCameraShakeEnabled);
         }
 
         private void HandleVictorySequenceStart(Vector2 position, float _)
@@ -105,7 +109,7 @@ namespace Gameplay.Camera
             rawPosition = Vector3.SmoothDamp(rawPosition, GetTargetPosition(), ref velocity, smoothTime);
             shakePosition = Vector3.SmoothDamp(shakePosition, shakeOffset, ref shakeVelocity, shakeSmoothTime);
 
-            transform.position = rawPosition + shakePosition;
+            transform.position = isCameraShakeEnabled ? rawPosition + shakePosition : rawPosition;
         }
 
         private Vector3 GetTargetPosition()

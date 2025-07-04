@@ -3323,14 +3323,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1184616001529765082, guid: 74075b5838bd21543bbd0d8d63e422a8, type: 3}
-      propertyPath: nextSceneConfig
-      value: 
-      objectReference: {fileID: 11400000, guid: a5df0169d87d21c459448efb34469885, type: 2}
-    - target: {fileID: 1184616001529765082, guid: 74075b5838bd21543bbd0d8d63e422a8, type: 3}
-      propertyPath: overrideNextSceneConfig
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1389942296723455415, guid: 74075b5838bd21543bbd0d8d63e422a8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -3785,7 +3777,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4999556759538620327, guid: 74075b5838bd21543bbd0d8d63e422a8, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1033.625
+      value: 1033.6458
       objectReference: {fileID: 0}
     - target: {fileID: 5068218857691470624, guid: 74075b5838bd21543bbd0d8d63e422a8, type: 3}
       propertyPath: m_AnchorMax.y

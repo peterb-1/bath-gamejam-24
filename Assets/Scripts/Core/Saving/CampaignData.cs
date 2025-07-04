@@ -77,7 +77,7 @@ namespace Core.Saving
                 
                 if (levelConfig.DistrictNumber != collectibleLevelConfig.DistrictNumber) continue;
 
-                if (levelConfig.IsHidden)
+                if (levelConfig.LevelType is LevelType.Hidden)
                 {
                     hiddenLevelConfig = levelConfig;
                     continue;
