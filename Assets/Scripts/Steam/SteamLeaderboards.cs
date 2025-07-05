@@ -146,6 +146,13 @@ namespace Steam
 
             while (uploadQueue.Count > 0)
             {
+                var timeSincePreviousUpload = (DateTime.UtcNow - lastUploadTime).TotalSeconds;
+                
+                if (timeSincePreviousUpload < UPLOAD_COOLDOWN)
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(UPLOAD_COOLDOWN - timeSincePreviousUpload));
+                }
+                
                 // if this fails, it will return default value (most recent)
                 SaveManager.Instance.SaveData.PreferenceData.TryGetValue(SettingId.LeaderboardPriority, out LeaderboardPriority priority);
                 
@@ -153,13 +160,6 @@ namespace Steam
                 var (levelConfig, levelData) = uploadQueue[index];
                 
                 uploadQueue.RemoveAt(index);
-                
-                var timeSincePreviousUpload = (DateTime.UtcNow - lastUploadTime).TotalSeconds;
-                
-                if (timeSincePreviousUpload < UPLOAD_COOLDOWN)
-                {
-                    await UniTask.Delay(TimeSpan.FromSeconds(UPLOAD_COOLDOWN - timeSincePreviousUpload));
-                }
                 
                 GameLogger.Log($"Processing score upload for {levelConfig.GetSteamName()}...", this);
 
