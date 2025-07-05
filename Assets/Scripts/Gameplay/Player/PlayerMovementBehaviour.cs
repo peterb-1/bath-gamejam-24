@@ -219,7 +219,6 @@ namespace Gameplay.Player
         private bool wasEjectedLeft;
         private bool hasLandedAtStart;
         private bool hasMovedLeft;
-        private bool movementEnabled;
 
         private HingeJoint2D hook;
         
@@ -249,7 +248,6 @@ namespace Gameplay.Player
 
             isGrounded = true;
             hasDoubleJumped = true;
-            movementEnabled = true;
             currentFallMultiplier = fallMultiplier;
         }
 
@@ -268,7 +266,6 @@ namespace Gameplay.Player
             if (hookCountdown > 0f) hookCountdown -= Time.deltaTime;
 
             if (isClimbingLedge) return;
-            if (!movementEnabled) return;
 
             var wasGrounded = isGrounded;
             var leftGroundPosition = leftGroundCheck.position;
@@ -418,7 +415,7 @@ namespace Gameplay.Player
         {
             if (isClimbingLedge) return;
             
-            var moveAmount = movementEnabled ? InputManager.MoveAmount : 0f;
+            var moveAmount = InputManager.MoveAmount;
             var desiredVelocity = moveAmount * moveSpeed;
 
             if (moveAmount < 0f)
@@ -426,7 +423,7 @@ namespace Gameplay.Player
                 hasMovedLeft = true;
             }
 
-            if (dashCountdown > 0f && movementEnabled)
+            if (dashCountdown > 0f)
             {
                 rigidBody.linearVelocity = new Vector2(dashForce * dashDirectionMultiplier, 0f);
             }
@@ -443,8 +440,6 @@ namespace Gameplay.Player
             {
                 rigidBody.linearVelocity += Vector2.up * (Physics2D.gravity.y * (currentFallMultiplier - 1f) * Time.deltaTime);
             }
-
-            if (!movementEnabled) return;
             
             var isMoving = Mathf.Abs(rigidBody.linearVelocityX) > runAnimationSpeedThreshold;
 
@@ -782,17 +777,6 @@ namespace Gameplay.Player
             rigidBody.gravityScale = 1f;
             boxCollider.enabled = true;
             isClimbingLedge = false;
-        }
-
-        public void SetMovementEnabled(bool isEnabled)
-        {
-            movementEnabled = isEnabled;
-            
-            if (!isEnabled)
-            {
-                playerAnimator.SetBool(IsRunning, false);
-            }
-            
         }
         
         private void HandleSceneLoadStart()

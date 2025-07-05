@@ -263,6 +263,38 @@ namespace Gameplay.Input
             yellowAction.action.Disable();
         }
 
+        public void EnableGameplayInputs()
+        {
+            AreInputsEnabled = true;
+            
+            startAction.action.Enable();
+            backAction.action.Enable();
+            moveAction.action.Enable();
+            jumpAction.action.Enable();
+            dropAction.action.Enable();
+            dashAction.action.Enable();
+            restartAction.action.Enable();
+            blueAction.action.Enable();
+            redAction.action.Enable();
+            yellowAction.action.Enable();
+        }
+        
+        public void DisableGameplayInputs()
+        {
+            AreInputsEnabled = false;
+            
+            startAction.action.Disable();
+            backAction.action.Disable();
+            moveAction.action.Disable();
+            jumpAction.action.Disable();
+            dropAction.action.Disable();
+            dashAction.action.Disable();
+            restartAction.action.Disable();
+            blueAction.action.Disable();
+            redAction.action.Disable();
+            yellowAction.action.Disable();
+        }
+        
         private void SubscribeToInputCallbacks()
         {
             startAction.action.performed += HandleStartPerformed;
