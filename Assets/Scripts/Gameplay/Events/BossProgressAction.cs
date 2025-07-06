@@ -12,7 +12,7 @@ namespace Gameplay.Events
         
         public override async UniTask Execute()
         {
-            bossMovementBehaviour.IncrementProgress();
+            bossMovementBehaviour.QueueIncrementProgress();
         }
     }
 }

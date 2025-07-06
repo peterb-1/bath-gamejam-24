@@ -34,6 +34,7 @@ namespace Gameplay.Boss
         private float progressTimer;
         private bool progressTimerActive;
         private int nextPointIndex;
+        private int eventsQueued;
         private bool isAlive = true;
 
         private float currentCycleTime;
@@ -49,6 +50,7 @@ namespace Gameplay.Boss
             progress = 0f;
             progressTimer = -progressTimeBuffer;
             nextPointIndex = 0;
+            eventsQueued = 0;
         }
 
         public void IncrementProgress()
@@ -59,16 +61,35 @@ namespace Gameplay.Boss
             OnBossProgress?.Invoke(this);
             nextPointIndex++;    
         }
+
+        // Queue the event instead of immediately triggering
+        // as a failsafe for if the player activates events out of order
+        public void QueueIncrementProgress()
+        {
+            eventsQueued++;
+        }
         
         private void Update()
         {
             if (!isAlive) return;
 
+            // Increment on timed point
             if (waitPoints[nextPointIndex].ProgressType == BossWaitPoint.BossProgressType.Timed)
             {
                 if (progressTimer >= waitPoints[nextPointIndex].TimeToProgress)
                 {
                     IncrementProgress();
+                }
+            }
+            
+            // Increment if event is queued
+            if (waitPoints[nextPointIndex].ProgressType == BossWaitPoint.BossProgressType.Event
+                && (progress >= 1f || nextPointIndex == 0))
+            {
+                if (eventsQueued > 0)
+                {
+                    IncrementProgress();
+                    eventsQueued--;
                 }
             }
             
