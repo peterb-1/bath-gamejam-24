@@ -1,5 +1,4 @@
-﻿using System;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using Gameplay.Boss;
 using UnityEngine;
 
@@ -8,11 +7,13 @@ namespace Gameplay.Events
     public class BossProgressAction : AbstractEventAction
     {
         [SerializeField]
-        BossMovementBehaviour bossMovementBehaviour;
+        private BossMovementBehaviour bossMovementBehaviour;
         
-        public override async UniTask Execute()
+        public override UniTask Execute()
         {
             bossMovementBehaviour.QueueIncrementProgress();
+            
+            return UniTask.CompletedTask;
         }
     }
 }

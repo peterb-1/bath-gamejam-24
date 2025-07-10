@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using Gameplay.Player;
 using NaughtyAttributes;
 using UnityEngine;
-using Utils;
 
 namespace Gameplay.Boss
 {
@@ -27,8 +24,6 @@ namespace Gameplay.Boss
 
         [SerializeField]
         private GameObject movementCurves;
-
-        private PlayerMovementBehaviour playerMovementBehaviour;
         
         private float progress;
         private float progressTimer;
@@ -41,16 +36,9 @@ namespace Gameplay.Boss
 
         public event Action<BossMovementBehaviour> OnBossProgress;
 
-        private async void Awake()
+        private void Awake()
         {
-            await UniTask.WaitUntil(PlayerAccessService.IsReady);
-            
-            playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
-            
-            progress = 0f;
             progressTimer = -progressTimeBuffer;
-            nextPointIndex = 0;
-            eventsQueued = 0;
         }
 
         public void IncrementProgress()
@@ -58,7 +46,9 @@ namespace Gameplay.Boss
             progress = 0f;
             progressTimer = -progressTimeBuffer;
             progressTimerActive = false;
+            
             OnBossProgress?.Invoke(this);
+            
             nextPointIndex++;    
         }
 
@@ -97,6 +87,7 @@ namespace Gameplay.Boss
             {
                 progressTimer += Time.deltaTime;
             }
+            
             currentCycleTime += Time.deltaTime;
 
             var cycleOffset = cycleAmplitude * Mathf.Sin(currentCycleTime * Mathf.PI * 2 / cycleDuration) * Vector3.up;
@@ -117,14 +108,16 @@ namespace Gameplay.Boss
             }
             
             progress = Mathf.Min(progress, 1f);
- 
-            transform.position = waitPoints[nextPointIndex - 1].Curve.GetPoint(progress);
-            transform.position += cycleOffset;
+
+            var position = waitPoints[nextPointIndex - 1].Curve.GetPoint(progress);
+            
+            transform.position = position + cycleOffset;
         }
 
         public int GetMaxHealth()
         {
             var health = 0;
+            
             foreach (var waitPoint in waitPoints)
             {
                 if (waitPoint.ProgressType == BossWaitPoint.BossProgressType.Damage)
@@ -143,8 +136,8 @@ namespace Gameplay.Boss
 
         public bool IsDamageable()
         {
-            return waitPoints[nextPointIndex].ProgressType == BossWaitPoint.BossProgressType.Damage
-                   && progress >= damageProgressThreshold;
+            return waitPoints[nextPointIndex].ProgressType is BossWaitPoint.BossProgressType.Damage &&
+                   progress >= damageProgressThreshold;
         }
         
 

@@ -10,10 +10,12 @@ namespace Gameplay.Events
         [SerializeField]
         private float freezeDuration;
         
-        public async override UniTask Execute()
+        public override async UniTask Execute()
         {
             InputManager.Instance.DisableGameplayInputs();
+            
             await UniTask.Delay(TimeSpan.FromSeconds(freezeDuration));
+            
             InputManager.Instance.EnableGameplayInputs();
         }
     }

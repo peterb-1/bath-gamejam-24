@@ -66,7 +66,7 @@ namespace Gameplay.Boss
 
             Gizmos.color = Color.magenta;
 
-            Vector3 previousPosition = Vector3.negativeInfinity;
+            var previousPosition = Vector3.negativeInfinity;
 
             foreach (var position in bezierCurve.GenerateCurvePoints(curveSegmentCount).ToArray())
             {

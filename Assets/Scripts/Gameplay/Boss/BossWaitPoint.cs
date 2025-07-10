@@ -25,7 +25,7 @@ namespace Gameplay.Boss
         [field: SerializeField]
         public BossProgressType ProgressType { get; private set; }
         
-        [field: SerializeField, ShowIf("ProgressType", BossProgressType.Timed), AllowNesting]
+        [field: SerializeField, ShowIf(nameof(ProgressType), BossProgressType.Timed), AllowNesting]
         public float TimeToProgress { get; private set; }
 
         public BossWaitPoint(BossMovementCurve curve)
