@@ -18,6 +18,7 @@ namespace Gameplay.Dash
         [SerializeField] 
         private int maxOrbCapacity;
 
+        private readonly HashSet<DashOrb> registeredOrbs = new();
         private readonly HashSet<DashOrb> collectedOrbs = new();
         private PlayerMovementBehaviour playerMovementBehaviour;
         private int currentOrbs;
@@ -25,7 +26,7 @@ namespace Gameplay.Dash
         public bool HasFullOrbCapacity => currentOrbs == maxOrbCapacity;
         public static DashTrackerService Instance { get; private set; }
         
-        public static event Action<int> OnDashGained;
+        public static event Action<int, DashOrb> OnDashGained;
         public static event Action<int> OnDashUsed;
         public static event Action OnDashFailed;
         
@@ -50,6 +51,13 @@ namespace Gameplay.Dash
             
             playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
         }
+        
+        public static bool IsReady() => Instance != null;
+        
+        public void RegisterDash(DashOrb orb)
+        {
+            registeredOrbs.Add(orb);
+        }
 
         private void HandleDashPerformed()
         {
@@ -71,6 +79,17 @@ namespace Gameplay.Dash
             }
         }
 
+        public void NotifyGhostPerformedDash()
+        {
+            if (currentOrbs <= 0) return;
+            
+            currentOrbs--;
+            
+            AudioManager.Instance.Play(AudioClipIdentifier.Dash);
+                
+            OnDashUsed?.Invoke(currentOrbs);
+        }
+
         public bool TryCollect(DashOrb dashOrb)
         {
             if (currentOrbs >= maxOrbCapacity || collectedOrbs.Contains(dashOrb))
@@ -83,14 +102,22 @@ namespace Gameplay.Dash
             collectedOrbs.Add(dashOrb);
             currentOrbs++;
 
-            OnDashGained?.Invoke(currentOrbs);
+            OnDashGained?.Invoke(currentOrbs, dashOrb);
             
             return true;
         }
         
         public void TryCollectFromSpectatorGhost(ushort orbId)
         {
-            
+            foreach (var orb in registeredOrbs)
+            {
+                if (orb.Id == orbId)
+                {
+                    TryCollect(orb);
+
+                    orb.NotifyCollectedByGhost();
+                }
+            }
         }
 
         private void OnDestroy()

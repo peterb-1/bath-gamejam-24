@@ -1,6 +1,7 @@
 ﻿using Audio;
 using Core;
 using Cysharp.Threading.Tasks;
+using Gameplay.Ghosts;
 using Gameplay.Player;
 using UnityEngine;
 
@@ -43,10 +44,17 @@ namespace Gameplay.Collectibles
         private async void Awake()
         {
             await UniTask.WaitUntil(SceneLoader.IsReady);
+
+            var isSpectating = false;
+            
+            if (SceneLoader.Instance.SceneLoadContext != null)
+            {
+                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GhostRunner.SPECTATE_KEY, out isSpectating);
+            }
             
             hasAlreadyBeenFound = SceneLoader.Instance.CurrentLevelData.HasFoundCollectible;
             
-            if (hasAlreadyBeenFound)
+            if (hasAlreadyBeenFound && !isSpectating)
             {
                 spriteRenderer.material.SetFloat(AlphaMult, alreadyFoundAlpha);
                 backgroundRenderer.enabled = false;
@@ -57,6 +65,8 @@ namespace Gameplay.Collectibles
                 colour.a = alreadyFoundAlpha;
                 main.startColor = colour;
             }
+
+            GhostRunner.OnGhostFoundCollectible += HandleGhostFoundCollectible;
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -66,11 +76,19 @@ namespace Gameplay.Collectibles
                 collectionCollider.enabled = false;
                 
                 PlayerAccessService.Instance.PlayerVictoryBehaviour.NotifyFoundCollectible();
+                PlayerAccessService.Instance.GhostWriter.NotifyFoundCollectible();
                 
                 AudioManager.Instance.Play(hasAlreadyBeenFound ? AudioClipIdentifier.CollectibleAlreadyFound : AudioClipIdentifier.CollectibleFound);
                 
                 RunDissolveAsync().Forget();
             }
+        }
+        
+        private void HandleGhostFoundCollectible()
+        {
+            AudioManager.Instance.Play(AudioClipIdentifier.CollectibleFound);
+            
+            RunDissolveAsync().Forget();
         }
         
         private async UniTask RunDissolveAsync()
@@ -104,6 +122,11 @@ namespace Gameplay.Collectibles
             
             backgroundRenderer.color = backgroundColour;
             spriteRenderer.material.SetFloat(Threshold, dissolveCurve.Evaluate(1f));
+        }
+
+        private void OnDestroy()
+        {
+            GhostRunner.OnGhostFoundCollectible -= HandleGhostFoundCollectible;
         }
     }
 }

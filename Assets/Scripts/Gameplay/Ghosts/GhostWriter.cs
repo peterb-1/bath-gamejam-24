@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Core;
 using Gameplay.Colour;
+using Gameplay.Dash;
 using Gameplay.Drone;
 using Gameplay.Player;
 using UnityEngine;
@@ -37,6 +38,8 @@ namespace Gameplay.Ghosts
             ColourManager.OnColourChangeInstant += HandleColourChangeInstant;
             ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
             DroneTrackerService.OnDroneKilled += HandleDroneKilled;
+            DashTrackerService.OnDashGained += HandleDashGained;
+            DashTrackerService.OnDashUsed += HandleDashUsed;
 
             playerMovementBehaviour.OnJump += HandleJump;
             playerMovementBehaviour.OnLanded += HandleLanded;
@@ -113,6 +116,25 @@ namespace Gameplay.Ghosts
                 time = Time.time - startTime
             });
         }
+        
+        private void HandleDashGained(int _, DashOrb dashOrb)
+        {
+            ghostEvents.Add(new GhostEvent
+            {
+                type = GhostEventType.DashCollection,
+                time = Time.time - startTime,
+                data = dashOrb.Id
+            });
+        }
+        
+        private void HandleDashUsed(int _)
+        {
+            ghostEvents.Add(new GhostEvent
+            {
+                type = GhostEventType.Dash,
+                time = Time.time - startTime
+            });
+        }
 
         private void Update()
         {
@@ -134,6 +156,15 @@ namespace Gameplay.Ghosts
                 isFacingRight = spriteRendererTransform.localScale.x > 0f
             });
         }
+        
+        public void NotifyFoundCollectible()
+        {
+            ghostEvents.Add(new GhostEvent
+            {
+                type = GhostEventType.CollectibleFound,
+                time = Time.time - startTime
+            });
+        }
 
         public void SaveGhostData()
         {
@@ -153,6 +184,9 @@ namespace Gameplay.Ghosts
         {
             ColourManager.OnColourChangeInstant -= HandleColourChangeInstant;
             ColourManager.OnColourChangeStarted -= HandleColourChangeStarted;
+            DroneTrackerService.OnDroneKilled -= HandleDroneKilled;
+            DashTrackerService.OnDashGained -= HandleDashGained;
+            DashTrackerService.OnDashUsed -= HandleDashUsed;
             
             playerMovementBehaviour.OnJump -= HandleJump;
             playerMovementBehaviour.OnLanded -= HandleLanded;

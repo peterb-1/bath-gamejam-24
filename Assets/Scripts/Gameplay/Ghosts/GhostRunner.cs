@@ -62,6 +62,7 @@ namespace Gameplay.Ghosts
         public static event Action<ColourId> OnGhostColourChangedWhileSpectating;
         public static event Action OnSpectateVictorySequenceStart;
         public static event Action<float> OnSpectateVictorySequenceFinish;
+        public static event Action OnGhostFoundCollectible;
 
         private async void Awake()
         {
@@ -205,7 +206,7 @@ namespace Gameplay.Ghosts
             while (currentEventIndex < ghostEvents.Count && ghostEvents[currentEventIndex].time <= playbackTime)
             {
                 var currentEvent = ghostEvents[currentEventIndex];
-                    
+                
                 switch (currentEvent.type)
                 {
                     case GhostEventType.Jump:
@@ -215,7 +216,7 @@ namespace Gameplay.Ghosts
                         AudioManager.Instance.Play(AudioClipIdentifier.Land);
                         break;
                     case GhostEventType.Dash:
-                        AudioManager.Instance.Play(AudioClipIdentifier.Dash);
+                        DashTrackerService.Instance.NotifyGhostPerformedDash();
                         break;
                     case GhostEventType.DashCollection:
                         var orbId = currentEvent.data;
@@ -232,8 +233,11 @@ namespace Gameplay.Ghosts
                         AudioManager.Instance.Stop(AudioClipIdentifier.ZiplineAttach);
                         AudioManager.Instance.Play(AudioClipIdentifier.ZiplineDetach);
                         break;
+                    case GhostEventType.CollectibleFound:
+                        OnGhostFoundCollectible?.Invoke();
+                        break;
                 }
-                    
+                
                 currentEventIndex++;
             }
         }

@@ -18,6 +18,7 @@ namespace Gameplay.Ghosts
         DashCollection,
         DroneKill,
         ZiplineHook,
-        ZiplineUnhook
+        ZiplineUnhook,
+        CollectibleFound
     }
 }

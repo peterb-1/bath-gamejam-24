@@ -112,7 +112,7 @@ namespace UI
             };
         }
         
-        private void HandleDashGained(int orbs)
+        private void HandleDashGained(int orbs, DashOrb _)
         {
             dashOrbs[orbs - 1].Show();
         }
