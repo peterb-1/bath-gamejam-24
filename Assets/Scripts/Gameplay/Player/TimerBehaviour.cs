@@ -17,6 +17,7 @@ namespace UI
         private void Awake()
         {
             DroneTrackerService.OnDroneKilled += HandleDroneKilled;
+            DroneTrackerService.OnDroneKilledByGhost += HandleDroneKilled;
         }
 
         private void Start()
@@ -72,6 +73,7 @@ namespace UI
         private void OnDestroy()
         {
             DroneTrackerService.OnDroneKilled -= HandleDroneKilled;
+            DroneTrackerService.OnDroneKilledByGhost -= HandleDroneKilled;
         }
     }
 }

@@ -1,9 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Audio;
 using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
+using Gameplay.Camera;
 using Gameplay.Colour;
 using Gameplay.Core;
+using Gameplay.Dash;
+using Gameplay.Drone;
+using Gameplay.Player;
+using UnityEditor.Animations;
 using UnityEngine;
 using Utils;
 
@@ -12,13 +19,17 @@ namespace Gameplay.Ghosts
     public class GhostRunner : MonoBehaviour
     {
         public const string GHOST_DATA_KEY = "GhostData";
-        public const string LOAD_FROM_LEADERBOARD_KEY = "LocalViaLeaderboard";
+        public const string LOAD_FROM_LEADERBOARD_KEY = "LoadFromLeaderboard";
+        public const string SPECTATE_KEY = "Spectate";
         
         [SerializeField]
         private SpriteRenderer spriteRenderer;
         
         [SerializeField]
         private Animator animator;
+        
+        [SerializeField]
+        private AnimatorState jumpState;
 
         [SerializeField] 
         private AnimationCurve shrinkCurve;
@@ -33,27 +44,40 @@ namespace Gameplay.Ghosts
         private float flashDuration;
 
         private List<GhostFrame> frames;
+        private List<GhostEvent> ghostEvents;
         private ColourId currentColour;
 
         private float playbackTime;
         private float victoryTime;
+        private float displayTime;
         private int currentAnimatorStateHash;
         private int currentIndex;
+        private int currentEventIndex;
         private bool isFinishing;
+        private Vector2 lastPosition;
         
-        private void Awake()
+        public static bool IsSpectating { get; private set; }
+        public static Vector2 Velocity { get; private set; }
+        
+        public static event Action<ColourId> OnGhostColourChangedWhileSpectating;
+        public static event Action OnSpectateVictorySequenceStart;
+        public static event Action<float> OnSpectateVictorySequenceFinish;
+
+        private async void Awake()
         {
             GhostRun ghostRun = null;
 
-            if (SceneLoader.Instance.SceneLoadContext != null &&
-                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GHOST_DATA_KEY, out GhostContext ghostContext))
+            var hasLoadContext = SceneLoader.Instance.SceneLoadContext != null;
+
+            if (hasLoadContext && SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GHOST_DATA_KEY, out GhostContext ghostContext))
             {
                 ghostRun = ghostContext.GhostRun;
+                displayTime = ghostContext.DisplayTime;
             }
 
             var shouldLoadLocalGhost = false;
 
-            if (SceneLoader.Instance.SceneLoadContext != null)
+            if (hasLoadContext)
             {
                 SceneLoader.Instance.SceneLoadContext.TryGetCustomData(LOAD_FROM_LEADERBOARD_KEY, out shouldLoadLocalGhost);
             }
@@ -75,6 +99,7 @@ namespace Gameplay.Ghosts
             else
             {
                 frames = ghostRun.frames;
+                ghostEvents = ghostRun.droneKills;
                 victoryTime = ghostRun.victoryTime;
                 
                 if (frames is { Count: > 0 } && colourDatabase.TryGetColourConfig(frames[0].colourId, out var colourConfig))
@@ -82,11 +107,35 @@ namespace Gameplay.Ghosts
                     spriteRenderer.color = colourConfig.PlayerColour;
                 }
             }
+
+            if (hasLoadContext && SceneLoader.Instance.SceneLoadContext.TryGetCustomData(SPECTATE_KEY, out bool isSpectating))
+            {
+                IsSpectating = isSpectating;
+
+                if (!isSpectating) return;
+                
+                await UniTask.WaitUntil(() => PlayerAccessService.IsReady() && CameraAccessService.IsReady());
+
+                CameraAccessService.Instance.CameraFollow.OverrideTarget(transform);
+                PlayerAccessService.Instance.DisablePlayerBehavioursForSpectate();
+            }
+            else
+            {
+                IsSpectating = false;
+            }
         }
 
         private void Update() 
         {
             if (frames == null || frames.Count == 0 || PauseManager.Instance.IsPaused) return;
+            
+            var currentPosition = transform.position.xy();
+            
+            Velocity = currentPosition == lastPosition 
+                ? Vector2.zero 
+                : (currentPosition - lastPosition) / Time.deltaTime;
+
+            lastPosition = currentPosition;
 
             // increment to current frame
             playbackTime += Time.deltaTime;
@@ -97,11 +146,11 @@ namespace Gameplay.Ghosts
                 currentIndex++;
             }
 
+            RunSpectatorEvents();
+
             // if we've reached the end of the ghost
             if (currentIndex >= frames.Count - 1) 
             {
-                Destroy(gameObject);
-
                 return;
             }
 
@@ -131,6 +180,11 @@ namespace Gameplay.Ghosts
                 spriteRenderer.color = colourConfig.PlayerColour;
                 
                 RunFlashAsync().Forget();
+
+                if (IsSpectating)
+                {
+                    OnGhostColourChangedWhileSpectating?.Invoke(currentColour);
+                }
             }
 
             spriteRenderer.flipX = lerp < 0.5f ? !frameA.isFacingRight : !frameB.isFacingRight;
@@ -144,8 +198,55 @@ namespace Gameplay.Ghosts
             }
         }
 
+        private void RunSpectatorEvents()
+        {
+            if (!IsSpectating) return;
+            
+            while (currentEventIndex < ghostEvents.Count && ghostEvents[currentEventIndex].time <= playbackTime)
+            {
+                var currentEvent = ghostEvents[currentEventIndex];
+                    
+                switch (currentEvent.type)
+                {
+                    case GhostEventType.Jump:
+                        AudioManager.Instance.Play(AudioClipIdentifier.Jump);
+                        break;
+                    case GhostEventType.Land:
+                        AudioManager.Instance.Play(AudioClipIdentifier.Land);
+                        break;
+                    case GhostEventType.Dash:
+                        AudioManager.Instance.Play(AudioClipIdentifier.Dash);
+                        break;
+                    case GhostEventType.DashCollection:
+                        var orbId = currentEvent.data;
+                        DashTrackerService.Instance.TryCollectFromSpectatorGhost(orbId);
+                        break;
+                    case GhostEventType.DroneKill:
+                        var droneId = currentEvent.data;
+                        DroneTrackerService.KillDroneFromSpectatorGhost(droneId, transform.position.xy());
+                        break;
+                    case GhostEventType.ZiplineHook:
+                        AudioManager.Instance.Play(AudioClipIdentifier.ZiplineAttach);
+                        break;
+                    case GhostEventType.ZiplineUnhook:
+                        AudioManager.Instance.Stop(AudioClipIdentifier.ZiplineAttach);
+                        AudioManager.Instance.Play(AudioClipIdentifier.ZiplineDetach);
+                        break;
+                }
+                    
+                currentEventIndex++;
+            }
+        }
+
         private async UniTask RunVictoryShrinkAsync()
         {
+            if (IsSpectating)
+            {
+                AudioManager.Instance.Play(AudioClipIdentifier.Victory);
+                
+                OnSpectateVictorySequenceStart?.Invoke();
+            }
+
             var timeElapsed = 0f;
             var trans = transform;
             var duration = frames[^1].time - playbackTime;
@@ -162,6 +263,14 @@ namespace Gameplay.Ghosts
             }
             
             trans.localScale = Vector3.zero;
+
+            if (IsSpectating)
+            {
+                // fallback to the accumulated time if display time couldn't be found for some reason
+                var time = displayTime == 0f ? playbackTime : displayTime;
+                
+                OnSpectateVictorySequenceFinish?.Invoke(time);
+            }
         }
         
         private async UniTask RunFlashAsync()

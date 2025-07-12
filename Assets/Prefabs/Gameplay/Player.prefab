@@ -754,6 +754,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9b2104fd6a047f0ae93e8df0ca6c36e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerMovementBehaviour: {fileID: 7832381044865399546}
   playerVictoryBehaviour: {fileID: 3249549202202213294}
   playerAnimator: {fileID: 7933610506833450488}
   spriteRendererTransform: {fileID: 8015807823079495631}

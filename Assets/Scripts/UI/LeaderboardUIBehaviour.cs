@@ -181,6 +181,8 @@ namespace UI
                 row.gameObject.SetActive(true);
                 row.SetDetails(entry.m_nGlobalRank, entry.m_steamIDUser, entry.m_nScore.ToSeconds(), fileId, sceneConfig);
             }
+            
+            SetNavigation();
         }
 
         private void HandlePreviousSelected()
@@ -271,6 +273,31 @@ namespace UI
             foreach (var row in leaderboardRows)
             {
                 row.EnableDownloads();
+            }
+            
+            SetNavigation();
+        }
+
+        private void SetNavigation()
+        {
+            var firstRow = leaderboardRows[0];
+            var friendsNavigation = friendsButton.navigation;
+            
+            friendsNavigation.selectOnDown = firstRow.SpectateButton.isActiveAndEnabled
+                ? firstRow.SpectateButton
+                : firstRow.GhostButton;
+            
+            friendsButton.navigation = friendsNavigation;
+            
+            for (var i = 0; i < leaderboardRows.Length - 1; i++)
+            {
+                var upperRow = leaderboardRows[i];
+                var lowerRow = leaderboardRows[i + 1];
+
+                if (!lowerRow.gameObject.activeSelf) break;
+
+                upperRow.SetDownNavigation(lowerRow.GhostButton, lowerRow.SpectateButton, lowerRow.SpectateButton.isActiveAndEnabled);
+                lowerRow.SetUpNavigation(upperRow.GhostButton, upperRow.SpectateButton, upperRow.SpectateButton.isActiveAndEnabled);
             }
         }
 

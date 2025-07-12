@@ -277,6 +277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 721f4171b1a45af4ea3f1dc3063a6800, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Id>k__BackingField: 4524
   droneAnimator: {fileID: 6225253448386162112}
   droneCollider: {fileID: 6832673857974883721}
   rigidBody: {fileID: 3999417708195568565}

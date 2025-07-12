@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
+using Gameplay.Ghosts;
 using Gameplay.Player;
 using UnityEngine;
 
@@ -33,9 +34,16 @@ namespace Gameplay.Victory
 
             playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
+
+            GhostRunner.OnSpectateVictorySequenceStart += HandleSpectateVictorySequenceStart;
         }
 
         private void HandleVictorySequenceStart(Vector2 _1, float _2)
+        {
+            RunSpinFxAsync().Forget();
+        }
+        
+        private void HandleSpectateVictorySequenceStart()
         {
             RunSpinFxAsync().Forget();
         }
@@ -72,6 +80,8 @@ namespace Gameplay.Victory
         private void OnDestroy()
         {
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
+            
+            GhostRunner.OnSpectateVictorySequenceStart -= HandleSpectateVictorySequenceStart;
         }
     }
 }

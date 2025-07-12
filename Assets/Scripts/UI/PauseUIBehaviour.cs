@@ -1,5 +1,5 @@
-﻿using Audio;
-using Core;
+﻿using Core;
+using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using TMPro;
 using UnityEngine;
@@ -14,6 +14,12 @@ namespace UI
         private TMP_Text levelInfoText;
         
         [SerializeField] 
+        private TMP_Text spectatingInfoText;
+        
+        [SerializeField] 
+        private TMP_Text retryText;
+
+        [SerializeField] 
         private Button resumeButton;
 
         [SerializeField] 
@@ -27,6 +33,17 @@ namespace UI
             resumeButton.onClick.AddListener(HandleResumeClicked);
             retryButton.onClick.AddListener(HandleRetryClicked);
             quitButton.onClick.AddListener(HandleQuitClicked);
+
+            if (SceneLoader.Instance.SceneLoadContext != null && 
+                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(SpectateVictoryUIBehaviour.LEADERBOARD_NAME_KEY, out string leaderboardName))
+            {
+                retryText.text = "REWATCH";
+                spectatingInfoText.text = $"Spectating {leaderboardName}";
+            }
+            else
+            {
+                spectatingInfoText.gameObject.SetActive(false);
+            }
         }
 
         private void Start()
@@ -58,6 +75,9 @@ namespace UI
         {
             GameLogger.Log("Restarting current level from pause menu...", this);
             PauseManager.Instance.UnpauseInvisible();
+            
+            Time.timeScale = 1f;
+            
             SceneLoader.Instance.ReloadCurrentScene();
         }
         
@@ -65,6 +85,9 @@ namespace UI
         {
             GameLogger.Log("Quitting current level from pause menu...", this);
             PauseManager.Instance.UnpauseInvisible();
+
+            Time.timeScale = 1f;
+            
             SceneLoader.Instance.LoadLevelSelect();
         }
 

@@ -32,7 +32,7 @@ namespace Gameplay.Drone
         {
             droneHitboxBehaviour.OnDroneKilled += HandleDroneKilled;
 
-            isActive = droneHitboxBehaviour.GetStartState();
+            isActive = droneHitboxBehaviour.StartActive;
 
             patrolPoint2 = bezierCurve.GetPoint(1f);
         }

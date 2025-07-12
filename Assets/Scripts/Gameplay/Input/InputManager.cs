@@ -4,6 +4,7 @@ using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
 using Gameplay.Core;
+using Gameplay.Ghosts;
 using Gameplay.Player;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -98,6 +99,7 @@ namespace Gameplay.Input
             playerInput.onControlsChanged += HandleControlSchemeChanged;
             SceneLoader.OnSceneLoaded += HandleSceneLoaded;
             SceneLoader.OnSceneLoadStart += HandleSceneLoadStart;
+            GhostRunner.OnSpectateVictorySequenceStart += HandleSpectateVictorySequenceStart;
             
             EnableInputs();
             SubscribeToInputCallbacks();
@@ -142,6 +144,14 @@ namespace Gameplay.Input
         }
 
         private void HandleVictorySequenceStart(Vector2 _1, float _2)
+        {
+            DisableInputs();
+            
+            playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
+            playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
+        }
+        
+        private void HandleSpectateVictorySequenceStart()
         {
             DisableInputs();
             
@@ -325,7 +335,7 @@ namespace Gameplay.Input
 
         private static void HandleJumpPerformed(InputAction.CallbackContext _)
         {
-            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
+            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused || GhostRunner.IsSpectating) return;
             
             if (isPrimedForGamepadDrop)
             {
@@ -337,13 +347,13 @@ namespace Gameplay.Input
         
         private static void HandleDropPerformed(InputAction.CallbackContext _)
         {
-            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
+            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused || GhostRunner.IsSpectating) return;
             OnDropPerformed?.Invoke();
         }
         
         private static void HandleDashPerformed(InputAction.CallbackContext _)
         {
-            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
+            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused || GhostRunner.IsSpectating) return;
             OnDashPerformed?.Invoke();
         }
 
@@ -360,19 +370,19 @@ namespace Gameplay.Input
 
         private static void HandleBluePerformed(InputAction.CallbackContext _)
         {
-            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
+            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused || GhostRunner.IsSpectating) return;
             OnColourChanged?.Invoke(ColourId.Blue);
         }
         
         private static void HandleRedPerformed(InputAction.CallbackContext _)
         {
-            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
+            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused || GhostRunner.IsSpectating) return;
             OnColourChanged?.Invoke(ColourId.Red);
         }
         
         private static void HandleYellowPerformed(InputAction.CallbackContext _)
         {
-            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused) return;
+            if (PauseManager.Instance == null || PauseManager.Instance.IsPaused || GhostRunner.IsSpectating) return;
             OnColourChanged?.Invoke(ColourId.Yellow);
         }
 
@@ -389,6 +399,7 @@ namespace Gameplay.Input
             
             SceneLoader.OnSceneLoaded -= HandleSceneLoaded;
             SceneLoader.OnSceneLoadStart -= HandleSceneLoadStart;
+            GhostRunner.OnSpectateVictorySequenceStart -= HandleSpectateVictorySequenceStart;
         }
     }
 }

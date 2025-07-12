@@ -31,10 +31,11 @@ namespace Gameplay.Drone
         private void Awake()
         {
             droneHitboxBehaviour.OnDroneKilled += HandleDroneKilled;
+            droneHitboxBehaviour.OnDroneKilledByGhost += HandleDroneKilled;
             
             currentCycleTime = cycleTime * cycleOffset;
 
-            isActive = droneHitboxBehaviour.GetStartState();
+            isActive = droneHitboxBehaviour.StartActive;
         }
 
         private void HandleDroneKilled(DroneHitboxBehaviour _)
@@ -69,6 +70,7 @@ namespace Gameplay.Drone
         private void OnDestroy()
         {
             droneHitboxBehaviour.OnDroneKilled -= HandleDroneKilled;
+            droneHitboxBehaviour.OnDroneKilledByGhost -= HandleDroneKilled;
         }
     }
 }

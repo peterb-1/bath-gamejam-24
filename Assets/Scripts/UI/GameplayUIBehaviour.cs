@@ -1,6 +1,8 @@
 using System;
+using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Dash;
+using Gameplay.Ghosts;
 using Gameplay.Input;
 using Gameplay.Player;
 using TMPro;
@@ -53,6 +55,7 @@ namespace UI
             DashTrackerService.OnDashGained += HandleDashGained;
             DashTrackerService.OnDashUsed += HandleDashUsed;
             DashTrackerService.OnDashFailed += HandleDashFailed;
+            GhostRunner.OnSpectateVictorySequenceStart += HandleSpectateVictorySequenceStart;
             
             await UniTask.WaitUntil(PlayerAccessService.IsReady);
 
@@ -63,6 +66,14 @@ namespace UI
             timerBehaviour.OnTimeBonusApplied += HandleTimeBonusApplied;
 
             HandleControlSchemeChanged(InputManager.CurrentNonMouseControlScheme);
+            
+            if (SceneLoader.Instance.SceneLoadContext != null && 
+                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GhostRunner.SPECTATE_KEY, out bool isSpectating) && 
+                isSpectating)
+            {
+                buttonPromptImage.enabled = false;
+                backgroundButtonPromptImage.enabled = false;
+            }
         }
 
         private void HandleTimeBonusApplied(float timeBonus)
@@ -73,6 +84,11 @@ namespace UI
         }
 
         private void HandleVictorySequenceStart(Vector2 _1, float _2)
+        {
+            gameplayPageGroup.HideGroup();
+        }
+
+        private void HandleSpectateVictorySequenceStart()
         {
             gameplayPageGroup.HideGroup();
         }
@@ -122,6 +138,7 @@ namespace UI
             DashTrackerService.OnDashGained -= HandleDashGained;
             DashTrackerService.OnDashUsed -= HandleDashUsed;
             DashTrackerService.OnDashFailed -= HandleDashFailed;
+            GhostRunner.OnSpectateVictorySequenceStart -= HandleSpectateVictorySequenceStart;
             
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
             timerBehaviour.OnTimeBonusApplied -= HandleTimeBonusApplied;

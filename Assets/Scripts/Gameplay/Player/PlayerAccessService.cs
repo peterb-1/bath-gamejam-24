@@ -47,6 +47,16 @@ namespace Gameplay.Player
 
         public static bool IsReady() => Instance != null;
 
+        public void DisablePlayerBehavioursForSpectate()
+        {
+            PlayerMovementBehaviour.DisableForSpectate();
+
+            for (var i = 0; i < transform.childCount; i++)
+            {
+                transform.GetChild(i).gameObject.SetActive(false);
+            }
+        }
+
         private void OnDestroy()
         {
             Instance = null;

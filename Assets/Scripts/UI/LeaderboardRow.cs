@@ -31,6 +31,12 @@ namespace UI
         private Button ghostButton;
         
         [SerializeField] 
+        private Button spectateButton;
+        
+        [SerializeField] 
+        private GameObject spectatePadding;
+
+        [SerializeField] 
         private Image currentPlayerBackground;
 
         [SerializeField] 
@@ -52,6 +58,7 @@ namespace UI
         private bool rowBelongsToCurrentUser;
 
         public Button GhostButton => ghostButton;
+        public Button SpectateButton => spectateButton;
 
         public event Action OnClickedPlay;
         public event Action OnDownloadStarted;
@@ -60,18 +67,24 @@ namespace UI
         private void Awake()
         {
             ghostButton.onClick.AddListener(HandleGhostButtonClicked);
+            spectateButton.onClick.AddListener(HandleSpectateButtonClicked);
         }
 
         private void HandleGhostButtonClicked()
         {
             if (rowBelongsToCurrentUser || downloadedGhostData != null)
             {
-                LoadSceneWithGhostData();
+                LoadSceneWithGhostData(false);
             }
             else
             {
                 GetGhostDataAsync().Forget();
             }
+        }
+        
+        private void HandleSpectateButtonClicked()
+        {
+            LoadSceneWithGhostData(true);
         }
 
         private async UniTask GetGhostDataAsync()
@@ -95,6 +108,9 @@ namespace UI
             {
                 ghostButtonImage.enabled = true;
                 ghostButtonImage.sprite = downloadedGhostData == null ? downloadSprite : playSprite;
+                
+                spectateButton.gameObject.SetActive(true);
+                spectatePadding.SetActive(false);
 
                 if (InputManager.CurrentControlScheme is not ControlScheme.Mouse && EventSystem.current.currentSelectedGameObject == null)
                 {
@@ -105,7 +121,7 @@ namespace UI
             OnDownloadFinished?.Invoke();
         }
 
-        private void LoadSceneWithGhostData()
+        private void LoadSceneWithGhostData(bool isSpectating)
         {
             OnClickedPlay?.Invoke();
             
@@ -114,6 +130,8 @@ namespace UI
             
             sceneLoadContext.SetCustomData(GhostRunner.GHOST_DATA_KEY, ghostContext);
             sceneLoadContext.SetCustomData(GhostRunner.LOAD_FROM_LEADERBOARD_KEY, true);
+            sceneLoadContext.SetCustomData(GhostRunner.SPECTATE_KEY, isSpectating);
+            sceneLoadContext.SetCustomData(SpectateVictoryUIBehaviour.LEADERBOARD_NAME_KEY, usernameText.text);
             
             SceneLoader.Instance.LoadScene(currentSceneConfig, sceneLoadContext);
         }
@@ -122,6 +140,7 @@ namespace UI
         {
             rowBelongsToCurrentUser = SteamUser.GetSteamID().m_SteamID == steamID.m_SteamID;
             currentPlayerBackground.enabled = rowBelongsToCurrentUser;
+            downloadedGhostData = null;
             ghostTime = time;
             
             positionText.text = $"{position}";
@@ -148,21 +167,53 @@ namespace UI
                 downloadedGhostData = SteamLeaderboards.Instance.TryGetOfflineGhostData(sceneConfig.LevelConfig, fileId);
                 ghostButtonImage.sprite = downloadedGhostData != null ? playSprite : downloadSprite;
             }
+
+            var isSpectateAllowed = rowBelongsToCurrentUser || downloadedGhostData != null;
+            
+            spectateButton.gameObject.SetActive(isSpectateAllowed);
+            spectatePadding.SetActive(!isSpectateAllowed);
         }
         
         public void EnableDownloads()
         {
             ghostButton.interactable = true;
+            spectateButton.interactable = true;
         }
         
         public void DisableDownloads()
         {
             ghostButton.interactable = false;
+            spectateButton.interactable = false;
+        }
+        
+        public void SetDownNavigation(Selectable left, Selectable right, bool shouldUseRight)
+        {
+            var ghostNavigation = ghostButton.navigation;
+            var spectateNavigation = spectateButton.navigation;
+
+            ghostNavigation.selectOnDown = left;
+            spectateNavigation.selectOnDown = shouldUseRight ? right : left;
+
+            ghostButton.navigation = ghostNavigation;
+            spectateButton.navigation = spectateNavigation;
+        }
+        
+        public void SetUpNavigation(Selectable left, Selectable right, bool shouldUseRight)
+        {
+            var ghostNavigation = ghostButton.navigation;
+            var spectateNavigation = spectateButton.navigation;
+
+            ghostNavigation.selectOnUp = left;
+            spectateNavigation.selectOnUp = shouldUseRight ? right : left;
+
+            ghostButton.navigation = ghostNavigation;
+            spectateButton.navigation = spectateNavigation;
         }
 
         private void OnDestroy()
         {
             ghostButton.onClick.RemoveListener(HandleGhostButtonClicked);
+            spectateButton.onClick.RemoveListener(HandleSpectateButtonClicked);
         }
     }
 }

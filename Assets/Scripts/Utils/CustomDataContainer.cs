@@ -22,7 +22,10 @@ namespace Utils
                 container.Add(type, new Dictionary<object, object>());
             }
             
-            container[type].Add(key, value);
+            if (!container[type].TryAdd(key, value))
+            {
+                container[type][key] = value;
+            }
         }
 
         public bool TryGetCustomData<T>(object key, out T value)
@@ -57,6 +60,16 @@ namespace Utils
 
             value = default;
             return false;
+        }
+        
+        public void RemoveCustomData<T>(object key)
+        {
+            var type = typeof(T);
+
+            if (container.TryGetValue(type, out var typeContainer))
+            {
+                typeContainer.Remove(key);
+            }
         }
     }
 }

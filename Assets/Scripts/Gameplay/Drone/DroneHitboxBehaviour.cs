@@ -1,15 +1,24 @@
 using System;
+using System.Collections.Generic;
 using Audio;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Player;
+using NaughtyAttributes;
 using UnityEngine;
 using Utils;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Gameplay.Drone
 {
     public class DroneHitboxBehaviour : MonoBehaviour
     {
+        [field: SerializeField, ReadOnly]
+        public ushort Id { get; private set; }
+
         [SerializeField] 
         private Animator droneAnimator;
         
@@ -49,7 +58,10 @@ namespace Gameplay.Drone
         private static readonly int Died = Animator.StringToHash("died");
         private static readonly int Threshold = Shader.PropertyToID("_Threshold");
 
+        public bool StartActive => startActive;
+
         public event Action<DroneHitboxBehaviour> OnDroneKilled;
+        public event Action<DroneHitboxBehaviour> OnDroneKilledByGhost;
 
         private async void Awake()
         {
@@ -90,9 +102,24 @@ namespace Gameplay.Drone
             
             playerMovementBehaviour.PerformHeadJump();
             
-            AudioManager.Instance.Play(AudioClipIdentifier.DroneDeath);
             SaveManager.Instance.SaveData.StatsData.AddToStat(StatType.DronesKilled, 1);
 
+            FallAway(direction);
+        }
+
+        public void NotifyKilledByGhost(Vector2 ghostPosition)
+        {
+            OnDroneKilledByGhost?.Invoke(this);
+            
+            var direction = ghostPosition - droneCollider.bounds.center.xy();
+            
+            FallAway(direction);
+        }
+
+        private void FallAway(Vector2 direction)
+        {
+            AudioManager.Instance.Play(AudioClipIdentifier.DroneDeath);
+            
             direction.Normalize();
             
             rigidBody.simulated = true;
@@ -109,11 +136,6 @@ namespace Gameplay.Drone
         private void HandleDroneKilledPlayer()
         {
             playerDeathBehaviour.KillPlayer(PlayerDeathSource.Drone);
-        }
-
-        public bool GetStartState()
-        {
-            return startActive;
         }
 
         public void ActivateHitbox()
@@ -158,5 +180,31 @@ namespace Gameplay.Drone
 
             rigidBody.simulated = false;
         }
+
+#if UNITY_EDITOR
+        [Button("Reset IDs")]
+        private void ResetIds()
+        {
+            var allDrones = FindObjectsByType<DroneHitboxBehaviour>(FindObjectsSortMode.None);
+
+            var assignedIds = new HashSet<ushort>();
+            var rand = new System.Random();
+
+            foreach (var drone in allDrones)
+            {
+                ushort newId;
+                do
+                {
+                    newId = (ushort)rand.Next(1, ushort.MaxValue);
+                } while (!assignedIds.Add(newId));
+
+                drone.Id = newId;
+                
+                EditorUtility.SetDirty(drone);
+            }
+
+            GameLogger.Log($"Reset IDs for {allDrones.Length} drones.");
+        }
+#endif
     }
 }

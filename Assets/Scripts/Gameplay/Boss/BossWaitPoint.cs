@@ -1,8 +1,6 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using NaughtyAttributes;
 using UnityEngine;
-using Utils;
 
 namespace Gameplay.Boss
 {

@@ -6,6 +6,7 @@ using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
 using Gameplay.Core;
+using Gameplay.Ghosts;
 using Gameplay.Player;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -77,6 +78,7 @@ namespace Audio
             ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
             SceneLoader.OnSceneLoadStart += HandleSceneLoadStart;
             SceneLoader.OnSceneLoaded += HandleSceneLoaded;
+            GhostRunner.OnSpectateVictorySequenceStart += HandleSpectateVictorySequenceStart;
             
             HandleSceneLoaded();
             
@@ -175,6 +177,14 @@ namespace Audio
         }
         
         private void HandleVictorySequenceStart(Vector2 _1, float _2)
+        {
+            playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
+            playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
+            
+            RunFilterCurveAsync(endLevelCurve, endLevelDuration).Forget();
+        }
+        
+        private void HandleSpectateVictorySequenceStart()
         {
             playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
@@ -404,6 +414,7 @@ namespace Audio
             ColourManager.OnColourChangeStarted -= HandleColourChangeStarted;
             SceneLoader.OnSceneLoadStart -= HandleSceneLoadStart;
             SceneLoader.OnSceneLoaded -= HandleSceneLoaded;
+            GhostRunner.OnSpectateVictorySequenceStart -= HandleSpectateVictorySequenceStart;
 
             SaveManager.Instance.SaveData.PreferenceData.OnSettingChanged -= HandleSettingChanged;
         }

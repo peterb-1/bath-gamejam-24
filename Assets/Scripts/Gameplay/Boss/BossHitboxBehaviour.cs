@@ -2,7 +2,6 @@ using System;
 using Cysharp.Threading.Tasks;
 using Gameplay.Player;
 using UnityEngine;
-using Utils;
 
 namespace Gameplay.Boss
 {

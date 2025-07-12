@@ -1,5 +1,6 @@
 using Core.Saving;
 using Cysharp.Threading.Tasks;
+using Gameplay.Ghosts;
 using Gameplay.Player;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -58,6 +59,7 @@ namespace Gameplay.Camera
         private bool isCameraShakeEnabled;
         private bool shouldOverridePosition;
         private bool shouldUseLookahead;
+        private bool isOverridingTarget;
 
         private async void Awake()
         {
@@ -66,7 +68,11 @@ namespace Gameplay.Camera
             playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
             playerVictoryBehaviour = PlayerAccessService.Instance.PlayerVictoryBehaviour;
             playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
-            target = PlayerAccessService.Instance.PlayerTransform;
+
+            if (!isOverridingTarget)
+            {
+                target = PlayerAccessService.Instance.PlayerTransform;
+            }
             
             velocity = Vector3.zero;
             shakeVelocity = Vector3.zero;
@@ -91,6 +97,12 @@ namespace Gameplay.Camera
         {
             positionOverride = transform.position;
             shouldOverridePosition = true;
+        }
+
+        public void OverrideTarget(Transform newTarget)
+        {
+            isOverridingTarget = true;
+            target = newTarget;
         }
         
         public void RegisterBorderZone(CameraBorderZone borderZone)
@@ -123,7 +135,7 @@ namespace Gameplay.Camera
 
             if (shouldUseLookahead)
             {
-                var playerVelocity = playerMovementBehaviour.Velocity;
+                var playerVelocity = GhostRunner.IsSpectating ? GhostRunner.Velocity : playerMovementBehaviour.Velocity;
             
                 var signVector = new Vector2(Mathf.Sign(playerVelocity.x), Mathf.Sign(playerVelocity.y));
                 var absoluteVelocity = new Vector2(Mathf.Abs(playerVelocity.x), Mathf.Abs(playerVelocity.y));

@@ -88,6 +88,11 @@ namespace Gameplay.Dash
             return true;
         }
         
+        public void TryCollectFromSpectatorGhost(ushort orbId)
+        {
+            
+        }
+
         private void OnDestroy()
         {
             InputManager.OnDashPerformed -= HandleDashPerformed;

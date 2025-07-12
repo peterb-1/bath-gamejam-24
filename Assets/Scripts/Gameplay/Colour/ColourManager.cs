@@ -2,6 +2,7 @@ using System;
 using Audio;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
+using Gameplay.Ghosts;
 using Gameplay.Input;
 using UnityEngine;
 
@@ -32,6 +33,7 @@ namespace Gameplay.Colour
             canChangeColour = true;
 
             InputManager.OnColourChanged += HandleColourChanged;
+            GhostRunner.OnGhostColourChangedWhileSpectating += HandleGhostColourChangedWhileSpectating;
         }
 
         private void Start()
@@ -48,12 +50,25 @@ namespace Gameplay.Colour
             RunColourChangeAsync().Forget();
         }
 
-        private async UniTask RunColourChangeAsync()
+        private void HandleGhostColourChangedWhileSpectating(ColourId colour)
+        {
+            if (colour == currentColour) return;
+            
+            currentColour = colour;
+            
+            RunColourChangeAsync(isSpectating: true).Forget();
+        }
+
+        private async UniTask RunColourChangeAsync(bool isSpectating = false)
         {
             canChangeColour = false;
             
             AudioManager.Instance.Play(AudioClipIdentifier.ColourSwitch);
-            SaveManager.Instance.SaveData.StatsData.AddToStat(StatType.ColourChanges, 1);
+            
+            if (!isSpectating)
+            {
+                SaveManager.Instance.SaveData.StatsData.AddToStat(StatType.ColourChanges, 1);
+            }
             
             OnColourChangeStarted?.Invoke(currentColour, colourChangeDuration);
 
@@ -69,6 +84,7 @@ namespace Gameplay.Colour
         private void OnDestroy()
         {
             InputManager.OnColourChanged -= HandleColourChanged;
+            GhostRunner.OnGhostColourChangedWhileSpectating -= HandleGhostColourChangedWhileSpectating;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Core;
 using Gameplay.Colour;
+using Gameplay.Drone;
 using Gameplay.Player;
 using UnityEngine;
 using Utils;
@@ -9,6 +10,9 @@ namespace Gameplay.Ghosts
 {
     public class GhostWriter : MonoBehaviour
     {
+        [SerializeField] 
+        private PlayerMovementBehaviour playerMovementBehaviour;
+        
         [SerializeField] 
         private PlayerVictoryBehaviour playerVictoryBehaviour;
         
@@ -22,6 +26,7 @@ namespace Gameplay.Ghosts
         private float recordingInterval;
         
         private readonly List<GhostFrame> frames = new();
+        private readonly List<GhostEvent> ghostEvents = new();
         private float startTime;
         private float previousFrameTime;
         private float victoryTime;
@@ -31,13 +36,14 @@ namespace Gameplay.Ghosts
         {
             ColourManager.OnColourChangeInstant += HandleColourChangeInstant;
             ColourManager.OnColourChangeStarted += HandleColourChangeStarted;
+            DroneTrackerService.OnDroneKilled += HandleDroneKilled;
+
+            playerMovementBehaviour.OnJump += HandleJump;
+            playerMovementBehaviour.OnLanded += HandleLanded;
+            playerMovementBehaviour.OnPlayerHooked += HandleHooked;
+            playerMovementBehaviour.OnPlayerUnhooked += HandleUnhooked;
 
             playerVictoryBehaviour.OnVictorySequenceStart += HandleVictorySequenceStart;
-        }
-
-        private void HandleVictorySequenceStart(Vector2 _1, float _2)
-        {
-            victoryTime = Time.time - startTime;
         }
 
         private void Start()
@@ -45,6 +51,21 @@ namespace Gameplay.Ghosts
             frames.Clear();
             startTime = Time.time;
             previousFrameTime = float.MinValue;
+        }
+
+        private void HandleVictorySequenceStart(Vector2 _1, float _2)
+        {
+            victoryTime = Time.time - startTime;
+        }
+
+        private void HandleDroneKilled(DroneHitboxBehaviour drone)
+        {
+            ghostEvents.Add(new GhostEvent
+            {
+                type = GhostEventType.DroneKill,
+                time = Time.time - startTime,
+                data = drone.Id
+            });
         }
 
         private void HandleColourChangeStarted(ColourId colour, float _)
@@ -55,6 +76,42 @@ namespace Gameplay.Ghosts
         private void HandleColourChangeInstant(ColourId colour)
         {
             colourId = colour;
+        }
+        
+        private void HandleJump()
+        {
+            ghostEvents.Add(new GhostEvent
+            {
+                type = GhostEventType.Jump,
+                time = Time.time - startTime
+            });
+        }
+
+        private void HandleLanded()
+        {
+            ghostEvents.Add(new GhostEvent
+            {
+                type = GhostEventType.Land,
+                time = Time.time - startTime
+            });
+        }
+
+        private void HandleHooked()
+        {
+            ghostEvents.Add(new GhostEvent
+            {
+                type = GhostEventType.ZiplineHook,
+                time = Time.time - startTime
+            });
+        }
+
+        private void HandleUnhooked()
+        {
+            ghostEvents.Add(new GhostEvent
+            {
+                type = GhostEventType.ZiplineUnhook,
+                time = Time.time - startTime
+            });
         }
 
         private void Update()
@@ -83,6 +140,7 @@ namespace Gameplay.Ghosts
             var ghostRun = new GhostRun
             {
                 frames = frames,
+                droneKills = ghostEvents,
                 victoryTime = victoryTime
             };
             
@@ -95,6 +153,11 @@ namespace Gameplay.Ghosts
         {
             ColourManager.OnColourChangeInstant -= HandleColourChangeInstant;
             ColourManager.OnColourChangeStarted -= HandleColourChangeStarted;
+            
+            playerMovementBehaviour.OnJump -= HandleJump;
+            playerMovementBehaviour.OnLanded -= HandleLanded;
+            playerMovementBehaviour.OnPlayerHooked -= HandleHooked;
+            playerMovementBehaviour.OnPlayerUnhooked -= HandleUnhooked;
             
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
         }

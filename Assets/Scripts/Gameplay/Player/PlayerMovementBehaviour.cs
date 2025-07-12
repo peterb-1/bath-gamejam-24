@@ -230,6 +230,7 @@ namespace Gameplay.Player
         private static readonly int Strength = Shader.PropertyToID("_Strength");
 
         public event Action OnLanded;
+        public event Action OnJump;
         public event Action OnWallJump;
         public event Action OnPlayerHooked;
         public event Action OnPlayerUnhooked;
@@ -514,6 +515,8 @@ namespace Gameplay.Player
             RumbleManager.Instance.Rumble(jumpingRumbleConfig);
             SaveManager.Instance.SaveData.StatsData.AddToStat(StatType.JumpsMade, 1);
             
+            OnJump?.Invoke();
+            
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, force);
             
             jumpCooldownCountdown = jumpCooldown;
@@ -530,6 +533,8 @@ namespace Gameplay.Player
                 AudioManager.Instance.Play(AudioClipIdentifier.Jump);
                 RumbleManager.Instance.Rumble(jumpingRumbleConfig);
                 SaveManager.Instance.SaveData.StatsData.AddToStat(StatType.JumpsMade, 1);
+                
+                OnJump?.Invoke();
             }
             
             rigidBody.linearVelocity = force;
@@ -547,6 +552,8 @@ namespace Gameplay.Player
         {
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
             RumbleManager.Instance.Rumble(droneHitRumbleConfig);
+            
+            OnJump?.Invoke();
             
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, headJumpForce);
             dashCountdown = 0f;
@@ -841,6 +848,15 @@ namespace Gameplay.Player
             trans.position = targetPosition;
             
             rigidBody.linearVelocity = Vector2.zero;
+        }
+
+        public void DisableForSpectate()
+        {
+            rigidBody.gravityScale = 0f;
+            boxCollider.enabled = false;
+            deathCollider.enabled = false;
+
+            enabled = false;
         }
 
         private void OnDestroy()
