@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49e0ef1fb32541ca97a3662a5c22c625, type: 3}
   m_Name: Level-2-4
   m_EditorClassIdentifier: 
-  sceneAsset: {fileID: 102900000, guid: 0dea362a943bf0e4d847561473cc53fe, type: 3}
-  scenePath: Assets/Scenes/Level-2-4.unity
+  sceneAsset: {fileID: 102900000, guid: 7a8f638d05e34324e9ef2ad6b98960d2, type: 3}
+  scenePath: Assets/Scenes/Level-2-2.unity
   <IsLevelScene>k__BackingField: 1
   <LevelConfig>k__BackingField:
     <Guid>k__BackingField: 4470a071-dd86-4058-b272-da8a6aee9855
@@ -21,9 +21,9 @@ MonoBehaviour:
     <LevelType>k__BackingField: 0
     missionNumber: 4
     <IsUnlockedByDefault>k__BackingField: 0
-    <HasCollectible>k__BackingField: 0
-    oneStarTime: 17.8
-    twoStarTime: 12
-    threeStarTime: 8.9
-    rainbowTime: 5.8
+    <HasCollectible>k__BackingField: 1
+    oneStarTime: 20.4
+    twoStarTime: 15.2
+    threeStarTime: 11.4
+    rainbowTime: 7.5
   <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: 2765f57f19525b746832cfdc39d82219, type: 2}
