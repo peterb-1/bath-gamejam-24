@@ -12,12 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49e0ef1fb32541ca97a3662a5c22c625, type: 3}
   m_Name: Level-2-5
   m_EditorClassIdentifier: 
-  sceneAsset: {fileID: 102900000, guid: 3a384ff8a3c41264383b619788bef293, type: 3}
+  sceneAsset: {fileID: 102900000, guid: 39fce1f407721f042b464f7fdb9e181a, type: 3}
   scenePath: Assets/Scenes/Level-2-5.unity
   <IsLevelScene>k__BackingField: 1
   <LevelConfig>k__BackingField:
     <Guid>k__BackingField: 94add8f2-3c15-457f-9673-d11237c57114
     districtNumber: 2
+    <LevelType>k__BackingField: 0
     missionNumber: 5
     <IsUnlockedByDefault>k__BackingField: 0
+    <HasCollectible>k__BackingField: 1
+    oneStarTime: 16.3
+    twoStarTime: 11.9
+    threeStarTime: 9.4
+    rainbowTime: 5.1
   <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: 1f98ef68288e60043bc14fc342b11349, type: 2}

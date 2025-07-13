@@ -146,6 +146,11 @@ namespace UI
             canvasGroup.blocksRaycasts = false;
         }
 
+        public void SetDefaultSelectable(Selectable selectable)
+        {
+            defaultSelectable = selectable;
+        }
+
         private void TrySelectDefaultSelectable()
         {
             if (hasDefaultSelectable && InputManager.CurrentControlScheme is not ControlScheme.Mouse)

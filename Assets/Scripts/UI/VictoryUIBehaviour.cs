@@ -20,6 +20,9 @@ namespace UI
         [Header("References")]
         [SerializeField] 
         private PageGroup victoryPageGroup;
+        
+        [SerializeField] 
+        private Page victoryPage;
 
         [SerializeField] 
         private Button retryButton;
@@ -117,6 +120,21 @@ namespace UI
             retryButton.onClick.AddListener(HandleRetryClicked);
             nextButton.onClick.AddListener(HandleNextClicked);
             quitButton.onClick.AddListener(HandleQuitClicked);
+
+            if (SceneLoader.Instance.CurrentSceneConfig.LevelConfig.LevelType is LevelType.Hidden)
+            {
+                nextButton.gameObject.SetActive(false);
+                victoryPage.SetDefaultSelectable(retryButton);
+
+                var retryNavigation = retryButton.navigation;
+                var quitNavigation = quitButton.navigation;
+
+                retryNavigation.selectOnRight = quitButton;
+                quitNavigation.selectOnLeft = retryButton;
+
+                retryButton.navigation = retryNavigation;
+                quitButton.navigation = quitNavigation;
+            }
         }
 
         private void HandleRetryClicked()
