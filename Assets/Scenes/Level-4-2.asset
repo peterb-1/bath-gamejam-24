@@ -25,5 +25,5 @@ MonoBehaviour:
     oneStarTime: 23.4
     twoStarTime: 17.8
     threeStarTime: 14.2
-    rainbowTime: 8.4
+    rainbowTime: 9.3
   <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: 48739daac4086614181ee762fe8de7a2, type: 2}

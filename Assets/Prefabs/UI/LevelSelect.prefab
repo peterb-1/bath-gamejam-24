@@ -822,16 +822,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 7a051288cff6cde478c9231ec3522a00, type: 3}
     - target: {fileID: 7970965165703425368, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7970965165703425368, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
       propertyPath: m_Color.b
-      value: 0.24313726
+      value: 0.25490198
       objectReference: {fileID: 0}
     - target: {fileID: 7970965165703425368, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
       propertyPath: m_Color.g
-      value: 0.2509804
+      value: 0.23921569
       objectReference: {fileID: 0}
     - target: {fileID: 7970965165703425368, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
       propertyPath: m_Color.r
-      value: 0.2627451
+      value: 0.24313726
       objectReference: {fileID: 0}
     - target: {fileID: 8003185127796193812, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
       propertyPath: sceneConfig
@@ -3832,7 +3836,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 48daa6c02f774cd4f8cd7982faae93aa, type: 2}
     - target: {fileID: 7158050746605220554, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
       propertyPath: m_Navigation.m_Mode
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7158050746605220554, guid: 037d9af18d03f4747907f3a7823b07ac, type: 3}
       propertyPath: m_Navigation.m_SelectOnUp
