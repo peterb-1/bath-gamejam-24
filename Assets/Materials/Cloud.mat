@@ -73,11 +73,11 @@ Material:
     - _EnableExternalAlpha: 0
     - _RotationSpeed: 0
     - _ScrollSpeed: 0.02
-    - _Strength: 0.3
+    - _Strength: 0.2
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Tiling: {r: 1, g: 5, b: 0, a: 0}
+    - _Tiling: {r: 1, g: 12, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -15,9 +15,9 @@ MonoBehaviour:
   <SettingId>k__BackingField: 17
   <DisplayName>k__BackingField: Fancy Clouds
   <Description>k__BackingField: 'Determines whether or not to apply a holographic
-    effect to the clouds during gameplay.
+    effect to the clouds at the bottom of the screen.
 
 
-    This setting has a small impact on
-    performance.'
+    This setting has a very
+    small impact on performance.'
   <DefaultValue>k__BackingField: 1

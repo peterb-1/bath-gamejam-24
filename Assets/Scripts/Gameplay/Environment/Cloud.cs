@@ -7,6 +7,12 @@ namespace Gameplay.Environment
     public class Cloud : MonoBehaviour
     {
         [SerializeField] 
+        private SpriteRenderer spriteRenderer;
+
+        [SerializeField] 
+        private Material fancyMaterial;
+
+        [SerializeField] 
         private Material cheapMaterial;
         
         [SerializeField, ReadOnly]
@@ -20,13 +26,24 @@ namespace Gameplay.Environment
 
         private void Awake()
         {
-            if (SaveManager.Instance.SaveData.PreferenceData.TryGetValue(SettingId.FancyClouds, out bool areFancyCloudsEnabled) &&
-                !areFancyCloudsEnabled)
+            SaveManager.Instance.SaveData.PreferenceData.OnSettingChanged += HandleSettingChanged;
+            
+            InitialiseSetting(SettingId.FancyClouds);
+        }
+        
+        private void InitialiseSetting(SettingId settingId)
+        {
+            if (SaveManager.Instance.SaveData.PreferenceData.TryGetValue(settingId, out object value))
             {
-                foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>())
-                {
-                    spriteRenderer.material = cheapMaterial;
-                }
+                HandleSettingChanged(settingId, value);
+            }
+        }
+
+        private void HandleSettingChanged(SettingId settingId, object value)
+        {
+            if (settingId is SettingId.FancyClouds && value is bool areFancyCloudsEnabled)
+            {
+                spriteRenderer.material = areFancyCloudsEnabled ? fancyMaterial : cheapMaterial;
             }
         }
 
@@ -53,6 +70,11 @@ namespace Gameplay.Environment
             }
 
             transform.localPosition = position;
+        }
+
+        private void OnDestroy()
+        {
+            SaveManager.Instance.SaveData.PreferenceData.OnSettingChanged -= HandleSettingChanged;
         }
     }
 }
