@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
@@ -18,6 +19,8 @@ namespace UI
         private Sprite unlockedSprite;
 
         private static readonly int Disappear = Animator.StringToHash("Disappear");
+        
+        public static event Action OnSatelliteComplete;
 
         public void Disable()
         {
@@ -28,6 +31,8 @@ namespace UI
         {
             image.sprite = unlockedSprite;
             animator.SetTrigger(Disappear);
+            
+            OnSatelliteComplete?.Invoke();
         }
 
         public void SetPanelProgress(int panels)

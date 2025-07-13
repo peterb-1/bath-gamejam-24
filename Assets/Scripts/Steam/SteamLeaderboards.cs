@@ -16,7 +16,8 @@ namespace Steam
     {
         private const float UPLOAD_COOLDOWN = 60f;
         
-        public int UploadsQueued => isUploading ? uploadQueue.Count + 1 : 0;
+        public int UploadsQueued => isUploading ? uploadQueue.Count : 0;
+        public LevelConfig CurrentlyProcessedLevelConfig { get; private set; }
         public static SteamLeaderboards Instance { get; private set; }
         
         private readonly Dictionary<LevelConfig, SteamLeaderboard_t> leaderboardLookup = new();
@@ -159,6 +160,7 @@ namespace Steam
                 var index = priority is LeaderboardPriority.Newest ? uploadQueue.Count - 1 : 0;
                 var (levelConfig, levelData) = uploadQueue[index];
                 
+                CurrentlyProcessedLevelConfig = levelConfig;
                 uploadQueue.RemoveAt(index);
                 
                 GameLogger.Log($"Processing score upload for {levelConfig.GetSteamName()}...", this);
@@ -193,6 +195,7 @@ namespace Steam
                 }
 
                 lastUploadTime = DateTime.UtcNow;
+                CurrentlyProcessedLevelConfig = null;
             }
 
             isUploading = false;

@@ -87,12 +87,14 @@ namespace UI
             if (!SteamLeaderboards.IsReady()) return;
             
             var queueSize = SteamLeaderboards.Instance.UploadsQueued;
+            var levelConfig = SteamLeaderboards.Instance.CurrentlyProcessedLevelConfig;
 
-            uploadInfoText.text = queueSize switch
+            uploadInfoText.text = (queueSize, levelConfig) switch
             {
-                0 => "All scores uploaded!",
-                1 => "1 score pending upload...",
-                > 1 => $"{queueSize} scores pending upload...",
+                (_, not null) => $"Uploading score for mission {levelConfig.GetLevelCode()}...",
+                (0, null) => "All scores uploaded!",
+                (1, null) => "1 score pending upload...",
+                (> 1, null) => $"{queueSize} scores pending upload...",
                 _ => ""
             };
         }
