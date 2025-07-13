@@ -182,6 +182,11 @@ namespace Gameplay.Drone
         }
 
 #if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ResetIds();
+        }
+        
         [Button("Reset IDs")]
         private void ResetIds()
         {

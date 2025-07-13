@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using UnityEngine;
@@ -76,6 +77,11 @@ namespace Gameplay.Dash
         }
         
 #if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ResetIds();
+        }
+
         [Button("Reset IDs")]
         private void ResetIds()
         {
