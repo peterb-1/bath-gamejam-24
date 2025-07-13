@@ -10,7 +10,6 @@ using Gameplay.Core;
 using Gameplay.Dash;
 using Gameplay.Drone;
 using Gameplay.Player;
-using UnityEditor.Animations;
 using UnityEngine;
 using Utils;
 
@@ -27,9 +26,6 @@ namespace Gameplay.Ghosts
         
         [SerializeField]
         private Animator animator;
-        
-        [SerializeField]
-        private AnimatorState jumpState;
 
         [SerializeField] 
         private AnimationCurve shrinkCurve;
