@@ -16,6 +16,19 @@ namespace Gameplay.Input
     {
         private const float PLAYER_ACCESS_TIMEOUT = 1f;
         
+        private static readonly Key[] KeyboardSwitchIgnoreKeys =
+        {
+            Key.Escape
+        };
+        
+        private static readonly Key[] GameplayKeyboardSwitchKeys =
+        {
+            Key.Z, Key.X, Key.C, 
+            Key.J, Key.K, Key.L, 
+            Key.Numpad1, Key.Numpad2, Key.Numpad3, 
+            Key.Digit1, Key.Digit2, Key.Digit3
+        };
+        
         [SerializeField] 
         private PlayerInput playerInput;
         
@@ -168,6 +181,28 @@ namespace Gameplay.Input
             
             return isMouseMoving || Mouse.current.leftButton.wasPressedThisFrame;
         }
+        
+        private bool ShouldSwitchToKeyboard()
+        {
+            if (Keyboard.current == null) return false;
+
+            if (SceneLoader.Instance.CurrentSceneConfig.IsLevelScene && !PauseManager.Instance.IsPaused)
+            {
+                foreach (var key in GameplayKeyboardSwitchKeys)
+                {
+                    if (Keyboard.current[key].wasPressedThisFrame) return true;
+                }
+                
+                return false;
+            }
+            
+            foreach (var key in KeyboardSwitchIgnoreKeys)
+            {
+                if (Keyboard.current[key].wasPressedThisFrame) return false;
+            }
+
+            return Keyboard.current.anyKey.wasPressedThisFrame;
+        }
 
         private async void HandleControlSchemeChanged(PlayerInput _)
         {
@@ -199,6 +234,7 @@ namespace Gameplay.Input
 
             isPrimedForGamepadDrop = verticalAmount < gamepadDropThreshold && CurrentControlScheme is ControlScheme.Gamepad;
             
+            // HandleControlSchemeChanged is unable to recognise keyboard and mouse as separate, so have to check here
             if (CurrentControlScheme is not ControlScheme.Mouse && IsMouseActive())
             {
                 UpdateControlScheme(ControlScheme.Mouse);
@@ -206,7 +242,7 @@ namespace Gameplay.Input
 
             if (CurrentControlScheme is ControlScheme.Mouse)
             {
-                if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+                if (ShouldSwitchToKeyboard())
                 {
                     UpdateControlScheme(ControlScheme.Keyboard);
                 }

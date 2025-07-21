@@ -93,6 +93,8 @@ namespace UI
         {
             canvasGroup.interactable = isInteractable;
             canvasGroup.blocksRaycasts = isInteractable;
+            
+            ActivePage.SetInteractable(isInteractable);
         }
 
         public void ShowGroupImmediate()

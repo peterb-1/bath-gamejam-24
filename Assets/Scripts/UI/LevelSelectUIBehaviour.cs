@@ -129,9 +129,12 @@ namespace UI
             SetPageNavigation();
         }
 
-        public void SelectLastSelectedItem()
+        public void TrySelectLastSelectedItem()
         {
-            lastSelectedItem.Select();
+            if (InputManager.CurrentControlScheme is not ControlScheme.Mouse)
+            {
+                lastSelectedItem.Select();
+            }
         }
         
         private void HandleSettingsClicked()

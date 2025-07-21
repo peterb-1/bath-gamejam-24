@@ -53,6 +53,7 @@ namespace UI
         {
             if (milliseconds >= int.MaxValue - 9) return "N/A";
 
+            // so that e.g. 12.201, which fails a 12.000 threshold, is displayed as 12.01 rather than 12.00
             milliseconds += 9;
 
             var minutes = milliseconds / 60000;

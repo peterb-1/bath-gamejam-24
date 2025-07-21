@@ -60,7 +60,7 @@ namespace UI
             levelSelectPageGroup.SetInteractable(true);
             popupPageGroup.HideGroupImmediate();
             
-            levelSelectUIBehaviour.SelectLastSelectedItem();
+            levelSelectUIBehaviour.TrySelectLastSelectedItem();
         }
 
         private void QuitGame()

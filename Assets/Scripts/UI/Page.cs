@@ -150,10 +150,16 @@ namespace UI
         {
             defaultSelectable = selectable;
         }
+        
+        public void SetInteractable(bool isInteractable)
+        {
+            canvasGroup.interactable = isInteractable;
+            canvasGroup.blocksRaycasts = isInteractable;
+        }
 
         private void TrySelectDefaultSelectable()
         {
-            if (hasDefaultSelectable && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
+            if (hasDefaultSelectable && canvasGroup.interactable && InputManager.CurrentControlScheme is not ControlScheme.Mouse)
             {
                 EventSystem.current.SetSelectedGameObject(null);
                 defaultSelectable.Select();

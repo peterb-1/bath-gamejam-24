@@ -328,6 +328,17 @@
                 },
                 {
                     "name": "",
+                    "id": "31f946a2-37cf-4dd8-afcc-45d7d4261d06",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Blue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "248a17bc-c5e7-4e85-a9f7-9315d7bf28c9",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
@@ -383,6 +394,17 @@
                 },
                 {
                     "name": "",
+                    "id": "b05dd91a-ac43-47a3-81cf-07d6d5b5e2fc",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Red",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "e09b28f5-adb3-431f-9abe-a8fe41bdd596",
                     "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
@@ -432,6 +454,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
+                    "action": "Yellow",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9e59c49d-cf10-4898-8767-0cbc38b6e9bc",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "Yellow",
                     "isComposite": false,
                     "isPartOfComposite": false

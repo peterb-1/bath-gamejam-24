@@ -28,6 +28,9 @@ namespace UI
         
         [SerializeField] 
         private Sprite gamepadButtonPrompts;
+        
+        [SerializeField] 
+        private Sprite mouseButtonPrompts;
 
         [SerializeField] 
         private TMP_Text timerText;
@@ -66,7 +69,7 @@ namespace UI
             timerBehaviour = PlayerAccessService.Instance.TimerBehaviour;
             timerBehaviour.OnTimeBonusApplied += HandleTimeBonusApplied;
 
-            HandleControlSchemeChanged(InputManager.CurrentNonMouseControlScheme);
+            HandleControlSchemeChanged(InputManager.CurrentControlScheme);
             
             if (SceneLoader.Instance.SceneLoadContext != null && 
                 SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GhostRunner.SPECTATE_KEY, out bool isSpectating) && 
@@ -100,7 +103,7 @@ namespace UI
             {
                 ControlScheme.Keyboard => keyboardMouseButtonPrompts,
                 ControlScheme.Gamepad => gamepadButtonPrompts,
-                ControlScheme.Mouse => buttonPromptImage.sprite,
+                ControlScheme.Mouse => mouseButtonPrompts,
                 _ => throw new ArgumentOutOfRangeException(nameof(controlScheme), controlScheme, null)
             };
             
@@ -108,7 +111,7 @@ namespace UI
             {
                 ControlScheme.Keyboard => keyboardMouseButtonPrompts,
                 ControlScheme.Gamepad => gamepadButtonPrompts,
-                ControlScheme.Mouse => buttonPromptImage.sprite,
+                ControlScheme.Mouse => mouseButtonPrompts,
                 _ => throw new ArgumentOutOfRangeException(nameof(controlScheme), controlScheme, null)
             };
         }
