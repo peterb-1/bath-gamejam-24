@@ -160,13 +160,13 @@ namespace UI
             SceneLoader.Instance.LoadLevelSelect();
         }
 
-        private async void HandleVictorySequenceFinish(float finalTime, bool hasCollectible)
+        private async void HandleVictorySequenceFinish(int finalMilliseconds, bool hasCollectible)
         {
             SetLevelInfoText();
             
-            timerText.text = TimerBehaviour.GetFormattedTime(finalTime);
+            timerText.text = TimerBehaviour.GetFormattedTime(finalMilliseconds);
             
-            var (ranking, isNewBest) = ProcessLevelCompletion(finalTime, hasCollectible);
+            var (ranking, isNewBest) = ProcessLevelCompletion(finalMilliseconds, hasCollectible);
 
             await victoryPageGroup.ShowGroupAsync();
             await DisplayRankingAsync(ranking, isNewBest);
@@ -187,24 +187,24 @@ namespace UI
             }
         }
 
-        private (TimeRanking, bool) ProcessLevelCompletion(float time, bool hasFoundCollectible)
+        private (TimeRanking, bool) ProcessLevelCompletion(int milliseconds, bool hasFoundCollectible)
         {
             var campaignData = SaveManager.Instance.SaveData.CampaignData;
             var currentSceneConfig = SceneLoader.Instance.CurrentSceneConfig;
             var currentLevelData = SceneLoader.Instance.CurrentLevelData;
             var levelConfig = currentSceneConfig.LevelConfig;
-            var oldTime = currentLevelData.BestTime;
-            var oldFormattedTime = TimerBehaviour.GetFormattedTime(oldTime);
-            var oldRanking = levelConfig.GetTimeRanking(oldTime);
-            var doFormattedTimesMatch = oldFormattedTime == TimerBehaviour.GetFormattedTime(time);
+            var oldMilliseconds = currentLevelData.BestMilliseconds;
+            var oldFormattedTime = TimerBehaviour.GetFormattedTime(oldMilliseconds);
+            var oldRanking = levelConfig.GetTimeRanking(oldMilliseconds);
+            var doFormattedTimesMatch = oldFormattedTime == TimerBehaviour.GetFormattedTime(milliseconds);
 
-            oneStarText.text = TimerBehaviour.GetFormattedTime(levelConfig.OneStarTime, round: false);
-            twoStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.TwoStarTime, round: false);
-            threeStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.ThreeStarTime, round: false);
-            rainbowText.text = TimerBehaviour.GetFormattedTime(levelConfig.RainbowTime, round: false);
+            oneStarText.text = TimerBehaviour.GetFormattedTime(levelConfig.OneStarMilliseconds);
+            twoStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.TwoStarMilliseconds);
+            threeStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.ThreeStarMilliseconds);
+            rainbowText.text = TimerBehaviour.GetFormattedTime(levelConfig.RainbowMilliseconds);
 
-            var ranking = levelConfig.GetTimeRanking(time);
-            var isNewBest = currentLevelData.TrySetTime(time) && !doFormattedTimesMatch;
+            var ranking = levelConfig.GetTimeRanking(milliseconds);
+            var isNewBest = currentLevelData.TrySetTime(milliseconds) && !doFormattedTimesMatch;
             var shouldSave = isNewBest;
 
             if (isNewBest)
@@ -242,7 +242,7 @@ namespace UI
                 }
             }
             
-            GameLogger.Log($"{currentSceneConfig.name} was completed in {time}s - awarding ranking of {ranking}!", this);
+            GameLogger.Log($"{currentSceneConfig.name} was completed in {milliseconds.ToSeconds()}s - awarding ranking of {ranking}!", this);
 
             if (currentSceneConfig.NextSceneConfig != null && 
                 currentSceneConfig.NextSceneConfig.IsLevelScene &&

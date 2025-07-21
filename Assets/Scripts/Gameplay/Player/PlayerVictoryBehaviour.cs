@@ -28,7 +28,7 @@ namespace Gameplay.Player
         private bool hasFoundCollectible;
 
         public event Action<Vector2, float> OnVictorySequenceStart;
-        public event Action<float, bool> OnVictorySequenceFinish;
+        public event Action<int, bool> OnVictorySequenceFinish;
 
         public void NotifyFoundCollectible()
         {
@@ -58,7 +58,7 @@ namespace Gameplay.Player
 
             GameLogger.Log($"Unpaused realtime for completion was {timerBehaviour.RealtimeElapsed}s.", this);
 
-            OnVictorySequenceFinish?.Invoke(timerBehaviour.TimeElapsed, hasFoundCollectible);
+            OnVictorySequenceFinish?.Invoke(timerBehaviour.TimeElapsed.ToMilliseconds(), hasFoundCollectible);
         }
     }
 }

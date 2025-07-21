@@ -1,6 +1,7 @@
 ﻿using System;
 using NaughtyAttributes;
 using UnityEngine;
+using Utils;
 
 namespace Gameplay.Core
 {
@@ -40,26 +41,26 @@ namespace Gameplay.Core
         public int DistrictNumber => districtNumber;
         public int MissionNumber => missionNumber;
 
-        public float OneStarTime => oneStarTime;
-        public float TwoStarTime => twoStarTime;
-        public float ThreeStarTime => threeStarTime;
-        public float RainbowTime => rainbowTime;
+        public int OneStarMilliseconds => oneStarTime.ToMilliseconds();
+        public int TwoStarMilliseconds => twoStarTime.ToMilliseconds();
+        public int ThreeStarMilliseconds => threeStarTime.ToMilliseconds();
+        public int RainbowMilliseconds => rainbowTime.ToMilliseconds();
 
         private bool ShouldHideFields => LevelType is LevelType.Hidden or LevelType.Boss;
 
-        public TimeRanking GetTimeRanking(float time)
+        public TimeRanking GetTimeRanking(int milliseconds)
         {
-            if (time <= rainbowTime) return TimeRanking.Rainbow;
-            if (time <= threeStarTime) return TimeRanking.ThreeStar;
-            if (time <= twoStarTime) return TimeRanking.TwoStar;
-            if (time <= oneStarTime) return TimeRanking.OneStar;
+            if (milliseconds <= RainbowMilliseconds) return TimeRanking.Rainbow;
+            if (milliseconds <= ThreeStarMilliseconds) return TimeRanking.ThreeStar;
+            if (milliseconds <= TwoStarMilliseconds) return TimeRanking.TwoStar;
+            if (milliseconds <= OneStarMilliseconds) return TimeRanking.OneStar;
 
             return TimeRanking.Unranked;
         }
 
-        public int GetStars(float time)
+        public int GetStars(int milliseconds)
         {
-            return Mathf.Min((int) GetTimeRanking(time), 3);
+            return Mathf.Min((int) GetTimeRanking(milliseconds), 3);
         }
         
         public string GetLevelCode()

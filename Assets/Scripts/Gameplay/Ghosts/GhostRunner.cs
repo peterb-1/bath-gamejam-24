@@ -45,7 +45,7 @@ namespace Gameplay.Ghosts
 
         private float playbackTime;
         private float victoryTime;
-        private float displayTime;
+        private int displayMilliseconds;
         private int currentAnimatorStateHash;
         private int currentIndex;
         private int currentEventIndex;
@@ -57,7 +57,7 @@ namespace Gameplay.Ghosts
         
         public static event Action<ColourId> OnGhostColourChangedWhileSpectating;
         public static event Action OnSpectateVictorySequenceStart;
-        public static event Action<float> OnSpectateVictorySequenceFinish;
+        public static event Action<int> OnSpectateVictorySequenceFinish;
         public static event Action OnGhostFoundCollectible;
 
         private async void Awake()
@@ -69,7 +69,7 @@ namespace Gameplay.Ghosts
             if (hasLoadContext && SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GHOST_DATA_KEY, out GhostContext ghostContext))
             {
                 ghostRun = ghostContext.GhostRun;
-                displayTime = ghostContext.DisplayTime;
+                displayMilliseconds = ghostContext.DisplayMilliseconds;
             }
 
             var shouldLoadLocalGhost = false;
@@ -267,9 +267,9 @@ namespace Gameplay.Ghosts
             if (IsSpectating)
             {
                 // fallback to the accumulated time if display time couldn't be found for some reason
-                var time = displayTime == 0f ? playbackTime : displayTime;
+                var milliseconds = displayMilliseconds == 0f ? playbackTime.ToMilliseconds() : displayMilliseconds;
                 
-                OnSpectateVictorySequenceFinish?.Invoke(time);
+                OnSpectateVictorySequenceFinish?.Invoke(milliseconds);
             }
         }
         

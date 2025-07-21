@@ -8,6 +8,7 @@ using Gameplay.Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace UI
 {
@@ -78,7 +79,7 @@ namespace UI
 
         private void HandleTimeBonusApplied(float timeBonus)
         {
-            timerBonusText.SetText($"- {TimerBehaviour.GetFormattedTime(timeBonus)}");
+            timerBonusText.SetText($"- {TimerBehaviour.GetFormattedTime(timeBonus.ToMilliseconds())}");
             
             timerTextAnimator.SetTrigger(Pulse);
         }

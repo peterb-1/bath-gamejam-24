@@ -181,7 +181,7 @@ namespace UI
                 var fileId = details.Length >= 2 ? ((ulong) details[1] << 32) | (uint) details[0] : 0;
                 
                 row.gameObject.SetActive(true);
-                row.SetDetails(entry.m_nGlobalRank, entry.m_steamIDUser, entry.m_nScore.ToSeconds(), fileId, sceneConfig);
+                row.SetDetails(entry.m_nGlobalRank, entry.m_steamIDUser, entry.m_nScore, fileId, sceneConfig);
             }
             
             SetNavigation();

@@ -2,6 +2,7 @@
 using Gameplay.Core;
 using Gameplay.Drone;
 using UnityEngine;
+using Utils;
 
 namespace UI
 {
@@ -45,27 +46,16 @@ namespace UI
 
         public string GetFormattedTimeElapsed()
         {
-            return GetFormattedTime(TimeElapsed);
+            return GetFormattedTime(TimeElapsed.ToMilliseconds());
         }
 
-        public static string GetFormattedTime(float time, bool round = true)
+        public static string GetFormattedTime(int milliseconds)
         {
-            if (Math.Abs(time - float.MaxValue) < 0.01f) return "N/A";
+            if (milliseconds == int.MaxValue) return "N/A";
 
-            if (round)
-            {
-                // round so that e.g. 18.401 (which fails an 18.40 time threshold) displays as 18.41
-                time = Mathf.Ceil(time * 100f) / 100f;
-            }
-            else
-            {
-                // add small epsilon so that floating point error for exact values e.g. 18.40 doesn't bring the time down to 18.39
-                time += 1e-6f;
-            }
-            
-            var minutes = (int) (time / 60);
-            var seconds = (int) (time % 60);
-            var centiSeconds = (int) ((time - (int) time) * 100);
+            var minutes = milliseconds / 60000;
+            var seconds = (milliseconds % 60000) / 1000;
+            var centiSeconds = (milliseconds % 1000) / 10;
 
             return $"{minutes:00}:{seconds:00}:{centiSeconds:00}";
         }

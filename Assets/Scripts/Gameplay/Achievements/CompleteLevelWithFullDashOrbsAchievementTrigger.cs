@@ -16,7 +16,7 @@ namespace Gameplay.Achievements
             playerVictoryBehaviour.OnVictorySequenceFinish += HandleVictorySequenceFinish;
         }
 
-        private void HandleVictorySequenceFinish(float _1, bool _2)
+        private void HandleVictorySequenceFinish(int _1, bool _2)
         {
             if (DashTrackerService.Instance.HasFullOrbCapacity)
             {

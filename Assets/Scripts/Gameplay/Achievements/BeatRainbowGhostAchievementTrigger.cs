@@ -3,13 +3,14 @@ using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Gameplay.Ghosts;
 using Gameplay.Player;
+using UI;
 
 namespace Gameplay.Achievements
 {
     public class BeatRainbowGhostAchievementTrigger : AbstractAchievementTrigger
     {
         private PlayerVictoryBehaviour playerVictoryBehaviour;
-        private float ghostDisplayTime;
+        private int ghostDisplayMilliseconds;
         
         private async void Awake()
         {
@@ -17,7 +18,7 @@ namespace Gameplay.Achievements
                 SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GhostRunner.GHOST_DATA_KEY, out GhostContext ghostContext) &&
                 ghostContext.GhostRun != null)
             {
-                ghostDisplayTime = ghostContext.DisplayTime;
+                ghostDisplayMilliseconds = ghostContext.DisplayMilliseconds;
             }
             
             await UniTask.WaitUntil(PlayerAccessService.IsReady);
@@ -27,10 +28,11 @@ namespace Gameplay.Achievements
             playerVictoryBehaviour.OnVictorySequenceFinish += HandleVictorySequenceFinish;
         }
 
-        private void HandleVictorySequenceFinish(float time, bool _)
+        private void HandleVictorySequenceFinish(int milliseconds, bool _)
         {
-            if (time < ghostDisplayTime && 
-                SceneLoader.Instance.CurrentSceneConfig.LevelConfig.GetTimeRanking(ghostDisplayTime) is TimeRanking.Rainbow)
+            if (milliseconds < ghostDisplayMilliseconds &&
+                TimerBehaviour.GetFormattedTime(milliseconds) != TimerBehaviour.GetFormattedTime(ghostDisplayMilliseconds) &&
+                SceneLoader.Instance.CurrentSceneConfig.LevelConfig.GetTimeRanking(ghostDisplayMilliseconds) is TimeRanking.Rainbow)
             {
                 TriggerAchievement();
             }

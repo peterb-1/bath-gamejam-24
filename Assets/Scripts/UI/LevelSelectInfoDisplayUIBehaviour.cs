@@ -60,14 +60,14 @@ namespace UI
             
             if (SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(levelConfig, out var levelData))
             {
-                bestTimeText.text = TimerBehaviour.GetFormattedTime(levelData.BestTime);
+                bestTimeText.text = TimerBehaviour.GetFormattedTime(levelData.BestMilliseconds);
 
                 if (levelConfig.HasCollectible)
                 {
                     collectibleUIBehaviour.SetCollected(levelData.HasFoundCollectible);
                 }
                 
-                rankingStarUIBehaviour.SetRanking(levelConfig.GetTimeRanking(levelData.BestTime));
+                rankingStarUIBehaviour.SetRanking(levelConfig.GetTimeRanking(levelData.BestMilliseconds));
             }
             
             collectibleImage.enabled = levelConfig.HasCollectible;

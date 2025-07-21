@@ -17,9 +17,9 @@ namespace Gameplay.Achievements
             playerVictoryBehaviour.OnVictorySequenceFinish += HandleVictorySequenceFinish;
         }
 
-        private void HandleVictorySequenceFinish(float time, bool _)
+        private void HandleVictorySequenceFinish(int milliseconds, bool _)
         {
-            if (2f * time <= SceneLoader.Instance.CurrentSceneConfig.LevelConfig.RainbowTime)
+            if (2f * milliseconds <= SceneLoader.Instance.CurrentSceneConfig.LevelConfig.RainbowMilliseconds)
             {
                 TriggerAchievement();
             }

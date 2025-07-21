@@ -186,7 +186,7 @@ namespace Steam
                 var upperBits = (int) ((fileId >> 32) & 0xFFFFFFFF);
                 var details = new[] { lowerBits, upperBits };
                 
-                var success = await TryPostScoreAsync(leaderboard, levelData.BestTime, details);
+                var success = await TryPostScoreAsync(leaderboard, levelData.BestMilliseconds, details);
 
                 if (success)
                 {
@@ -201,13 +201,13 @@ namespace Steam
             isUploading = false;
         }
 
-        private async UniTask<bool> TryPostScoreAsync(SteamLeaderboard_t leaderboard, float timeSeconds, int[] details)
+        private async UniTask<bool> TryPostScoreAsync(SteamLeaderboard_t leaderboard, int milliseconds, int[] details)
         {
             var tcs = new UniTaskCompletionSource<bool>();
             var handle = SteamUserStats.UploadLeaderboardScore(
                 leaderboard,
                 ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodKeepBest,
-                timeSeconds.ToMilliseconds(),
+                milliseconds,
                 details,
                 details.Length
             );

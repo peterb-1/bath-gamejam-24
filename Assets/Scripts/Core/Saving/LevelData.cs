@@ -12,7 +12,7 @@ namespace Core.Saving
         public string LevelConfigGuid { get; private set; }
         
         [field: SerializeField]
-        public float BestTime { get; private set; }
+        public int BestMilliseconds { get; private set; }
         
         [field: SerializeField]
         public int DronesKilled { get; private set; }
@@ -37,7 +37,7 @@ namespace Core.Saving
         public LevelData(LevelConfig levelConfig)
         {
             LevelConfigGuid = levelConfig.Guid;
-            BestTime = float.MaxValue;
+            BestMilliseconds = int.MaxValue;
             DronesKilled = 0;
             HasFoundCollectible = false;
             HasShownUnlockAnimation = false;
@@ -46,11 +46,11 @@ namespace Core.Saving
             GhostData = null;
         }
 
-        public bool TrySetTime(float time)
+        public bool TrySetTime(int milliseconds)
         {
-            if (time < BestTime)
+            if (milliseconds < BestMilliseconds)
             {
-                BestTime = time;
+                BestMilliseconds = milliseconds;
                 IsBestTimePosted = false;
                 
                 OnNewBestAchieved?.Invoke();
@@ -115,7 +115,7 @@ namespace Core.Saving
 
         public bool IsComplete()
         {
-            return BestTime < float.MaxValue - 1e6f;
+            return BestMilliseconds < int.MaxValue;
         }
     }
 }

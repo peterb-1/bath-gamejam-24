@@ -114,7 +114,7 @@ namespace Core.Saving
                 if (TryGetLevelData(levelConfig, out var levelData))
                 {
                     totalMissions++;
-                    stars += levelConfig.GetStars(levelData.BestTime);
+                    stars += levelConfig.GetStars(levelData.BestMilliseconds);
 
                     if (levelData.IsComplete())
                     {
@@ -139,7 +139,7 @@ namespace Core.Saving
                 
                 if (TryGetLevelData(levelConfig, out var levelData) && levelConfig.Guid == levelData.LevelConfigGuid)
                 {
-                    if (levelConfig.GetTimeRanking(levelData.BestTime) is TimeRanking.Rainbow)
+                    if (levelConfig.GetTimeRanking(levelData.BestMilliseconds) is TimeRanking.Rainbow)
                     {
                         rainbowRanksAchieved++;
                     }

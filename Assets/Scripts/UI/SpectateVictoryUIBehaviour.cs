@@ -118,13 +118,13 @@ namespace UI
             SceneLoader.Instance.LoadLevelSelect();
         }
 
-        private async void HandleSpectateVictorySequenceFinish(float finalTime)
+        private async void HandleSpectateVictorySequenceFinish(int finalMilliseconds)
         {
             SetInfoText();
             
-            timerText.text = TimerBehaviour.GetFormattedTime(finalTime);
+            timerText.text = TimerBehaviour.GetFormattedTime(finalMilliseconds);
             
-            var ranking = ProcessLevelCompletion(finalTime);
+            var ranking = ProcessLevelCompletion(finalMilliseconds);
             
             await victoryPageGroup.ShowGroupAsync();
             await DisplayRankingAsync(ranking);
@@ -156,21 +156,21 @@ namespace UI
             }
         }
         
-        private TimeRanking ProcessLevelCompletion(float time)
+        private TimeRanking ProcessLevelCompletion(int milliseconds)
         {
             var currentSceneConfig = SceneLoader.Instance.CurrentSceneConfig;
             var currentLevelData = SceneLoader.Instance.CurrentLevelData;
             var levelConfig = currentSceneConfig.LevelConfig;
-            var yourTime = currentLevelData.BestTime;
+            var yourTime = currentLevelData.BestMilliseconds;
             var yourFormattedTime = TimerBehaviour.GetFormattedTime(yourTime);
             var yourRanking = levelConfig.GetTimeRanking(yourTime);
 
-            oneStarText.text = TimerBehaviour.GetFormattedTime(levelConfig.OneStarTime, round: false);
-            twoStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.TwoStarTime, round: false);
-            threeStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.ThreeStarTime, round: false);
-            rainbowText.text = TimerBehaviour.GetFormattedTime(levelConfig.RainbowTime, round: false);
+            oneStarText.text = TimerBehaviour.GetFormattedTime(levelConfig.OneStarMilliseconds);
+            twoStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.TwoStarMilliseconds);
+            threeStarsText.text = TimerBehaviour.GetFormattedTime(levelConfig.ThreeStarMilliseconds);
+            rainbowText.text = TimerBehaviour.GetFormattedTime(levelConfig.RainbowMilliseconds);
 
-            var theirRanking = levelConfig.GetTimeRanking(time);
+            var theirRanking = levelConfig.GetTimeRanking(milliseconds);
             
             oldBestText.text = $"YOUR BEST — {yourFormattedTime}";
 

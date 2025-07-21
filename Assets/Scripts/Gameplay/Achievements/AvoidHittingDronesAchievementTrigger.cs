@@ -25,7 +25,7 @@ namespace Gameplay.Achievements
             DroneTrackerService.OnDroneKilled += HandleDroneKilled;
         }
 
-        private void HandleVictorySequenceFinish(float _1, bool _2)
+        private void HandleVictorySequenceFinish(int _1, bool _2)
         {
             TriggerAchievement();
         }
