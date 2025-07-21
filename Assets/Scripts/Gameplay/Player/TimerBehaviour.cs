@@ -51,7 +51,9 @@ namespace UI
 
         public static string GetFormattedTime(int milliseconds)
         {
-            if (milliseconds == int.MaxValue) return "N/A";
+            if (milliseconds >= int.MaxValue - 9) return "N/A";
+
+            milliseconds += 9;
 
             var minutes = milliseconds / 60000;
             var seconds = (milliseconds % 60000) / 1000;
