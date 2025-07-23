@@ -1,3 +1,4 @@
+using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Boss;
 using Gameplay.Colour;
@@ -64,7 +65,7 @@ namespace Gameplay.Core
             var initialFixedDeltaTime = Time.fixedDeltaTime;
             var timeElapsed = 0f;
 
-            while (timeElapsed < duration)
+            while (timeElapsed < duration && !SceneLoader.Instance.IsLoading)
             {
                 if (!PauseManager.Instance.IsPaused)
                 {

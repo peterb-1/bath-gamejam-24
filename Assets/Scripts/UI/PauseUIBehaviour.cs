@@ -1,6 +1,7 @@
 ﻿using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
+using Gameplay.Ghosts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,7 +36,9 @@ namespace UI
             quitButton.onClick.AddListener(HandleQuitClicked);
 
             if (SceneLoader.Instance.SceneLoadContext != null && 
-                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(SpectateVictoryUIBehaviour.LEADERBOARD_NAME_KEY, out string leaderboardName))
+                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(SpectateVictoryUIBehaviour.LEADERBOARD_NAME_KEY, out string leaderboardName) &&
+                SceneLoader.Instance.SceneLoadContext.TryGetCustomData(GhostRunner.SPECTATE_KEY, out bool isSpectating) &&
+                isSpectating)
             {
                 retryText.text = "REWATCH";
                 spectatingInfoText.text = $"Spectating {leaderboardName}";

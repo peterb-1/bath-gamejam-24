@@ -106,6 +106,8 @@ namespace UI
 
         public async UniTask OpenLeaderboardAsync(LevelConfig levelConfig, Action<SceneConfig> onClosedCallback)
         {
+            levelConfig ??= orderedSceneConfigs[0].LevelConfig;
+            
             for (var i = 0; i < orderedSceneConfigs.Count; i++)
             {
                 if (orderedSceneConfigs[i].LevelConfig.Guid == levelConfig.Guid)

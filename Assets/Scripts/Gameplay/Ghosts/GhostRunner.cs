@@ -62,6 +62,9 @@ namespace Gameplay.Ghosts
 
         private async void Awake()
         {
+            // ghost is spawned under the camera so the camera doesn't zip across the screen, but want it to be separate for everything else
+            transform.parent = null;
+            
             GhostRun ghostRun = null;
 
             var hasLoadContext = SceneLoader.Instance.SceneLoadContext != null;
@@ -143,7 +146,11 @@ namespace Gameplay.Ghosts
                 currentIndex++;
             }
 
-            RunSpectatorEvents();
+            // want to still see the player move (especially on quick restart) but don't want audio events if loading
+            if (!SceneLoader.Instance.IsLoading)
+            {
+                RunSpectatorEvents();
+            }
 
             // if we've reached the end of the ghost
             if (currentIndex >= frames.Count - 1) 
@@ -178,7 +185,8 @@ namespace Gameplay.Ghosts
                 
                 RunFlashAsync().Forget();
 
-                if (IsSpectating)
+                // time-slow events are VERY dangerous if loading
+                if (IsSpectating && !SceneLoader.Instance.IsLoading)
                 {
                     OnGhostColourChangedWhileSpectating?.Invoke(currentColour);
                 }
