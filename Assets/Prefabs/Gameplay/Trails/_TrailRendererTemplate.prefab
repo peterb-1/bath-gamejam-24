@@ -51,7 +51,7 @@ MonoBehaviour:
   maxEmissionBoost: 2
   trailWidthResponseTime: 0.25
   smoothingStrength: 0.7
-  windBaseStrength: 0.3
+  windBaseStrength: 0.1
   windFrequency: {x: 1.2, y: 0.8}
   windNoiseScale: {x: 0.08, y: 0.11}
   windDirection: {x: 0.5, y: 0.2}
@@ -139,13 +139,13 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.14270243
-        inSlope: -0.33685902
-        outSlope: -0.33685902
+        value: 0.11
+        inSlope: -0.23656462
+        outSlope: -0.23656462
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.12427185
+        outWeight: 0.13126491
       - serializedVersion: 3
         time: 1
         value: 0.02

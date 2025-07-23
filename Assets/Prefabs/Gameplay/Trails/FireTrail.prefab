@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4338869334934023406, guid: ea7710ab36ab0c44e9e7ea6befa2b273, type: 3}
+      propertyPath: windBaseStrength
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 6316461748009112871, guid: ea7710ab36ab0c44e9e7ea6befa2b273, type: 3}
       propertyPath: m_Name
       value: FireTrail

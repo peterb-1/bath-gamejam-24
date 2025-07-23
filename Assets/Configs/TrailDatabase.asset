@@ -25,6 +25,10 @@ MonoBehaviour:
     <Guid>k__BackingField: 20944845-abe8-49a6-bcd0-9671940a0a4f
     <IsUnlockedByDefault>k__BackingField: 0
     <GameplayTrailBehaviour>k__BackingField: {fileID: 8832567710976653532, guid: 6d6d341be60ab1f49a0061459b071c18, type: 3}
+  - <Name>k__BackingField: Spectre
+    <Guid>k__BackingField: 57923840-1463-4c6f-aa66-afc442942ec8
+    <IsUnlockedByDefault>k__BackingField: 0
+    <GameplayTrailBehaviour>k__BackingField: {fileID: 9193687036037189446, guid: 986954e8507e6074cba019e1ac5d3fdd, type: 3}
   - <Name>k__BackingField: Whirlwind
     <Guid>k__BackingField: cf945410-73c3-45b5-ac45-96084f1965da
     <IsUnlockedByDefault>k__BackingField: 0
@@ -33,4 +37,8 @@ MonoBehaviour:
     <Guid>k__BackingField: 6eba2754-5e05-4900-8dfd-65c00a24ec22
     <IsUnlockedByDefault>k__BackingField: 0
     <GameplayTrailBehaviour>k__BackingField: {fileID: 1860341458621901986, guid: 46a43d4c61853384a9503c8ea6d07c12, type: 3}
+  - <Name>k__BackingField: Stardust
+    <Guid>k__BackingField: 83f8322b-b6a8-4543-a273-2ad872c72a04
+    <IsUnlockedByDefault>k__BackingField: 0
+    <GameplayTrailBehaviour>k__BackingField: {fileID: 4899384113044056510, guid: 8edb8238556e1f94381bcb6c8a45655a, type: 3}
   <DefaultTrail>k__BackingField: c5c69847-76e9-4ec8-86f7-ff52def12970
