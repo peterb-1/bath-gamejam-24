@@ -2,6 +2,7 @@ using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Colour;
 using Gameplay.Core;
+using Gameplay.Trails;
 using UnityEngine;
 using Utils;
 
@@ -25,7 +26,7 @@ namespace Gameplay.Player
         private AnimationCurve flashCurve;
 
         private ColourConfig currentColourConfig;
-        private TrailRenderer trailRenderer;
+        private AbstractGameplayTrailBehaviour trailBehaviour;
         private Gradient trailGradient;
         
         private void Awake()
@@ -61,14 +62,13 @@ namespace Gameplay.Player
             }
         }
         
-        private void HandleTrailLoaded(TrailRenderer trail)
+        private void HandleTrailLoaded(AbstractGameplayTrailBehaviour trail)
         {
-            trailRenderer = trail;
-            trailGradient = trailRenderer.colorGradient;
+            trailBehaviour = trail;
 
             if (currentColourConfig != null)
             {
-                trailRenderer.colorGradient = trailGradient.WithTint(currentColourConfig.PlayerColour);
+                trailBehaviour.SetColour(currentColourConfig.PlayerColour);
             }
         }
 
@@ -79,9 +79,9 @@ namespace Gameplay.Player
             playerSpriteRenderer.color = colourConfig.PlayerColour;
             deathParticleRenderer.material.color = colourConfig.PlayerColour;
 
-            if (trailRenderer != null)
+            if (trailBehaviour != null)
             {
-                trailRenderer.colorGradient = trailGradient.WithTint(colourConfig.PlayerColour);
+                trailBehaviour.SetColour(colourConfig.PlayerColour);
             }
         }
 
@@ -99,9 +99,9 @@ namespace Gameplay.Player
 
                 playerSpriteRenderer.color = colour;
 
-                if (trailRenderer != null)
+                if (trailBehaviour != null)
                 {
-                    trailRenderer.colorGradient = trailGradient.WithTint(colour);
+                    trailBehaviour.SetColour(colour);
                 }
 
                 await UniTask.Yield();
@@ -111,9 +111,9 @@ namespace Gameplay.Player
 
             playerSpriteRenderer.color = startColour;
 
-            if (trailRenderer != null)
+            if (trailBehaviour != null)
             {
-                trailRenderer.colorGradient = trailGradient.WithTint(startColour);
+                trailBehaviour.SetColour(startColour);
             }
         }
 

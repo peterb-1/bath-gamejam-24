@@ -186,7 +186,7 @@ namespace Gameplay.Input
         {
             if (Keyboard.current == null) return false;
 
-            if (SceneLoader.Instance.CurrentSceneConfig.IsLevelScene && !PauseManager.Instance.IsPaused)
+            if (SceneLoader.Instance.CurrentSceneConfig.IsLevelScene && PauseManager.Instance != null && !PauseManager.Instance.IsPaused)
             {
                 foreach (var key in GameplayKeyboardSwitchKeys)
                 {

@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Gameplay.Environment;
 using Gameplay.Input;
+using UI.Settings;
 using UnityEngine;
 using UnityEngine.UI;
 

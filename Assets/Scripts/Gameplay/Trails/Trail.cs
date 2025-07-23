@@ -17,7 +17,7 @@ namespace Gameplay.Trails
         public bool IsUnlockedByDefault { get; private set; }
         
         [field: SerializeField]
-        public TrailRenderer TrailRenderer { get; private set; }
+        public AbstractGameplayTrailBehaviour GameplayTrailBehaviour { get; private set; }
         
 #if UNITY_EDITOR
         public void SetGuid(Guid guid)
