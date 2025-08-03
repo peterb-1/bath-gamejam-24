@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
@@ -93,6 +94,7 @@ namespace Gameplay.Environment
         [SerializeField] 
         private List<Tile> tiles;
 
+        private CancellationTokenSource toggleCts;
         private PlayerMovementBehaviour playerMovementBehaviour;
 
         private bool containsPlayer;
@@ -209,61 +211,57 @@ namespace Gameplay.Environment
 
         private async UniTask ToggleBuildingAsync(float duration)
         {
+            toggleCts?.Cancel();
+            toggleCts?.Dispose();
+            toggleCts = new CancellationTokenSource();
+
+            var token = toggleCts.Token;
+
             if (isGameplay)
             {
                 ToggleCollidersAsync().Forget();
             }
 
             var totalTiles = tiles.Count;
-            
             if (totalTiles == 0) return;
 
-            var shuffledIndices = new int[totalTiles];
-            
-            for (var i = 0; i < totalTiles; i++)
-            {
-                shuffledIndices[i] = i;
-            }
+            var shuffledIndices = ArrayUtils.GetRandomIndices(totalTiles);
 
-            // O(n) shuffle
-            for (var i = totalTiles - 1; i > 0; i--)
+            if (duration == 0f)
             {
-                var randomIndex = Random.Range(0, i + 1);
-                (shuffledIndices[i], shuffledIndices[randomIndex]) = (shuffledIndices[randomIndex], shuffledIndices[i]);
-            }
-
-            var tilesPerCycle = duration == 0f 
-                ? totalTiles
-                : Mathf.Max(1, (int) Mathf.Ceil(totalTiles * DELAY / duration));
-
-            try
-            {
-                for (var startIndex = 0; startIndex < totalTiles; startIndex += tilesPerCycle)
+                foreach (var i in shuffledIndices)
                 {
-                    var endIndex = Mathf.Min(startIndex + tilesPerCycle, totalTiles);
-                    
-                    for (var i = startIndex; i < endIndex; i++)
-                    {
-                        var tile = tiles[shuffledIndices[i]];
-                        
-                        if (!isActive)
-                        {
-                            tile.CancelFlash();
-                        }
+                    if (token.IsCancellationRequested) return;
 
-                        tile.Toggle(isActive);
-                    }
-
-                    if (endIndex < totalTiles)
-                    {
-                        await UniTask.WaitUntil(() => !PauseManager.Instance.IsPaused);
-                        await UniTask.Delay(TimeSpan.FromSeconds(DELAY), ignoreTimeScale: true);
-                    }
+                    var tile = tiles[i];
+                    if (!isActive) tile.CancelFlash();
+                    tile.Toggle(isActive);
                 }
+
+                return;
             }
-            catch (InvalidOperationException)
+
+            var timeElapsed = 0f;
+            var toggledCount = 0;
+
+            while (toggledCount < totalTiles)
             {
-                // do nothing - suppress the error log, it's ok if we cancel the enumeration to toggle the other way
+                if (token.IsCancellationRequested) return;
+
+                timeElapsed += Time.deltaTime;
+                
+                var progress = Mathf.Clamp01(timeElapsed / duration);
+                var countToToggle = Mathf.FloorToInt(progress * totalTiles);
+
+                while (toggledCount < countToToggle)
+                {
+                    var tile = tiles[shuffledIndices[toggledCount]];
+                    if (!isActive) tile.CancelFlash();
+                    tile.Toggle(isActive);
+                    toggledCount++;
+                }
+
+                await UniTask.Yield(token);
             }
         }
 
