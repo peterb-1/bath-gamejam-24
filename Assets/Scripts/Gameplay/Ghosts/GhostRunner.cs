@@ -99,7 +99,7 @@ namespace Gameplay.Ghosts
             else
             {
                 frames = ghostRun.frames;
-                ghostEvents = ghostRun.droneKills;
+                ghostEvents = ghostRun.ghostEvents;
                 victoryTime = ghostRun.victoryTime;
                 
                 if (frames is { Count: > 0 } && colourDatabase.TryGetColourConfig(frames[0].colourId, out var colourConfig))

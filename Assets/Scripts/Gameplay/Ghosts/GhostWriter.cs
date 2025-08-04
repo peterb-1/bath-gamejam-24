@@ -171,7 +171,7 @@ namespace Gameplay.Ghosts
             var ghostRun = new GhostRun
             {
                 frames = frames,
-                droneKills = ghostEvents,
+                ghostEvents = ghostEvents,
                 victoryTime = victoryTime
             };
             

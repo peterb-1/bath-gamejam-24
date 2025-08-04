@@ -7,7 +7,7 @@ namespace Gameplay.Ghosts
     public class GhostRun 
     {
         public List<GhostFrame> frames;
-        public List<GhostEvent> droneKills;
+        public List<GhostEvent> ghostEvents;
         public float victoryTime;
     }
 }

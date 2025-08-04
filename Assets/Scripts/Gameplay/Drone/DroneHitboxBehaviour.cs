@@ -184,21 +184,29 @@ namespace Gameplay.Drone
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            ResetIds();
+            ResetIds(false);
         }
         
-        [Button("Reset IDs")]
-        private void ResetIds()
+        [Button("Force Reset IDs")]
+        private void ForceResetIds()
+        {
+            ResetIds(true);
+        }
+
+        private void ResetIds(bool forceReset)
         {
             if (EditorApplication.isPlaying) return;
             
             var allDrones = FindObjectsByType<DroneHitboxBehaviour>(FindObjectsSortMode.None);
+            var resetCount = 0;
 
             var assignedIds = new HashSet<ushort>();
             var rand = new System.Random();
 
             foreach (var drone in allDrones)
             {
+                if (drone.Id != 0 && !forceReset) continue;
+                
                 ushort newId;
                 do
                 {
@@ -208,9 +216,11 @@ namespace Gameplay.Drone
                 drone.Id = newId;
                 
                 EditorUtility.SetDirty(drone);
+
+                resetCount++;
             }
 
-            GameLogger.Log($"Reset IDs for {allDrones.Length} drones.");
+            GameLogger.Log($"Reset IDs for {resetCount} drones.");
         }
 #endif
     }

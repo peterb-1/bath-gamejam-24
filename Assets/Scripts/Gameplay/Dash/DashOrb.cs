@@ -79,21 +79,30 @@ namespace Gameplay.Dash
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            ResetIds();
+            ResetIds(false);
+        }
+        
+        [Button("Force Reset IDs")]
+        private void ForceResetIds()
+        {
+            ResetIds(true);
         }
 
         [Button("Reset IDs")]
-        private void ResetIds()
+        private void ResetIds(bool forceReset)
         {
             if (EditorApplication.isPlaying) return;
             
             var allOrbs = FindObjectsByType<DashOrb>(FindObjectsSortMode.None);
+            var resetCount = 0;
 
             var assignedIds = new HashSet<ushort>();
             var rand = new System.Random();
 
             foreach (var dashOrb in allOrbs)
             {
+                if (dashOrb.Id != 0 && !forceReset) continue;
+                
                 ushort newId;
                 do
                 {
@@ -103,9 +112,11 @@ namespace Gameplay.Dash
                 dashOrb.Id = newId;
                 
                 EditorUtility.SetDirty(dashOrb);
+
+                resetCount++;
             }
 
-            GameLogger.Log($"Reset IDs for {allOrbs.Length} orbs.");
+            GameLogger.Log($"Reset IDs for {resetCount} orbs.");
         }
 #endif
     }
