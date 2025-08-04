@@ -437,13 +437,9 @@ namespace Audio
                 audioMixer.SetFloat(FLANGER_DRY, (1f - lerp) * startFlangerDry + lerp);
                 audioMixer.SetFloat(FLANGER_WET, (1f - lerp) * startFlangerWet);
                 
-                GameLogger.Log($"setting mixer values on disable curve {(1f - lerp) * startFrequency + lerp * UNFILTERED_FREQUENCY} {(1f - lerp) * startFlangerDry + lerp} {(1f - lerp) * startFlangerWet}");
-                
                 await UniTask.Yield();
                 
                 timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
-                
-                GameLogger.Log($"time elapsed is {timeElapsed}, delta time {Time.deltaTime} (unscaled {Time.unscaledDeltaTime}) timescale {Time.timeScale}");
             }
             
             DisableFxInstant();
