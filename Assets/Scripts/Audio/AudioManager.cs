@@ -104,6 +104,7 @@ namespace Audio
         {
             // stop any "long" sounds
             Stop(AudioClipIdentifier.ZiplineAttach);
+            Stop(AudioClipIdentifier.ColourSwitch);
 
             SetPauseState(false);
         }
@@ -305,6 +306,17 @@ namespace Audio
                 {
                     source.UnPause();
                 }
+            }
+        }
+
+        public void ClearPausedSounds()
+        {
+            // stop all sounds apart from scene transition UI
+            foreach (AudioClipIdentifier audioClipIdentifier in Enum.GetValues(typeof(AudioClipIdentifier)))
+            {
+                if (audioClipIdentifier is AudioClipIdentifier.ButtonClick or AudioClipIdentifier.MusicTransition) continue;
+                
+                Stop(audioClipIdentifier);
             }
         }
 

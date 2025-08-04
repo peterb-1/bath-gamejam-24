@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Audio;
+using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Gameplay.Ghosts;
@@ -78,6 +79,7 @@ namespace UI
         {
             GameLogger.Log("Restarting current level from pause menu...", this);
             PauseManager.Instance.UnpauseInvisible();
+            AudioManager.Instance.ClearPausedSounds();
             
             Time.timeScale = 1f;
             
@@ -88,6 +90,7 @@ namespace UI
         {
             GameLogger.Log("Quitting current level from pause menu...", this);
             PauseManager.Instance.UnpauseInvisible();
+            AudioManager.Instance.ClearPausedSounds();
 
             Time.timeScale = 1f;
             

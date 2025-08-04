@@ -195,6 +195,8 @@ namespace UI
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(starAnimationDelay));
                 
+                if (SceneLoader.Instance.IsLoading) return;
+                
                 secondStar.SetActive(true);
                 AudioManager.Instance.Play(AudioClipIdentifier.RankingStar);
                 RumbleManager.Instance.Rumble(starRumbleConfig);
@@ -204,6 +206,8 @@ namespace UI
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(starAnimationDelay));
                 
+                if (SceneLoader.Instance.IsLoading) return;
+                
                 thirdStar.SetActive(true);
                 AudioManager.Instance.Play(AudioClipIdentifier.RankingStar);
                 RumbleManager.Instance.Rumble(starRumbleConfig);
@@ -212,6 +216,8 @@ namespace UI
             if (ranking == TimeRanking.Rainbow)
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(rainbowAnimationDelay));
+                
+                if (SceneLoader.Instance.IsLoading) return;
                 
                 firstStar.SetRainbowState(true);
                 secondStar.SetRainbowState(true);
