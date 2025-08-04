@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -20,8 +19,6 @@ namespace Gameplay.Environment
     [RequireComponent(typeof(BoxCollider2D))]
     public class Building : MonoBehaviour
     {
-        private const float DELAY = 0.03f;
-
         [SerializeField] 
         private bool isGameplay = true;
         

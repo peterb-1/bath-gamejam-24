@@ -63,6 +63,8 @@ namespace Audio
         private PlayerDeathBehaviour playerDeathBehaviour;
         private PlayerVictoryBehaviour playerVictoryBehaviour;
 
+        private CancellationTokenSource fxCurveCts;
+
         private async void Awake()
         {
             if (Instance != null && Instance != this)
@@ -93,8 +95,6 @@ namespace Audio
         {
             // stop any "long" sounds
             Stop(AudioClipIdentifier.ZiplineAttach);
-            
-            DisableFxAsync().Forget();
         }
 
         private void HandleColourChangeStarted(ColourId _, float duration)
@@ -105,6 +105,7 @@ namespace Audio
         private void HandleSceneLoaded()
         {
             GetPlayerBehavioursAsync().Forget();
+            DisableFxAsync().Forget();
         }
         
         private async UniTask InitialiseSettingsAsync()
@@ -336,11 +337,16 @@ namespace Audio
         
         private async UniTask RunFxCurveAsync(float duration)
         {
+            fxCurveCts?.Cancel();
+            fxCurveCts?.Dispose();
+            fxCurveCts = new CancellationTokenSource();
+
+            var token = fxCurveCts.Token;
             var initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
             var timeElapsed = 0f;
 
             // run fx curve independent of timescale, since this happens during the slowdown
-            while (timeElapsed < duration && playerDeathBehaviour.IsAlive)
+            while (timeElapsed < duration && playerDeathBehaviour.IsAlive && !token.IsCancellationRequested)
             {
                 var lerp = fxCurve.Evaluate(timeElapsed / duration);
 
@@ -353,7 +359,7 @@ namespace Audio
                 timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
             }
 
-            if (playerDeathBehaviour.IsAlive)
+            if (playerDeathBehaviour.IsAlive && !token.IsCancellationRequested)
             {
                 audioMixer.SetFloat(LOW_PASS_CUTOFF, UNFILTERED_FREQUENCY);
                 audioMixer.SetFloat(FLANGER_DRY, 1f);
@@ -363,17 +369,24 @@ namespace Audio
 
         private async UniTask RunFilterCurveAsync(AnimationCurve curve, float duration)
         {
+            fxCurveCts?.Cancel();
+            fxCurveCts?.Dispose();
+            fxCurveCts = new CancellationTokenSource();
+
+            var token = fxCurveCts.Token;
             var initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
+            var targetProportion = curve.Evaluate(1f);
+            var targetFrequency = targetProportion * UNFILTERED_FREQUENCY;
             var timeElapsed = 0f;
             
             audioMixer.GetFloat(LOW_PASS_CUTOFF, out var startFrequency);
 
             // may die during slowdown, so use real time
-            while (timeElapsed < duration)
+            while (timeElapsed < duration && !token.IsCancellationRequested)
             {
-                var lerp = curve.Evaluate(timeElapsed / duration);
+                var lerp = (curve.Evaluate(timeElapsed / duration) - targetProportion) / (1f - targetProportion);
 
-                audioMixer.SetFloat(LOW_PASS_CUTOFF, lerp * startFrequency);
+                audioMixer.SetFloat(LOW_PASS_CUTOFF, Mathf.Lerp(targetFrequency, startFrequency, lerp));
                 
                 await UniTask.Yield();
                 
@@ -383,20 +396,36 @@ namespace Audio
 
         private async UniTask DisableFxAsync()
         {
+            // because seemingly second frame after load has a very high unscaled delta time?
+            await UniTask.DelayFrame(2);
+            
+            fxCurveCts?.Cancel();
+            fxCurveCts?.Dispose();
+            fxCurveCts = new CancellationTokenSource();
+            
+            var token = fxCurveCts.Token;
             var initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
             var timeElapsed = 0f;
             
             audioMixer.GetFloat(LOW_PASS_CUTOFF, out var startFrequency);
+            audioMixer.GetFloat(FLANGER_DRY, out var startFlangerDry);
+            audioMixer.GetFloat(FLANGER_WET, out var startFlangerWet);
             
-            while (timeElapsed < disableFxDuration)
+            while (timeElapsed < disableFxDuration && !token.IsCancellationRequested)
             {
                 var lerp = disableFxCurve.Evaluate(timeElapsed / disableFxDuration);
 
                 audioMixer.SetFloat(LOW_PASS_CUTOFF, (1f - lerp) * startFrequency + lerp * UNFILTERED_FREQUENCY);
+                audioMixer.SetFloat(FLANGER_DRY, (1f - lerp) * startFlangerDry + lerp);
+                audioMixer.SetFloat(FLANGER_WET, (1f - lerp) * startFlangerWet);
+                
+                GameLogger.Log($"setting mixer values on disable curve {(1f - lerp) * startFrequency + lerp * UNFILTERED_FREQUENCY} {(1f - lerp) * startFlangerDry + lerp} {(1f - lerp) * startFlangerWet}");
                 
                 await UniTask.Yield();
                 
                 timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
+                
+                GameLogger.Log($"time elapsed is {timeElapsed}, delta time {Time.deltaTime} (unscaled {Time.unscaledDeltaTime}) timescale {Time.timeScale}");
             }
             
             audioMixer.SetFloat(LOW_PASS_CUTOFF, UNFILTERED_FREQUENCY);
