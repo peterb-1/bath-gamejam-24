@@ -47,6 +47,9 @@ namespace Audio
         
         [SerializeField] 
         private AnimationCurve musicTransitionCurve;
+        
+        [SerializeField] 
+        private float pausedMusicVolumeProportion;
 
         [SerializeField] 
         private float endLevelDuration;
@@ -101,6 +104,8 @@ namespace Audio
         {
             // stop any "long" sounds
             Stop(AudioClipIdentifier.ZiplineAttach);
+
+            SetPauseState(false);
         }
 
         private void HandleColourChangeStarted(ColourId _, float duration)
@@ -282,6 +287,8 @@ namespace Audio
         
         public void Pause()
         {
+            SetPauseState(true);
+
             foreach (var (_, source) in playingSfxSources)
             {
                 source.Pause();
@@ -290,12 +297,28 @@ namespace Audio
 
         public void Unpause()
         {
+            SetPauseState(false);
+            
             foreach (var (_, source) in playingSfxSources)
             {
                 if (!source.isPlaying)
                 {
                     source.UnPause();
                 }
+            }
+        }
+
+        private void SetPauseState(bool isPaused)
+        {
+            if (SaveManager.Instance.SaveData.PreferenceData.TryGetValue(SettingId.MusicVolume, out float musicVolume))
+            {
+                HandleSettingChanged(SettingId.MusicVolume, isPaused ? musicVolume * pausedMusicVolumeProportion : musicVolume);
+            }
+
+            // no need to set on unpause - if it's in the middle of the fx curve that will take over
+            if (isPaused)
+            {
+                DisableFxInstant();
             }
         }
 
@@ -368,11 +391,14 @@ namespace Audio
             // run fx curve independent of timescale, since this happens during the slowdown
             while (timeElapsed < duration && playerDeathBehaviour.IsAlive && !token.IsCancellationRequested)
             {
-                var lerp = fxCurve.Evaluate(timeElapsed / duration);
+                if (!PauseManager.Instance.IsPaused)
+                {
+                    var lerp = fxCurve.Evaluate(timeElapsed / duration);
 
-                audioMixer.SetFloat(LOW_PASS_CUTOFF, (1f - lerp) * UNFILTERED_FREQUENCY);
-                audioMixer.SetFloat(FLANGER_DRY, 1f - lerp);
-                audioMixer.SetFloat(FLANGER_WET, lerp);
+                    audioMixer.SetFloat(LOW_PASS_CUTOFF, (1f - lerp) * UNFILTERED_FREQUENCY);
+                    audioMixer.SetFloat(FLANGER_DRY, 1f - lerp);
+                    audioMixer.SetFloat(FLANGER_WET, lerp);
+                }
                 
                 await UniTask.Yield();
                 

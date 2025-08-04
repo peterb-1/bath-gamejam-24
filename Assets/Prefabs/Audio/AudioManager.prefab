@@ -194,6 +194,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  pausedMusicVolumeProportion: 0.6
   endLevelDuration: 0.4
   deathDuration: 0.4
   disableFxDuration: 0.4
