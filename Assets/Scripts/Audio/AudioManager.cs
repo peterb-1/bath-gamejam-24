@@ -44,6 +44,9 @@ namespace Audio
         
         [SerializeField] 
         private AnimationCurve disableFxCurve;
+        
+        [SerializeField] 
+        private AnimationCurve musicTransitionCurve;
 
         [SerializeField] 
         private float endLevelDuration;
@@ -53,6 +56,9 @@ namespace Audio
         
         [SerializeField] 
         private float disableFxDuration;
+        
+        [SerializeField] 
+        private float musicTransitionDuration;
 
         public static AudioManager Instance { get; private set; }
 
@@ -136,7 +142,7 @@ namespace Audio
             var floatNames = settingId switch
             {
                 SettingId.MasterVolume => new[] {"MasterVolume"},
-                SettingId.MusicVolume => new[] {"MusicVolume"},
+                SettingId.MusicVolume => new[] {"MusicVolume", "MusicUnfilteredVolume"},
                 SettingId.SfxVolume => new[] {"SfxVolume", "GameplayUnfilteredVolume", "UIVolume"},
                 _ => null
             };
@@ -249,6 +255,30 @@ namespace Audio
                 playingSfxSources.Remove(item);
             }
         }
+
+        public async UniTask StopMusicAsync()
+        {
+            var itemsToRemove = new List<(MusicData, AudioSource)>();
+            
+            foreach (var (data, audioSource) in playingMusicSources)
+            {
+                itemsToRemove.Add((data, audioSource));
+            }
+
+            if (playingMusicSources.Count > 0 && itemsToRemove.Count == 0) return;
+
+            Play(AudioClipIdentifier.MusicTransition);
+                
+            await RunFilterCurveAsync(musicTransitionCurve, musicTransitionDuration);
+            
+            foreach (var item in itemsToRemove)
+            {
+                var (_, audioSource) = item;
+                audioSource.Stop();
+                audioSourcePool.Release(audioSource);
+                playingMusicSources.Remove(item);
+            }
+        }
         
         public void Pause()
         {
@@ -297,28 +327,11 @@ namespace Audio
         
         private void PlayMusic(MusicData musicData)
         {
-            var itemsToRemove = new List<(MusicData, AudioSource)>();
+            fxCurveCts?.Cancel();
+            fxCurveCts?.Dispose();
+            fxCurveCts = new CancellationTokenSource();
             
-            foreach (var (data, audioSource) in playingMusicSources)
-            {
-                if (data.Identifier != musicData.Identifier)
-                {
-                    audioSource.Stop();
-                    audioSourcePool.Release(audioSource);
-                    
-                    itemsToRemove.Add((data, audioSource));
-                }
-            }
-
-            // if we have nothing to remove, then we're not changing districts
-            if (playingMusicSources.Count > 0 && itemsToRemove.Count == 0) return;
-            
-            // TODO: SFX for switching music? should probably be punctuated by button click, but might want to lowpass or similar
-            
-            foreach (var item in itemsToRemove)
-            {
-                playingMusicSources.Remove(item);
-            }
+            DisableFxInstant();
 
             foreach (var clip in musicData.ParallelAudioClips)
             {
@@ -333,6 +346,13 @@ namespace Audio
                 
                 playingMusicSources.Add((musicData, audioSource));
             }
+        }
+        
+        private void DisableFxInstant()
+        {
+            audioMixer.SetFloat(LOW_PASS_CUTOFF, UNFILTERED_FREQUENCY);
+            audioMixer.SetFloat(FLANGER_DRY, 1f);
+            audioMixer.SetFloat(FLANGER_WET, 0f);
         }
         
         private async UniTask RunFxCurveAsync(float duration)
@@ -361,9 +381,7 @@ namespace Audio
 
             if (playerDeathBehaviour.IsAlive && !token.IsCancellationRequested)
             {
-                audioMixer.SetFloat(LOW_PASS_CUTOFF, UNFILTERED_FREQUENCY);
-                audioMixer.SetFloat(FLANGER_DRY, 1f);
-                audioMixer.SetFloat(FLANGER_WET, 0f);
+                DisableFxInstant();
             }
         }
 
@@ -428,9 +446,7 @@ namespace Audio
                 GameLogger.Log($"time elapsed is {timeElapsed}, delta time {Time.deltaTime} (unscaled {Time.unscaledDeltaTime}) timescale {Time.timeScale}");
             }
             
-            audioMixer.SetFloat(LOW_PASS_CUTOFF, UNFILTERED_FREQUENCY);
-            audioMixer.SetFloat(FLANGER_DRY, 1f);
-            audioMixer.SetFloat(FLANGER_WET, 0f);
+            DisableFxInstant();
         }
         
         public static bool IsReady() => Instance != null;

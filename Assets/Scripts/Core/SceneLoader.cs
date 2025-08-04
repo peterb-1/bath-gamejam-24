@@ -8,7 +8,6 @@ using Gameplay.Input;
 using NaughtyAttributes;
 using Steam;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Utils;
 
@@ -140,21 +139,21 @@ namespace Core
             {
                 SteamLeaderboards.Instance.QueueScoreUpload(CurrentSceneConfig.LevelConfig);
             }
+            
+            PreviousSceneConfig = CurrentSceneConfig;
+            CurrentSceneConfig = sceneConfig;
+            
+            if (CurrentDistrict != PreviousDistrict)
+            {
+                AudioManager.Instance.StopMusicAsync().Forget();
+            }
 
             await loadingScreen.ShowAsync();
             
             SaveManager.Instance.Save();
-            
-            PreviousSceneConfig = CurrentSceneConfig;
-            CurrentSceneConfig = sceneConfig;
 
             SetLevelData();
 
-            if (CurrentDistrict != PreviousDistrict)
-            {
-                AudioManager.Instance.PlayMusic((MusicIdentifier) CurrentDistrict);
-            }
-            
             await SceneManager.LoadSceneAsync(sceneConfig.ScenePath);
 
             await UniTask.WaitUntil(CameraAccessService.IsReady);
@@ -166,6 +165,11 @@ namespace Core
             else
             {
                 CameraAccessService.Instance.PostProcessOverrider.RemovePostProcessOverride();
+            }
+            
+            if (CurrentDistrict != PreviousDistrict)
+            {
+                AudioManager.Instance.PlayMusic((MusicIdentifier) CurrentDistrict);
             }
 
             GameLogger.Log($"Loaded scene {sceneConfig.name} successfully!", this);

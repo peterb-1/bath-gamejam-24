@@ -183,6 +183,11 @@ MonoBehaviour:
     <MixerGroup>k__BackingField: {fileID: -6322005595636824246, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
     <IsLooping>k__BackingField: 0
     <Volume>k__BackingField: 0.45
+  - <Identifier>k__BackingField: 23
+    <AudioClip>k__BackingField: {fileID: 8300000, guid: 71c9fe14b18259446a77468c190a6291, type: 3}
+    <MixerGroup>k__BackingField: {fileID: -2087039422109596197, guid: dcd71a5c44cc3b8419eeac414d4965a9, type: 2}
+    <IsLooping>k__BackingField: 0
+    <Volume>k__BackingField: 0.27
   musicClips:
   - <Identifier>k__BackingField: 0
     <ParallelAudioClips>k__BackingField:

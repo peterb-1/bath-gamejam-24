@@ -85,6 +85,8 @@ namespace Gameplay.Dash
         [Button("Reset IDs")]
         private void ResetIds()
         {
+            if (EditorApplication.isPlaying) return;
+            
             var allOrbs = FindObjectsByType<DashOrb>(FindObjectsSortMode.None);
 
             var assignedIds = new HashSet<ushort>();

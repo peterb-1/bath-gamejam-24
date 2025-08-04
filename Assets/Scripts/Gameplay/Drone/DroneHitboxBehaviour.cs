@@ -190,6 +190,8 @@ namespace Gameplay.Drone
         [Button("Reset IDs")]
         private void ResetIds()
         {
+            if (EditorApplication.isPlaying) return;
+            
             var allDrones = FindObjectsByType<DroneHitboxBehaviour>(FindObjectsSortMode.None);
 
             var assignedIds = new HashSet<ushort>();
@@ -200,7 +202,7 @@ namespace Gameplay.Drone
                 ushort newId;
                 do
                 {
-                    newId = (ushort)rand.Next(1, ushort.MaxValue);
+                    newId = (ushort) rand.Next(1, ushort.MaxValue);
                 } while (!assignedIds.Add(newId));
 
                 drone.Id = newId;

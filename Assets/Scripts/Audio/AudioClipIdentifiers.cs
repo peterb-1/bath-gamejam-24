@@ -24,6 +24,7 @@ namespace Audio
         SplashScreen,
         CollectibleFound,
         CollectibleAlreadyFound,
-        SatelliteComplete
+        SatelliteComplete,
+        MusicTransition
     }
 }
