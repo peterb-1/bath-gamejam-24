@@ -88,7 +88,6 @@ namespace Gameplay.Dash
             ResetIds(true);
         }
 
-        [Button("Reset IDs")]
         private void ResetIds(bool forceReset)
         {
             if (EditorApplication.isPlaying) return;
@@ -101,12 +100,20 @@ namespace Gameplay.Dash
 
             foreach (var dashOrb in allOrbs)
             {
-                if (dashOrb.Id != 0 && !forceReset) continue;
+                if (PrefabUtility.IsPartOfPrefabAsset(dashOrb)) continue;
+                
+                if (dashOrb.Id != 0 && !forceReset)
+                {
+                    if (assignedIds.Add(dashOrb.Id))
+                    {
+                        continue;
+                    }
+                }
                 
                 ushort newId;
                 do
                 {
-                    newId = (ushort)rand.Next(1, ushort.MaxValue);
+                    newId = (ushort) rand.Next(1, ushort.MaxValue);
                 } while (!assignedIds.Add(newId));
 
                 dashOrb.Id = newId;

@@ -205,7 +205,15 @@ namespace Gameplay.Drone
 
             foreach (var drone in allDrones)
             {
-                if (drone.Id != 0 && !forceReset) continue;
+                if (PrefabUtility.IsPartOfPrefabAsset(drone)) continue;
+                
+                if (drone.Id != 0 && !forceReset)
+                {
+                    if (assignedIds.Add(drone.Id))
+                    {
+                        continue;
+                    }
+                }
                 
                 ushort newId;
                 do
