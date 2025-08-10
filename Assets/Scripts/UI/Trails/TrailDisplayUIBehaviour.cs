@@ -15,6 +15,9 @@ namespace UI.Trails
         private GameObject selectedMarker;
 
         [SerializeField] 
+        private GameObject lockedFilter;
+
+        [SerializeField] 
         private TMP_Text trailNameText;
 
         [SerializeField]
@@ -89,6 +92,7 @@ namespace UI.Trails
             currentTrail = trail;
             isCurrentTrailUnlocked = trail.IsUnlockedByDefault || SaveManager.Instance.SaveData.AchievementsData.IsAchievementWithTrailUnlocked(trail);
             trailNameText.text = trail.Name;
+            lockedFilter.SetActive(!isCurrentTrailUnlocked);
 
             UpdateTrailPreview(trail);
         }
