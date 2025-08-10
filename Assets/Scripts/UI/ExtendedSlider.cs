@@ -1,6 +1,7 @@
 ﻿using System;
 using Audio;
 using Gameplay.Input;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -8,6 +9,8 @@ namespace UI
 {
     public class ExtendedSlider : Slider
     {
+        private bool isDragging;
+        
         public event Action<ExtendedSlider> OnHover;
         public event Action<ExtendedSlider> OnUnhover;
 
@@ -65,12 +68,41 @@ namespace UI
 
         public override void OnPointerExit(PointerEventData eventData)
         {
-            if (InputManager.CurrentControlScheme is ControlScheme.Mouse)
+            if (!isDragging && InputManager.CurrentControlScheme is ControlScheme.Mouse)
             {
                 OnUnhover?.Invoke(this);
             }
             
             base.OnPointerExit(eventData);
+        }
+        
+        public override void OnPointerDown(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Left)
+            {
+                isDragging = true;
+            }
+            
+            base.OnPointerDown(eventData);
+        }
+
+        public override void OnPointerUp(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Left)
+            {
+                isDragging = false;
+                
+                if (InputManager.CurrentControlScheme is ControlScheme.Mouse &&
+                    !RectTransformUtility.RectangleContainsScreenPoint(
+                        transform as RectTransform,
+                        eventData.position,
+                        eventData.pressEventCamera))
+                {
+                    OnUnhover?.Invoke(this);
+                }
+            }
+            
+            base.OnPointerUp(eventData);
         }
 
         protected override void OnDestroy()

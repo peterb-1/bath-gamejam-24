@@ -4790,8 +4790,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5a594c9972141c39ab43c9d94ed980b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tabButton: {fileID: 3380462225138720278}
   trailDatabase: {fileID: 11400000, guid: 5f90f395cd6ddc841b45925dae138aab, type: 2}
-  trailGridRoot: {fileID: 5355673909879469050}
+  gridLayout: {fileID: 7449205199137752787}
+  gridTransform: {fileID: 5355673909879469050}
   trailDisplayPrefab: {fileID: 3228001043983782407, guid: 2923614177efa954ca34dc95ab676f46, type: 3}
   selectedTrailDisplay: {fileID: 4891443622334852520}
   customisationPage: {fileID: 8982709390090203945}

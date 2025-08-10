@@ -20,7 +20,7 @@ namespace UI.Settings
         private Button backButton;
 
         private Action settingsClosedCallback;
-        private int currentTabIndex;
+        private int currentTabIndex = -1;
 
         private void Awake()
         {
@@ -35,10 +35,15 @@ namespace UI.Settings
         public async UniTask OpenSettingsAsync(Action onClosedCallback)
         {
             settingsClosedCallback = onClosedCallback;
-            pageGroup.SetDefaultPage();
-            currentTabIndex = 0;
+            
+            HandleTabSelected(tabs[0]);
 
             await pageGroup.ShowGroupAsync(isForward: false);
+
+            if (InputManager.CurrentControlScheme is not ControlScheme.Mouse)
+            {
+                tabs[0].TabButton.Select();
+            }
 
             InputManager.OnBackPerformed += HandleBackPerformed;
         }
@@ -67,9 +72,7 @@ namespace UI.Settings
             
             for (var i = 0; i < tabs.Length; i++)
             {
-                var tabBehaviour = tabs[i];
-                
-                if (tabBehaviour == tab)
+                if (tabs[i] == tab)
                 {
                     currentTabIndex = i;
                 }

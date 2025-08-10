@@ -12,6 +12,9 @@ namespace UI.Trails
         private ExtendedButton button;
 
         [SerializeField] 
+        private GameObject selectedMarker;
+
+        [SerializeField] 
         private TMP_Text trailNameText;
 
         [SerializeField]
@@ -98,6 +101,11 @@ namespace UI.Trails
         public void StopEmitting()
         {
             trailDisplayStrategy?.StopEmitting();
+        }
+
+        public void NotifySelectedTrailGuid(string selectedTrailGuid)
+        {
+            selectedMarker.SetActive(currentTrail.Guid == selectedTrailGuid);
         }
 
         private void UpdateTrailPreview(Trail trail)

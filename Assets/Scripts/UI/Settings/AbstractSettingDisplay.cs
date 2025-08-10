@@ -16,7 +16,7 @@ namespace UI.Settings
         private TMP_Text settingNameText;
 
         public event Action<AbstractSettingDisplay> OnHover;
-        public event Action OnUnhover;
+        public event Action<AbstractSettingDisplay> OnUnhover;
 
         protected AbstractSettingBase Setting { get; private set; }
         public string SettingName => Setting.DisplayName;
@@ -51,7 +51,7 @@ namespace UI.Settings
         
         protected void FireUnhoverEvent()
         {
-            OnUnhover?.Invoke();
+            OnUnhover?.Invoke(this);
         }
     }
 }

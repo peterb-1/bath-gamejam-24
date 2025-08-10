@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NaughtyAttributes;
 using TMPro;
 using UI.Trails;
@@ -39,9 +40,13 @@ namespace UI.Settings
         [SerializeField, HideIf(nameof(overrideSettingDisplay))]
         private AbstractSettingDisplay[] settingDisplays;
 
+        public Button TabButton => tabButton;
+        
         public Selectable FirstSelectable => overrideSettingDisplay 
             ? trailSelectionBehaviour.FirstSelectable 
             : settingDisplays[0].GetSelectables()[0];
+
+        private readonly List<AbstractSettingDisplay> hoveredDisplays = new();
 
         public event Action<SettingsTabBehaviour> OnTabSelected;
 
@@ -65,15 +70,34 @@ namespace UI.Settings
         
         private void HandleSettingHover(AbstractSettingDisplay settingDisplay)
         {
+            if (hoveredDisplays.Count == 0)
+            {
+                DisplaySettingInfo(settingDisplay);
+            }
+            
+            hoveredDisplays.Add(settingDisplay);
+        }
+        
+        private void HandleSettingUnhover(AbstractSettingDisplay settingDisplay)
+        {
+            hoveredDisplays.Remove(settingDisplay);
+
+            if (hoveredDisplays.Count > 0)
+            {
+                DisplaySettingInfo(hoveredDisplays[0]);
+            }
+            else
+            {
+                pageGroup.SetPage(noDataPage);
+            }
+        }
+
+        private void DisplaySettingInfo(AbstractSettingDisplay settingDisplay)
+        {
             pageGroup.SetPage(infoPage);
             
             settingNameText.text = settingDisplay.SettingName;
             settingDescriptionText.text = settingDisplay.SettingDescription;
-        }
-        
-        private void HandleSettingUnhover()
-        {
-            pageGroup.SetPage(noDataPage);
         }
         
         private void SetNavigation()
