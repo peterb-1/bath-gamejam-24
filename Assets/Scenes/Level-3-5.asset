@@ -18,10 +18,12 @@ MonoBehaviour:
   <LevelConfig>k__BackingField:
     <Guid>k__BackingField: 0dbf0f52-e75d-48b6-8b23-8bec5966f4d2
     districtNumber: 3
+    <LevelType>k__BackingField: 0
     missionNumber: 5
     <IsUnlockedByDefault>k__BackingField: 0
+    <HasCollectible>k__BackingField: 0
     oneStarTime: 28.4
     twoStarTime: 25
-    threeStarTime: 21.5
+    threeStarTime: 20.9
     rainbowTime: 15.3
   <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: 934ebdf69ac1b954ca7f2f099797b0b8, type: 2}
