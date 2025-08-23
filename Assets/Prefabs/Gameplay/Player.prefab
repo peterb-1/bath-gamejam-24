@@ -268,7 +268,8 @@ MonoBehaviour:
   wallJumpDeceleration: 3
   clingFallMultiplier: 1
   clingVelocityMultiplier: 0.4
-  coyoteDuration: 0.15
+  coyoteDuration: 0.1
+  ziplineCoyoteDuration: 0.2
   jumpBufferDuration: 0.2
   jumpCooldown: 0.25
   wallJumpDecelerationDuration: 0.5

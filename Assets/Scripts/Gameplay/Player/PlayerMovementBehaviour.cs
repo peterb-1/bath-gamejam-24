@@ -57,6 +57,9 @@ namespace Gameplay.Player
         [Header("Durations")]
         [SerializeField] 
         private float coyoteDuration;
+        
+        [SerializeField] 
+        private float ziplineCoyoteDuration;
 
         [SerializeField] 
         private float jumpBufferDuration;
@@ -299,7 +302,7 @@ namespace Gameplay.Player
 
             if (isGrounded || isHooked)
             {
-                coyoteCountdown = coyoteDuration;
+                coyoteCountdown = isHooked ? ziplineCoyoteDuration : coyoteDuration;
                 hasDoubleJumped = false;
                 hasLandedAtStart = true;
             }
