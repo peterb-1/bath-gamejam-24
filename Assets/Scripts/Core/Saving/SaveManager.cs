@@ -1,4 +1,5 @@
-﻿using NaughtyAttributes;
+﻿using Cysharp.Threading.Tasks;
+using NaughtyAttributes;
 using UnityEngine;
 using Utils;
 
@@ -41,7 +42,7 @@ namespace Core.Saving
         {
             SaveData.PreferenceData.PrepareForSerialization();
             
-            SaveUtils.Save(SaveData, SAVE_PATH);
+            SaveUtils.SaveAsync(SaveData, SAVE_PATH).Forget();
         }
         
 #if UNITY_EDITOR

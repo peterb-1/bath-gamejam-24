@@ -1,29 +1,69 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Utils
 {
     public static class SaveUtils
     {
-        public static void Save<T>(T data, string fileName) where T : class, new()
+        private static readonly SemaphoreSlim FileLock = new(1, 1);
+        
+        public static async UniTask SaveAsync<T>(T data, string fileName) where T : class, new()
         {
             var path = Path.Combine(Application.persistentDataPath, fileName);
+            var tempPath = path + ".tmp";
             var json = JsonUtility.ToJson(data, true);
+            
+            await FileLock.WaitAsync();
 
             try
             {
-                using var fileStream = new FileStream(path, FileMode.Create, FileAccess.Write);
-                using var writer = new StreamWriter(fileStream, Encoding.UTF8);
-                
-                writer.Write(json);
+                await UniTask.RunOnThreadPool(() =>
+                {
+                    // write to temp file first to avoid corruption in event of crash
+                    using (var fileStream = new FileStream(tempPath, FileMode.Create, FileAccess.Write))
+                    using (var writer = new StreamWriter(fileStream, Encoding.UTF8))
+                    {
+                        writer.Write(json);
+                        writer.Flush();
+                        fileStream.Flush(true);
+                    }
+
+                    if (File.Exists(path))
+                    {
+                        File.Replace(tempPath, path, null);
+                    }
+                    else
+                    {
+                        File.Move(tempPath, path);
+                    }
+                });
                 
                 GameLogger.Log($"Saved data to path {path} successfully.");
             }
-            catch (Exception e)
+            catch (Exception e1)
             {
-                GameLogger.LogError($"Failed to save data to path {path}: {e}");
+                GameLogger.LogError($"Failed to save data to path {path}: {e1}");
+            }
+            finally
+            {
+                FileLock.Release();
+                
+                // in case the temp file still exists after an error
+                try
+                {
+                    if (File.Exists(tempPath))
+                    {
+                        File.Delete(tempPath);
+                    }
+                }
+                catch (Exception e2)
+                {
+                    GameLogger.LogWarning($"Could not delete temp file {tempPath}: {e2}");
+                }
             }
         }
         
