@@ -21,7 +21,7 @@ MonoBehaviour:
     <LevelType>k__BackingField: 0
     missionNumber: 4
     <IsUnlockedByDefault>k__BackingField: 0
-    <HasCollectible>k__BackingField: 1
+    <HasCollectible>k__BackingField: 0
     oneStarTime: 25.5
     twoStarTime: 20
     threeStarTime: 16.3
