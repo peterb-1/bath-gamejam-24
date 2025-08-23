@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49e0ef1fb32541ca97a3662a5c22c625, type: 3}
   m_Name: Level-2-8
   m_EditorClassIdentifier: 
-  sceneAsset: {fileID: 102900000, guid: 1fa596bbd8ef42b4099f2af5acc56ea4, type: 3}
+  sceneAsset: {fileID: 102900000, guid: 3a384ff8a3c41264383b619788bef293, type: 3}
   scenePath: Assets/Scenes/Level-2-8.unity
   <IsLevelScene>k__BackingField: 1
   <LevelConfig>k__BackingField:
@@ -22,8 +22,8 @@ MonoBehaviour:
     missionNumber: 8
     <IsUnlockedByDefault>k__BackingField: 0
     <HasCollectible>k__BackingField: 0
-    oneStarTime: 21.5
-    twoStarTime: 16.3
-    threeStarTime: 12.8
-    rainbowTime: 7.3
+    oneStarTime: 0
+    twoStarTime: 0
+    threeStarTime: 0
+    rainbowTime: 0
   <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: 14234982d0b16fb40aabf55f07446b2d, type: 2}
