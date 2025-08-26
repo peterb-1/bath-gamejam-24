@@ -12,7 +12,7 @@ GameObject:
   m_Layer: 0
   m_Name: Patrol Point 1
   m_TagString: Untagged
-  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -239,7 +239,7 @@ Transform:
   m_GameObject: {fileID: 4705282589404379199}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.4, y: 1.1, z: 0.07077229}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -259,11 +259,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3c0fa6fc83dd54ab4d8fb0526e700b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolPoint1: {fileID: 5958829447525932916}
-  patrolPoint2: {fileID: 7079453491131020925}
+  dronePatrolStrategy: 0
   cycleTime: 5
   cycleOffset: 0
+  patrolPoint1: {fileID: 5958829447525932916}
+  patrolPoint2: {fileID: 7079453491131020925}
   smoothEnds: 1
+  centre: {fileID: 0}
+  radius: 0
+  isClockwise: 0
   droneHitboxBehaviour: {fileID: 1193363079179838421}
 --- !u!114 &1193363079179838421
 MonoBehaviour:
@@ -429,7 +433,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1604798318690189431}
   m_Layer: 0
-  m_Name: Patrol Drone
+  m_Name: DroneLinear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -465,7 +469,7 @@ GameObject:
   m_Layer: 0
   m_Name: Patrol Point 2
   m_TagString: Untagged
-  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 3306451490063965843, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

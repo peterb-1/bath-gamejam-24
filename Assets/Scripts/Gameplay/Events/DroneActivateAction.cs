@@ -13,7 +13,7 @@ namespace Gameplay.Events
         [SerializeField]
         private List<DronePatrolBehaviour> patrolDrones;
         
-        public override UniTask Execute()
+        public override async UniTask Execute()
         {
             foreach (var drone in flyInDrones)
             {
@@ -22,10 +22,8 @@ namespace Gameplay.Events
 
             foreach (var drone in patrolDrones)
             {
-                drone.Activate();
+                await drone.ActivateAsync();
             }
-            
-            return UniTask.CompletedTask;
         }
     }
 }

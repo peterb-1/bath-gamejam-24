@@ -6,22 +6,22 @@ namespace Gameplay.Drone
 {
     public class DroneFlyInBehaviour : MonoBehaviour
     {
-        [Header("Settings")] [SerializeField] private BezierCurve bezierCurve;
+        [Header("Curve settings")] 
+        [SerializeField] 
+        private BezierCurve bezierCurve;
 
-        [SerializeField] private int curveSegmentCount;
+        [SerializeField]
+        private int curveSegmentCount;
 
-        [SerializeField] private float flyInTime;
+        [SerializeField]
+        private float flyInTime;
 
-        [SerializeField] private Transform patrolPoint1;
-
-        [SerializeField] private float cycleTime;
-
-        [SerializeField] private bool smoothEnds;
-
-        [Header("References")] [SerializeField]
+        [Header("References")] 
+        [SerializeField]
         private DroneHitboxBehaviour droneHitboxBehaviour;
 
-        private Vector3 patrolPoint2;
+        [SerializeField]
+        private DronePatrolBehaviour dronePatrolBehaviour;
 
         private float currentCycleTime;
         private float curveProgress;
@@ -31,10 +31,9 @@ namespace Gameplay.Drone
         private void Awake()
         {
             droneHitboxBehaviour.OnDroneKilled += HandleDroneKilled;
+            dronePatrolBehaviour.SetIsPatrolling(false);
 
             isActive = droneHitboxBehaviour.StartActive;
-
-            patrolPoint2 = bezierCurve.GetPoint(1f);
         }
 
         private void HandleDroneKilled(DroneHitboxBehaviour _)
@@ -57,21 +56,11 @@ namespace Gameplay.Drone
                 curveProgress += Time.deltaTime / flyInTime;
                 var smoothedProgress = Mathf.SmoothStep(0f, 1f, curveProgress);
                 transform.position = bezierCurve.GetPoint(smoothedProgress);
-                return;
             }
-
-            currentCycleTime += Time.deltaTime;
-            currentCycleTime %= cycleTime;
-
-            var cycleProgress = currentCycleTime / cycleTime;
-            var lerp = 1f - 2f * Mathf.Abs(cycleProgress - 0.5f);
-
-            if (smoothEnds)
+            else
             {
-                lerp = Mathf.SmoothStep(0f, 1f, lerp);
+                dronePatrolBehaviour.SetIsPatrolling(true);
             }
-
-            transform.position = lerp * patrolPoint1.position + (1f - lerp) * patrolPoint2;
         }
 
         private void OnDestroy()
@@ -80,7 +69,6 @@ namespace Gameplay.Drone
         }
 
 #if UNITY_EDITOR
-
         [Button("Add Control Point")]
         private void AddControlPoint()
         {
@@ -139,6 +127,5 @@ namespace Gameplay.Drone
             }
         }
 #endif
-        
     }
 }
