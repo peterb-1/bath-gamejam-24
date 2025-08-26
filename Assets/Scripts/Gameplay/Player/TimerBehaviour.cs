@@ -36,11 +36,13 @@ namespace UI
 
         private void HandleDroneKilled(DroneHitboxBehaviour drone)
         {
-            TimeElapsed -= drone.TimeBonusOnKilled;
+            var bonus = Mathf.Min(TimeElapsed, drone.TimeBonusOnKilled);
+            
+            TimeElapsed -= bonus;
 
             if (drone.TimeBonusOnKilled > 0f)
             {
-                OnTimeBonusApplied?.Invoke(drone.TimeBonusOnKilled);
+                OnTimeBonusApplied?.Invoke(bonus);
             }
         }
 
