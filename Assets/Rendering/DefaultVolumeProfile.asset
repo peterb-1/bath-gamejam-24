@@ -355,7 +355,7 @@ MonoBehaviour:
     m_Value: 0.7
   intensity:
     m_OverrideState: 1
-    m_Value: 8
+    m_Value: 4
   scatter:
     m_OverrideState: 1
     m_Value: 1
@@ -433,7 +433,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccf1aba9553839d41ae37dd52e9ebcce, type: 3}
   m_Name: MotionBlur
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   mode:
     m_OverrideState: 1
     m_Value: 0
@@ -630,7 +630,7 @@ MonoBehaviour:
     m_Value: {x: 1, y: 1, z: 1, w: -0.106348686}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: -0.20000002, y: -0.20000002, z: -0.20000002, w: -0.20000002}
+    m_Value: {x: -0.29620978, y: -0.29620978, z: -0.29620978, w: -0.29620978}
   gain:
     m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 1, w: 0.43103448}

@@ -355,10 +355,10 @@ MonoBehaviour:
     m_Value: 0.78
   intensity:
     m_OverrideState: 1
-    m_Value: 16
+    m_Value: 9
   scatter:
     m_OverrideState: 1
-    m_Value: 0.521
+    m_Value: 0.221
   clamp:
     m_OverrideState: 1
     m_Value: 65472
@@ -486,7 +486,7 @@ MonoBehaviour:
   active: 1
   redOutRedIn:
     m_OverrideState: 1
-    m_Value: 62
+    m_Value: 66
   redOutGreenIn:
     m_OverrideState: 1
     m_Value: 0
@@ -504,13 +504,13 @@ MonoBehaviour:
     m_Value: -8
   blueOutRedIn:
     m_OverrideState: 1
-    m_Value: -7
+    m_Value: -6
   blueOutGreenIn:
     m_OverrideState: 1
-    m_Value: 12
+    m_Value: 22
   blueOutBlueIn:
     m_OverrideState: 1
-    m_Value: 72
+    m_Value: 86
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -630,7 +630,7 @@ MonoBehaviour:
     m_Value: {x: 1, y: 1, z: 1, w: -0.106348686}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 1, z: 1, w: -0.20000002}
+    m_Value: {x: -0.29620978, y: -0.29620978, z: -0.29620978, w: -0.29620978}
   gain:
     m_OverrideState: 1
     m_Value: {x: 1, y: 1, z: 1, w: 0.43103448}
@@ -677,10 +677,10 @@ MonoBehaviour:
   active: 1
   temperature:
     m_OverrideState: 1
-    m_Value: 28
+    m_Value: 21.3
   tint:
     m_OverrideState: 1
-    m_Value: -2
+    m_Value: -18.2
 --- !u!114 &6011325081710771952
 MonoBehaviour:
   m_ObjectHideFlags: 3
