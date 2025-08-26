@@ -19,7 +19,7 @@ namespace Gameplay.Achievements
         [SerializeField] 
         private bool tryPostOnAwake;
 
-        private List<Achievement> achievements = new();
+        private readonly List<Achievement> achievements = new();
 
         public List<Achievement> Achievements => achievements;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Gameplay.Core;
 using UnityEngine;
 using Utils;
@@ -15,7 +16,7 @@ namespace Core.Saving
         public int BestMilliseconds { get; private set; }
         
         [field: SerializeField]
-        public int DronesKilled { get; private set; }
+        public List<ushort> DronesKilled { get; private set; }
         
         [field: SerializeField]
         public bool HasFoundCollectible { get; private set; }
@@ -38,7 +39,7 @@ namespace Core.Saving
         {
             LevelConfigGuid = levelConfig.Guid;
             BestMilliseconds = int.MaxValue;
-            DronesKilled = 0;
+            DronesKilled = new List<ushort>();
             HasFoundCollectible = false;
             HasShownUnlockAnimation = false;
             IsUnlocked = false;
@@ -61,11 +62,12 @@ namespace Core.Saving
             return false;
         }
 
-        public bool TrySetDronesKilled(int drones)
+        public bool TryNotifyDroneKilled(ushort droneId)
         {
-            if (drones > DronesKilled)
+            if (!DronesKilled.Contains(droneId))
             {
-                DronesKilled = drones;
+                DronesKilled.Add(droneId);
+
                 return true;
             }
 

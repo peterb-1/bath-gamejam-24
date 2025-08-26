@@ -14,8 +14,6 @@ namespace Gameplay.Achievements
         [SerializeField] 
         private int dronesRequired;
 
-        private int dronesKilled;
-
         private void Awake()
         {
             if (SceneLoader.Instance.CurrentSceneConfig.LevelConfig.DistrictNumber != validDistrict) return;
@@ -23,13 +21,11 @@ namespace Gameplay.Achievements
             DroneTrackerService.OnDroneKilled += HandleDroneKilled;
         }
 
-        private void HandleDroneKilled(DroneHitboxBehaviour _)
+        private void HandleDroneKilled(DroneHitboxBehaviour drone)
         {
-            dronesKilled++;
-            
             var sceneLoader = SceneLoader.Instance;
 
-            if (sceneLoader.CurrentLevelData.TrySetDronesKilled(dronesKilled))
+            if (sceneLoader.CurrentLevelData.TryNotifyDroneKilled(drone.Id))
             {
                 var districtDronesKilled = 0;
                 
@@ -39,7 +35,7 @@ namespace Gameplay.Achievements
                         sceneConfig.LevelConfig.DistrictNumber == validDistrict &&
                         SaveManager.Instance.SaveData.CampaignData.TryGetLevelData(sceneConfig.LevelConfig, out var levelData))
                     {
-                        districtDronesKilled += levelData.DronesKilled;
+                        districtDronesKilled += levelData.DronesKilled.Count;
                     }
                 }
 
