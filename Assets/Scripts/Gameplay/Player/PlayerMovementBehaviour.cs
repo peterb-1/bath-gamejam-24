@@ -53,6 +53,9 @@ namespace Gameplay.Player
         
         [SerializeField] 
         private float clingVelocityMultiplier;
+        
+        [SerializeField] 
+        private float maxFallVelocity;
 
         [Header("Durations")]
         [SerializeField] 
@@ -443,6 +446,7 @@ namespace Gameplay.Player
             if (rigidBody.linearVelocityY < 0f)
             {
                 rigidBody.linearVelocity += Vector2.up * (Physics2D.gravity.y * (currentFallMultiplier - 1f) * Time.deltaTime);
+                rigidBody.linearVelocityY = Mathf.Max(rigidBody.linearVelocityY, -maxFallVelocity);
             }
             
             var isMoving = Mathf.Abs(rigidBody.linearVelocityX) > runAnimationSpeedThreshold;
