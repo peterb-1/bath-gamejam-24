@@ -257,6 +257,7 @@ namespace Steam
 
                     var updateHandle = SteamUGC.StartItemUpdate(SteamUtils.GetAppID(), createResult.m_nPublishedFileId);
                     
+                    // steam fucking crashes the entire game if you don't do all of these things which are mentioned nowhere in the documentation
                     SteamUGC.SetItemTitle(updateHandle, levelConfig.GetSteamGhostFileName());
                     SteamUGC.SetItemDescription(updateHandle, $"Ghost data for {levelConfig.GetSteamName()}");
                     SteamUGC.SetItemContent(updateHandle, tempDirectory);

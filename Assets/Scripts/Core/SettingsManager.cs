@@ -62,7 +62,6 @@ namespace Core
             }
 
             SaveManager.Instance.SaveData.PreferenceData.SetValue(settingId, value);
-            // Trigger events if needed
         }
     }
 }

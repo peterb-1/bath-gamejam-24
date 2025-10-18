@@ -30,10 +30,11 @@ namespace Core.Saving
                     
                     foreach (var setting in allSettings)
                     {
-                        if (entry.settingId != setting.SettingId) continue;
-                        
-                        settingType = setting.GetValueType();
-                        break;
+                        if (entry.settingId == setting.SettingId)
+                        {
+                            settingType = setting.GetValueType();
+                            break;
+                        }
                     }
                     
                     if (settingType == null) continue;
@@ -50,9 +51,9 @@ namespace Core.Saving
                         FieldInfo = fieldInfo
                     };
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    Debug.LogError($"Failed to load setting {entry.settingId}: {ex.Message}");
+                    Debug.LogError($"Failed to load setting {entry.settingId}: {e}");
                 }
             }
 
