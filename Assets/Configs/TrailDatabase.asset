@@ -41,4 +41,8 @@ MonoBehaviour:
     <Guid>k__BackingField: 83f8322b-b6a8-4543-a273-2ad872c72a04
     <IsUnlockedByDefault>k__BackingField: 0
     <GameplayTrailBehaviour>k__BackingField: {fileID: 4899384113044056510, guid: 8edb8238556e1f94381bcb6c8a45655a, type: 3}
+  - <Name>k__BackingField: Sparks
+    <Guid>k__BackingField: 0b1fa7b9-476a-4570-9ae6-466c21752913
+    <IsUnlockedByDefault>k__BackingField: 0
+    <GameplayTrailBehaviour>k__BackingField: {fileID: 1860341458621901986, guid: dd573e06455b6c54f94b85bb2f6d05ad, type: 3}
   <DefaultTrail>k__BackingField: c5c69847-76e9-4ec8-86f7-ff52def12970

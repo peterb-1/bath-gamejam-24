@@ -50,15 +50,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6051951874490870416, guid: 2188a07d8c8cb654d84497a8340b7cd5, type: 3}
       propertyPath: ShapeModule.radius.value
-      value: 0.16
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6051951874490870416, guid: 2188a07d8c8cb654d84497a8340b7cd5, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 6051951874490870416, guid: 2188a07d8c8cb654d84497a8340b7cd5, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6051951874490870416, guid: 2188a07d8c8cb654d84497a8340b7cd5, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 6051951874490870416, guid: 2188a07d8c8cb654d84497a8340b7cd5, type: 3}
       propertyPath: UVModule.sprites.Array.data[0].sprite
       value: 
-      objectReference: {fileID: 21300000, guid: fccb209bb13d3b14e94e621c3c23a511, type: 3}
+      objectReference: {fileID: 21300000, guid: 5f16239c3cbffbc4aa7422b10ae56276, type: 3}
     - target: {fileID: 6316461748009112871, guid: 2188a07d8c8cb654d84497a8340b7cd5, type: 3}
       propertyPath: m_Name
-      value: CircleParticleTrail
+      value: SparkParticleTrail
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
