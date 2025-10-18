@@ -27,7 +27,7 @@ namespace Core
         public LevelConfig LevelConfig { get; private set; }
         
         [field: SerializeField, ShowIf(nameof(IsLevelScene))]
-        public SceneConfig NextSceneConfig { get; private set; }
+        public SceneConfig[] UnlockedConfigsOnCompletion { get; private set; }
 
         public string ScenePath => scenePath;
 

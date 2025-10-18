@@ -149,7 +149,7 @@ namespace UI
 
             var sceneToLoad = overrideNextSceneConfig 
                 ? nextSceneConfig 
-                : SceneLoader.Instance.CurrentSceneConfig.NextSceneConfig;
+                : SceneLoader.Instance.CurrentSceneConfig.UnlockedConfigsOnCompletion[0];
             
             SceneLoader.Instance.LoadScene(sceneToLoad);
         }
@@ -244,11 +244,12 @@ namespace UI
             
             GameLogger.Log($"{currentSceneConfig.name} was completed in {milliseconds.ToSeconds()}s - awarding ranking of {ranking}!", this);
 
-            if (currentSceneConfig.NextSceneConfig != null && 
-                currentSceneConfig.NextSceneConfig.IsLevelScene &&
-                campaignData.TryGetLevelData(currentSceneConfig.NextSceneConfig.LevelConfig, out var nextLevelData))
+            foreach (var sceneConfig in currentSceneConfig.UnlockedConfigsOnCompletion)
             {
-                shouldSave |= nextLevelData.TryUnlock();
+                if (sceneConfig.IsLevelScene && campaignData.TryGetLevelData(sceneConfig.LevelConfig, out var nextLevelData))
+                {
+                    shouldSave |= nextLevelData.TryUnlock();
+                }
             }
 
             if (shouldSave)

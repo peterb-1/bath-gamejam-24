@@ -26,4 +26,5 @@ MonoBehaviour:
     twoStarTime: 11.9
     threeStarTime: 9.4
     rainbowTime: 5.1
-  <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: 1f98ef68288e60043bc14fc342b11349, type: 2}
+  <UnlockedConfigsOnCompletion>k__BackingField:
+  - {fileID: 11400000, guid: 1f98ef68288e60043bc14fc342b11349, type: 2}

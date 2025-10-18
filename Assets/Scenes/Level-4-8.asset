@@ -26,4 +26,5 @@ MonoBehaviour:
     twoStarTime: 0
     threeStarTime: 0
     rainbowTime: 0
-  <NextSceneConfig>k__BackingField: {fileID: 11400000, guid: c47de6d7340a8934ab662d7050dea147, type: 2}
+  <UnlockedConfigsOnCompletion>k__BackingField:
+  - {fileID: 11400000, guid: c47de6d7340a8934ab662d7050dea147, type: 2}
