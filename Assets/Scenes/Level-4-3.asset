@@ -24,7 +24,7 @@ MonoBehaviour:
     <HasCollectible>k__BackingField: 1
     oneStarTime: 28.8
     twoStarTime: 23.3
-    threeStarTime: 18.3
+    threeStarTime: 18.9
     rainbowTime: 12.8
   <UnlockedConfigsOnCompletion>k__BackingField:
   - {fileID: 11400000, guid: 48daa6c02f774cd4f8cd7982faae93aa, type: 2}
