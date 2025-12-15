@@ -22,9 +22,9 @@ MonoBehaviour:
     missionNumber: 3
     <IsUnlockedByDefault>k__BackingField: 0
     <HasCollectible>k__BackingField: 1
-    oneStarTime: 0
-    twoStarTime: 0
-    threeStarTime: 0
-    rainbowTime: 0
+    oneStarTime: 28.8
+    twoStarTime: 23.3
+    threeStarTime: 18.3
+    rainbowTime: 12.8
   <UnlockedConfigsOnCompletion>k__BackingField:
   - {fileID: 11400000, guid: 48daa6c02f774cd4f8cd7982faae93aa, type: 2}
