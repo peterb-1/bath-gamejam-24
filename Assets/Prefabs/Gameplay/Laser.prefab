@@ -268,7 +268,7 @@ MonoBehaviour:
   isStartColoured: 1
   isEndColoured: 1
   colourId: 0
-  startActive: 1
+  isSuppressedOnAwake: 0
   fadeCurve:
     serializedVersion: 2
     m_Curve:

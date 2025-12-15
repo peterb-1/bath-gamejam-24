@@ -13,12 +13,14 @@ namespace Gameplay.Events
         [SerializeField]
         private float duration;
         
-        public override async UniTask Execute()
+        public override UniTask Execute()
         {
             foreach (var laser in lasers)
             {
-                await laser.ActivateLaserAsync(duration);
+                laser.EnableLaser(duration);
             }
+            
+            return UniTask.CompletedTask;
         }
     }
 }

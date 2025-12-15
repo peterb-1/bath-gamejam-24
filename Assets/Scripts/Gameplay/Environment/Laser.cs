@@ -21,7 +21,7 @@ namespace Gameplay.Environment
         private ColourId colourId;
         
         [SerializeField]
-        private bool startActive;
+        private bool isSuppressedOnAwake;
 
         [SerializeField] 
         private AnimationCurve fadeCurve;
@@ -66,7 +66,7 @@ namespace Gameplay.Environment
         private ColourDatabase colourDatabase;
 
         private bool isActive = true;
-        private bool canActivate = true;
+        private bool isSuppressed;
         
         private static readonly int Tiling = Shader.PropertyToID("_Tiling");
 
@@ -97,9 +97,9 @@ namespace Gameplay.Environment
                 }
             }
 
-            if (!startActive)
+            if (isSuppressedOnAwake)
             {
-                canActivate = false;
+                isSuppressed = true;
                 deathCollider.enabled = false;
                 var currentColour = laserRenderer.color;
                 currentColour.a = 0f;
@@ -123,7 +123,7 @@ namespace Gameplay.Environment
             if (shouldActivate != isActive)
             {
                 isActive = shouldActivate;
-                if (!canActivate)
+                if (isSuppressed)
                 {
                     return;
                 }
@@ -134,17 +134,17 @@ namespace Gameplay.Environment
         private void HandleColourChangeInstant(ColourId colour)
         {
             isActive = colourId == colour;
-            if (!canActivate)
+            if (isSuppressed)
             {
                 return;
             }
             ToggleLaserAsync(0f).Forget();
         }
 
-        public async UniTask ActivateLaserAsync(float duration)
+        public void EnableLaser(float duration)
         {
-            canActivate = true;
-            await ToggleLaserAsync(duration);
+            isSuppressed = false;
+            ToggleLaserAsync(duration).Forget();
         }
 
         private async UniTask ToggleLaserAsync(float duration)
