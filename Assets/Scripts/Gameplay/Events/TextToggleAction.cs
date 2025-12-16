@@ -1,23 +1,20 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using Gameplay.Environment;
+using UI;
 using UnityEngine;
 
 namespace Gameplay.Events
 {
-    public class LaserEnableAction : AbstractEventAction
+    public class TextToggleAction : AbstractEventAction
     {
         [SerializeField]
-        private List<Laser> lasers;
-
-        [SerializeField]
-        private float duration;
+        private List<WorldSpaceText> texts;
         
         public override UniTask Execute()
         {
-            foreach (var laser in lasers)
+            foreach (var text in texts)
             {
-                laser.EnableLaser(duration);
+                text.ToggleVisibility();
             }
             
             return UniTask.CompletedTask;

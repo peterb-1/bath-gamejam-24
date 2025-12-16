@@ -120,6 +120,7 @@ MonoBehaviour:
   text: {fileID: 2877793389482198196}
   colourId: 0
   colourDatabase: {fileID: 11400000, guid: 9ee9ba719534f7b428301db4856b7bda, type: 2}
+  isVisibleOnAwake: 1
 --- !u!114 &2877793389482198196 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2270012815131646168, guid: 5940a499c6809b74ca475087eab726f3, type: 3}
