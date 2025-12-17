@@ -74,7 +74,6 @@ namespace Gameplay.Boss
         private void HandleBossKilledPlayer()
         {
             playerDeathBehaviour.KillPlayer(PlayerDeathSource.Drone);
-            hitboxDisableCountdown = hitboxDisableTime;
         }
 
         private void HandleBossTakeDamage()
@@ -83,6 +82,7 @@ namespace Gameplay.Boss
             {
                 health--;
                 bossMovementBehaviour.IncrementProgress();
+                hitboxDisableCountdown = hitboxDisableTime;
                 
                 playerMovementBehaviour.HandleBossHit(bossHitForce);
                 OnBossHit?.Invoke(timeSlowDuration);

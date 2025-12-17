@@ -123,10 +123,6 @@ namespace Gameplay.Environment
             if (shouldActivate != isActive)
             {
                 isActive = shouldActivate;
-                if (isSuppressed)
-                {
-                    return;
-                }
                 ToggleLaserAsync(duration).Forget();
             }
         }
@@ -134,27 +130,23 @@ namespace Gameplay.Environment
         private void HandleColourChangeInstant(ColourId colour)
         {
             isActive = colourId == colour;
-            if (isSuppressed)
-            {
-                return;
-            }
             ToggleLaserAsync(0f).Forget();
         }
 
-        public void EnableLaser(float duration)
+        public void ToggleSuppression(float duration)
         {
-            isSuppressed = false;
+            isSuppressed = !isSuppressed;
             ToggleLaserAsync(duration).Forget();
         }
 
         private async UniTask ToggleLaserAsync(float duration)
         {
-            deathCollider.enabled = isActive;
+            deathCollider.enabled = isActive && !isSuppressed;
             
             var initialTime = TimeManager.Instance.UnpausedRealtimeSinceStartup;
             var currentColour = laserRenderer.color;
             var startAlpha = currentColour.a;
-            var targetAlpha = isActive ? 1f : fadedAlpha;
+            var targetAlpha = isSuppressed ? 0f : isActive ? 1f : fadedAlpha;
             var timeElapsed = 0f;
 
             // run fade independent of timescale, since this happens during the slowdown

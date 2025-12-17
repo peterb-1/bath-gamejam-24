@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Gameplay.Events
 {
-    public class LaserEnableAction : AbstractEventAction
+    public class LaserToggleAction : AbstractEventAction
     {
         [SerializeField]
         private List<Laser> lasers;
@@ -17,7 +17,7 @@ namespace Gameplay.Events
         {
             foreach (var laser in lasers)
             {
-                laser.EnableLaser(duration);
+                laser.ToggleSuppression(duration);
             }
             
             return UniTask.CompletedTask;

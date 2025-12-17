@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2851936335063709134}
   - component: {fileID: -3605180690837673073}
   m_Layer: 0
-  m_Name: LaserActivateAction
+  m_Name: LaserToggleAction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
