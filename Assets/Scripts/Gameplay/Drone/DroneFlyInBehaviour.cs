@@ -73,7 +73,8 @@ namespace Gameplay.Drone
         private void AddControlPoint()
         {
             var newPoint = new GameObject("ControlPoint");
-            newPoint.transform.parent = transform;
+            
+            newPoint.transform.parent = transform.parent;
 
             bezierCurve.AddPoint(newPoint.transform);
         }
