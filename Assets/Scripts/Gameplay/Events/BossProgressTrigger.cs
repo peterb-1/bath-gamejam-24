@@ -11,8 +11,10 @@ namespace Gameplay.Events
         [SerializeField]
         private int progressToTrigger;
         
-        private void Awake()
+        public override void Awake()
         {
+            base.Awake();
+            
             bossMovementBehaviour.OnBossProgress += TryTriggerEvent;
         }
 

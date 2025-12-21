@@ -655,6 +655,7 @@ namespace Gameplay.Player
 
         public void HandleBossHit(Vector2 force)
         {
+            force.x *= Mathf.Sign(rigidBody.linearVelocityX);
             rigidBody.linearVelocity = force;
             
             dashCountdown = 0f;

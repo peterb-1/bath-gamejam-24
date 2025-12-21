@@ -11,10 +11,11 @@ namespace Gameplay.Events
         
         private PlayerMovementBehaviour playerMovementBehaviour;
         
-        private async void Awake()
+        public override async void Awake()
         {
+            base.Awake();
+            
             await UniTask.WaitUntil(PlayerAccessService.IsReady);
-
             playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
         }
         

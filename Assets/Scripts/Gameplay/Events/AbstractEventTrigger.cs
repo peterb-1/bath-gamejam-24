@@ -9,14 +9,23 @@ namespace Gameplay.Events
         [SerializeField] 
         private AbstractEventAction[] actions;
 
+        [SerializeField] 
+        private bool isActiveOnAwake = true;
+        
         private bool hasTriggered;
+        
+        public bool IsActive { get; private set; }
 
+        public virtual void Awake()
+        {
+            IsActive = isActiveOnAwake;
+        }
+        
         protected void TriggerSequence()
         {
-            if (hasTriggered) return;
-            
+            if (hasTriggered || !IsActive) return;
             hasTriggered = true;
-                
+            
             RunSequenceAsync().Forget();
         }
 
@@ -39,6 +48,11 @@ namespace Gameplay.Events
             }
             
             GameLogger.Log($"Completed execution of event trigger {name}!", this);
+        }
+        
+        public void SetActive(bool isActive)
+        {
+            IsActive = isActive;
         }
     }
 }
