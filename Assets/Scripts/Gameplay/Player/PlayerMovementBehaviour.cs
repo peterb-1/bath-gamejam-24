@@ -96,6 +96,9 @@ namespace Gameplay.Player
 
         [SerializeField] 
         private float dashDuration;
+        
+        [SerializeField] 
+        private float dashHitDuration;
 
         [Header("Offsets and Distances")]
         [SerializeField] 
@@ -190,6 +193,7 @@ namespace Gameplay.Player
 
         public Vector2 Velocity => isHooked ? ziplineVelocity : rigidBody.linearVelocity;
         public bool IsDashing => dashCountdown > 0f;
+        public bool CanDashHit => dashHitCountdown > 0f;
         public bool IsHooked => isHooked;
         public bool IsOnGround => isGrounded;
 
@@ -206,6 +210,7 @@ namespace Gameplay.Player
         private float jumpBufferCountdown;
         private float jumpCooldownCountdown;
         private float dashCountdown;
+        private float dashHitCountdown;
         private float wallJumpDecelerationCountdown;
         private float wallEjectionCountdown;
         private float doubleJumpCancellationCountdown;
@@ -266,6 +271,7 @@ namespace Gameplay.Player
             if (jumpBufferCountdown > 0f) jumpBufferCountdown -= Time.deltaTime;
             if (jumpCooldownCountdown > 0f) jumpCooldownCountdown -= Time.deltaTime;
             if (dashCountdown > 0f) dashCountdown -= Time.deltaTime;
+            if (dashHitCountdown > 0f) dashHitCountdown -= Time.deltaTime;
             if (wallJumpDecelerationCountdown > 0f) wallJumpDecelerationCountdown -= Time.deltaTime;
             if (wallEjectionCountdown > 0f) wallEjectionCountdown -= Time.deltaTime;
             if (doubleJumpCancellationCountdown > 0f) doubleJumpCancellationCountdown -= Time.deltaTime;
@@ -642,6 +648,7 @@ namespace Gameplay.Player
         {
             dashDirectionMultiplier = Mathf.Sign(spriteRendererTransform.localScale.x);
             dashCountdown = dashDuration;
+            dashHitCountdown = dashHitDuration;
 
             dashDistortionRenderer.transform.localPosition = dashDistortionOffset * dashDirectionMultiplier;
         }
@@ -801,7 +808,7 @@ namespace Gameplay.Player
         
         private void HandleDeathSequenceStart(PlayerDeathSource source)
         {
-            if (dashCountdown > 0f && source is PlayerDeathSource.Laser)
+            if (dashHitCountdown > 0f && source is PlayerDeathSource.Laser)
             {
                 OnPlayerDashedIntoLaser?.Invoke();
             }
