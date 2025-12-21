@@ -87,6 +87,10 @@ namespace Gameplay.Boss
                 playerMovementBehaviour.HandleBossHit(bossHitForce);
                 OnBossHit?.Invoke(timeSlowDuration);
             }
+            else
+            {
+                Debug.Log("Boss killed");
+            }
         }
 
         private void Update()

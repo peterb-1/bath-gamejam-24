@@ -29,6 +29,7 @@ namespace Gameplay.Boss
         private float progressTimer;
         private bool progressTimerActive;
         private int nextPointIndex;
+        private int numPoints;
         private int eventsQueued;
         private bool isAlive = true;
 
@@ -39,6 +40,7 @@ namespace Gameplay.Boss
         private void Awake()
         {
             progressTimer = -progressTimeBuffer;
+            numPoints = waitPoints.Count;
         }
 
         public void IncrementProgress()
@@ -63,23 +65,26 @@ namespace Gameplay.Boss
         {
             if (!isAlive) return;
 
-            // Increment on timed point
-            if (waitPoints[nextPointIndex].ProgressType == BossWaitPoint.BossProgressType.Timed)
+            if (nextPointIndex < numPoints)
             {
-                if (progressTimer >= waitPoints[nextPointIndex].TimeToProgress)
+                // Increment on timed point
+                if (waitPoints[nextPointIndex].ProgressType == BossWaitPoint.BossProgressType.Timed)
                 {
-                    IncrementProgress();
+                    if (progressTimer >= waitPoints[nextPointIndex].TimeToProgress)
+                    {
+                        IncrementProgress();
+                    }
                 }
-            }
             
-            // Increment if event is queued
-            if (waitPoints[nextPointIndex].ProgressType == BossWaitPoint.BossProgressType.Event
-                && (progress >= 1f || nextPointIndex == 0))
-            {
-                if (eventsQueued > 0)
+                // Increment if event is queued
+                if (waitPoints[nextPointIndex].ProgressType == BossWaitPoint.BossProgressType.Event
+                    && (progress >= 1f || nextPointIndex == 0))
                 {
-                    IncrementProgress();
-                    eventsQueued--;
+                    if (eventsQueued > 0)
+                    {
+                        IncrementProgress();
+                        eventsQueued--;
+                    }
                 }
             }
             
@@ -116,7 +121,8 @@ namespace Gameplay.Boss
 
         public int GetMaxHealth()
         {
-            var health = 0;
+            // start counting from 1 since the final hit doesn't have a movement curve
+            var health = 1;
             
             foreach (var waitPoint in waitPoints)
             {
@@ -136,8 +142,9 @@ namespace Gameplay.Boss
 
         public bool IsDamageable()
         {
-            return waitPoints[nextPointIndex].ProgressType is BossWaitPoint.BossProgressType.Damage &&
-                   progress >= damageProgressThreshold;
+            return nextPointIndex == numPoints ||
+                   (waitPoints[nextPointIndex].ProgressType is BossWaitPoint.BossProgressType.Damage && 
+                    progress >= damageProgressThreshold);
         }
         
 
