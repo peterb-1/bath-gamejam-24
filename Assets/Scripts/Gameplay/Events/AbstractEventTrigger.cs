@@ -26,6 +26,8 @@ namespace Gameplay.Events
             
             foreach (var action in actions)
             {
+                if (!action.IsActive) continue;
+                
                 if (action.ShouldAwaitExecution)
                 {
                     await action.Execute();
