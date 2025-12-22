@@ -573,7 +573,7 @@ MonoBehaviour:
     <Curve>k__BackingField: {fileID: 8566010837794215226}
     <ProgressType>k__BackingField: 2
     <TimeToProgress>k__BackingField: 2
-  damageProgressThreshold: 0
+  damageProgressThreshold: 0.98
   cycleDuration: 8
   cycleAmplitude: 0.4
   progressTimeBuffer: 0.01
