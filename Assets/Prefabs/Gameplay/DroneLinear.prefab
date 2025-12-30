@@ -259,16 +259,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3c0fa6fc83dd54ab4d8fb0526e700b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dronePatrolStrategy: 0
+  movementStrategy:
+    rid: 1077721101714325608
   cycleTime: 5
   cycleOffset: 0
-  patrolPoint1: {fileID: 5958829447525932916}
-  patrolPoint2: {fileID: 7079453491131020925}
   smoothEnds: 1
-  centre: {fileID: 0}
   radius: 0
   isClockwise: 0
   droneHitboxBehaviour: {fileID: 1193363079179838421}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1077721101714325608
+      type: {class: PatrolMovementStrategy, ns: Gameplay.Drone, asm: Assembly-CSharp}
+      data:
+        patrolType: 0
+        cycleTime: 5
+        cycleOffset: 0
+        patrolPoint1: {fileID: 5958829447525932916}
+        patrolPoint2: {fileID: 7079453491131020925}
+        smoothEnds: 1
+        centre: {fileID: 0}
+        radius: 0
+        isClockwise: 0
 --- !u!114 &1193363079179838421
 MonoBehaviour:
   m_ObjectHideFlags: 0

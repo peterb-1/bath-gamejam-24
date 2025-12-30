@@ -1,6 +1,6 @@
 ﻿namespace Gameplay.Drone
 {
-    public enum DronePatrolStrategy
+    public enum PatrolType
     {
         Linear,
         Circular

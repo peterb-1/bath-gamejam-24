@@ -16,58 +16,6 @@ namespace Gameplay.Drone
         [SerializeField]
         private float flyInTime;
 
-        [Header("References")] 
-        [SerializeField]
-        private DroneHitboxBehaviour droneHitboxBehaviour;
-
-        [SerializeField]
-        private DronePatrolBehaviour dronePatrolBehaviour;
-
-        private float currentCycleTime;
-        private float curveProgress;
-        private bool isActive;
-        private bool isAlive = true;
-
-        private void Awake()
-        {
-            droneHitboxBehaviour.OnDroneKilled += HandleDroneKilled;
-            dronePatrolBehaviour.SetIsPatrolling(false);
-
-            isActive = droneHitboxBehaviour.StartActive;
-        }
-
-        private void HandleDroneKilled(DroneHitboxBehaviour _)
-        {
-            isAlive = false;
-        }
-
-        public void Activate()
-        {
-            isActive = true;
-            droneHitboxBehaviour.ActivateHitbox();
-        }
-
-        private void Update()
-        {
-            if (!isAlive || !isActive) return;
-
-            if (curveProgress < 1f)
-            {
-                curveProgress += Time.deltaTime / flyInTime;
-                var smoothedProgress = Mathf.SmoothStep(0f, 1f, curveProgress);
-                transform.position = bezierCurve.GetPoint(smoothedProgress);
-            }
-            else
-            {
-                dronePatrolBehaviour.SetIsPatrolling(true);
-            }
-        }
-
-        private void OnDestroy()
-        {
-            droneHitboxBehaviour.OnDroneKilled -= HandleDroneKilled;
-        }
-
 #if UNITY_EDITOR
         [Button("Add Control Point")]
         private void AddControlPoint()
