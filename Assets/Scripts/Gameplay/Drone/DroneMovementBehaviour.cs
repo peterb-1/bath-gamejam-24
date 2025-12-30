@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -69,5 +70,12 @@ namespace Gameplay.Drone
             droneHitboxBehaviour.OnDroneKilled -= HandleDroneKilled;
             droneHitboxBehaviour.OnDroneKilledByGhost -= HandleDroneKilled;
         }
+        
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            movementStrategy?.DrawGizmos();
+        }
+#endif
     }
 }

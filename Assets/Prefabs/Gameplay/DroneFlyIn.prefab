@@ -199,7 +199,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].segmentCount
-      value: 0
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325598].patrolPoint1
@@ -224,386 +224,386 @@ PrefabInstance:
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: 'managedReferences[1077721101714325597].bezierCurve.controlPoints.Array.data[0]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5230100079205829496}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: 'managedReferences[1077721101714325597].bezierCurve.controlPoints.Array.data[1]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7787613357902375707}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: 'managedReferences[1077721101714325597].bezierCurve.controlPoints.Array.data[2]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6374453054890229382}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[0].x
-      value: 0
+      value: -5.5999985
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[0].y
-      value: 0
+      value: 0.586
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[0].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[1].x
-      value: 0
+      value: -5.160498
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[1].y
-      value: 0
+      value: 0.3826689
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[1].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[2].x
-      value: 0
+      value: -4.721732
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[2].y
-      value: 0
+      value: 0.19480892
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[2].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[3].x
-      value: 0
+      value: -4.2836986
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[3].y
-      value: 0
+      value: 0.022420036
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[3].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[4].x
-      value: 0
+      value: -3.8463988
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[4].y
-      value: 0
+      value: -0.13449778
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[4].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[5].x
-      value: 0
+      value: -3.409832
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[5].y
-      value: 0
+      value: -0.2759444
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[5].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[6].x
-      value: 0
+      value: -2.9739985
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[6].y
-      value: 0
+      value: -0.40191996
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[6].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[7].x
-      value: 0
+      value: -2.538899
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[7].y
-      value: 0
+      value: -0.5124244
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[7].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[8].x
-      value: 0
+      value: -2.104532
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[8].y
-      value: 0
+      value: -0.60745776
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[8].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[9].x
-      value: 0
+      value: -1.6708988
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[9].y
-      value: 0
+      value: -0.68702
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[9].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[10].x
-      value: 0
+      value: -1.2379988
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[10].y
-      value: 0
+      value: -0.7511111
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[10].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[11].x
-      value: 0
+      value: -0.8058323
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[11].y
-      value: 0
+      value: -0.7997311
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[11].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[12].x
-      value: 0
+      value: -0.374399
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[12].y
-      value: 0
+      value: -0.83287996
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[12].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[13].x
-      value: 0
+      value: 0.056300912
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[13].y
-      value: 0
+      value: -0.85055774
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[13].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[14].x
-      value: 0
+      value: 0.4862674
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[14].y
-      value: 0
+      value: -0.8527644
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[14].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[15].x
-      value: 0
+      value: 0.91550064
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[15].y
-      value: 0
+      value: -0.83949995
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[15].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[16].x
-      value: 0
+      value: 1.3440008
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[16].y
-      value: 0
+      value: -0.8107644
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[16].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[17].x
-      value: 0
+      value: 1.7717673
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[17].y
-      value: 0
+      value: -0.76655775
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[17].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[18].x
-      value: 0
+      value: 2.1988008
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[18].y
-      value: 0
+      value: -0.7068799
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[18].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[19].x
-      value: 0
+      value: 2.6251001
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[19].y
-      value: 0
+      value: -0.63173115
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[19].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[20].x
-      value: 0
+      value: 3.050667
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[20].y
-      value: 0
+      value: -0.54111105
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[20].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[21].x
-      value: 0
+      value: 3.4755
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[21].y
-      value: 0
+      value: -0.43502003
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[21].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[22].x
-      value: 0
+      value: 3.8996003
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[22].y
-      value: 0
+      value: -0.3134577
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[22].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[23].x
-      value: 0
+      value: 4.322966
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[23].y
-      value: 0
+      value: -0.1764245
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[23].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[24].x
-      value: 0
+      value: 4.7455997
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[24].y
-      value: 0
+      value: -0.023919934
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[24].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[25].x
-      value: 0
+      value: 5.1674995
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[25].y
-      value: 0
+      value: 0.14405547
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[25].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[26].x
-      value: 0
+      value: 5.5886664
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[26].y
-      value: 0
+      value: 0.32750228
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[26].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[27].x
-      value: 0
+      value: 6.009099
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[27].y
-      value: 0
+      value: 0.5264198
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[27].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[28].x
-      value: 0
+      value: 6.428799
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[28].y
-      value: 0
+      value: 0.7408089
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[28].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[29].x
-      value: 0
+      value: 6.8477654
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[29].y
-      value: 0
+      value: 0.9706687
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[29].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[30].x
-      value: 0
+      value: 7.265999
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[30].y
-      value: 0
+      value: 1.216
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].bezierCurve.segmentPoints.Array.data[30].z
-      value: 0
+      value: -0.07077229
       objectReference: {fileID: 0}
     - target: {fileID: 5958829447525932916, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: m_LocalPosition.x

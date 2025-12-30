@@ -63,7 +63,7 @@ namespace Gameplay.Drone
             bezierCurve.Clear();
         }
 
-        private void OnDrawGizmos()
+        public void DrawGizmos()
         {
             Gizmos.color = Color.cyan;
 
@@ -94,6 +94,8 @@ namespace Gameplay.Drone
 
                 previousPosition = position;
             }
+            
+            strategyOnFinish?.DrawGizmos();
         }
 #endif
     }

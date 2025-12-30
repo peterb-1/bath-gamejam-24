@@ -71,7 +71,7 @@ namespace Gameplay.Drone
         }
         
 #if UNITY_EDITOR
-        private void OnDrawGizmos()
+        public void DrawGizmos()
         {
             if (patrolType is PatrolType.Linear)
             {
