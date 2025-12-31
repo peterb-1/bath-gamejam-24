@@ -1,4 +1,3 @@
-using System;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -24,6 +23,12 @@ namespace Gameplay.Drone
         
         [SerializeField]
         private bool isClockwise;
+        
+        [SerializeField]
+        private Transform patrolPoint1;
+
+        [SerializeField]
+        private Transform patrolPoint2;
         
         [Header("References")]
         [SerializeField] 

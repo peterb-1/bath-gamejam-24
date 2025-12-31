@@ -34,9 +34,16 @@ namespace Gameplay.Drone
         private bool isClockwise;
         
         private float currentCycleTime;
+        private bool hasAppliedCycleOffset;
         
         public Vector3 GetUpdatedPosition()
         {
+            if (!hasAppliedCycleOffset)
+            {
+                currentCycleTime = cycleOffset * cycleTime;
+                hasAppliedCycleOffset = true;
+            }
+            
             currentCycleTime += Time.deltaTime;
             currentCycleTime %= cycleTime;
 
