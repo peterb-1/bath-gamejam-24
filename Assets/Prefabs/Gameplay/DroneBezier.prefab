@@ -143,7 +143,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5264209634603969185, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: m_Name
-      value: DroneFlyIn
+      value: DroneBezier
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: m_Enabled
@@ -634,67 +634,8 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1604798318690189431, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6374453054890229382}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4705282589404379199, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
-      insertIndex: 1
-      addedObject: {fileID: 7253477822998055582}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
---- !u!1 &8141600411492194 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4705282589404379199, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
-  m_PrefabInstance: {fileID: 4706377247448704861}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7253477822998055582
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8141600411492194}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07fbd21ffcf3c164cb1b965d3285210c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bezierCurve:
-    controlPoints:
-    - {fileID: 5230100079205829496}
-    - {fileID: 7787613357902375707}
-    - {fileID: 6374453054890229382}
-    segmentPoints:
-    - {x: -5.5999985, y: 0.586, z: -0.07077229}
-    - {x: -5.160498, y: 0.3826689, z: -0.07077229}
-    - {x: -4.721732, y: 0.19480892, z: -0.07077229}
-    - {x: -4.2836986, y: 0.022420036, z: -0.07077229}
-    - {x: -3.8463988, y: -0.13449778, z: -0.07077229}
-    - {x: -3.409832, y: -0.2759444, z: -0.07077229}
-    - {x: -2.9739985, y: -0.40191996, z: -0.07077229}
-    - {x: -2.538899, y: -0.5124244, z: -0.07077229}
-    - {x: -2.104532, y: -0.60745776, z: -0.07077229}
-    - {x: -1.6708988, y: -0.68702, z: -0.07077229}
-    - {x: -1.2379988, y: -0.7511111, z: -0.07077229}
-    - {x: -0.8058323, y: -0.7997311, z: -0.07077229}
-    - {x: -0.374399, y: -0.83287996, z: -0.07077229}
-    - {x: 0.056300912, y: -0.85055774, z: -0.07077229}
-    - {x: 0.4862674, y: -0.8527644, z: -0.07077229}
-    - {x: 0.91550064, y: -0.83949995, z: -0.07077229}
-    - {x: 1.3440008, y: -0.8107644, z: -0.07077229}
-    - {x: 1.7717673, y: -0.76655775, z: -0.07077229}
-    - {x: 2.1988008, y: -0.7068799, z: -0.07077229}
-    - {x: 2.6251001, y: -0.63173115, z: -0.07077229}
-    - {x: 3.050667, y: -0.54111105, z: -0.07077229}
-    - {x: 3.4755, y: -0.43502003, z: -0.07077229}
-    - {x: 3.8996003, y: -0.3134577, z: -0.07077229}
-    - {x: 4.322966, y: -0.1764245, z: -0.07077229}
-    - {x: 4.7455997, y: -0.023919934, z: -0.07077229}
-    - {x: 5.1674995, y: 0.14405547, z: -0.07077229}
-    - {x: 5.5886664, y: 0.32750228, z: -0.07077229}
-    - {x: 6.009099, y: 0.5264198, z: -0.07077229}
-    - {x: 6.428799, y: 0.7408089, z: -0.07077229}
-    - {x: 6.8477654, y: 0.9706687, z: -0.07077229}
-    - {x: 7.265999, y: 1.216, z: -0.07077229}
-  curveSegmentCount: 30
-  flyInTime: 3
 --- !u!4 &1432825161052239913 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5958829447525932916, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
