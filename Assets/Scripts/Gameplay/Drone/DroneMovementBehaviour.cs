@@ -6,35 +6,12 @@ namespace Gameplay.Drone
 {
     public class DroneMovementBehaviour : MonoBehaviour
     {
-        [Header("Settings")] 
-        [SerializeReference, SubclassSelector] 
-        private IDroneMovementStrategy movementStrategy;
-
-        [SerializeField] 
-        private float cycleTime;
-        
-        [SerializeField]
-        private float cycleOffset;
-
-        [SerializeField]
-        private bool smoothEnds;
-        
-        [SerializeField]
-        private float radius;
-        
-        [SerializeField]
-        private bool isClockwise;
-        
-        [SerializeField]
-        private Transform patrolPoint1;
-
-        [SerializeField]
-        private Transform patrolPoint2;
-        
-        [Header("References")]
         [SerializeField] 
         private DroneHitboxBehaviour droneHitboxBehaviour;
         
+        [SerializeReference, SubclassSelector] 
+        private IDroneMovementStrategy movementStrategy;
+
         public IDroneMovementStrategy MovementStrategy => movementStrategy;
 
         private bool isActive;
