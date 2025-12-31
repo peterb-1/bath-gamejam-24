@@ -8131,6 +8131,10 @@ PrefabInstance:
       propertyPath: cycleTime
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
+      propertyPath: managedReferences[1077721101714325608].cycleTime
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5958829447525932916, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.27
@@ -21559,6 +21563,10 @@ PrefabInstance:
       propertyPath: cycleTime
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
+      propertyPath: managedReferences[1077721101714325608].cycleTime
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5958829447525932916, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.01
@@ -25333,6 +25341,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: cycleTime
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
+      propertyPath: managedReferences[1077721101714325608].cycleTime
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5958829447525932916, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}

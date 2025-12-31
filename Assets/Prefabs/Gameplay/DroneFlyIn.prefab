@@ -204,11 +204,11 @@ PrefabInstance:
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325598].patrolPoint1
       value: 
-      objectReference: {fileID: 6374453054890229382}
+      objectReference: {fileID: 1432825161052239913}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325598].patrolPoint2
       value: 
-      objectReference: {fileID: 1432825161052239913}
+      objectReference: {fileID: 6374453054890229382}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: managedReferences[1077721101714325597].strategyOnFinish
       value: 1077721101714325598
