@@ -1,12 +1,13 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Utils;
 
 namespace Gameplay.Drone
 {
     public class DroneMovementBehaviour : MonoBehaviour
     {
         [Header("Settings")] 
-        [SerializeReference] 
+        [SerializeReference, SubclassSelector] 
         private IDroneMovementStrategy movementStrategy;
 
         [SerializeField] 

@@ -4,10 +4,10 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace Gameplay.Drone
+namespace Utils
 {
-    [CustomPropertyDrawer(typeof(IDroneMovementStrategy), true)]
-    public class StrategyDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(SubclassSelectorAttribute))]
+    public class SubclassSelectorDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
@@ -89,13 +89,17 @@ namespace Gameplay.Drone
                 property.managedReferenceValue = null;
                 property.serializedObject.ApplyModifiedProperties();
             });
-        
-            // Find all derived types
-            var baseType = typeof(IDroneMovementStrategy);
+
+            // Get the field type using the property path
+            var baseType = GetFieldType(property);
+    
+            if (baseType == null) return;
+    
+            // Find all types that implement this interface/inherit from this class
             var types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(assembly => assembly.GetTypes())
-                .Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t));
-        
+                .Where(t => !t.IsAbstract && !t.IsInterface && baseType.IsAssignableFrom(t));
+
             foreach (var type in types)
             {
                 menu.AddItem(new GUIContent(type.Name), false, () => {
@@ -103,8 +107,19 @@ namespace Gameplay.Drone
                     property.serializedObject.ApplyModifiedProperties();
                 });
             }
-        
+
             menu.ShowAsContext();
+        }
+
+        private Type GetFieldType(SerializedProperty property)
+        {
+            var parentType = property.serializedObject.targetObject.GetType();
+            var fieldInfo = parentType.GetField(property.propertyPath,
+                System.Reflection.BindingFlags.Public |
+                System.Reflection.BindingFlags.NonPublic |
+                System.Reflection.BindingFlags.Instance);
+    
+            return fieldInfo?.FieldType;
         }
     }
 }
