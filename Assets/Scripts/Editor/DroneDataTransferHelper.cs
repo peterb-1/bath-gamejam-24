@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Gameplay.Drone;
-using Gameplay.Events;
+﻿using Gameplay.Drone;
 using UnityEditor;
 using UnityEngine;
 using Utils;
@@ -34,6 +32,8 @@ namespace Editor
                     transferCount++;
                 }
 
+                // DroneFlyInBehaviour has been REMOVED - this block is retained as legacy
+                /*
                 if (strategy is BezierMovementStrategy && droneMovementBehaviour.gameObject.TryGetComponent<DroneFlyInBehaviour>(out var droneFlyInBehaviour))
                 {
                     var serializedFlyInBehaviour = new SerializedObject(droneFlyInBehaviour);
@@ -65,16 +65,19 @@ namespace Editor
                     
                     transferCount++;
                 }
+                */
             }
             
             var actionTransferCount = 0;
             
+            // DroneFlyInBehaviour has been REMOVED - this block is retained as legacy
+            /*
             foreach (var action in Object.FindObjectsByType<DroneActivateAction>(FindObjectsSortMode.None))
             {
                 var serializedAction = new SerializedObject(action);
                 var flyInDronesProperty = serializedAction.FindProperty("flyInDrones");
                 var patrolDronesProperty = serializedAction.FindProperty("patrolDrones");
-                
+
                 var existingDrones = new HashSet<Object>();
                 for (var i = 0; i < patrolDronesProperty.arraySize; i++)
                 {
@@ -84,7 +87,7 @@ namespace Editor
                         existingDrones.Add(drone);
                     }
                 }
-                
+
                 var addedCount = 0;
                 for (var i = 0; i < flyInDronesProperty.arraySize; i++)
                 {
@@ -93,7 +96,7 @@ namespace Editor
                     {
                         var newIndex = patrolDronesProperty.arraySize;
                         patrolDronesProperty.InsertArrayElementAtIndex(newIndex);
-                        
+
                         var flyInBehaviour = flyInDrone as DroneFlyInBehaviour;
                         if (flyInBehaviour != null && flyInBehaviour.TryGetComponent<DroneMovementBehaviour>(out var movementBehaviour))
                         {
@@ -102,7 +105,7 @@ namespace Editor
                         }
                     }
                 }
-                
+
                 if (addedCount > 0)
                 {
                     serializedAction.ApplyModifiedProperties();
@@ -110,36 +113,37 @@ namespace Editor
                     actionTransferCount++;
                 }
             }
-            
+            */
+
             GameLogger.Log($"Transferred data for {transferCount} drones!");
             GameLogger.Log($"Merged drone lists in {actionTransferCount} DroneActivateAction objects!");
-            
+
             AssetDatabase.SaveAssets();
         }
-        
+
         private static void CopySerializedProperty(SerializedProperty source, SerializedProperty target)
         {
             if (source == null || target == null) return;
-            
+
             if (source.isArray && target.isArray)
             {
                 CopyArray(source, target);
                 return;
             }
-            
+
             var sourceIterator = source.Copy();
             var sourceEndProperty = source.GetEndProperty();
             var enterChildren = true;
-            
+
             while (sourceIterator.Next(enterChildren) && !SerializedProperty.EqualContents(sourceIterator, sourceEndProperty))
             {
                 enterChildren = false;
-                
+
                 var relativePath = sourceIterator.propertyPath[(source.propertyPath.Length + 1)..];
                 var targetProperty = target.FindPropertyRelative(relativePath);
-                
+
                 if (targetProperty == null) continue;
-                
+
                 if (sourceIterator.isArray && targetProperty.isArray)
                 {
                     CopyArray(sourceIterator, targetProperty);
@@ -154,12 +158,12 @@ namespace Editor
         private static void CopyArray(SerializedProperty source, SerializedProperty target)
         {
             target.arraySize = source.arraySize;
-            
+
             for (var i = 0; i < source.arraySize; i++)
             {
                 var sourceElement = source.GetArrayElementAtIndex(i);
                 var targetElement = target.GetArrayElementAtIndex(i);
-                
+
                 CopyPropertyValue(sourceElement, targetElement);
             }
         }

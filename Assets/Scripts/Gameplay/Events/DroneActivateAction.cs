@@ -8,9 +8,6 @@ namespace Gameplay.Events
     public class DroneActivateAction : AbstractEventAction
     {
         [SerializeField]
-        private List<DroneFlyInBehaviour> flyInDrones;
-        
-        [SerializeField]
         private List<DroneMovementBehaviour> patrolDrones;
         
         public override UniTask Execute()
