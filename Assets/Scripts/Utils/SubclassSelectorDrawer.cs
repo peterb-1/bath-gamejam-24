@@ -13,44 +13,40 @@ namespace Utils
         {
             EditorGUI.BeginProperty(position, label, property);
         
-            // Draw the field label
             var labelRect = new Rect(position.x, position.y, EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight);
             EditorGUI.LabelField(labelRect, label);
-        
-            // Get current type
+
             var currentType = property.managedReferenceValue?.GetType();
             var currentTypeName = currentType != null ? currentType.Name : "None";
-        
-            // Type dropdown (positioned after the label)
             var dropdownRect = new Rect(position.x + EditorGUIUtility.labelWidth, position.y, 
                 position.width - EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight);
+            
             if (EditorGUI.DropdownButton(dropdownRect, new GUIContent(currentTypeName), FocusType.Keyboard))
             {
                 ShowTypeMenu(property);
             }
         
-            // Draw fields of selected type
             if (property.managedReferenceValue != null)
             {
                 EditorGUI.indentLevel++;
+
                 var fieldRect = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight + 2, 
                     position.width, position.height - EditorGUIUtility.singleLineHeight - 2);
-            
-                // Draw children without the main property label
                 var iterator = property.Copy();
                 var endProperty = iterator.GetEndProperty();
-                iterator.NextVisible(true); // Enter children
+
+                iterator.NextVisible(true);
             
-                float yOffset = fieldRect.y;
+                var yOffset = fieldRect.y;
                 while (!SerializedProperty.EqualContents(iterator, endProperty))
                 {
-                    float height = EditorGUI.GetPropertyHeight(iterator, true);
+                    var height = EditorGUI.GetPropertyHeight(iterator, true);
                     var childRect = new Rect(fieldRect.x, yOffset, fieldRect.width, height);
+                    
                     EditorGUI.PropertyField(childRect, iterator, true);
                     yOffset += height + EditorGUIUtility.standardVerticalSpacing;
                 
-                    if (!iterator.NextVisible(false))
-                        break;
+                    if (!iterator.NextVisible(false)) break;
                 }
             
                 EditorGUI.indentLevel--;
@@ -61,7 +57,7 @@ namespace Utils
     
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            float height = EditorGUIUtility.singleLineHeight;
+            var height = EditorGUIUtility.singleLineHeight;
         
             if (property.managedReferenceValue != null)
             {
@@ -69,33 +65,32 @@ namespace Utils
             
                 var iterator = property.Copy();
                 var endProperty = iterator.GetEndProperty();
+
                 iterator.NextVisible(true);
             
                 while (!SerializedProperty.EqualContents(iterator, endProperty))
                 {
                     height += EditorGUI.GetPropertyHeight(iterator, true) + EditorGUIUtility.standardVerticalSpacing;
-                    if (!iterator.NextVisible(false))
-                        break;
+                    
+                    if (!iterator.NextVisible(false)) break;
                 }
             }
-        
+
             return height;
         }
-    
-        private void ShowTypeMenu(SerializedProperty property)
+
+        private static void ShowTypeMenu(SerializedProperty property)
         {
             var menu = new GenericMenu();
+
             menu.AddItem(new GUIContent("None"), false, () => {
                 property.managedReferenceValue = null;
                 property.serializedObject.ApplyModifiedProperties();
             });
 
-            // Get the field type using the property path
             var baseType = GetFieldType(property);
-    
             if (baseType == null) return;
-    
-            // Find all types that implement this interface/inherit from this class
+
             var types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(assembly => assembly.GetTypes())
                 .Where(t => !t.IsAbstract && !t.IsInterface && baseType.IsAssignableFrom(t));
@@ -111,7 +106,7 @@ namespace Utils
             menu.ShowAsContext();
         }
 
-        private Type GetFieldType(SerializedProperty property)
+        private static Type GetFieldType(SerializedProperty property)
         {
             var parentType = property.serializedObject.targetObject.GetType();
             var fieldInfo = parentType.GetField(property.propertyPath,
