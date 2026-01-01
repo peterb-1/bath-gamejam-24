@@ -45,9 +45,6 @@ namespace Gameplay.Drone
 
         [SerializeField] 
         private float fadeDuration;
-
-        [SerializeField]
-        private bool startActive;
         
         [field: SerializeField] 
         public float TimeBonusOnKilled { get; private set; }
