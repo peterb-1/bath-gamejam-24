@@ -58,8 +58,6 @@ namespace Gameplay.Drone
         private static readonly int Died = Animator.StringToHash("died");
         private static readonly int Threshold = Shader.PropertyToID("_Threshold");
 
-        public bool StartActive => startActive;
-
         public event Action<DroneHitboxBehaviour> OnDroneKilled;
         public event Action<DroneHitboxBehaviour> OnDroneKilledByGhost;
 
@@ -69,11 +67,6 @@ namespace Gameplay.Drone
 
             playerMovementBehaviour = PlayerAccessService.Instance.PlayerMovementBehaviour;
             playerDeathBehaviour = PlayerAccessService.Instance.PlayerDeathBehaviour;
-
-            if (!startActive)
-            {
-                spriteRenderer.material.SetFloat(Threshold, 1f);
-            }
             
             DroneTrackerService.RegisterDrone(this);
         }
@@ -130,7 +123,7 @@ namespace Gameplay.Drone
             droneCollider.enabled = false;
             droneAnimator.SetTrigger(Died);
             
-            RunDissolveAsync().Forget();
+            SetActive(false, shouldAnimate: true);
         }
         
         private void HandleDroneKilledPlayer()
@@ -138,12 +131,19 @@ namespace Gameplay.Drone
             playerDeathBehaviour.KillPlayer(PlayerDeathSource.Drone);
         }
 
-        public void ActivateHitbox()
+        public void SetActive(bool isActive, bool shouldAnimate = false)
         {
-            spriteRenderer.material.SetFloat(Threshold, 0f);
+            if (shouldAnimate)
+            {
+                AnimateActiveAsync(isActive).Forget();
+            }
+            else
+            {
+                spriteRenderer.material.SetFloat(Threshold, isActive ? 0f : 1f);
+            }
         }
         
-        public async UniTask RunFadeInAsync()
+        private async UniTask AnimateActiveAsync(bool isActive)
         {
             var timeElapsed = 0f;
 
@@ -151,34 +151,19 @@ namespace Gameplay.Drone
             {
                 var lerp = fadeCurve.Evaluate(timeElapsed / fadeDuration);
 
-                spriteRenderer.material.SetFloat(Threshold, 1f - lerp);
+                spriteRenderer.material.SetFloat(Threshold, isActive ? 1f - lerp : lerp);
                 
                 await UniTask.Yield();
 
                 timeElapsed += Time.deltaTime;
             }
             
-            spriteRenderer.material.SetFloat(Threshold, 0f);
-        }
-        
-        private async UniTask RunDissolveAsync()
-        {
-            var timeElapsed = 0f;
+            spriteRenderer.material.SetFloat(Threshold, isActive ? 0f : 1f);
 
-            while (timeElapsed < fadeDuration)
+            if (!isActive)
             {
-                var lerp = fadeCurve.Evaluate(timeElapsed / fadeDuration);
-
-                spriteRenderer.material.SetFloat(Threshold, lerp);
-                
-                await UniTask.Yield();
-
-                timeElapsed += Time.deltaTime;
+                rigidBody.simulated = false;
             }
-            
-            spriteRenderer.material.SetFloat(Threshold, 1f);
-
-            rigidBody.simulated = false;
         }
 
 #if UNITY_EDITOR

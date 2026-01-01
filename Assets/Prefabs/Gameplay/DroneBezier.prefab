@@ -158,6 +158,10 @@ PrefabInstance:
       value: 1077721101714325597
       objectReference: {fileID: 0}
     - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
+      propertyPath: <ShouldStartActive>k__BackingField
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5277196919517267600, guid: 4b9f1f5aaf3ffee4994e9ee6ebfe9542, type: 3}
       propertyPath: 'managedReferences[1077721101714325597]'
       value: Assembly-CSharp Gameplay.Drone.BezierMovementStrategy
       objectReference: {fileID: 0}

@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Utils;
 
@@ -8,6 +7,9 @@ namespace Gameplay.Drone
     {
         [SerializeField] 
         private DroneHitboxBehaviour droneHitboxBehaviour;
+        
+        [field: SerializeField] 
+        public bool ShouldStartActive { get; private set; }
         
         [SerializeReference, SubclassSelector] 
         private IDroneMovementStrategy movementStrategy;
@@ -22,7 +24,9 @@ namespace Gameplay.Drone
             droneHitboxBehaviour.OnDroneKilled += HandleDroneKilled;
             droneHitboxBehaviour.OnDroneKilledByGhost += HandleDroneKilled;
 
-            isActive = droneHitboxBehaviour.StartActive;
+            isActive = ShouldStartActive;
+
+            droneHitboxBehaviour.SetActive(isActive);
         }
 
         private void HandleDroneKilled(DroneHitboxBehaviour _)
@@ -42,10 +46,10 @@ namespace Gameplay.Drone
             movementStrategy = newStrategy;
         }
 
-        public void Activate()
+        public void Activate(bool shouldAnimate = false)
         {
             isActive = true;
-            droneHitboxBehaviour.RunFadeInAsync().Forget();
+            droneHitboxBehaviour.SetActive(true, shouldAnimate);
         }
         
         private void OnDestroy()
