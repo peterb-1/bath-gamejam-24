@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Gameplay.Drone
 {
-    public class PatrolMovementStrategy : IDroneMovementStrategy
+    public class PatrolMovementStrategy : IDroneMovementStrategy, IFixedPathStrategy
     {
         [SerializeField]
         private PatrolType patrolType;
@@ -36,7 +36,7 @@ namespace Gameplay.Drone
         private float currentCycleTime;
         private bool hasAppliedCycleOffset;
         
-        public Vector3 GetUpdatedPosition()
+        public void Update()
         {
             if (!hasAppliedCycleOffset)
             {
@@ -46,13 +46,38 @@ namespace Gameplay.Drone
             
             currentCycleTime += Time.deltaTime;
             currentCycleTime %= cycleTime;
+        }
 
-            var cycleProgress = currentCycleTime / cycleTime;
+        public Vector3 GetPosition()
+        {
+            return GetPositionAfterTime(0f);
+        }
+
+        public Vector3 GetVelocity()
+        {
+            return GetVelocityAfterTime(0f);
+        }
+        
+        public Vector3 GetPositionAfterTime(float deltaTime)
+        {
+            var cycleProgress = (currentCycleTime + deltaTime) / cycleTime;
 
             return patrolType switch
             {
                 PatrolType.Linear => GetLinearPosition(cycleProgress),
                 PatrolType.Circular => GetCircularPosition(cycleProgress),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+
+        public Vector3 GetVelocityAfterTime(float deltaTime)
+        {
+            var cycleProgress = (currentCycleTime + deltaTime) / cycleTime;
+
+            return patrolType switch
+            {
+                PatrolType.Linear => GetLinearVelocity(cycleProgress),
+                PatrolType.Circular => GetCircularVelocity(cycleProgress),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -75,6 +100,36 @@ namespace Gameplay.Drone
             var y = radius * Mathf.Sin(2f * Mathf.PI * cycleProgress) * (isClockwise ? -1f : 1f);
             
             return centre.position + new Vector3(x, y);
+        }
+
+        private Vector3 GetLinearVelocity(float cycleProgress)
+        {
+            var lerpDerivative = (cycleProgress < 0.5f) ? 2f : -2f;
+    
+            if (smoothEnds)
+            {
+                // apply chain rule for SmoothStep with derivative 6t - 6t^2
+                var lerp = 1f - 2f * Mathf.Abs(cycleProgress - 0.5f);
+                var smoothStepDerivative = 6f * lerp - 6f * lerp * lerp;
+                
+                lerpDerivative *= smoothStepDerivative;
+            }
+
+            var direction = patrolPoint1.position - patrolPoint2.position;
+            var cycleRate = 1f / cycleTime;
+    
+            return direction * (lerpDerivative * cycleRate);
+        }
+
+        private Vector3 GetCircularVelocity(float cycleProgress)
+        {
+            var angle = 2f * Mathf.PI * cycleProgress;
+            var angularVelocity = (2f * Mathf.PI) / cycleTime;
+    
+            var velocityX = -radius * Mathf.Sin(angle) * angularVelocity;
+            var velocityY = radius * Mathf.Cos(angle) * angularVelocity * (isClockwise ? -1f : 1f);
+    
+            return new Vector3(velocityX, velocityY);
         }
         
 #if UNITY_EDITOR

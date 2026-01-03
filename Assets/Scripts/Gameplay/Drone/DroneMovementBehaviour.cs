@@ -7,6 +7,9 @@ namespace Gameplay.Drone
     {
         [SerializeField] 
         private DroneHitboxBehaviour droneHitboxBehaviour;
+
+        [SerializeField] 
+        private float strategySwitchDuration;
         
         [field: SerializeField] 
         public bool ShouldStartActive { get; private set; }
@@ -16,6 +19,10 @@ namespace Gameplay.Drone
 
         public IDroneMovementStrategy MovementStrategy => movementStrategy;
 
+        private Vector3 transitionStartPosition;
+        private Vector3 transitionStartVelocity;
+
+        private float strategySwitchCountdown;
         private bool isActive;
         private bool isAlive = true;
 
@@ -38,12 +45,50 @@ namespace Gameplay.Drone
         {
             if (!isAlive || !isActive) return;
             
-            transform.position = movementStrategy.GetUpdatedPosition();
+            movementStrategy.Update();
+            
+            var targetPosition = movementStrategy.GetPosition();
+
+            if (strategySwitchCountdown > 0f)
+            {
+                var lerp = 1f - strategySwitchCountdown / strategySwitchDuration;
+        
+                if (movementStrategy is IFixedPathStrategy fixedPathStrategy)
+                {
+                    var timeRemaining = strategySwitchCountdown;
+                        
+                    var endPosition = fixedPathStrategy.GetPositionAfterTime(timeRemaining);
+                    var endVelocity = fixedPathStrategy.GetVelocityAfterTime(timeRemaining);
+                    
+                    targetPosition = HermiteCurveUtils.CubicHermite(
+                        transitionStartPosition, 
+                        transitionStartVelocity * strategySwitchDuration,
+                        endPosition, 
+                        endVelocity * strategySwitchDuration,
+                        lerp
+                    );
+                }
+                else
+                {
+                    var desiredVelocity = movementStrategy.GetVelocity();
+                    var blendedVelocity = Vector3.Lerp(transitionStartVelocity, desiredVelocity, lerp);
+            
+                    targetPosition = transform.position + blendedVelocity * Time.deltaTime;
+                }
+        
+                strategySwitchCountdown -= Time.deltaTime;
+            }
+
+            transform.position = targetPosition;
         }
 
         public void SetMovementStrategy(IDroneMovementStrategy newStrategy)
         {
+            transitionStartPosition = transform.position;
+            transitionStartVelocity = movementStrategy.GetVelocity();
+            
             movementStrategy = newStrategy;
+            strategySwitchCountdown = strategySwitchDuration;
         }
 
         public void Activate(bool shouldAnimate = false)

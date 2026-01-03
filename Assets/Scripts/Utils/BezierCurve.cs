@@ -100,7 +100,7 @@ namespace Utils
             return Mathf.Sqrt(minSqrDistance);
         }
         
-        public Vector3 GetTangent(float t)
+        public Vector3 GetTangent(float t, bool normalise = true)
         {
             if (controlPoints.Count < 2)
             {
@@ -134,7 +134,7 @@ namespace Utils
                 derivativePoints = nextLevel;
             }
 
-            return derivativePoints[0].normalized;
+            return normalise ? derivativePoints[0].normalized : derivativePoints[0];
         }
     }
 }

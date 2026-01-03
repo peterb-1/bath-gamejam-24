@@ -4,7 +4,9 @@ namespace Gameplay.Drone
 {
     public interface IDroneMovementStrategy
     {
-        public Vector3 GetUpdatedPosition();
+        public void Update();
+        public Vector3 GetPosition();
+        public Vector3 GetVelocity();
 
 #if UNITY_EDITOR
         public void DrawGizmos();
