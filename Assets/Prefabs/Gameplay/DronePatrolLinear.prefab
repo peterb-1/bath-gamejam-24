@@ -260,6 +260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   droneHitboxBehaviour: {fileID: 1193363079179838421}
+  strategySwitchDuration: 0.5
   <ShouldStartActive>k__BackingField: 1
   movementStrategy:
     rid: 1077721101714325608
