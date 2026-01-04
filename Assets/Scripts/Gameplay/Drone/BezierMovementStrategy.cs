@@ -20,6 +20,11 @@ namespace Gameplay.Drone
 
         private float curveProgress;
 
+        public void Initialise(DroneMovementBehaviour drone)
+        {
+            strategyOnFinish.Initialise(drone);
+        }
+
         public void Update()
         {
             if (curveProgress < 1f)

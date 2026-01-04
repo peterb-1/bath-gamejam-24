@@ -34,6 +34,7 @@ namespace Gameplay.Drone
             isActive = ShouldStartActive;
 
             droneHitboxBehaviour.SetActive(isActive);
+            movementStrategy.Initialise(this);
         }
 
         private void HandleDroneKilled(DroneHitboxBehaviour _)
@@ -84,6 +85,8 @@ namespace Gameplay.Drone
 
         public void SetMovementStrategy(IDroneMovementStrategy newStrategy)
         {
+            newStrategy.Initialise(this);
+            
             transitionStartPosition = transform.position;
             transitionStartVelocity = movementStrategy.GetVelocity();
             

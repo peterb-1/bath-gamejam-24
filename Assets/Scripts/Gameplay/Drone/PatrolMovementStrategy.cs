@@ -34,16 +34,14 @@ namespace Gameplay.Drone
         private bool isClockwise;
         
         private float currentCycleTime;
-        private bool hasAppliedCycleOffset;
+
+        public void Initialise(DroneMovementBehaviour _)
+        {
+            currentCycleTime = cycleOffset * cycleTime;
+        }
         
         public void Update()
         {
-            if (!hasAppliedCycleOffset)
-            {
-                currentCycleTime = cycleOffset * cycleTime;
-                hasAppliedCycleOffset = true;
-            }
-            
             currentCycleTime += Time.deltaTime;
             currentCycleTime %= cycleTime;
         }
