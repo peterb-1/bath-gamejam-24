@@ -125,10 +125,10 @@ MonoBehaviour:
   lookaheadStrength: {x: 4, y: 4}
   smoothTime: 0.12
   lookaheadSmoothTime: 0.2
-  shakeSmoothTime: 0.07
+  shakeSmoothTime: 0.08
   velocityShakeThreshold: 5
-  velocityShakeMultiplier: 0.0007
-  maxShakeStrength: 0.005
+  velocityShakeMultiplier: 0.12
+  maxShakeStrength: 1.1
 --- !u!114 &5366401592391419492
 MonoBehaviour:
   m_ObjectHideFlags: 0

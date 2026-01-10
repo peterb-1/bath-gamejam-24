@@ -127,7 +127,12 @@ namespace Gameplay.Ghosts
 
         private void Update() 
         {
-            if (frames == null || frames.Count == 0 || PauseManager.Instance.IsPaused) return;
+            if (PauseManager.Instance.IsPaused || Time.deltaTime == 0f || frames == null || frames.Count == 0)
+            {
+                Velocity = Vector2.zero;
+                lastPosition = transform.position.xy();
+                return;
+            }
             
             var currentPosition = transform.position.xy();
             

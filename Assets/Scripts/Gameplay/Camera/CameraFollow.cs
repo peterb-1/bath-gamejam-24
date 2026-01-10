@@ -113,9 +113,9 @@ namespace Gameplay.Camera
         private void Update()
         {
             if (Time.deltaTime == 0f) return;
-                
+
             var velocityMagnitude = velocity.magnitude - velocityShakeThreshold;
-            var shakeIntensity = Mathf.Clamp(velocityMagnitude * velocityShakeMultiplier, 0, maxShakeStrength) / Time.deltaTime;
+            var shakeIntensity = Mathf.Clamp(velocityMagnitude * velocityShakeMultiplier, 0, maxShakeStrength);
             var shakeOffset = new Vector3(Random.Range(-1f, 1f) * shakeIntensity, Random.Range(-1f, 1f) * shakeIntensity, 0f);
 
             rawPosition = Vector3.SmoothDamp(rawPosition, GetTargetPosition(), ref velocity, smoothTime);
@@ -131,7 +131,7 @@ namespace Gameplay.Camera
                 return positionOverride;
             }
 
-            var targetPosition = target.position + followOffset;
+            var targetPosition = target.position;
 
             if (shouldUseLookahead)
             {
