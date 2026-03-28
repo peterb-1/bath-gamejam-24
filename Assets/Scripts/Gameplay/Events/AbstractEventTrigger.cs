@@ -13,17 +13,16 @@ namespace Gameplay.Events
         private bool isActiveOnAwake = true;
         
         private bool hasTriggered;
-        
-        public bool IsActive { get; private set; }
+        private bool isActive;
 
         public virtual void Awake()
         {
-            IsActive = isActiveOnAwake;
+            isActive = isActiveOnAwake;
         }
         
         protected void TriggerSequence()
         {
-            if (hasTriggered || !IsActive) return;
+            if (hasTriggered || !isActive) return;
             hasTriggered = true;
             
             RunSequenceAsync().Forget();
@@ -50,9 +49,9 @@ namespace Gameplay.Events
             GameLogger.Log($"Completed execution of event trigger {name}!", this);
         }
         
-        public void SetActive(bool isActive)
+        public void SetActive(bool active)
         {
-            IsActive = isActive;
+            isActive = active;
         }
     }
 }
