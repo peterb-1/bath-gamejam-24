@@ -273,6 +273,7 @@ MonoBehaviour:
   clingFallMultiplier: 1
   clingVelocityMultiplier: 0.4
   maxFallVelocity: 17
+  freezeFrameDuration: 0.07
   coyoteDuration: 0.1
   ziplineCoyoteDuration: 0.2
   jumpBufferDuration: 0.2
