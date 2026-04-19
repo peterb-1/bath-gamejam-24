@@ -58,9 +58,6 @@ namespace Gameplay.Player
         private float maxFallVelocity;
 
         [Header("Durations")]
-        [SerializeField]
-        private float freezeFrameDuration;
-        
         [SerializeField] 
         private float coyoteDuration;
         
@@ -208,7 +205,6 @@ namespace Gameplay.Player
         private float currentDashDistortion;
         private float currentWallJumpMaxVelocity;
 
-        private float freezeFrameCountdown;
         private float coyoteCountdown;
         private float jumpBufferCountdown;
         private float jumpCooldownCountdown;
@@ -268,19 +264,6 @@ namespace Gameplay.Player
         private void Update()
         {
             hasDroppedThisFrame = false;
-
-            if (freezeFrameCountdown > 0f && !PauseManager.Instance.IsPaused)
-            {
-                // ignore slowdowns
-                freezeFrameCountdown -= Time.unscaledDeltaTime;
-
-                if (freezeFrameCountdown <= 0f)
-                {
-                    ExitFreezeFrame();
-                }
-
-                return;
-            }
             
             if (!isGrounded) coyoteCountdown -= Time.deltaTime;
             if (jumpBufferCountdown > 0f) jumpBufferCountdown -= Time.deltaTime;
@@ -442,7 +425,7 @@ namespace Gameplay.Player
         
         private void FixedUpdate()
         {
-            if (isClimbingLedge || freezeFrameCountdown > 0f) return;
+            if (isClimbingLedge) return;
             
             var moveAmount = InputManager.MoveAmount;
             var desiredVelocity = moveAmount * moveSpeed;
@@ -574,10 +557,7 @@ namespace Gameplay.Player
             wallEjectionCountdown = 0f;
             dashCountdown = 0f;
 
-            EnterFreezeFrame();
-            
-            // use input after freeze frames
-            await UniTask.WaitUntil(() => freezeFrameCountdown <= 0f);
+            await TimeManager.Instance.FreezeFrameAsync();
             
             if (shouldTriggerEffects)
             {
@@ -604,7 +584,7 @@ namespace Gameplay.Player
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, headJumpForce);
             dashCountdown = 0f;
 
-            EnterFreezeFrame();
+            TimeManager.Instance.FreezeFrameAsync().Forget();
         }
         
         public void PerformSpringJump(float radians, Vector2 minBounce, float verticalDamping)
@@ -686,10 +666,7 @@ namespace Gameplay.Player
 
         private async UniTask DashAsync()
         {
-            EnterFreezeFrame();
-            
-            // decide direction after freeze frames
-            await UniTask.WaitUntil(() => freezeFrameCountdown <= 0f);
+            await TimeManager.Instance.FreezeFrameAsync();
             
             dashDirectionMultiplier = Mathf.Sign(spriteRendererTransform.localScale.x);
             dashCountdown = dashDuration;
@@ -706,7 +683,7 @@ namespace Gameplay.Player
             dashCountdown = 0f;
             hasDoubleJumped = false;
             
-            EnterFreezeFrame();
+            TimeManager.Instance.FreezeFrameAsync().Forget();
         }
 
         public bool TryHookPlayer(HingeJoint2D newHook)
@@ -846,21 +823,6 @@ namespace Gameplay.Player
             rigidBody.gravityScale = 1f;
             boxCollider.enabled = true;
             isClimbingLedge = false;
-        }
-
-        private void EnterFreezeFrame()
-        {
-            rigidBody.gravityScale = 0f;
-            freezeFrameCountdown = freezeFrameDuration;
-            preFreezeFrameVelocity = rigidBody.linearVelocity;
-            rigidBody.linearVelocity = Vector2.zero;
-        }
-
-        private void ExitFreezeFrame()
-        {
-            rigidBody.gravityScale = 1f;
-            freezeFrameCountdown = 0f;
-            rigidBody.linearVelocity = preFreezeFrameVelocity;
         }
         
         private void HandleSceneLoadStart()

@@ -11,10 +11,15 @@ namespace Gameplay.Core
     {
         [SerializeField] 
         private AnimationCurve slowdownCurve;
+        
+        [SerializeField]
+        private float freezeFrameDuration;
 
         public static TimeManager Instance { get; private set; }
         
         public float UnpausedRealtimeSinceStartup { get; private set; }
+        
+        public bool IsFrozen { get; private set; }
         
         private void Awake()
         {
@@ -67,7 +72,7 @@ namespace Gameplay.Core
 
             while (timeElapsed < duration && !SceneLoader.Instance.IsLoading)
             {
-                if (!PauseManager.Instance.IsPaused)
+                if (!PauseManager.Instance.IsPaused && !IsFrozen)
                 {
                     var lerp = timeElapsed / duration;
 
@@ -83,6 +88,23 @@ namespace Gameplay.Core
             if (!PauseManager.Instance.IsPaused)
             {
                 Time.timeScale = 1.0f;
+            }
+        }
+
+        public async UniTask FreezeFrameAsync()
+        {
+            IsFrozen = true;
+
+            Time.timeScale = 0f;
+
+            var initialTime = UnpausedRealtimeSinceStartup;
+            await UniTask.WaitUntil(() => UnpausedRealtimeSinceStartup - initialTime >= freezeFrameDuration);
+
+            IsFrozen = false;
+            
+            if (!PauseManager.Instance.IsPaused)
+            {
+                Time.timeScale = 1f;
             }
         }
         
