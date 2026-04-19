@@ -49,6 +49,12 @@ namespace Gameplay.Player
         private float wallJumpDeceleration;
         
         [SerializeField] 
+        private float wallJumpLeniencyTargetSpeed;
+        
+        [SerializeField] 
+        private float wallJumpLeniencyDuration;
+        
+        [SerializeField] 
         private float clingFallMultiplier;
         
         [SerializeField] 
@@ -203,7 +209,8 @@ namespace Gameplay.Player
         private float dashDirectionMultiplier;
         private float currentFallMultiplier;
         private float currentDashDistortion;
-        private float currentWallJumpMaxVelocity;
+        private float wallJumpLeniencyVelocityCeiling;
+        private float wallJumpLeniencyDirection;
 
         private float coyoteCountdown;
         private float jumpBufferCountdown;
@@ -215,6 +222,7 @@ namespace Gameplay.Player
         private float clingCountdown;
         private float hookCountdown;
         private float moveToHookCountdown;
+        private float wallJumpLeniencyCountdown;
         
         private bool isGrounded;
         private bool isTouchingLeftWall;
@@ -228,6 +236,7 @@ namespace Gameplay.Player
         private bool wasEjectedLeft;
         private bool hasLandedAtStart;
         private bool hasMovedLeft;
+        private bool hasReachedWallJumpPeak;
 
         private HingeJoint2D hook;
         
@@ -315,7 +324,7 @@ namespace Gameplay.Player
 
             if (isGrounded && !wasGrounded)
             {
-                currentWallJumpMaxVelocity = 0f;
+                wallJumpLeniencyVelocityCeiling = 0f;
 
                 AudioManager.Instance.Play(AudioClipIdentifier.Land);
                 RumbleManager.Instance.Rumble(landingRumbleConfig);
@@ -430,13 +439,36 @@ namespace Gameplay.Player
             var moveAmount = InputManager.MoveAmount;
             var desiredVelocity = moveAmount * moveSpeed;
 
-            currentWallJumpMaxVelocity = Mathf.Lerp(currentWallJumpMaxVelocity, 0f, wallJumpDeceleration * Time.fixedDeltaTime);
-
-            // "Possible loss of precision while rounding value" message does not apply to Mathf.Sign which only produces -1 or 1
-            var isHoldingWallJumpDirection = moveAmount != 0f && Mathf.Sign(moveAmount) == Mathf.Sign(currentWallJumpMaxVelocity);
-            if (isHoldingWallJumpDirection && Mathf.Abs(currentWallJumpMaxVelocity) > Mathf.Abs(desiredVelocity))
+            if (wallJumpLeniencyCountdown > 0f)
             {
-                desiredVelocity = currentWallJumpMaxVelocity;
+                wallJumpLeniencyCountdown -= Time.fixedDeltaTime;
+
+                // "Possible loss of precision while rounding value" message does not apply to Mathf.Sign which only produces -1 or 1
+                if (moveAmount != 0f && Mathf.Sign(moveAmount) == wallJumpLeniencyDirection)
+                {
+                    wallJumpLeniencyVelocityCeiling = wallJumpForce.x * wallJumpLeniencyDirection;
+                    wallJumpLeniencyCountdown = 0f;
+                    hasReachedWallJumpPeak = false;
+                }
+            }
+            else if (wallJumpLeniencyVelocityCeiling != 0f)
+            {
+                if (!hasReachedWallJumpPeak && Mathf.Abs(rigidBody.linearVelocityX) >= wallJumpLeniencyTargetSpeed)
+                {
+                    hasReachedWallJumpPeak = true;
+                }
+    
+                if (hasReachedWallJumpPeak)
+                {
+                    wallJumpLeniencyVelocityCeiling = Mathf.Lerp(wallJumpLeniencyVelocityCeiling, 0f, wallJumpDeceleration * Time.fixedDeltaTime);
+                }
+            }
+
+            // As above
+            var isHoldingWallJumpDirection = moveAmount != 0f && Mathf.Sign(moveAmount) == Mathf.Sign(wallJumpLeniencyVelocityCeiling);
+            if (isHoldingWallJumpDirection && Mathf.Abs(wallJumpLeniencyVelocityCeiling) > Mathf.Abs(desiredVelocity))
+            {
+                desiredVelocity = wallJumpLeniencyVelocityCeiling;
             }
 
             if (moveAmount < 0f)
@@ -558,19 +590,22 @@ namespace Gameplay.Player
             dashCountdown = 0f;
 
             await TimeManager.Instance.FreezeFrameAsync();
-            
+
             if (shouldTriggerEffects)
             {
                 AudioManager.Instance.Play(AudioClipIdentifier.Jump);
                 RumbleManager.Instance.Rumble(jumpingRumbleConfig);
                 SaveManager.Instance.SaveData.StatsData.AddToStat(StatType.JumpsMade, 1);
-                
+
                 OnJump?.Invoke();
             }
-            
+
             rigidBody.linearVelocity = force;
-            currentWallJumpMaxVelocity = force.x;
-            
+            wallJumpLeniencyVelocityCeiling = 0f;
+            wallJumpLeniencyDirection = Mathf.Sign(force.x);
+            wallJumpLeniencyCountdown = wallJumpLeniencyDuration;
+            hasReachedWallJumpPeak = false;
+
             OnWallJump?.Invoke();
         }
 

@@ -265,11 +265,12 @@ MonoBehaviour:
   moveSpeed: 7
   acceleration: 4.9
   deceleration: 6
-  wallJumpDeceleration: 2
+  wallJumpDeceleration: 4.9
+  wallJumpLeniencyTargetSpeed: 11
+  wallJumpLeniencyDuration: 0.2
   clingFallMultiplier: 1
   clingVelocityMultiplier: 0.4
   maxFallVelocity: 17
-  freezeFrameDuration: 0.07
   coyoteDuration: 0.1
   ziplineCoyoteDuration: 0.2
   jumpBufferDuration: 0.2
