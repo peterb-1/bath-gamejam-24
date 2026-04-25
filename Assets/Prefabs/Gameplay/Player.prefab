@@ -470,9 +470,9 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Strength>k__BackingField: 0.5
+    <Strength>k__BackingField: 0.45
   droneHitShakeConfig:
-    <Duration>k__BackingField: 0.3
+    <Duration>k__BackingField: 0.45
     <Shape>k__BackingField:
       serializedVersion: 2
       m_Curve:
@@ -497,7 +497,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    <Strength>k__BackingField: 0.5
+    <Strength>k__BackingField: 0.7
   runAnimationSpeedThreshold: 0.8
   dashDistortionStrength: 0.2
   dashDistortionSmoothing: 0.06
