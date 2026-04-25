@@ -165,6 +165,8 @@ namespace Gameplay.Camera
 
         private void CancelShake()
         {
+            oneShotCts?.Cancel();
+            oneShotCts?.Dispose();
             oneShotCts = new CancellationTokenSource();
         }
         
@@ -244,6 +246,9 @@ namespace Gameplay.Camera
 
         private void OnDestroy()
         {
+            oneShotCts?.Cancel();
+            oneShotCts?.Dispose();
+            
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
             playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
         }

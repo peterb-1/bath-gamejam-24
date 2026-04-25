@@ -145,9 +145,6 @@ namespace Gameplay.Player
         private ShakeConfig jumpingShakeConfig;
         
         [SerializeField] 
-        private ShakeConfig dashingShakeConfig;
-        
-        [SerializeField] 
         private ShakeConfig droneHitShakeConfig;
 
         
