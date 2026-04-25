@@ -248,6 +248,7 @@ namespace Gameplay.Camera
         {
             oneShotCts?.Cancel();
             oneShotCts?.Dispose();
+            oneShotCts = null;
             
             playerVictoryBehaviour.OnVictorySequenceStart -= HandleVictorySequenceStart;
             playerDeathBehaviour.OnDeathSequenceStart -= HandleDeathSequenceStart;
