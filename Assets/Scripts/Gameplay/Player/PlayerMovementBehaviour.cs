@@ -651,8 +651,6 @@ namespace Gameplay.Player
             
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocityX, headJumpForce);
             dashCountdown = 0f;
-
-            TimeManager.Instance.FreezeFrameAsync().Forget();
         }
         
         public void PerformSpringJump(float radians, Vector2 minBounce, float verticalDamping)
