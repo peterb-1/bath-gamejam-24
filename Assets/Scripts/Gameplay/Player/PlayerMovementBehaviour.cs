@@ -78,6 +78,9 @@ namespace Gameplay.Player
         private float jumpCooldown;
         
         [SerializeField] 
+        private float wallJumpDecelerationDuration;
+        
+        [SerializeField] 
         private float wallEjectionDuration;
 
         [SerializeField] 
@@ -221,6 +224,7 @@ namespace Gameplay.Player
         private float jumpCooldownCountdown;
         private float dashCountdown;
         private float dashHitCountdown;
+        private float wallJumpDecelerationCountdown;
         private float wallEjectionCountdown;
         private float doubleJumpCancellationCountdown;
         private float clingCountdown;
@@ -283,6 +287,7 @@ namespace Gameplay.Player
             if (jumpCooldownCountdown > 0f) jumpCooldownCountdown -= Time.deltaTime;
             if (dashCountdown > 0f) dashCountdown -= Time.deltaTime;
             if (dashHitCountdown > 0f) dashHitCountdown -= Time.deltaTime;
+            if (wallJumpDecelerationCountdown > 0f) wallJumpDecelerationCountdown -= Time.deltaTime;
             if (wallEjectionCountdown > 0f) wallEjectionCountdown -= Time.deltaTime;
             if (doubleJumpCancellationCountdown > 0f) doubleJumpCancellationCountdown -= Time.deltaTime;
             if (clingCountdown > 0f) clingCountdown -= Time.deltaTime;
@@ -465,7 +470,7 @@ namespace Gameplay.Player
     
                 if (hasReachedWallJumpPeak)
                 {
-                    wallJumpLeniencyVelocityCeiling = Mathf.Lerp(wallJumpLeniencyVelocityCeiling, 0f, wallJumpDeceleration * Time.fixedDeltaTime);
+                    wallJumpLeniencyVelocityCeiling = Mathf.Lerp(wallJumpLeniencyVelocityCeiling, 0f, acceleration * Time.fixedDeltaTime);
                 }
             }
 
@@ -487,9 +492,11 @@ namespace Gameplay.Player
             }
             else if (!isHooked)
             {
+                var targetDeceleration = wallJumpDecelerationCountdown > 0f ? wallJumpDeceleration : deceleration;
+                
                 rigidBody.linearVelocity = horizontalMoveAmount != 0f
                     ? new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, desiredVelocity, acceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY)
-                    : new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, 0f, deceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY);
+                    : new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, 0f, targetDeceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY);
             }
 
             if (rigidBody.linearVelocityY < 0f)
@@ -618,6 +625,7 @@ namespace Gameplay.Player
             wallJumpLeniencyVelocityCeiling = 0f;
             wallJumpLeniencyDirection = Mathf.Sign(force.x);
             wallJumpLeniencyCountdown = wallJumpLeniencyDuration;
+            wallJumpDecelerationCountdown = wallJumpDecelerationDuration;
             hasReachedWallJumpPeak = false;
 
             OnWallJump?.Invoke();
