@@ -3,6 +3,7 @@ using Audio;
 using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
+using Gameplay.Camera;
 using Gameplay.Core;
 using Gameplay.Dash;
 using Gameplay.Environment;
@@ -138,6 +139,17 @@ namespace Gameplay.Player
 
         [SerializeField] 
         private ContinuousRumbleConfig ziplineRumbleConfig;
+        
+        [Header("Shake")]
+        [SerializeField] 
+        private ShakeConfig jumpingShakeConfig;
+        
+        [SerializeField] 
+        private ShakeConfig dashingShakeConfig;
+        
+        [SerializeField] 
+        private ShakeConfig droneHitShakeConfig;
+
         
         [Header("Misc")]
         [SerializeField] 
@@ -617,6 +629,7 @@ namespace Gameplay.Player
                 AudioManager.Instance.Play(AudioClipIdentifier.Jump);
                 RumbleManager.Instance.Rumble(jumpingRumbleConfig);
                 SaveManager.Instance.SaveData.StatsData.AddToStat(StatType.JumpsMade, 1);
+                CameraAccessService.Instance.CameraFollow.AddShake(jumpingShakeConfig);
 
                 OnJump?.Invoke();
             }
@@ -635,6 +648,7 @@ namespace Gameplay.Player
         {
             AudioManager.Instance.Play(AudioClipIdentifier.Jump);
             RumbleManager.Instance.Rumble(droneHitRumbleConfig);
+            CameraAccessService.Instance.CameraFollow.AddShake(droneHitShakeConfig);
             
             OnJump?.Invoke();
             

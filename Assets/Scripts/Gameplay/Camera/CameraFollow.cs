@@ -1,3 +1,5 @@
+using System.Threading;
+using Core;
 using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Ghosts;
@@ -48,6 +50,8 @@ namespace Gameplay.Camera
         private PlayerDeathBehaviour playerDeathBehaviour;
         private Transform target;
         
+        private CancellationTokenSource oneShotCts;
+        
         private Vector3 positionOverride;
         private Vector3 velocity;
         private Vector3 rawPosition;
@@ -60,7 +64,11 @@ namespace Gameplay.Camera
         private bool shouldOverridePosition;
         private bool shouldUseLookahead;
         private bool isOverridingTarget;
+        private bool isPaused;
 
+        private float oneShotShakeAmount;
+        private float lastOneShotShakeAmount;
+        
         private async void Awake()
         {
             await UniTask.WaitUntil(PlayerAccessService.IsReady);
@@ -86,6 +94,7 @@ namespace Gameplay.Camera
             playerDeathBehaviour.OnDeathSequenceStart += HandleDeathSequenceStart;
 
             SaveManager.Instance.SaveData.PreferenceData.TryGetValue(SettingId.CameraShake, out isCameraShakeEnabled);
+            SceneLoader.OnSceneLoadStart += HandleSceneLoadStart;
         }
 
         private void HandleVictorySequenceStart(Vector2 position, float _)
@@ -98,7 +107,7 @@ namespace Gameplay.Camera
             positionOverride = transform.position;
             shouldOverridePosition = true;
         }
-
+        
         public void OverrideTarget(Transform newTarget)
         {
             isOverridingTarget = true;
@@ -109,13 +118,87 @@ namespace Gameplay.Camera
         {
             cameraBorderZone = borderZone;
         }
+        
+        public void Pause()
+        {
+            lastOneShotShakeAmount = oneShotShakeAmount;
+            if (isPaused) return;
+            
+            isPaused = true;
+            oneShotShakeAmount = 0f;
+        }
+
+        public void Unpause()
+        {
+            if (!isPaused) return;
+            
+            isPaused = false;
+            oneShotShakeAmount = lastOneShotShakeAmount;
+        }
+        
+        public void AddShake(ShakeConfig config)
+        {
+            CancelShake();
+            OneShotShakeAsync(config, oneShotCts.Token).Forget();
+        }
+
+        private void StopShake()
+        {
+            CancelShake();
+            SetAmount(0f);
+        }
+        
+        private void HandleSceneLoadStart()
+        {
+            isPaused = false;
+            StopShake();
+        }
+        
+        private void SetAmount(float strength)
+        {
+            lastOneShotShakeAmount = strength;
+            if (!isPaused)
+            {
+                oneShotShakeAmount = strength;
+            }
+        }
+
+        private void CancelShake()
+        {
+            oneShotCts = new CancellationTokenSource();
+        }
+        
+        private async UniTask OneShotShakeAsync(ShakeConfig config, CancellationToken token)
+        {
+            CancelShake();
+            
+            var timeElapsed = 0f;
+
+            while (timeElapsed < config.Duration)
+            {
+                if (token.IsCancellationRequested)
+                    break;
+
+                var lerp = timeElapsed / config.Duration;
+                oneShotShakeAmount = config.Strength * config.Shape.Evaluate(lerp);
+
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
+                timeElapsed += Time.deltaTime;
+            }
+
+            if (!token.IsCancellationRequested)
+            {
+                oneShotShakeAmount = 0f;
+            }
+        }
 
         private void Update()
         {
             if (Time.deltaTime == 0f) return;
-
+            
             var velocityMagnitude = velocity.magnitude - velocityShakeThreshold;
-            var shakeIntensity = Mathf.Clamp(velocityMagnitude * velocityShakeMultiplier, 0, maxShakeStrength);
+            var velocityShakeIntensity = velocityMagnitude * velocityShakeMultiplier;
+            var shakeIntensity = Mathf.Clamp(velocityShakeIntensity + oneShotShakeAmount, 0, maxShakeStrength);
             var shakeOffset = new Vector3(Random.Range(-1f, 1f) * shakeIntensity, Random.Range(-1f, 1f) * shakeIntensity, 0f);
 
             rawPosition = Vector3.SmoothDamp(rawPosition, GetTargetPosition(), ref velocity, smoothTime);
