@@ -201,7 +201,7 @@ namespace Gameplay.Player
         public bool IsHooked => isHooked;
         public bool IsOnGround => isGrounded;
 
-        private (Building, int) lastWallJump;
+        private WallJumpRecord lastWallJump;
         private Building lastEnteredBuilding;
 
         private Vector3 ziplineLocalStartOffset;
@@ -533,18 +533,17 @@ namespace Gameplay.Player
         
         private void TryJump()
         {
-            var (previousBuilding, previousJumpSign) = lastWallJump;
-            var isOnSameBuilding = lastEnteredBuilding == previousBuilding;
+            var isHigherOnSameBuilding = lastEnteredBuilding == lastWallJump.Building && transform.position.y > lastWallJump.Height;
             
             if (jumpCooldownCountdown <= 0f && (isGrounded || isHooked || coyoteCountdown > 0f))
             {
                 PerformJump(jumpForce);
             }
-            else if (isTouchingLeftWall && (previousJumpSign == -1 || !isOnSameBuilding))
+            else if (isTouchingLeftWall && (lastWallJump.Direction == -1 || !isHigherOnSameBuilding))
             {
                 PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y));
             }
-            else if (isTouchingRightWall && (previousJumpSign == 1 || !isOnSameBuilding))
+            else if (isTouchingRightWall && (lastWallJump.Direction == 1 || !isHigherOnSameBuilding))
             {
                 PerformWallJump(new Vector2(-wallJumpForce.x, wallJumpForce.y));
             }
@@ -592,7 +591,12 @@ namespace Gameplay.Player
 
         private async UniTask WallJumpAsync(Vector2 force, bool shouldTriggerEffects = true)
         {
-            lastWallJump = (lastEnteredBuilding, (int) Mathf.Sign(force.x));
+            lastWallJump = new WallJumpRecord
+            {
+                Building = lastEnteredBuilding,
+                Direction = (int)Mathf.Sign(force.x),
+                Height = transform.position.y
+            };
             
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
@@ -808,7 +812,7 @@ namespace Gameplay.Player
 
         private void ResetLastWallJump()
         {
-            lastWallJump = (null, 0);
+            lastWallJump = new WallJumpRecord();
         }
         
         public void NotifyEjectedFromBuilding(Bounds buildingBounds)
