@@ -1,6 +1,7 @@
 ﻿using Core;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
+using Gameplay.Input;
 using Gameplay.Player;
 using NaughtyAttributes;
 using UnityEngine;
@@ -33,6 +34,9 @@ namespace Gameplay.Zipline
         
         [SerializeField] 
         private float activationDistanceThreshold;
+
+        [SerializeField]
+        private float directionalInputThreshold;
 
         [SerializeField] 
         private float endThreshold;
@@ -102,33 +106,41 @@ namespace Gameplay.Zipline
         {
             var playerDistance = bezierCurve.GetDistanceToCurve(playerTransform.position, out var closestPoint, out curveProgress);
             if (playerDistance > activationDistanceThreshold) return;
-            
+
             hook.transform.position = closestPoint;
-            
-            var preHookVelocity = playerMovementBehaviour.Velocity.normalized;
 
             if (!playerMovementBehaviour.TryHookPlayer(hook)) return;
-            
-            var distanceToStart = (closestPoint - bezierCurve.GetPoint(0f)).magnitude;
-            var distanceToEnd = (closestPoint - bezierCurve.GetPoint(1f)).magnitude;
-            
-            // this is an approximation assuming the curve is relatively straight near the end
-            if (distanceToStart < endThreshold)
-            {
-                isMovingForwards = true;
-            }
-            else if (distanceToEnd < endThreshold)
-            {
-                isMovingForwards = false;
-            }
-            else
-            {
-                var tangent = bezierCurve.GetTangent(curveProgress).xy();
-                isMovingForwards = tangent.x * preHookVelocity.x >= forwardsThreshold;
-            }
-            
+
+            isMovingForwards = ShouldMoveForwards(closestPoint);
+
             stabilisationFramesRemaining = stabilisationFrames;
             previousHorizontalVelocity = playerMovementBehaviour.Velocity.x;
+        }
+
+        private bool ShouldMoveForwards(Vector3 closestPoint)
+        {
+            var tangent = bezierCurve.GetTangent(curveProgress).xy().normalized;
+
+            var distanceToStart = (closestPoint - bezierCurve.GetPoint(0f)).magnitude;
+            if (distanceToStart < endThreshold)
+            {
+                return true;
+            }
+
+            var distanceToEnd = (closestPoint - bezierCurve.GetPoint(1f)).magnitude;
+            if (distanceToEnd < endThreshold)
+            {
+                return false;
+            }
+
+            var dot = Vector2.Dot(InputManager.MoveAmount.normalized, tangent);
+            if (Mathf.Abs(dot) > directionalInputThreshold)
+            {
+                return dot > 0f;
+            }
+
+            // default fall-through - move forwards
+            return true;
         }
 
         private void MovePlayerAlongZipline()

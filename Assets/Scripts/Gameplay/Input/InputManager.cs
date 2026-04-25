@@ -82,8 +82,8 @@ namespace Gameplay.Input
         
         public static ControlScheme CurrentControlScheme { get; private set; }
         public static ControlScheme CurrentNonMouseControlScheme { get; private set; }
+        public static Vector2 MoveAmount { get; private set; }
         public static bool AreInputsEnabled { get; private set; }
-        public static float MoveAmount { get; private set; }
         public static event Action<ColourId> OnColourChanged;
         public static event Action OnStartPerformed;
         public static event Action OnBackPerformed;
@@ -228,9 +228,10 @@ namespace Gameplay.Input
             var horizontalAmount = moveVector.x;
             var verticalAmount = moveVector.y;
 
-            MoveAmount = Mathf.Abs(horizontalAmount) > movementThreshold
-                ? Mathf.Sign(horizontalAmount)
-                : 0f;
+            MoveAmount = new Vector2(
+                Mathf.Abs(horizontalAmount) > movementThreshold ? Mathf.Sign(horizontalAmount) : 0f,
+                Mathf.Abs(verticalAmount) > movementThreshold ? Mathf.Sign(verticalAmount) : 0f
+            );
 
             isPrimedForGamepadDrop = verticalAmount < gamepadDropThreshold && CurrentControlScheme is ControlScheme.Gamepad;
             

@@ -436,15 +436,15 @@ namespace Gameplay.Player
         {
             if (isClimbingLedge) return;
             
-            var moveAmount = InputManager.MoveAmount;
-            var desiredVelocity = moveAmount * moveSpeed;
+            var horizontalMoveAmount = InputManager.MoveAmount.x;
+            var desiredVelocity = horizontalMoveAmount * moveSpeed;
 
             if (wallJumpLeniencyCountdown > 0f)
             {
                 wallJumpLeniencyCountdown -= Time.fixedDeltaTime;
 
                 // "Possible loss of precision while rounding value" message does not apply to Mathf.Sign which only produces -1 or 1
-                if (moveAmount != 0f && Mathf.Sign(moveAmount) == wallJumpLeniencyDirection)
+                if (horizontalMoveAmount != 0f && Mathf.Sign(horizontalMoveAmount) == wallJumpLeniencyDirection)
                 {
                     wallJumpLeniencyVelocityCeiling = wallJumpForce.x * wallJumpLeniencyDirection;
                     wallJumpLeniencyCountdown = 0f;
@@ -465,13 +465,13 @@ namespace Gameplay.Player
             }
 
             // As above
-            var isHoldingWallJumpDirection = moveAmount != 0f && Mathf.Sign(moveAmount) == Mathf.Sign(wallJumpLeniencyVelocityCeiling);
+            var isHoldingWallJumpDirection = horizontalMoveAmount != 0f && Mathf.Sign(horizontalMoveAmount) == Mathf.Sign(wallJumpLeniencyVelocityCeiling);
             if (isHoldingWallJumpDirection && Mathf.Abs(wallJumpLeniencyVelocityCeiling) > Mathf.Abs(desiredVelocity))
             {
                 desiredVelocity = wallJumpLeniencyVelocityCeiling;
             }
 
-            if (moveAmount < 0f)
+            if (horizontalMoveAmount < 0f)
             {
                 hasMovedLeft = true;
             }
@@ -482,7 +482,7 @@ namespace Gameplay.Player
             }
             else if (!isHooked)
             {
-                rigidBody.linearVelocity = moveAmount != 0f
+                rigidBody.linearVelocity = horizontalMoveAmount != 0f
                     ? new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, desiredVelocity, acceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY)
                     : new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, 0f, deceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY);
             }
