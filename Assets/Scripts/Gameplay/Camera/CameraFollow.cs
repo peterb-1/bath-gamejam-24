@@ -194,8 +194,6 @@ namespace Gameplay.Camera
         
         private async UniTask OneShotShakeAsync(ShakeConfig config, CancellationToken token)
         {
-            CancelShake();
-            
             var timeElapsed = 0f;
 
             while (timeElapsed < config.Duration)
@@ -206,7 +204,7 @@ namespace Gameplay.Camera
                 var lerp = timeElapsed / config.Duration;
                 oneShotShakeAmount = config.Strength * config.Shape.Evaluate(lerp);
 
-                await UniTask.Yield(PlayerLoopTiming.Update, token);
+                await UniTask.Yield(PlayerLoopTiming.Update);
                 timeElapsed += Time.deltaTime;
             }
 
