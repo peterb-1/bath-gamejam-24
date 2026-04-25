@@ -118,7 +118,6 @@ namespace Gameplay.Core
                 
                 AudioManager.Instance.Pause();
                 RumbleManager.Instance.Pause();
-                CameraAccessService.Instance.CameraFollow.Pause();
             }
             else
             {
@@ -129,7 +128,6 @@ namespace Gameplay.Core
                 
                 AudioManager.Instance.Unpause();
                 RumbleManager.Instance.Unpause();
-                CameraAccessService.Instance.CameraFollow.Unpause();
             }
         }
         

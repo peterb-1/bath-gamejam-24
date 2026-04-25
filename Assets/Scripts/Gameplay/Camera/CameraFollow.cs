@@ -64,7 +64,6 @@ namespace Gameplay.Camera
         private bool shouldOverridePosition;
         private bool shouldUseLookahead;
         private bool isOverridingTarget;
-        private bool isPaused;
 
         private float oneShotShakeAmount;
         private float lastOneShotShakeAmount;
@@ -108,99 +107,18 @@ namespace Gameplay.Camera
             shouldOverridePosition = true;
         }
         
-        public void OverrideTarget(Transform newTarget)
-        {
-            isOverridingTarget = true;
-            target = newTarget;
-        }
-        
-        public void RegisterBorderZone(CameraBorderZone borderZone)
-        {
-            cameraBorderZone = borderZone;
-        }
-        
-        public void Pause()
-        {
-            lastOneShotShakeAmount = oneShotShakeAmount;
-            if (isPaused) return;
-            
-            isPaused = true;
-            oneShotShakeAmount = 0f;
-        }
-
-        public void Unpause()
-        {
-            if (!isPaused) return;
-            
-            isPaused = false;
-            oneShotShakeAmount = lastOneShotShakeAmount;
-        }
-        
-        public void AddShake(ShakeConfig config)
-        {
-            CancelShake();
-            OneShotShakeAsync(config, oneShotCts.Token).Forget();
-        }
-
-        private void StopShake()
-        {
-            CancelShake();
-            SetAmount(0f);
-        }
-        
         private void HandleSceneLoadStart()
         {
-            isPaused = false;
             StopShake();
         }
         
-        private void SetAmount(float strength)
-        {
-            lastOneShotShakeAmount = strength;
-            if (!isPaused)
-            {
-                oneShotShakeAmount = strength;
-            }
-        }
-
-        private void CancelShake()
-        {
-            oneShotCts?.Cancel();
-            oneShotCts?.Dispose();
-            oneShotCts = new CancellationTokenSource();
-        }
-        
-        private async UniTask OneShotShakeAsync(ShakeConfig config, CancellationToken token)
-        {
-            CancelShake();
-            
-            var timeElapsed = 0f;
-
-            while (timeElapsed < config.Duration)
-            {
-                if (token.IsCancellationRequested)
-                    break;
-
-                var lerp = timeElapsed / config.Duration;
-                oneShotShakeAmount = config.Strength * config.Shape.Evaluate(lerp);
-
-                await UniTask.Yield(PlayerLoopTiming.Update, token);
-                timeElapsed += Time.deltaTime;
-            }
-
-            if (!token.IsCancellationRequested)
-            {
-                oneShotShakeAmount = 0f;
-            }
-        }
-
         private void Update()
         {
             if (Time.deltaTime == 0f) return;
             
             var velocityMagnitude = velocity.magnitude - velocityShakeThreshold;
             var velocityShakeIntensity = velocityMagnitude * velocityShakeMultiplier;
-            var shakeIntensity = Mathf.Clamp(velocityShakeIntensity + oneShotShakeAmount, 0, maxShakeStrength);
+            var shakeIntensity = Mathf.Clamp(velocityShakeIntensity, 0, maxShakeStrength) + oneShotShakeAmount;
             var shakeOffset = new Vector3(Random.Range(-1f, 1f) * shakeIntensity, Random.Range(-1f, 1f) * shakeIntensity, 0f);
 
             rawPosition = Vector3.SmoothDamp(rawPosition, GetTargetPosition(), ref velocity, smoothTime);
@@ -242,6 +160,60 @@ namespace Gameplay.Camera
             }
 
             return targetPosition + followOffset;
+        }
+        
+        public void OverrideTarget(Transform newTarget)
+        {
+            isOverridingTarget = true;
+            target = newTarget;
+        }
+        
+        public void RegisterBorderZone(CameraBorderZone borderZone)
+        {
+            cameraBorderZone = borderZone;
+        }
+        
+        public void AddShake(ShakeConfig config)
+        {
+            CancelShake();
+            OneShotShakeAsync(config, oneShotCts.Token).Forget();
+        }
+
+        private void StopShake()
+        {
+            CancelShake();
+            oneShotShakeAmount = 0f;
+        }
+
+        private void CancelShake()
+        {
+            oneShotCts?.Cancel();
+            oneShotCts?.Dispose();
+            oneShotCts = new CancellationTokenSource();
+        }
+        
+        private async UniTask OneShotShakeAsync(ShakeConfig config, CancellationToken token)
+        {
+            CancelShake();
+            
+            var timeElapsed = 0f;
+
+            while (timeElapsed < config.Duration)
+            {
+                if (token.IsCancellationRequested)
+                    break;
+
+                var lerp = timeElapsed / config.Duration;
+                oneShotShakeAmount = config.Strength * config.Shape.Evaluate(lerp);
+
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
+                timeElapsed += Time.deltaTime;
+            }
+
+            if (!token.IsCancellationRequested)
+            {
+                oneShotShakeAmount = 0f;
+            }
         }
 
         private void OnDestroy()
