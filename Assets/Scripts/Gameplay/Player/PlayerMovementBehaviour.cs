@@ -555,13 +555,27 @@ namespace Gameplay.Player
             {
                 PerformJump(jumpForce);
             }
-            else if (isTouchingLeftWall && canWallJumpOnCurrentWall)
+            else if (isTouchingLeftWall)
             {
-                PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y));
+                if (canWallJumpOnCurrentWall)
+                {
+                    PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y));
+                }
+                else
+                {
+                    jumpBufferCountdown += Time.fixedDeltaTime;
+                }
             }
-            else if (isTouchingRightWall && canWallJumpOnCurrentWall)
+            else if (isTouchingRightWall)
             {
-                PerformWallJump(new Vector2(-wallJumpForce.x, wallJumpForce.y));
+                if (canWallJumpOnCurrentWall)
+                {
+                    PerformWallJump(new Vector2(-wallJumpForce.x, wallJumpForce.y));
+                }
+                else
+                {
+                    jumpBufferCountdown += Time.fixedDeltaTime;
+                }
             }
             else if (!wasEjectedLeft && wallEjectionCountdown > 0f)
             {
@@ -622,7 +636,7 @@ namespace Gameplay.Player
                 Direction = (int)Mathf.Sign(force.x),
                 Height = transform.position.y
             };
-            
+
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
             wallEjectionCountdown = 0f;
