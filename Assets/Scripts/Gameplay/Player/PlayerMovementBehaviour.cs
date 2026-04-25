@@ -5,6 +5,7 @@ using Core.Saving;
 using Cysharp.Threading.Tasks;
 using Gameplay.Core;
 using Gameplay.Dash;
+using Gameplay.Environment;
 using Gameplay.Input;
 using Hardware;
 using UnityEngine;
@@ -200,6 +201,9 @@ namespace Gameplay.Player
         public bool IsHooked => isHooked;
         public bool IsOnGround => isGrounded;
 
+        private (Building, int) lastWallJump;
+        private Building lastEnteredBuilding;
+
         private Vector3 ziplineLocalStartOffset;
         private Vector2 lastZiplinePosition;
         private Vector2 ziplineVelocity;
@@ -320,6 +324,7 @@ namespace Gameplay.Player
                 coyoteCountdown = isHooked ? ziplineCoyoteDuration : coyoteDuration;
                 hasDoubleJumped = false;
                 hasLandedAtStart = true;
+                ResetLastWallJump();
             }
 
             if (isGrounded && !wasGrounded)
@@ -528,15 +533,18 @@ namespace Gameplay.Player
         
         private void TryJump()
         {
+            var (previousBuilding, previousJumpSign) = lastWallJump;
+            var isOnSameBuilding = lastEnteredBuilding == previousBuilding;
+            
             if (jumpCooldownCountdown <= 0f && (isGrounded || isHooked || coyoteCountdown > 0f))
             {
                 PerformJump(jumpForce);
             }
-            else if (isTouchingLeftWall)
+            else if (isTouchingLeftWall && (previousJumpSign == -1 || !isOnSameBuilding))
             {
                 PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y));
             }
-            else if (isTouchingRightWall)
+            else if (isTouchingRightWall && (previousJumpSign == 1 || !isOnSameBuilding))
             {
                 PerformWallJump(new Vector2(-wallJumpForce.x, wallJumpForce.y));
             }
@@ -584,6 +592,8 @@ namespace Gameplay.Player
 
         private async UniTask WallJumpAsync(Vector2 force, bool shouldTriggerEffects = true)
         {
+            lastWallJump = (lastEnteredBuilding, (int) Mathf.Sign(force.x));
+            
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
             wallEjectionCountdown = 0f;
@@ -673,6 +683,7 @@ namespace Gameplay.Player
                 timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
             }
             
+            ResetLastWallJump();
             rigidBody.linearVelocity = targetVelocity;
             hasDoubleJumped = false;
             isSpringJumping = false;
@@ -689,6 +700,7 @@ namespace Gameplay.Player
                 PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y), shouldTriggerEffects: false);
             }
             
+            ResetLastWallJump();
             hasDoubleJumped = false;
             playerAnimator.SetTrigger(CancelDoubleJump);
             doubleJumpCancellationCountdown = 0f;
@@ -715,6 +727,7 @@ namespace Gameplay.Player
             force.x *= Mathf.Sign(rigidBody.linearVelocityX);
             rigidBody.linearVelocity = force;
             
+            ResetLastWallJump();
             dashCountdown = 0f;
             hasDoubleJumped = false;
             
@@ -786,6 +799,16 @@ namespace Gameplay.Player
             playerAnimator.SetBool(IsHookedHash, false);
 
             return true;
+        }
+        
+        public void UpdateLastEnteredBuilding(Building building)
+        {
+            lastEnteredBuilding = building;
+        }
+
+        private void ResetLastWallJump()
+        {
+            lastWallJump = (null, 0);
         }
         
         public void NotifyEjectedFromBuilding(Bounds buildingBounds)
