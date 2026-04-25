@@ -394,7 +394,7 @@ namespace Gameplay.Player
                     {
                         ReplaceDoubleJumpWithWallJump(isMovingLeft: isTouchingRightWall);
                     }
-                    else
+                    else if (CanWallJumpOnCurrentWall())
                     {
                         isClinging = true;
                         currentFallMultiplier = clingFallMultiplier;
@@ -549,17 +549,17 @@ namespace Gameplay.Player
         
         private void TryJump()
         {
-            var isHigherOnSameBuilding = lastEnteredBuilding == lastWallJump.Building && transform.position.y > lastWallJump.Height;
+            var canWallJumpOnCurrentWall = CanWallJumpOnCurrentWall();
             
             if (jumpCooldownCountdown <= 0f && (isGrounded || isHooked || coyoteCountdown > 0f))
             {
                 PerformJump(jumpForce);
             }
-            else if (isTouchingLeftWall && (lastWallJump.Direction == -1 || !isHigherOnSameBuilding))
+            else if (isTouchingLeftWall && canWallJumpOnCurrentWall)
             {
                 PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y));
             }
-            else if (isTouchingRightWall && (lastWallJump.Direction == 1 || !isHigherOnSameBuilding))
+            else if (isTouchingRightWall && canWallJumpOnCurrentWall)
             {
                 PerformWallJump(new Vector2(-wallJumpForce.x, wallJumpForce.y));
             }
@@ -574,11 +574,20 @@ namespace Gameplay.Player
             else if (!hasDoubleJumped)
             {
                 PerformJump(Mathf.Max(doubleJumpForce, rigidBody.linearVelocityY));
+                ResetLastWallJump();
                 hasDoubleJumped = true;
                 doubleJumpCancellationCountdown = doubleJumpCancellationDuration;
                 playerAnimator.ResetTrigger(CancelDoubleJump);
                 playerAnimator.SetTrigger(DoubleJump);
             }
+        }
+
+        private bool CanWallJumpOnCurrentWall()
+        {
+            var isHigherOnSameBuilding = lastEnteredBuilding == lastWallJump.Building && transform.position.y > lastWallJump.Height;
+            var doesDirectionMatch = (isTouchingLeftWall && lastWallJump.Direction == 1) || (isTouchingRightWall && lastWallJump.Direction == -1);
+
+            return !(isHigherOnSameBuilding && doesDirectionMatch);
         }
         
         private void PerformJump(float force)
