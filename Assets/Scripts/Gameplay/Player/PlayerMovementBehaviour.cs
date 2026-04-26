@@ -146,7 +146,6 @@ namespace Gameplay.Player
         
         [SerializeField] 
         private ShakeConfig droneHitShakeConfig;
-
         
         [Header("Misc")]
         [SerializeField] 
@@ -214,6 +213,7 @@ namespace Gameplay.Player
         public bool IsOnGround => isGrounded;
 
         private WallJumpRecord lastWallJump;
+        private WallJumpRecord wallJumpRecordBeforeDoubleJump;
         private Building lastEnteredBuilding;
 
         private Vector3 ziplineLocalStartOffset;
@@ -390,11 +390,23 @@ namespace Gameplay.Player
             {
                 if (!isClinging)
                 {
+                    if (!CanWallJumpOnCurrentWall()) return;
+                    
                     if (doubleJumpCancellationCountdown > 0f)
                     {
-                        ReplaceDoubleJumpWithWallJump(isMovingLeft: isTouchingRightWall);
+                        // if we're going to replace with a wall jump, we want to ignore the double jump that just happened
+                        // and ignoring it includes the fact that it resets your wall jump allowance
+                        var savedWallJump = lastWallJump;
+                        lastWallJump = wallJumpRecordBeforeDoubleJump;
+                        var canReplace = CanWallJumpOnCurrentWall();
+                        lastWallJump = savedWallJump;
+
+                        if (canReplace)
+                        {
+                            ReplaceDoubleJumpWithWallJump(isMovingLeft: isTouchingRightWall);
+                        }
                     }
-                    else if (CanWallJumpOnCurrentWall())
+                    else
                     {
                         isClinging = true;
                         currentFallMultiplier = clingFallMultiplier;
@@ -588,11 +600,12 @@ namespace Gameplay.Player
             else if (!hasDoubleJumped)
             {
                 PerformJump(Mathf.Max(doubleJumpForce, rigidBody.linearVelocityY));
-                ResetLastWallJump();
                 hasDoubleJumped = true;
                 doubleJumpCancellationCountdown = doubleJumpCancellationDuration;
                 playerAnimator.ResetTrigger(CancelDoubleJump);
                 playerAnimator.SetTrigger(DoubleJump);
+                wallJumpRecordBeforeDoubleJump = lastWallJump;
+                ResetLastWallJump();
             }
         }
 
@@ -633,7 +646,7 @@ namespace Gameplay.Player
             lastWallJump = new WallJumpRecord
             {
                 Building = lastEnteredBuilding,
-                Direction = (int)Mathf.Sign(force.x),
+                Direction = (int) Mathf.Sign(force.x),
                 Height = transform.position.y
             };
 
