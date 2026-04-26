@@ -54,9 +54,6 @@ namespace Gameplay.Player
         private float wallJumpLeniencyTargetSpeed;
         
         [SerializeField] 
-        private float wallJumpLeniencyDuration;
-        
-        [SerializeField] 
         private float clingFallMultiplier;
         
         [SerializeField] 
@@ -83,6 +80,9 @@ namespace Gameplay.Player
         
         [SerializeField] 
         private float wallEjectionDuration;
+        
+        [SerializeField] 
+        private float wallJumpLeniencyDuration;
 
         [SerializeField] 
         private float doubleJumpCancellationDuration;
@@ -497,7 +497,9 @@ namespace Gameplay.Player
 
             // As above
             var isHoldingWallJumpDirection = horizontalMoveAmount != 0f && Mathf.Sign(horizontalMoveAmount) == Mathf.Sign(wallJumpLeniencyVelocityCeiling);
-            if (isHoldingWallJumpDirection && Mathf.Abs(wallJumpLeniencyVelocityCeiling) > Mathf.Abs(desiredVelocity))
+            if (isHoldingWallJumpDirection && 
+                Mathf.Abs(wallJumpLeniencyVelocityCeiling) > Mathf.Abs(desiredVelocity) &&
+                Mathf.Abs(rigidBody.linearVelocityX) < Mathf.Abs(wallJumpLeniencyVelocityCeiling))
             {
                 desiredVelocity = wallJumpLeniencyVelocityCeiling;
             }
@@ -513,7 +515,9 @@ namespace Gameplay.Player
             }
             else if (!isHooked)
             {
-                var targetDeceleration = wallJumpDecelerationCountdown > 0f ? wallJumpDeceleration : deceleration;
+                var targetDeceleration = wallJumpDecelerationCountdown > 0f && Mathf.Abs(rigidBody.linearVelocityX) <= moveSpeed
+                    ? wallJumpDeceleration 
+                    : deceleration;
                 
                 rigidBody.linearVelocity = horizontalMoveAmount != 0f
                     ? new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, desiredVelocity, acceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY)
