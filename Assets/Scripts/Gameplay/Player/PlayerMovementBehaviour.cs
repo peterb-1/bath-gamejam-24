@@ -390,7 +390,7 @@ namespace Gameplay.Player
             {
                 if (!isClinging)
                 {
-                    if (doubleJumpCancellationCountdown > 0f && wallEjectionCountdown > 0f)
+                    if (doubleJumpCancellationCountdown > 0f)
                     {
                         ReplaceDoubleJumpWithWallJump(isMovingLeft: isTouchingRightWall);
                     }
@@ -744,7 +744,6 @@ namespace Gameplay.Player
                 PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y), shouldTriggerEffects: false);
             }
             
-            ResetLastWallJump();
             hasDoubleJumped = false;
             playerAnimator.SetTrigger(CancelDoubleJump);
             doubleJumpCancellationCountdown = 0f;
