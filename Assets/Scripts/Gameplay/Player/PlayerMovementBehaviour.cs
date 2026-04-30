@@ -51,6 +51,9 @@ namespace Gameplay.Player
         private float wallJumpDeceleration;
         
         [SerializeField] 
+        private float wallJumpCounterDeceleration;
+        
+        [SerializeField] 
         private float wallJumpLeniencyTargetSpeed;
         
         [SerializeField] 
@@ -468,6 +471,7 @@ namespace Gameplay.Player
             if (isClimbingLedge) return;
             
             var horizontalMoveAmount = InputManager.MoveAmount.x;
+            var horizontalMoveDirection = horizontalMoveAmount == 0f ? 0f : Mathf.Sign(horizontalMoveAmount);
             var desiredVelocity = horizontalMoveAmount * moveSpeed;
 
             if (wallJumpLeniencyCountdown > 0f)
@@ -475,7 +479,7 @@ namespace Gameplay.Player
                 wallJumpLeniencyCountdown -= Time.fixedDeltaTime;
 
                 // "Possible loss of precision while rounding value" message does not apply to Mathf.Sign which only produces -1 or 1
-                if (horizontalMoveAmount != 0f && Mathf.Sign(horizontalMoveAmount) == wallJumpLeniencyDirection)
+                if (horizontalMoveDirection == wallJumpLeniencyDirection)
                 {
                     wallJumpLeniencyVelocityCeiling = wallJumpForce.x * wallJumpLeniencyDirection;
                     wallJumpLeniencyCountdown = 0f;
@@ -496,7 +500,7 @@ namespace Gameplay.Player
             }
 
             // As above
-            var isHoldingWallJumpDirection = horizontalMoveAmount != 0f && Mathf.Sign(horizontalMoveAmount) == Mathf.Sign(wallJumpLeniencyVelocityCeiling);
+            var isHoldingWallJumpDirection = horizontalMoveDirection == Mathf.Sign(wallJumpLeniencyVelocityCeiling);
             if (isHoldingWallJumpDirection && 
                 Mathf.Abs(wallJumpLeniencyVelocityCeiling) > Mathf.Abs(desiredVelocity) &&
                 Mathf.Abs(rigidBody.linearVelocityX) < Mathf.Abs(wallJumpLeniencyVelocityCeiling))
@@ -515,12 +519,18 @@ namespace Gameplay.Player
             }
             else if (!isHooked)
             {
-                var targetDeceleration = wallJumpDecelerationCountdown > 0f && Mathf.Abs(rigidBody.linearVelocityX) <= moveSpeed
+                var targetAcceleration = wallJumpDecelerationCountdown > 0f
+                    ? horizontalMoveDirection == 0f || horizontalMoveDirection == wallJumpLeniencyDirection 
+                        ? wallJumpDeceleration 
+                        : wallJumpCounterDeceleration
+                    : acceleration;
+                
+                var targetDeceleration = wallJumpDecelerationCountdown > 0f
                     ? wallJumpDeceleration 
                     : deceleration;
                 
                 rigidBody.linearVelocity = horizontalMoveAmount != 0f
-                    ? new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, desiredVelocity, acceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY)
+                    ? new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, desiredVelocity, targetAcceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY)
                     : new Vector2(Mathf.Lerp(rigidBody.linearVelocityX, 0f, targetDeceleration * Time.fixedDeltaTime), rigidBody.linearVelocityY);
             }
 
