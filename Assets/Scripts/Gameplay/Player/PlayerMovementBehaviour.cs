@@ -57,6 +57,9 @@ namespace Gameplay.Player
         private float wallJumpLeniencyTargetSpeed;
         
         [SerializeField] 
+        private float predictiveWallJumpSpeedThreshold;
+        
+        [SerializeField] 
         private float clingFallMultiplier;
         
         [SerializeField] 
@@ -129,6 +132,9 @@ namespace Gameplay.Player
         
         [SerializeField]
         private float wallCheckOffset;
+        
+        [SerializeField]
+        private float predictiveWallCheckDistance;
         
         [Header("Rumble")]
         [SerializeField] 
@@ -253,6 +259,7 @@ namespace Gameplay.Player
         private bool hasLandedAtStart;
         private bool hasMovedLeft;
         private bool hasReachedWallJumpPeak;
+        private bool isWallJumpPredicted;
 
         private HingeJoint2D hook;
         
@@ -347,8 +354,6 @@ namespace Gameplay.Player
 
             DashUpdate();
 
-            WallUpdate();
-
             if (jumpBufferCountdown <= 0f)
             {
                 var isOnLeftLedge = raycast.Flags.HasFlag(PlayerRaycastHit.LeftGround) && !raycast.Flags.HasFlag(PlayerRaycastHit.LeftMid);
@@ -396,37 +401,48 @@ namespace Gameplay.Player
 
         private void WallUpdate()
         {
-            if (isTouchingLeftWall || isTouchingRightWall)
+            if (isWallJumpPredicted && !IsApproachingWall())
             {
-                if (!isClinging)
-                {
-                    if (doubleJumpCancellationCountdown > 0f && wallEjectionCountdown > 0f)
-                    {
-                        // put new leniency logic here?
-                        ReplaceDoubleJumpWithWallJump(isMovingLeft: isTouchingRightWall);
-                    }
-                    else
-                    {
-                        isClinging = true;
-                        currentFallMultiplier = clingFallMultiplier;
-                        clingCountdown = clingDuration;
-                        dashCountdown = 0f;
-                    
-                        if (rigidBody.linearVelocityY < 0f)
-                        {
-                            rigidBody.linearVelocityY *= clingVelocityMultiplier;
-                        }
-                    }
-                }
-                else if (clingCountdown <= 0f)
-                {
-                    currentFallMultiplier = fallMultiplier;
-                }
+                isWallJumpPredicted = false;
+                PerformDoubleJump();
             }
-            else
+            
+            if (!isTouchingLeftWall && !isTouchingRightWall)
             {
                 currentFallMultiplier = fallMultiplier;
                 isClinging = false;
+                return;
+            }
+
+            // already on wall
+            if (isClinging)
+            {
+                if (clingCountdown <= 0f) currentFallMultiplier = fallMultiplier;
+                return;
+            }
+
+            // just arrived at wall this frame
+            if (isWallJumpPredicted)
+            {
+                PerformWallJump(isTouchingLeftWall
+                    ? new Vector2(wallJumpForce.x, wallJumpForce.y)
+                    : new Vector2(-wallJumpForce.x, wallJumpForce.y));
+            }
+            else if (doubleJumpCancellationCountdown > 0f && wallEjectionCountdown > 0f)
+            {
+                ReplaceDoubleJumpWithWallJump(isMovingLeft: isTouchingRightWall);
+            }
+            else
+            {
+                isClinging = true;
+                currentFallMultiplier = clingFallMultiplier;
+                clingCountdown = clingDuration;
+                dashCountdown = 0f;
+
+                if (rigidBody.linearVelocityY < 0f)
+                {
+                    rigidBody.linearVelocityY *= clingVelocityMultiplier;
+                }
             }
         }
         
@@ -555,6 +571,8 @@ namespace Gameplay.Player
             {
                 TryJump();
             }
+            
+            WallUpdate();
         }
         
         private void HandleJumpPerformed()
@@ -593,12 +611,29 @@ namespace Gameplay.Player
             }
             else if (!hasDoubleJumped)
             {
-                PerformJump(Mathf.Max(doubleJumpForce, rigidBody.linearVelocityY));
-                hasDoubleJumped = true;
-                doubleJumpCancellationCountdown = doubleJumpCancellationDuration;
-                playerAnimator.ResetTrigger(CancelDoubleJump);
-                playerAnimator.SetTrigger(DoubleJump);
+                var horizontalVelocity = Velocity.x;
+
+                if (Mathf.Abs(horizontalVelocity) > predictiveWallJumpSpeedThreshold)
+                {
+                    isWallJumpPredicted = IsApproachingWall();
+                    if (isWallJumpPredicted)
+                    {
+                        jumpBufferCountdown = 0f;
+                        return;
+                    }
+                }
+                
+                PerformDoubleJump();
             }
+        }
+
+        private bool IsApproachingWall()
+        {
+            var predictiveRaycastHit = GetRaycastHit(predictiveWallCheckDistance);
+
+            return Mathf.Sign(Velocity.x) > 0 
+                ? predictiveRaycastHit.Flags.HasAnyFlag(PlayerRaycastHit.RightGround | PlayerRaycastHit.RightMid | PlayerRaycastHit.RightHead) 
+                : predictiveRaycastHit.Flags.HasAnyFlag(PlayerRaycastHit.LeftGround | PlayerRaycastHit.LeftMid | PlayerRaycastHit.LeftHead);
         }
         
         private void PerformJump(float force)
@@ -627,6 +662,7 @@ namespace Gameplay.Player
 
         private async UniTask WallJumpAsync(Vector2 force, bool shouldTriggerEffects = true)
         {
+            isWallJumpPredicted = false;
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
             wallEjectionCountdown = 0f;
@@ -652,6 +688,15 @@ namespace Gameplay.Player
             hasReachedWallJumpPeak = false;
 
             OnWallJump?.Invoke();
+        }
+
+        private void PerformDoubleJump()
+        {
+            PerformJump(Mathf.Max(doubleJumpForce, rigidBody.linearVelocityY));
+            hasDoubleJumped = true;
+            doubleJumpCancellationCountdown = doubleJumpCancellationDuration;
+            playerAnimator.ResetTrigger(CancelDoubleJump);
+            playerAnimator.SetTrigger(DoubleJump);
         }
 
         public void PerformHeadJump()
