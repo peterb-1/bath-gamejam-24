@@ -323,10 +323,17 @@ namespace Gameplay.Player
                                      Physics2D.Raycast(rightGroundPosition, Vector2.down, groundCheckDistance, groundLayers);
             var leftWallProbe = Physics2D.OverlapCircle(leftGroundPosition + Vector3.right * wallCheckOffset, wallCheckDistance, groundLayers);
             var rightWallProbe = Physics2D.OverlapCircle(rightGroundPosition + Vector3.left * wallCheckOffset, wallCheckDistance, groundLayers);
+
+            var isLeftProbeValid = leftWallProbe == raycast.LeftGround.collider ||
+                                   leftWallProbe == raycast.LeftMid.collider ||
+                                   leftWallProbe == raycast.LeftHead.collider;
+            var isRightProbeValid = rightWallProbe == raycast.RightGround.collider ||
+                                    rightWallProbe == raycast.RightMid.collider ||
+                                    rightWallProbe == raycast.RightHead.collider;
             
             isGrounded = doesRaycastDownHit && !doesRaycastUpHit;
-            isTouchingLeftWall = doesRaycastLeftHit && !leftWallProbe;
-            isTouchingRightWall = doesRaycastRightHit && !rightWallProbe;
+            isTouchingLeftWall = doesRaycastLeftHit && (!isLeftProbeValid || !leftWallProbe);
+            isTouchingRightWall = doesRaycastRightHit && (!isRightProbeValid || !rightWallProbe);
             
             playerAnimator.SetBool(IsGrounded, isGrounded);
 
@@ -396,7 +403,7 @@ namespace Gameplay.Player
             if (rightMid)    flags |= PlayerRaycastHit.RightMid;
             if (rightHead)   flags |= PlayerRaycastHit.RightHead;
 
-            return new PlayerRaycastResult(flags, leftGround, leftMid, rightGround, rightMid);
+            return new PlayerRaycastResult(flags, leftGround, leftMid, leftHead, rightGround, rightMid, rightHead);
         }
 
         private void WallUpdate()
