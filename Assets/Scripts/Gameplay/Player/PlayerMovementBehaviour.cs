@@ -215,10 +215,6 @@ namespace Gameplay.Player
         public bool IsHooked => isHooked;
         public bool IsOnGround => isGrounded;
 
-        private WallJumpRecord lastWallJump;
-        private WallJumpRecord wallJumpRecordBeforeDoubleJump;
-        private Building lastEnteredBuilding;
-
         private Vector3 ziplineLocalStartOffset;
         private Vector2 lastZiplinePosition;
         private Vector2 ziplineVelocity;
@@ -311,22 +307,13 @@ namespace Gameplay.Player
             var leftGroundPosition = leftGroundCheck.position;
             var rightGroundPosition = rightGroundCheck.position;
 
+            var raycast = GetRaycastHit(groundCheckDistance);
+            var doesRaycastLeftHit = raycast.Flags.HasAnyFlag(PlayerRaycastHit.LeftGround | PlayerRaycastHit.LeftMid | PlayerRaycastHit.LeftHead);
+            var doesRaycastRightHit = raycast.Flags.HasAnyFlag(PlayerRaycastHit.RightGround | PlayerRaycastHit.RightMid | PlayerRaycastHit.RightHead);
             var doesRaycastUpHit = Physics2D.Raycast(leftGroundPosition, Vector2.up, groundCheckDistance, groundLayers) || 
                                    Physics2D.Raycast(rightGroundPosition, Vector2.up, groundCheckDistance, groundLayers);
-            
-            var downLeftHit = Physics2D.Raycast(leftGroundPosition, Vector2.down, groundCheckDistance, groundLayers);
-            var downRightHit = Physics2D.Raycast(rightGroundPosition, Vector2.down, groundCheckDistance, groundLayers);
-            var leftGroundHit = Physics2D.Raycast(leftGroundPosition, Vector2.left, groundCheckDistance, groundLayers);
-            var leftMidHit = Physics2D.Raycast(leftMidCheck.position, Vector2.left, groundCheckDistance, groundLayers);
-            var leftHeadHit = Physics2D.Raycast(leftHeadCheck.position, Vector2.left, groundCheckDistance, groundLayers);
-            var rightGroundHit = Physics2D.Raycast(rightGroundPosition, Vector2.right, groundCheckDistance, groundLayers);
-            var rightMidHit = Physics2D.Raycast(rightMidCheck.position, Vector2.right, groundCheckDistance, groundLayers);
-            var rightHeadHit = Physics2D.Raycast(rightHeadCheck.position, Vector2.right, groundCheckDistance, groundLayers);
-            
-            var doesRaycastDownHit = downLeftHit || downRightHit;
-            var doesRaycastLeftHit = leftGroundHit || leftMidHit || leftHeadHit;
-            var doesRaycastRightHit = rightGroundHit || rightMidHit || rightHeadHit;
-
+            var doesRaycastDownHit = Physics2D.Raycast(leftGroundPosition, Vector2.down, groundCheckDistance, groundLayers) ||
+                                     Physics2D.Raycast(rightGroundPosition, Vector2.down, groundCheckDistance, groundLayers);
             var leftWallProbe = Physics2D.OverlapCircle(leftGroundPosition + Vector3.right * wallCheckOffset, wallCheckDistance, groundLayers);
             var rightWallProbe = Physics2D.OverlapCircle(rightGroundPosition + Vector3.left * wallCheckOffset, wallCheckDistance, groundLayers);
             
@@ -341,7 +328,6 @@ namespace Gameplay.Player
                 coyoteCountdown = isHooked ? ziplineCoyoteDuration : coyoteDuration;
                 hasDoubleJumped = false;
                 hasLandedAtStart = true;
-                ResetLastWallJump();
             }
 
             if (isGrounded && !wasGrounded)
@@ -365,19 +351,19 @@ namespace Gameplay.Player
 
             if (jumpBufferCountdown <= 0f)
             {
-                var isOnLeftLedge = leftGroundHit && !leftMidHit;
-                var isOnRightLedge = rightGroundHit && !rightMidHit;
+                var isOnLeftLedge = raycast.Flags.HasFlag(PlayerRaycastHit.LeftGround) && !raycast.Flags.HasFlag(PlayerRaycastHit.LeftMid);
+                var isOnRightLedge = raycast.Flags.HasFlag(PlayerRaycastHit.RightGround) && !raycast.Flags.HasFlag(PlayerRaycastHit.RightMid);
 
                 // make sure we're on exactly ONE ledge - if it's both, we're in the middle of a block and will be pushed out as normal
                 if (isOnLeftLedge != isOnRightLedge)
                 {
                     if (isOnLeftLedge)
                     {
-                        TryClimbLedgeAsync(true, leftGroundHit, leftMidHit).Forget();
+                        TryClimbLedgeAsync(true, raycast.LeftGround, raycast.LeftMid).Forget();
                     }
                     else
                     {
-                        TryClimbLedgeAsync(false,  rightGroundHit, rightMidHit).Forget();
+                        TryClimbLedgeAsync(false,  raycast.RightGround, raycast.RightMid).Forget();
                     }
                 }
             }
@@ -387,27 +373,37 @@ namespace Gameplay.Player
             lastPosition = position;
         }
 
+        public PlayerRaycastResult GetRaycastHit(float distance)
+        {
+            var flags = (PlayerRaycastHit) 0;
+
+            var leftGround  = Physics2D.Raycast(leftGroundCheck.position,  Vector2.left,  distance, groundLayers);
+            var leftMid     = Physics2D.Raycast(leftMidCheck.position,     Vector2.left,  distance, groundLayers);
+            var leftHead    = Physics2D.Raycast(leftHeadCheck.position,    Vector2.left,  distance, groundLayers);
+            var rightGround = Physics2D.Raycast(rightGroundCheck.position, Vector2.right, distance, groundLayers);
+            var rightMid    = Physics2D.Raycast(rightMidCheck.position,    Vector2.right, distance, groundLayers);
+            var rightHead   = Physics2D.Raycast(rightHeadCheck.position,   Vector2.right, distance, groundLayers);
+
+            if (leftGround)  flags |= PlayerRaycastHit.LeftGround;
+            if (leftMid)     flags |= PlayerRaycastHit.LeftMid;
+            if (leftHead)    flags |= PlayerRaycastHit.LeftHead;
+            if (rightGround) flags |= PlayerRaycastHit.RightGround;
+            if (rightMid)    flags |= PlayerRaycastHit.RightMid;
+            if (rightHead)   flags |= PlayerRaycastHit.RightHead;
+
+            return new PlayerRaycastResult(flags, leftGround, leftMid, rightGround, rightMid);
+        }
+
         private void WallUpdate()
         {
             if (isTouchingLeftWall || isTouchingRightWall)
             {
                 if (!isClinging)
                 {
-                    if (!CanWallJumpOnCurrentWall()) return;
-                    
-                    if (doubleJumpCancellationCountdown > 0f)
+                    if (doubleJumpCancellationCountdown > 0f && wallEjectionCountdown > 0f)
                     {
-                        // if we're going to replace with a wall jump, we want to ignore the double jump that just happened
-                        // and ignoring it includes the fact that it resets your wall jump allowance
-                        var savedWallJump = lastWallJump;
-                        lastWallJump = wallJumpRecordBeforeDoubleJump;
-                        var canReplace = CanWallJumpOnCurrentWall();
-                        lastWallJump = savedWallJump;
-
-                        if (canReplace)
-                        {
-                            ReplaceDoubleJumpWithWallJump(isMovingLeft: isTouchingRightWall);
-                        }
+                        // put new leniency logic here?
+                        ReplaceDoubleJumpWithWallJump(isMovingLeft: isTouchingRightWall);
                     }
                     else
                     {
@@ -575,33 +571,17 @@ namespace Gameplay.Player
         
         private void TryJump()
         {
-            var canWallJumpOnCurrentWall = CanWallJumpOnCurrentWall();
-            
             if (jumpCooldownCountdown <= 0f && (isGrounded || isHooked || coyoteCountdown > 0f))
             {
                 PerformJump(jumpForce);
             }
             else if (isTouchingLeftWall)
             {
-                if (canWallJumpOnCurrentWall)
-                {
-                    PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y));
-                }
-                else
-                {
-                    jumpBufferCountdown += Time.fixedDeltaTime;
-                }
+                PerformWallJump(new Vector2(wallJumpForce.x, wallJumpForce.y));
             }
             else if (isTouchingRightWall)
             {
-                if (canWallJumpOnCurrentWall)
-                {
-                    PerformWallJump(new Vector2(-wallJumpForce.x, wallJumpForce.y));
-                }
-                else
-                {
-                    jumpBufferCountdown += Time.fixedDeltaTime;
-                }
+                PerformWallJump(new Vector2(-wallJumpForce.x, wallJumpForce.y));
             }
             else if (!wasEjectedLeft && wallEjectionCountdown > 0f)
             {
@@ -618,17 +598,7 @@ namespace Gameplay.Player
                 doubleJumpCancellationCountdown = doubleJumpCancellationDuration;
                 playerAnimator.ResetTrigger(CancelDoubleJump);
                 playerAnimator.SetTrigger(DoubleJump);
-                wallJumpRecordBeforeDoubleJump = lastWallJump;
-                ResetLastWallJump();
             }
-        }
-
-        private bool CanWallJumpOnCurrentWall()
-        {
-            var isHigherOnSameBuilding = lastEnteredBuilding == lastWallJump.Building && transform.position.y > lastWallJump.Height;
-            var doesDirectionMatch = (isTouchingLeftWall && lastWallJump.Direction == 1) || (isTouchingRightWall && lastWallJump.Direction == -1);
-
-            return !(isHigherOnSameBuilding && doesDirectionMatch);
         }
         
         private void PerformJump(float force)
@@ -657,13 +627,6 @@ namespace Gameplay.Player
 
         private async UniTask WallJumpAsync(Vector2 force, bool shouldTriggerEffects = true)
         {
-            lastWallJump = new WallJumpRecord
-            {
-                Building = lastEnteredBuilding,
-                Direction = (int) Mathf.Sign(force.x),
-                Height = transform.position.y
-            };
-
             jumpBufferCountdown = 0f;
             coyoteCountdown = 0f;
             wallEjectionCountdown = 0f;
@@ -754,7 +717,6 @@ namespace Gameplay.Player
                 timeElapsed = TimeManager.Instance.UnpausedRealtimeSinceStartup - initialTime;
             }
             
-            ResetLastWallJump();
             rigidBody.linearVelocity = targetVelocity;
             hasDoubleJumped = false;
             isSpringJumping = false;
@@ -796,8 +758,7 @@ namespace Gameplay.Player
         {
             force.x *= Mathf.Sign(rigidBody.linearVelocityX);
             rigidBody.linearVelocity = force;
-            
-            ResetLastWallJump();
+
             dashCountdown = 0f;
             hasDoubleJumped = false;
             
@@ -869,16 +830,6 @@ namespace Gameplay.Player
             playerAnimator.SetBool(IsHookedHash, false);
 
             return true;
-        }
-        
-        public void UpdateLastEnteredBuilding(Building building)
-        {
-            lastEnteredBuilding = building;
-        }
-
-        private void ResetLastWallJump()
-        {
-            lastWallJump = new WallJumpRecord();
         }
         
         public void NotifyEjectedFromBuilding(Bounds buildingBounds)

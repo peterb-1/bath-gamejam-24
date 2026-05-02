@@ -181,7 +181,6 @@ namespace Gameplay.Environment
         public void NotifyPlayerEntered()
         {
             containsPlayer = true;
-			PlayerAccessService.Instance.PlayerMovementBehaviour.UpdateLastEnteredBuilding(this);
         }
         
         public void NotifyPlayerExited()
