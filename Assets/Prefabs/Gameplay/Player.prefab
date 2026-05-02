@@ -268,7 +268,7 @@ MonoBehaviour:
   wallJumpDeceleration: 2.3
   wallJumpCounterDeceleration: 3.6
   wallJumpLeniencyTargetSpeed: 10.2
-  predictiveWallJumpSpeedThreshold: 5
+  predictiveWallJumpSpeedThreshold: 3
   clingFallMultiplier: 1
   clingVelocityMultiplier: 0.4
   maxFallVelocity: 17
