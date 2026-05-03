@@ -4,7 +4,6 @@ namespace Gameplay.Player
 {
     public readonly struct PlayerRaycastResult
     {
-        public readonly PlayerRaycastHit Flags;
         public readonly RaycastHit2D LeftGround;
         public readonly RaycastHit2D LeftMid;
         public readonly RaycastHit2D LeftHead;
@@ -13,7 +12,6 @@ namespace Gameplay.Player
         public readonly RaycastHit2D RightHead;
 
         public PlayerRaycastResult(
-            PlayerRaycastHit flags,
             RaycastHit2D leftGround,
             RaycastHit2D leftMid,
             RaycastHit2D leftHead,
@@ -21,7 +19,6 @@ namespace Gameplay.Player
             RaycastHit2D rightMid,
             RaycastHit2D rightHead)
         {
-            Flags = flags;
             LeftGround = leftGround;
             LeftMid = leftMid;
             LeftHead = leftHead;

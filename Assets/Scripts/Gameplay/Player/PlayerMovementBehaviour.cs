@@ -315,8 +315,8 @@ namespace Gameplay.Player
             var rightGroundPosition = rightGroundCheck.position;
 
             var raycast = GetRaycastHit(groundCheckDistance);
-            var doesRaycastLeftHit = raycast.Flags.HasAnyFlag(PlayerRaycastHit.LeftGround | PlayerRaycastHit.LeftMid | PlayerRaycastHit.LeftHead);
-            var doesRaycastRightHit = raycast.Flags.HasAnyFlag(PlayerRaycastHit.RightGround | PlayerRaycastHit.RightMid | PlayerRaycastHit.RightHead);
+            var doesRaycastLeftHit = raycast.LeftGround || raycast.LeftMid || raycast.LeftHead;
+            var doesRaycastRightHit = raycast.RightGround || raycast.RightMid || raycast.RightHead;
             var doesRaycastUpHit = Physics2D.Raycast(leftGroundPosition, Vector2.up, groundCheckDistance, groundLayers) || 
                                    Physics2D.Raycast(rightGroundPosition, Vector2.up, groundCheckDistance, groundLayers);
             var doesRaycastDownHit = Physics2D.Raycast(leftGroundPosition, Vector2.down, groundCheckDistance, groundLayers) ||
@@ -363,8 +363,8 @@ namespace Gameplay.Player
 
             if (jumpBufferCountdown <= 0f)
             {
-                var isOnLeftLedge = raycast.Flags.HasFlag(PlayerRaycastHit.LeftGround) && !raycast.Flags.HasFlag(PlayerRaycastHit.LeftMid);
-                var isOnRightLedge = raycast.Flags.HasFlag(PlayerRaycastHit.RightGround) && !raycast.Flags.HasFlag(PlayerRaycastHit.RightMid);
+                var isOnLeftLedge = raycast.LeftGround && !raycast.LeftMid;
+                var isOnRightLedge = raycast.RightGround && !raycast.RightMid;
 
                 // make sure we're on exactly ONE ledge - if it's both, we're in the middle of a block and will be pushed out as normal
                 if (isOnLeftLedge != isOnRightLedge)
@@ -387,23 +387,14 @@ namespace Gameplay.Player
 
         public PlayerRaycastResult GetRaycastHit(float distance)
         {
-            var flags = (PlayerRaycastHit) 0;
-
-            var leftGround  = Physics2D.Raycast(leftGroundCheck.position,  Vector2.left,  distance, groundLayers);
-            var leftMid     = Physics2D.Raycast(leftMidCheck.position,     Vector2.left,  distance, groundLayers);
-            var leftHead    = Physics2D.Raycast(leftHeadCheck.position,    Vector2.left,  distance, groundLayers);
-            var rightGround = Physics2D.Raycast(rightGroundCheck.position, Vector2.right, distance, groundLayers);
-            var rightMid    = Physics2D.Raycast(rightMidCheck.position,    Vector2.right, distance, groundLayers);
-            var rightHead   = Physics2D.Raycast(rightHeadCheck.position,   Vector2.right, distance, groundLayers);
-
-            if (leftGround)  flags |= PlayerRaycastHit.LeftGround;
-            if (leftMid)     flags |= PlayerRaycastHit.LeftMid;
-            if (leftHead)    flags |= PlayerRaycastHit.LeftHead;
-            if (rightGround) flags |= PlayerRaycastHit.RightGround;
-            if (rightMid)    flags |= PlayerRaycastHit.RightMid;
-            if (rightHead)   flags |= PlayerRaycastHit.RightHead;
-
-            return new PlayerRaycastResult(flags, leftGround, leftMid, leftHead, rightGround, rightMid, rightHead);
+            return new PlayerRaycastResult(
+                leftGround:  Physics2D.Raycast(leftGroundCheck.position,  Vector2.left,  distance, groundLayers),
+                leftMid:     Physics2D.Raycast(leftMidCheck.position,     Vector2.left,  distance, groundLayers),
+                leftHead:    Physics2D.Raycast(leftHeadCheck.position,    Vector2.left,  distance, groundLayers),
+                rightGround: Physics2D.Raycast(rightGroundCheck.position, Vector2.right, distance, groundLayers),
+                rightMid:    Physics2D.Raycast(rightMidCheck.position,    Vector2.right, distance, groundLayers),
+                rightHead:   Physics2D.Raycast(rightHeadCheck.position,   Vector2.right, distance, groundLayers)
+            );
         }
 
         private void WallUpdate()
@@ -639,8 +630,8 @@ namespace Gameplay.Player
             var predictiveRaycastHit = GetRaycastHit(predictiveWallCheckDistance);
 
             return Mathf.Sign(Velocity.x) > 0 
-                ? predictiveRaycastHit.Flags.HasAnyFlag(PlayerRaycastHit.RightGround | PlayerRaycastHit.RightMid | PlayerRaycastHit.RightHead) 
-                : predictiveRaycastHit.Flags.HasAnyFlag(PlayerRaycastHit.LeftGround | PlayerRaycastHit.LeftMid | PlayerRaycastHit.LeftHead);
+                ? predictiveRaycastHit.RightGround || predictiveRaycastHit.RightMid || predictiveRaycastHit.RightHead
+                : predictiveRaycastHit.LeftGround || predictiveRaycastHit.LeftMid || predictiveRaycastHit.LeftHead;
         }
         
         private void PerformJump(float force)
